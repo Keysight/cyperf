@@ -10,7 +10,7 @@ A licensed CyPerf product from Keysight is compatible with multiple environments
 
 Choose from the following supported platforms:
 
-[![aws](images/aws.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![azure](images/azure.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![GCP](images/GCP.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![kubernetes](images/kubernetes.jpg)](https://github.com/Keysight/cyperf/blob/develop/)
+[![aws](images/aws.jpg)](deployment/aws)   [![azure](images/azure.jpg)](deployment/azure)   [![GCP](images/GCP.jpg)](deployment/gcp)   [![kubernetes](images/kubernetes.jpg)](deployment/k8s)
 
 
 
