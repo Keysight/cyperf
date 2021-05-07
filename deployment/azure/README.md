@@ -64,7 +64,7 @@ Alternatively, user may use following PowerShell command from Azure cloud shell 
 
 The following is a list of the current supported CyPerf ARM templates. Click the links to view the README files which include the topology diagrams. 
 
-### I. [controller_and_agent_pair](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-azure/controller_and_agent_pair): 
+### I. [controller_and_agent_pair](controller_and_agent_pair): 
  
 
 This template deploys: 
@@ -77,7 +77,7 @@ This template deploys:
 
 Select **New VNET** to deploy a new VPC or **Existing VNET** to deploy in an already existing VPC.
 
-### II. [controller_proxy_and_agent_pair](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-azure/controller_proxy_and_agent_pair):
+### II. [controller_proxy_and_agent_pair](controller_proxy_and_agent_pair):
 
 
 This template deploys: 

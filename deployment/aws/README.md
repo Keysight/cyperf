@@ -31,7 +31,7 @@ The supported instance types are:
 ## List of Supported CyPerf CloudFormation templates for AWS deployments
 The following is a list of the current supported CyPerf CloudFormation templates. Click the links to view the README files which include the topology diagrams. 
 
-### I. [Controller and Agent Pair](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-aws/develop/controller_and_agent_pair):
+### I. [Controller and Agent Pair](controller_and_agent_pair):
 
 This template deploys:
 - One CyPerf Controller, in a public subnet.
@@ -39,7 +39,7 @@ This template deploys:
 
 Select **New VPC** to deploy a new VPC or **Existing VPC** to deploy in an already existing VPC.
 
-### II. [Controller Proxy and Agent Pair](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-aws/develop/controller_proxy_and_agent_pair):
+### II. [Controller Proxy and Agent Pair](controller_proxy_and_agent_pair):
 
 This template deploys:
 - One CyPerf Controller Proxy, in a public subnet.
@@ -47,7 +47,7 @@ This template deploys:
 
 Select **New VPC** to deploy a new VPC or **Existing VPC** to deploy in an already existing VPC.
 
-### III. [Controller Only](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-aws/develop/controller_only):
+### III. [Controller Only](controller_only):
 
 This template deploys:
 - A CyPerf Controller, in a public subnet.
