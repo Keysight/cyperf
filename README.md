@@ -10,7 +10,7 @@ A licensed CyPerf product from Keysight is compatible with multiple environments
 
 Choose from the following supported platforms:
 
-[![aws](images/aws.jpg)](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-aws/develop)   [![azure](images/azure.jpg)](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-azure/)   [![GCP](images/GCP.jpg)](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-gcp)   [![kubernetes](images/kubernetes.jpg)](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-k8s/develop)
+[![aws](images/aws.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![azure](images/azure.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![GCP](images/GCP.jpg)](https://github.com/Keysight/cyperf/blob/develop/)   [![kubernetes](images/kubernetes.jpg)](https://github.com/Keysight/cyperf/blob/develop/)
 
 
 
