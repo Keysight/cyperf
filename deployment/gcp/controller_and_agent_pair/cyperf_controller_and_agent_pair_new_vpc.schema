@@ -1,0 +1,56 @@
+
+
+info: 
+  title: CyPerf B2B Agents with Controller Template
+  author: Soumya N
+  description: Creates a B2B Test Topology with Controller in GCP 
+
+
+imports:
+  - path: client-server-agents-controller.py
+    name: helper.py
+
+
+properties: 
+  controllerMachineType:
+    type: string
+    default: e2-standard-8
+    description: machine type for controller
+ 
+  controllerSourceImage:
+    type: string
+    default: cyperf-mdw-v1-0-0-1567
+    description: sample source image of controller 
+
+  region:
+    type: string
+    default: us-east1
+    description: Region to deploy
+
+  zone:
+    type: string
+    default: us-east1-c
+    description: Zone to deploy 
+
+  agentMachineType:
+    type: string
+    default: e2-standard-4
+    description: Zone to deploy
+
+  agentSourceImage:
+    type: string
+    default: cyperf-agent-1-0-0-888
+    description: source image for agents
+
+  managementNetworkCIDR:
+    type: string
+    default: 172.16.5.0/24
+    description: CIDR for  for mngt network
+  testNetworkCIDR:
+    type: string
+    default: 10.0.0.0/8
+    description: CIDR for  for test network
+  agentCount:
+    type: integer
+    default: 2
+    description: number of agnets

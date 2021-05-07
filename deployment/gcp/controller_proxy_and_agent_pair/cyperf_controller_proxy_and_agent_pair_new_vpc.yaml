@@ -1,0 +1,8 @@
+imports:
+- path: controller-proxy-client-server-agents.py
+
+resources:
+- name: myresources
+  type: controller-proxy-client-server-agents.py
+  properties: 
+      region: us-east1

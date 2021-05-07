@@ -1,0 +1,55 @@
+
+
+info: 
+  title: CyPerf B2B Agents with Controller Proxy Template
+  author: Soumya N
+  description: Creates a B2B Test Topology with Controller Proxy in GCP 
+
+
+imports:
+  - path: controller-proxy-client-server-agents.py
+    name: helper.py
+
+
+properties: 
+  brokerMachineType:
+    type: string
+    default: e2-medium
+    description: machine type for controller proxy 
+
+  region:
+    type: string
+    default: us-east1
+    description: Region to deploy
+
+  zone:
+    type: string
+    default: us-east1-c
+    description: Zone to deploy 
+
+  agentMachineType:
+    type: string
+    default: e2-standard-4
+    description: Zone to deploy
+
+  brokerSourceImage:
+    type: string
+    default: image-broker-v2
+    description: source image for broker
+
+  agentSourceImage:
+    type: string
+    default: cyperf-agent-1-0-0-888
+    description: source image for agents
+  managementNetworkCIDR:
+    type: string
+    default: 172.16.5.0/24
+    description: CIDR for  for mngt net
+  testNetworkCIDR:
+    type: string
+    default: 10.0.0.0/8
+    description: CIDR for  for test net
+  agentCount:
+    type: integer
+    default: 2
+    description: number of agnets

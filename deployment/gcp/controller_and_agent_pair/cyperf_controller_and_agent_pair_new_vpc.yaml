@@ -1,0 +1,8 @@
+imports:
+- path: client-server-agents-controller.py
+
+resources:
+- name: myresources
+  type: client-server-agents-controller.py
+  properties: 
+      region: us-east1
