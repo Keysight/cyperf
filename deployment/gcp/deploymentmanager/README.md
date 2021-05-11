@@ -20,7 +20,13 @@ Before you deploy this Python template, we recommend that you become familiar wi
 - [GCP Images](https://cloud.google.com/compute/docs/images)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)
 
-**Note:** If you are new to AWS, see [Getting Started with GCP](https://cloud.google.com/gcp/getting-started).
+**Note:** If you are new to GCP, see [Getting Started with GCP](https://cloud.google.com/gcp/getting-started).
+
+## GCP images
+Following CyPerf images are publicly available
+- For CyPerf Contoller, keysight-cyperf-controller-1-0 (Family name)
+- For CyPerf Agents, keysight-cyperf-agent-1-0 (Family name)
+- For CyPerf Controller Proxy, keysight-cyperf-controller-proxy-1-0 (Family name)
 
 ## Supported instance types 
 - For CyPerf Controller, supported Machine type e2-standard-8.
