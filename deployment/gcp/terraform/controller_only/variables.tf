@@ -1,6 +1,6 @@
 variable "GCP_PROJECT_NAME" {
   type    = string
-  default = "kt-nas-cyperf-dev"
+  default = "specify your project name"
 }
 
 variable "GCP_REGION_NAME" {
@@ -20,7 +20,7 @@ variable "GCP_OWNER_TAG" {
 
 variable "GCP_PROJECT_TAG" {
   type    = string
-  default = "open-ixia-gcp-cyperf"
+  default = "keysight-gcp-cyperf"
 }
 
 variable "GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES" {
@@ -37,7 +37,7 @@ variable "GCP_MDW_MACHINE_TYPE" {
 
 variable "mdw_version" {
   type        = string
-  default     = "1-0-488-master"
-  description = "Image id for the MDW machine"
+  default     = "keysight-cyperf-contoller-1-0"
+  description = "Image id for the cyperf controller machine"
 }
 

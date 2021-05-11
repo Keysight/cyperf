@@ -1,6 +1,6 @@
 variable "GCP_PROJECT_NAME" {
   type    = string
-  default = "kt-nas-cyperf-dev"
+  default = "<specify your project name>"
 }
 
 variable "GCP_REGION_NAME" {
@@ -20,7 +20,7 @@ variable "GCP_OWNER_TAG" {
 
 variable "GCP_PROJECT_TAG" {
   type    = string
-  default = "open-ixia-gcp-cyperf"
+  default = "keysight-gcp-cyperf"
 }
 
 variable "GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES" {
@@ -47,14 +47,14 @@ variable "GCP_AGENT_MACHINE_TYPE" {
 
 variable "agent_version" {
   type        = string
-  default     = "1-0-206-master-tiger-1-0-3-170"
-  description = "Image id for the agent machines"
+  default     = "keysight-cyperf-agent-1-0"
+  description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "cyperf-broker-1-0-0-12"
-  description = "Image id for the agent machines"
+  default     = "keysight-cyperf-controller-proxy-1-0"
+  description = "Image id for the cyperf controller proxy machines"
 }
 
 variable "network_name" {
@@ -65,6 +65,6 @@ variable "network_name" {
 
 variable "ssl_certificate"{
   type = string
-  default = "projects/kt-nas-cyperf-dev/global/sslCertificates/cyper-https-lb"
+  default = "projects/<your project name>/global/sslCertificates/cyper-https-lb"
   description = "SSL certificate for https load balancers"
 }

@@ -10,12 +10,12 @@ variable "availability_zone" {
 
 variable "aws_access_key" {
   type = string
-  default = "AKIAQAUTNXTKAWYWM353"
+  default = "<specify your aws-cli access key>"
 }
 
 variable "aws_secret_key" {
   type = string
-  default = "VbUswOTgTWUlWvJOvd1l3uKECfn5YeXZlHxQAwPF"
+  default = "<specify your aws-cli secret key>"
 }
 
 variable "aws_stack_name" {
@@ -26,7 +26,7 @@ variable "aws_stack_name" {
 
 variable "aws_auth_key" {
   type = string
-  default = "id_rsa_ghost"
+  default = "<specify your ssh key file>"
   description = "The key used to ssh into VMs"
 }
 
@@ -44,12 +44,12 @@ variable "aws_agent_machine_type" {
 
 variable "broker_version" {
   type        = string
-  default     = "CyPerf-Broker-1-0-0-12"
-  description = "Image id for the MDW machine"
+  default     = "keysight-cyperf-controller-proxy-1-0"
+  description = "Image id for the controller-proxy machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "1-0-181-master-tiger-1-0-0-936"
-  description = "Image id for the agent machines"
+  default     = "keysight-cyperf-agent-1-0"
+  description = "Image id for the cyperf agent machines"
 }
