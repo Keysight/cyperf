@@ -23,13 +23,6 @@ variable "GCP_PROJECT_TAG" {
   default = "keysight-gcp-cyperf"
 }
 
-variable "GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES" {
-  type = list(string)
-  default = [
-    "1.1.1.1/32"
-  ]
-}
-
 variable "GCP_SSH_KEY" {
   type = string
   default = "<specify the gcp public ssh key file path>"

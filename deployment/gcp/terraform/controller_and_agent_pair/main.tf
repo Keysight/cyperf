@@ -147,7 +147,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
     subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
     network_ip = "172.16.5.100"
-
+    
     access_config {
       network_tier = "PREMIUM"
       nat_ip = google_compute_address.GCP_MDW_IP.address
@@ -174,7 +174,7 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
   zone                      = local.GCP_ZONE_NAME
   machine_type              = "zones/${local.GCP_ZONE_NAME}/machineTypes/${local.GCP_agent_MACHINE_TYPE}"
   allow_stopping_for_update = true
-
+  
   boot_disk {
     device_name = "persistent-disk-0"
     auto_delete = "true"
