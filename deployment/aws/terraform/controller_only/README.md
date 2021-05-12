@@ -28,6 +28,21 @@ terraform apply -var=&quot;aws\_auth\_key=my_rsa_key&quot;
 
 The -var option can be applied multiple times in order to use multiple parameters.
 
+## Template Parameters
+
+The following table lists the parameters for this deployment.
+
+| **Parameter label (name)**                  | **Default**            | **Description**  |
+| ----------------------- | ----------------- | ----- |
+| aws_region            | us-east-2   | The AWS region for deployment. |
+| availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
+| aws_access_key | Requires input | The AWS access key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
+| aws_secret_key  | Requires input | The AWS secret key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
+| aws_stack_name | Requires input |The AWS stack name. |
+| aws_auth_key | Requires input | Specify the AWS SSH key name. |
+| aws_mdw_machine_type   | t2.xlarge   | The machine type used for deploying the CyPerf controller. |
+| mdw_version   | keysight-cyperf-controller-1-0           | The CyPerf controller image version. |
+
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
