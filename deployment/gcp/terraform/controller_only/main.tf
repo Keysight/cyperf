@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("<path for credential json file>")
+  credentials = file(var.GCP_CREDENTIALS_FILE)
   project     = var.GCP_PROJECT_NAME
   region      = var.GCP_REGION_NAME
   zone        = var.GCP_ZONE_NAME
@@ -30,6 +30,7 @@ locals {
   GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME            = var.GCP_PROJECT_NAME
   GCP_MDW_MACHINE_TYPE                         = var.GCP_MDW_MACHINE_TYPE
   GCP_MDW_IFACE_ETH0_PUBLIC_IP_ADDRESS_NAME    = "MDW-IP"
+  GCP_SSH_KEY								   = var.GCP_SSH_KEY
 }
 
 resource "google_compute_network" "GCP_MGMT_VPC_NETWORK" {
@@ -104,7 +105,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_MDW_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<path for public ssh-key>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
 
   labels = {

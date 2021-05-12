@@ -1,12 +1,12 @@
 provider "google" {
-  credentials = file("<path for credential json file>")
+  credentials = file(var.GCP_CREDENTIALS_FILE)
   project     = var.GCP_PROJECT_NAME
   region      = var.GCP_REGION_NAME
   zone        = var.GCP_ZONE_NAME
 }
 
 provider "google-beta" {
-  credentials = file("<path for credential json file>")
+  credentials = file("kt-nas-cyperf-dev-5b29ff75f49a.json")
   project     = var.GCP_PROJECT_NAME
   region      = var.GCP_REGION_NAME
   zone        = var.GCP_ZONE_NAME
@@ -56,6 +56,7 @@ locals {
   GCP_agent_CAN_IP_FORWARD                     = "false"
   GCP_agent_CUSTOM_IMAGE_PROJECT_NAME          = var.GCP_PROJECT_NAME
   GCP_LB_NETWORK_NAME                          = "alb-network"
+  GCP_SSH_KEY								   = var.GCP_SSH_KEY
   startup_script = <<SCRIPT
                             /bin/bash
                             /usr/bin/image_init_gcp.sh ${google_compute_instance.GCP_BROKER_INSTANCE.network_interface.0.network_ip} >> image_init_behind_alb_log
@@ -159,7 +160,7 @@ resource "google_compute_instance" "GCP_BROKER_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = "true"
-    ssh-keys           = "cyperf:${file("<path for public ssh-key>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
 
   labels = {
@@ -203,7 +204,7 @@ resource "google_compute_instance" "GCP_CLIENT_AGENT_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<path for public ssh-key>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
   labels = {
     owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
@@ -248,7 +249,7 @@ resource "google_compute_instance" "GCP_SERVER_AGENT_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<path for public ssh-key>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
   labels = {
     owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
@@ -257,9 +258,6 @@ resource "google_compute_instance" "GCP_SERVER_AGENT_INSTANCE" {
   }
   tags = [ "gcp-agent" ]
 }
-
-
-
 
 output "broker_public_ip" {
   value = google_compute_instance.GCP_BROKER_INSTANCE.network_interface.0.access_config.0.nat_ip

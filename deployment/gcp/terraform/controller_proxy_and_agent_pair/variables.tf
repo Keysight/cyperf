@@ -23,17 +23,16 @@ variable "GCP_PROJECT_TAG" {
   default = "keysight-gcp-cyperf"
 }
 
-variable "GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES" {
-  type = list(string)
-  default = [
-    "1.1.1.1/32"
-  ]
+variable "GCP_SSH_KEY" {
+  type = string
+  default = "<specify the gcp public ssh key file path>"
 }
 
-variable "GCP_MDW_MACHINE_TYPE" {
-  type    = string
-  default = "n1-standard-4"
+variable "GCP_CREDENTIALS_FILE" {
+  type = string
+  default = "<create gcp credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys>"
 }
+
 
 variable "GCP_BROKER_MACHINE_TYPE" {
   type    = string
