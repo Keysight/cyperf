@@ -10,7 +10,7 @@ variable "AZURE_REGION_NAME" {
 
 variable "AZURE_OWNER_TAG" {
   type    = string
-  default = "broker-agent"
+  default = "<specify the azure owner tag name>"
 }
 
 variable "AZURE_ADMIN_USERNAME" {
@@ -23,10 +23,6 @@ variable "AZURE_PROJECT_TAG" {
   default = "keysight-azure-cyperf"
 }
 
-variable "AZURE_MDW_MACHINE_TYPE" {
-  type    = string
-  default = "Standard_F8s_v2"
-}
 
 variable "AZURE_AGENT_MACHINE_TYPE" {
   type    = string

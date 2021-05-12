@@ -10,7 +10,7 @@ variable "AZURE_REGION_NAME" {
 
 variable "AZURE_OWNER_TAG" {
   type    = string
-  default = "mdw-qa-b2b"
+  default = "<specify the azure owner tag name>"
 }
 
 variable "AZURE_ADMIN_USERNAME" {

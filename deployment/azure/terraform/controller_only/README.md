@@ -28,6 +28,24 @@ terraform apply -var=&quot;client\_secret=11111111-0000-0000-0000-11111111111&qu
 
 The -var option can be applied multiple times in order to use multiple parameters.
 
+## Template Parameters
+
+The following table lists the parameters for this deployment.
+
+| **Parameter label (name)**                  | **Default**            | **Description**  |
+| ----------------------- | ----------------- | ----- |
+| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
+| AZURE_REGION_NAME      | eastus       | The Azure region where the deployment will take place. |
+| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
+| AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
+| AZURE_PROJECT_TAG | keysight-gcp-cyperf |The Azure project tag name. |
+| AZURE_MDW_MACHINE_TYPE | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
+| subscription_id     | Requires input   | Specify the Azure subscription id.    |
+| client_id       | Requires input   | Specify the Azure client id.   |
+| client_secret     | Requires input     | Specify the Azure client secret.   |
+| tenant_id       | Requires input    | Specify the Azure tenant id.   |
+
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
