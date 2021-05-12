@@ -20,7 +20,7 @@ variable "aws_secret_key" {
 
 variable "aws_stack_name" {
   type = string
-  default = "broker-agents"
+  default = "<specify your aws stack name>"
   description = "Stack name, prefix for all resources"
 }
 
