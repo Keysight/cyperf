@@ -53,7 +53,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
     kubectl apply cyperf-agent-server.yaml
 
-    kubectl scale deployment.v1.apps/cyperf-agent-server --replicas=2
+    kubectl scale deployment.v1.apps/cyperf-agent-server-deployment --replicas=2
     ```
 
 ## Deployment in **AWS EKS**
