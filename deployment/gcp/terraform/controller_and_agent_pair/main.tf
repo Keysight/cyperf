@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("<path for crediential file>")
+  credentials = file(var.GCP_CREDENTIALS_FILE)
   project     = var.GCP_PROJECT_NAME
   region      = var.GCP_REGION_NAME
   zone        = var.GCP_ZONE_NAME
@@ -48,6 +48,7 @@ locals {
   GCP_agent_SERIAL_PORT_ENABLE                 = "true"
   GCP_agent_CAN_IP_FORWARD                     = "false"
   GCP_agent_CUSTOM_IMAGE_PROJECT_NAME          = var.GCP_PROJECT_NAME
+  GCP_SSH_KEY								   = var.GCP_SSH_KEY
   startup_script = "/bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.GCP_MDW_INSTANCE.network_interface.0.network_ip} >> /home/cyperf/gcp_image_init_log "
 }
 
@@ -146,7 +147,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
     subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
     network_ip = "172.16.5.100"
-    
+
     access_config {
       network_tier = "PREMIUM"
       nat_ip = google_compute_address.GCP_MDW_IP.address
@@ -157,7 +158,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_MDW_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<specify public ssh-key file>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
 
   labels = {
@@ -173,7 +174,7 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
   zone                      = local.GCP_ZONE_NAME
   machine_type              = "zones/${local.GCP_ZONE_NAME}/machineTypes/${local.GCP_agent_MACHINE_TYPE}"
   allow_stopping_for_update = true
-  
+
   boot_disk {
     device_name = "persistent-disk-0"
     auto_delete = "true"
@@ -209,7 +210,7 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<path for public ssh-key file>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
   labels = {
     owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
@@ -259,7 +260,7 @@ resource "google_compute_instance" "GCP_SERVER_INSTANCE" {
     Project            = local.GCP_PROJECT_TAG
     Options            = local.GCP_OPTIONS_TAG
     serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file("<path for public ssh-key>")}"
+    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
   }
   labels = {
     owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
