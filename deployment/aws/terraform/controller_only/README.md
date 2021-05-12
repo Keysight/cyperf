@@ -26,7 +26,7 @@ The  **terraform apply**  command executes the actions proposed in a terraform t
 
 terraform apply -var=&quot;aws\_auth\_key=my_rsa_key&quot;
 
-The -var option can be applied multiple times in order to use multiple parameters.
+The -var option must be applied multiple times to use all the required input parameters.
 
 ## Template Parameters
 
