@@ -26,7 +26,7 @@ The  **terraform apply**  command executes the actions proposed in a terraform t
 
 terraform apply -var=&quot;client\_secret=11111111-0000-0000-0000-11111111111&quot;
 
-The -var option can be applied multiple times in order to use multiple parameters.
+The -var option must be applied multiple times to use all the required input parameters.
 
 ## Template Parameters
 
