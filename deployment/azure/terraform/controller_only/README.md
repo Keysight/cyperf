@@ -38,7 +38,7 @@ The following table lists the parameters for this deployment.
 | AZURE_REGION_NAME      | eastus       | The Azure region where the deployment will take place. |
 | AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
 | AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
-| AZURE_PROJECT_TAG | keysight-gcp-cyperf |The Azure project tag name. |
+| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
 | AZURE_MDW_MACHINE_TYPE | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
