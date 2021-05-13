@@ -179,7 +179,7 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/cyperf-agent-${var.agent_version}"
+      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.agent_version}"
     }
   }
   tags = [ "gcp-client" ]
@@ -229,7 +229,7 @@ resource "google_compute_instance" "GCP_SERVER_INSTANCE" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/cyperf-agent-${var.agent_version}"
+      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.agent_version}"
     }
   }
   tags = [ "gcp-server" ]

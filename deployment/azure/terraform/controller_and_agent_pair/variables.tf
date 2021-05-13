@@ -36,7 +36,7 @@ variable "AZURE_AGENT_MACHINE_TYPE" {
 variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-1-0"
-  description = "Image id for the cypef controller machine"
+  description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
