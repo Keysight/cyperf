@@ -111,7 +111,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.AZURE_AGENT_MACHINE_TYPE
   admin_username      = "cyperf"
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/cyperf-agent-${var.agent_version}"
+  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/${var.agent_version}"
   network_interface_ids = [
     azurerm_network_interface.azr_automation_client_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_client_agent_test_nic.id
@@ -179,7 +179,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.AZURE_AGENT_MACHINE_TYPE
   admin_username      = var.AZURE_ADMIN_USERNAME
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/cyperf-agent-${var.agent_version}"
+  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/${var.agent_version}"
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_server_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_server_test_nic.id

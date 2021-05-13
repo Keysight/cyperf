@@ -15,8 +15,8 @@ variable "GCP_ZONE_NAME" {
 
 variable "GCP_OWNER_TAG" {
   type    = string
-  default = "broker-agents-ox"
-}
+  default = "<specify the gcp owner tag name>"
+}c2-standard-1
 
 variable "GCP_PROJECT_TAG" {
   type    = string
@@ -41,7 +41,7 @@ variable "GCP_BROKER_MACHINE_TYPE" {
 
 variable "GCP_AGENT_MACHINE_TYPE" {
   type    = string
-  default = "c2-standard-4"
+  default = "c2-standard-16"
 }
 
 variable "agent_version" {
