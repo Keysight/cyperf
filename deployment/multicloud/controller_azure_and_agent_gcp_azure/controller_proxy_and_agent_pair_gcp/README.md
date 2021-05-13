@@ -24,7 +24,7 @@ This command is required the first time you use as template. It is not required 
 
 The  **terraform apply**  command executes the actions proposed in a terraform template. All the default deployment variables may be changed.
 
-terraform apply -var=&quot;GCP_CREDENTIALS_FILE=gcp-credentials.json&quot;
+terraform apply -var=&quot;GCP_CREDENTIALS=gcp-credentials.json&quot;
 
 The -var option must be applied multiple times to use all the required input parameters.
 
