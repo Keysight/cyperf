@@ -1,0 +1,5 @@
+urllib3
+simplejson
+requests
+tabulate
+pandas

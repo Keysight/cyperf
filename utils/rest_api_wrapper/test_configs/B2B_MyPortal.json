@@ -1,0 +1,2198 @@
+{
+    "id": "appsec-11",
+    "displayName": "B2B_MyPortal",
+    "lastModified": 1588861273,
+    "lastModifiedAsString": "2020-05-07T14:21:13Z",
+    "lastAccessed": 1588861179,
+    "lastAccessedAsString": "2020-05-07T14:19:39Z",
+    "tags": {
+        "Application": "CyPerf",
+        "category": "CyPerf"
+    },
+    "type": "appsec",
+    "owner": "wap-automation@keysight.com",
+    "readonly": false,
+    "configUrl": "http://appsec-resource-service/api/v2/resources/configs/appsec-11",
+    "configData": {
+        "Config": {
+            "AttackProfiles": [
+                {
+                    "Attacks": [
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 1",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike MSSCCM XSS_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike MSSCCM XSS",
+                                            "ProtocolID": "Strike MSSCCM XSS",
+                                            "Params": [],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "1",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 2",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike Magento RCE_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike Magento RCE",
+                                            "ProtocolID": "Strike Magento RCE",
+                                            "Params": [],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "2",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 3",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike Jenkins RCE_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike Jenkins RCE",
+                                            "ProtocolID": "Strike Jenkins RCE",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "cve_2018_1000861_http_version",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "1.1",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "3",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 4",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike WordPress XSS_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike WordPress XSS",
+                                            "ProtocolID": "Strike WordPress XSS",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "cve_2019_14470_http_version",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "1.1",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "4",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 5",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike WordPress XSS_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike WordPress XSS",
+                                            "ProtocolID": "Strike WordPress XSS",
+                                            "Params": [],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "5",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 6",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike McAfee SQLi_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike McAfee SQLi",
+                                            "ProtocolID": "Strike McAfee SQLi",
+                                            "Params": [],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "6",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 7",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike Elastix SQLi_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike Elastix SQLi",
+                                            "ProtocolID": "Strike Elastix SQLi",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "cve_2015_1875_http_version",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "1.1",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "7",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 443,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 443,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "Portal Attack 8",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Strike Tomcat File Upload_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": true,
+                                            "Name": "Strike Tomcat File Upload",
+                                            "ProtocolID": "Strike Tomcat File Upload",
+                                            "Params": [],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "8",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        }
+                    ],
+                    "DefaultNetworkMapping": {
+                        "ClientNetworkTags": [
+                            "Client"
+                        ],
+                        "ServerNetworkTags": [
+                            "Server"
+                        ]
+                    },
+                    "Name": "Attack Profile",
+                    "ObjectivesAndTimeline": {
+                        "TimelineSegments": [
+                            {
+                                "AttackRate": 50,
+                                "Duration": 60,
+                                "MaxConcurrentAttack": 9,
+                                "SegmentType": "",
+                                "id": "1"
+                            }
+                        ]
+                    },
+                    "TrafficSettings": {
+                        "DefaultTransportProfile": {
+                            "ClientTLSProfile": {
+                                "certificateFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_cert_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVDRENDQXZDZ0F3SUJBZ0lVQkVONWtEN3crREpFV1VacDBzYXgzdEZFUTdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daUXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJREFKWFFqRU1NQW9HQTFVRUJ3d0RTMDlNTVJFdwpEd1lEVlFRS0RBaExSVmxUU1VkSVZERVBNQTBHQTFVRUN3d0dRVkJRVTBWRE1TSXdJQVlEVlFRRERCbFRaV04xCmNtVmtYMUpUUVdSbGN6TmZZMlZ5ZEY4eU1EUTRNU0l3SUFZSktvWklodmNOQVFrQkZoTmhjSEJ6WldOQWEyVjUKYzJsbmFIUXVZMjl0TUI0WERUSXdNREl3TkRFeU5UWXdNbG9YRFRNd01ESXdNVEV5TlRZd01sb3dnWlF4Q3pBSgpCZ05WQkFZVEFrbE9NUXN3Q1FZRFZRUUlEQUpYUWpFTU1Bb0dBMVVFQnd3RFMwOU1NUkV3RHdZRFZRUUtEQWhMClJWbFRTVWRJVkRFUE1BMEdBMVVFQ3d3R1FWQlFVMFZETVNJd0lBWURWUVFEREJsVFpXTjFjbVZrWDFKVFFXUmwKY3pOZlkyVnlkRjh5TURRNE1TSXdJQVlKS29aSWh2Y05BUWtCRmhOaGNIQnpaV05BYTJWNWMybG5hSFF1WTI5dApNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZ3SWMwVmRQR3JianI0dWNpaHZsClZsYlhjRlhXTHZ1bEFiaUlxMS9VYUsya0tMRzcyVFZUTXlxWkhXMzlPYVY1c25NaGhZQTdJa200SkZIZUs5NmwKTXBLVkhoMmlrRlR2c202NVlwWUpHNGpDZ3Q4R09mWTBPMGw3UHA5MUdCV1ZodnlSQnNORVdYOGxKS3JRZ01xeQo0eW1NVWczcGUrcDRtZlNRUUtyNzBvcHh3Slg5WEU0SGl2cG9jMG42ZjdqMGZlVGlVb21TTmFUeGVIb2R2a25OCkw4bGtuLzd6dFdlNTFkcVIwSEZzelRvRHB1V1p3TS9IR1hmSHlhTmNZdEV5cnErakdheWZySEVDNE9mUWFyTlAKcE40VGhIYzhNQUdydmw2VkE5UmQzNGxBRnVSTThkMHc0ZC9xMDRPYlVESit1d1F2UTh1L2xZWTBva0VGQUJTdQpTUUlEQVFBQm8xQXdUakFkQmdOVkhRNEVGZ1FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0h3WURWUjBqCkJCZ3dGb0FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0RBWURWUjBUQkFVd0F3RUIvekFOQmdrcWhraUcKOXcwQkFRc0ZBQU9DQVFFQW9RZmNMV1A5a1dsYWFsclVRQ2hMZXRGaDRTWWJ1L1ltV0kxeHBrcU9uUXI3Q29uQwpKQjF1blZYUjA0bVFpMklQQjV3UW1EOTZXQWh0a1RiSElRYlJsa1F2MStXYXNmYWgrWjk2TXgvY0pmdXA1MllICmdKeDRFL0ZqbEwvL3VYVDJFbzJVdFBFcXBzZ2RUYmorZEdYZHdYV0J6WXJieGdBeVN1RXVaS3dBVVpGY2x2MmEKQkpXS1BSaVYySHp0bWRTTjJyb0xObFY3dEdmUFZTQk5abGNOWkZ2dTFFNThIOXZlUThHVWhJL3ViUHVCWnhaYgpGaElYN3FQNzZDQ2E3c09FMDhiYXBCaVVKckMyL3p1cnJqUTllNzR1SXdpWmg4ZFRMdjEwbWVnV2VlZVRzUTd0CkEvaVhkcjJFbXdmNUJsTkJDbitnRWZ0eWZBL25jMDhXMlVSV1VnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_cert_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "cipher": "AES256-GCM-SHA384",
+                                "dhFile": {
+                                    "id": ""
+                                },
+                                "keyFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_key_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsRDRBMDA0NzcwRjlDRERCNwoKWlo5dDE1QU5JWExncUpkY01lNUJyYjA4V2NiUFU2OUZISndvN0R0VHdJMUdDUnI1K3NJc3EzdHFJcjIvV3c2dQp3cXJ0MlREbFFmaWZWbVJZbFVVVE9JQU4vUVlDazVQNkp3Ukx2L1hwNCtPeXRxQ0QwNnpVTzVpRVAwVEFtOGt1CmRRU0tHbDFIZWtUUFlIMTVvdFJkczNBZ09YdGpzUVR1TXFqTFdkOStyaDlDY2F5RmYvMDFjbUQ5L1ZRQTY4RGwKZk5va2xEdVVjM1NqWUIrbWpVdVBySnBablRTbkZadC9pQjRvcTBpQXFiMzR5U0JWajBQZnJpcE8rTzY3TVhWagp1dGxIbUY0WXN1dTBSclhCSWpPRW5Rb1drMFl6ZWlvWXR0MVVaeXBEQmlQM3dTL05rS3lQNzB0RCtHSDFhWXZXCmFCUUw2T0RuTlMwbGZ4L1Jld1AvMnQ5WVE4N0hoOXN2YVRQNnlOV0NENzJWVm5RS1k3a0NxTVpVajhpRE9pVjcKc1p5dk1jRFBxclVTMFpyTURiR0xKU0E2N1orSFJaRmsxSFFCRUJGbElCcmRDRUVnMUtZSWNLRFNCeTBUWjMvSgpjV0R6YXlzNXJaQVlYRkhZSlpqMHZoN3R1SjZTTGVYbzlJS3haSmpqc3Rqa2txQWdCMHUyOG5jSnVNTnlaMm1OCjJVVDVTS2VzVGtwUnJlQzlUcTJUVHZBeVFqd01mWVUyb3VvcytVSXdFOXJJS2lkVmUxa3daWVdkcERhK1NmbXYKN0hRMXMrMHJUK0xrb2l4amhTSEFNZDlnMnA5NnpIOXlVYjJJdHViNkw4RU82alFFaSsrTk5Cekw2U2RncHp3UgpzR3pESzZSVWlPTTlzTm9WOEExMzdQSFJ1R0pBRGtnMWxRY1ByakgrdkdsWTV1dnd4dUs4T01IZlFzcmNTRURWCjdzVlZkWkUvb2VmbGFUamR0VXZWT25yaWlSbnZ6d2p0ek8rUzBqdzNQRDRwTjBlbDNsVHBaY3hOa2Y3VnRTRHMKYkFTOFNhUjE4NHIrd1lIOGlhdkNyUXhtbXJQazdOdVlUVUd6Qit6RmgyYTh2QUgyWnZOY1MzTUlaV3dnNUJYUQpEeEgwMGpDQlNma1d1SFY1ZHJPV203V0FQblNFYkkwTW1zUWMycmR3QmhDSzdVb3dkTUV5TEU1aWFWVklGa3R5CjliREJ2dk96eWh0KzVBdnhBczh5TXFEN3lBNDB2emc1bzVjZVhTZFNwQUFsWStRTWhjcmc1MkRiaHlFVVNwdEIKS1NYTmhhWGdSeFZqOU03L29QckQ1ZTV3NkFGbDZrU0NmRS9XcEdxOS85NTZ6dERPWW11Q1FweEFHNjN5QmFtbgp5cHJNU24yendSNUgvKzhTN3BXQytTdUE3SUUzSVkyNDA5aXNCV0tld1BZYXVVMnRvbkNPN3ExQUd3L2pFQVFpCk10YkUwN2U3ci9zRHFncHFxWlpta0JIV2V4ZlFLNHAxY08xWWRsTEY3ckhzaFdpYjVHdlRhRGhHNElTVUF3VnMKNE5TWjRUUE1LNEdVVzV5UXZsWVZ6KzdNN2pTNDNmZUpBQUlxMHBIcDVmZ2VTSlVrMlNtNEk1c1JBU1Y2RzRFWgpqODBnek5mcWlKanQwZmlQcS9WY1p2SnR1cFl4Syt5L0JXbFJMcjhnYmVndXkwMm1teWNSNTYzbXJ5YkJLbkc2CkZGdnlZSDRRRTBhelc2em1hK0R0bVZXTVkrcytGdnBPRmNwSGtIdUVxZTR0V1dsOHJiUkZNUDQ4b0FGLzRJQVkKTjREdmxLNHBVRzhCaDlOaHpjL1NhZEcyRG4zYXp1OE1aOXl0bmpuTG5vN3d6cDJJbUN6aUZDNGduZWVMbXVnaQpLZzFaTlBTRGVNUXNvZ0F5M3FOTVB6ZkF0WFYyQ0JzWkZvOEJ4ZWgzQW9qYlJLdzBIdm5OdWlLb0ZhQlZXcG1iCmdRTlBoN1VKV201MU1GbnVsVFNhekhaczNRWHhSRklRb0tibnN1TTl0OCsraVJXS3JBR0RZckFSYkg1cFpEQWgKQVIyS3dib3FVRHJIU3c0bWJzRnlJWXg5SkptWTZQbGErNE9yYUVpemNBdUtodzdJTXVWM2d3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K"
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_key_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "keyFilePassword": "appsec",
+                                "sessionReuseMethod": "DISABLE",
+                                "sessionReuseCount": 0,
+                                "profileId": "TLSProfile",
+                                "version": "TLSv1.2"
+                            },
+                            "IpTos": 0,
+                            "L4ProfileName": "DefaultTransportProfile",
+                            "ServerTLSProfile": {
+                                "certificateFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_cert_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVDRENDQXZDZ0F3SUJBZ0lVQkVONWtEN3crREpFV1VacDBzYXgzdEZFUTdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daUXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJREFKWFFqRU1NQW9HQTFVRUJ3d0RTMDlNTVJFdwpEd1lEVlFRS0RBaExSVmxUU1VkSVZERVBNQTBHQTFVRUN3d0dRVkJRVTBWRE1TSXdJQVlEVlFRRERCbFRaV04xCmNtVmtYMUpUUVdSbGN6TmZZMlZ5ZEY4eU1EUTRNU0l3SUFZSktvWklodmNOQVFrQkZoTmhjSEJ6WldOQWEyVjUKYzJsbmFIUXVZMjl0TUI0WERUSXdNREl3TkRFeU5UWXdNbG9YRFRNd01ESXdNVEV5TlRZd01sb3dnWlF4Q3pBSgpCZ05WQkFZVEFrbE9NUXN3Q1FZRFZRUUlEQUpYUWpFTU1Bb0dBMVVFQnd3RFMwOU1NUkV3RHdZRFZRUUtEQWhMClJWbFRTVWRJVkRFUE1BMEdBMVVFQ3d3R1FWQlFVMFZETVNJd0lBWURWUVFEREJsVFpXTjFjbVZrWDFKVFFXUmwKY3pOZlkyVnlkRjh5TURRNE1TSXdJQVlKS29aSWh2Y05BUWtCRmhOaGNIQnpaV05BYTJWNWMybG5hSFF1WTI5dApNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZ3SWMwVmRQR3JianI0dWNpaHZsClZsYlhjRlhXTHZ1bEFiaUlxMS9VYUsya0tMRzcyVFZUTXlxWkhXMzlPYVY1c25NaGhZQTdJa200SkZIZUs5NmwKTXBLVkhoMmlrRlR2c202NVlwWUpHNGpDZ3Q4R09mWTBPMGw3UHA5MUdCV1ZodnlSQnNORVdYOGxKS3JRZ01xeQo0eW1NVWczcGUrcDRtZlNRUUtyNzBvcHh3Slg5WEU0SGl2cG9jMG42ZjdqMGZlVGlVb21TTmFUeGVIb2R2a25OCkw4bGtuLzd6dFdlNTFkcVIwSEZzelRvRHB1V1p3TS9IR1hmSHlhTmNZdEV5cnErakdheWZySEVDNE9mUWFyTlAKcE40VGhIYzhNQUdydmw2VkE5UmQzNGxBRnVSTThkMHc0ZC9xMDRPYlVESit1d1F2UTh1L2xZWTBva0VGQUJTdQpTUUlEQVFBQm8xQXdUakFkQmdOVkhRNEVGZ1FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0h3WURWUjBqCkJCZ3dGb0FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0RBWURWUjBUQkFVd0F3RUIvekFOQmdrcWhraUcKOXcwQkFRc0ZBQU9DQVFFQW9RZmNMV1A5a1dsYWFsclVRQ2hMZXRGaDRTWWJ1L1ltV0kxeHBrcU9uUXI3Q29uQwpKQjF1blZYUjA0bVFpMklQQjV3UW1EOTZXQWh0a1RiSElRYlJsa1F2MStXYXNmYWgrWjk2TXgvY0pmdXA1MllICmdKeDRFL0ZqbEwvL3VYVDJFbzJVdFBFcXBzZ2RUYmorZEdYZHdYV0J6WXJieGdBeVN1RXVaS3dBVVpGY2x2MmEKQkpXS1BSaVYySHp0bWRTTjJyb0xObFY3dEdmUFZTQk5abGNOWkZ2dTFFNThIOXZlUThHVWhJL3ViUHVCWnhaYgpGaElYN3FQNzZDQ2E3c09FMDhiYXBCaVVKckMyL3p1cnJqUTllNzR1SXdpWmg4ZFRMdjEwbWVnV2VlZVRzUTd0CkEvaVhkcjJFbXdmNUJsTkJDbitnRWZ0eWZBL25jMDhXMlVSV1VnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_cert_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "cipher": "AES256-GCM-SHA384",
+                                "dhFile": {
+                                    "id": ""
+                                },
+                                "keyFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_key_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsRDRBMDA0NzcwRjlDRERCNwoKWlo5dDE1QU5JWExncUpkY01lNUJyYjA4V2NiUFU2OUZISndvN0R0VHdJMUdDUnI1K3NJc3EzdHFJcjIvV3c2dQp3cXJ0MlREbFFmaWZWbVJZbFVVVE9JQU4vUVlDazVQNkp3Ukx2L1hwNCtPeXRxQ0QwNnpVTzVpRVAwVEFtOGt1CmRRU0tHbDFIZWtUUFlIMTVvdFJkczNBZ09YdGpzUVR1TXFqTFdkOStyaDlDY2F5RmYvMDFjbUQ5L1ZRQTY4RGwKZk5va2xEdVVjM1NqWUIrbWpVdVBySnBablRTbkZadC9pQjRvcTBpQXFiMzR5U0JWajBQZnJpcE8rTzY3TVhWagp1dGxIbUY0WXN1dTBSclhCSWpPRW5Rb1drMFl6ZWlvWXR0MVVaeXBEQmlQM3dTL05rS3lQNzB0RCtHSDFhWXZXCmFCUUw2T0RuTlMwbGZ4L1Jld1AvMnQ5WVE4N0hoOXN2YVRQNnlOV0NENzJWVm5RS1k3a0NxTVpVajhpRE9pVjcKc1p5dk1jRFBxclVTMFpyTURiR0xKU0E2N1orSFJaRmsxSFFCRUJGbElCcmRDRUVnMUtZSWNLRFNCeTBUWjMvSgpjV0R6YXlzNXJaQVlYRkhZSlpqMHZoN3R1SjZTTGVYbzlJS3haSmpqc3Rqa2txQWdCMHUyOG5jSnVNTnlaMm1OCjJVVDVTS2VzVGtwUnJlQzlUcTJUVHZBeVFqd01mWVUyb3VvcytVSXdFOXJJS2lkVmUxa3daWVdkcERhK1NmbXYKN0hRMXMrMHJUK0xrb2l4amhTSEFNZDlnMnA5NnpIOXlVYjJJdHViNkw4RU82alFFaSsrTk5Cekw2U2RncHp3UgpzR3pESzZSVWlPTTlzTm9WOEExMzdQSFJ1R0pBRGtnMWxRY1ByakgrdkdsWTV1dnd4dUs4T01IZlFzcmNTRURWCjdzVlZkWkUvb2VmbGFUamR0VXZWT25yaWlSbnZ6d2p0ek8rUzBqdzNQRDRwTjBlbDNsVHBaY3hOa2Y3VnRTRHMKYkFTOFNhUjE4NHIrd1lIOGlhdkNyUXhtbXJQazdOdVlUVUd6Qit6RmgyYTh2QUgyWnZOY1MzTUlaV3dnNUJYUQpEeEgwMGpDQlNma1d1SFY1ZHJPV203V0FQblNFYkkwTW1zUWMycmR3QmhDSzdVb3dkTUV5TEU1aWFWVklGa3R5CjliREJ2dk96eWh0KzVBdnhBczh5TXFEN3lBNDB2emc1bzVjZVhTZFNwQUFsWStRTWhjcmc1MkRiaHlFVVNwdEIKS1NYTmhhWGdSeFZqOU03L29QckQ1ZTV3NkFGbDZrU0NmRS9XcEdxOS85NTZ6dERPWW11Q1FweEFHNjN5QmFtbgp5cHJNU24yendSNUgvKzhTN3BXQytTdUE3SUUzSVkyNDA5aXNCV0tld1BZYXVVMnRvbkNPN3ExQUd3L2pFQVFpCk10YkUwN2U3ci9zRHFncHFxWlpta0JIV2V4ZlFLNHAxY08xWWRsTEY3ckhzaFdpYjVHdlRhRGhHNElTVUF3VnMKNE5TWjRUUE1LNEdVVzV5UXZsWVZ6KzdNN2pTNDNmZUpBQUlxMHBIcDVmZ2VTSlVrMlNtNEk1c1JBU1Y2RzRFWgpqODBnek5mcWlKanQwZmlQcS9WY1p2SnR1cFl4Syt5L0JXbFJMcjhnYmVndXkwMm1teWNSNTYzbXJ5YkJLbkc2CkZGdnlZSDRRRTBhelc2em1hK0R0bVZXTVkrcytGdnBPRmNwSGtIdUVxZTR0V1dsOHJiUkZNUDQ4b0FGLzRJQVkKTjREdmxLNHBVRzhCaDlOaHpjL1NhZEcyRG4zYXp1OE1aOXl0bmpuTG5vN3d6cDJJbUN6aUZDNGduZWVMbXVnaQpLZzFaTlBTRGVNUXNvZ0F5M3FOTVB6ZkF0WFYyQ0JzWkZvOEJ4ZWgzQW9qYlJLdzBIdm5OdWlLb0ZhQlZXcG1iCmdRTlBoN1VKV201MU1GbnVsVFNhekhaczNRWHhSRklRb0tibnN1TTl0OCsraVJXS3JBR0RZckFSYkg1cFpEQWgKQVIyS3dib3FVRHJIU3c0bWJzRnlJWXg5SkptWTZQbGErNE9yYUVpemNBdUtodzdJTXVWM2d3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K"
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_key_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "keyFilePassword": "appsec",
+                                "profileId": "TLSProfile",
+                                "version": "TLSv1.2",
+                                "sessionReuseMethod": "DISABLE",
+                                "sessionReuseCount": 0
+                            },
+                            "ClientTcpProfile": {
+                                "CloseWithReset": false,
+                                "DeferAccept": true,
+                                "EcnEnabled": false,
+                                "MaxRto": 3200,
+                                "MaxSrcPort": 65535,
+                                "MinRto": 2000,
+                                "MinSrcPort": 1024,
+                                "PingPong": true,
+                                "PmtuDiscDisabled": false,
+                                "RecycleTwEnabled": true,
+                                "Reordering": false,
+                                "ReuseTwEnabled": true,
+                                "RxBuffer": 4096,
+                                "SackEnabled": false,
+                                "SockGroup": "appsim_group",
+                                "TimestampHdrEnabled": true,
+                                "TxBuffer": 4096,
+                                "UserMss": 1460,
+                                "WscaleEnabled": false
+                            },
+                            "ServerTcpProfile": {
+                                "CloseWithReset": false,
+                                "DeferAccept": true,
+                                "EcnEnabled": false,
+                                "MaxRto": 3200,
+                                "MaxSrcPort": 65535,
+                                "MinRto": 2000,
+                                "MinSrcPort": 1024,
+                                "PingPong": true,
+                                "PmtuDiscDisabled": false,
+                                "RecycleTwEnabled": true,
+                                "Reordering": false,
+                                "ReuseTwEnabled": true,
+                                "RxBuffer": 4096,
+                                "SackEnabled": false,
+                                "SockGroup": "appsim_group",
+                                "TimestampHdrEnabled": true,
+                                "TxBuffer": 4096,
+                                "UserMss": 1460,
+                                "WscaleEnabled": false
+                            },
+                            "UdpProfile": {
+                                "MaxSrcPort": 65535,
+                                "MinSrcPort": 1024,
+                                "RecvBuffSizeIni": 32768,
+                                "RecvBuffSizeRes": 32768,
+                                "RxBuffer": 32768,
+                                "SockGroup": "appsim_group",
+                                "TxBuffer": 32768
+                            },
+                            "VlanPrio": 0
+                        }
+                    },
+                    "id": "1"
+                }
+            ],
+            "NetworkProfiles": [
+                {
+                    "DUTNetworkSegment": [
+                        {
+                            "HTTPHealthCheck": {
+                                "Enabled": true,
+                                "Port": 0,
+                                "Params": [
+                                    {
+                                        "id": "1",
+                                        "ParamId": "HealthCheckURI",
+                                        "Source": "UserInput",
+                                        "Type": "bigstring",
+                                        "Value": "/AppSecHTTPHealthCheck",
+                                        "IsDeprecated": false
+                                    },
+                                    {
+                                        "id": "2",
+                                        "ParamId": "PayloadFile",
+                                        "Source": "PayloadProfile",
+                                        "Type": "payload",
+                                        "Value": "1",
+                                        "IsDeprecated": false
+                                    },
+                                    {
+                                        "id": "3",
+                                        "ParamId": "HealthCheckVersion",
+                                        "Source": "UserInput",
+                                        "Type": "bigstring",
+                                        "Value": "1.1",
+                                        "IsDeprecated": false
+                                    }
+                                ]
+                            },
+                            "HTTPSHealthCheck": {
+                                "Enabled": false,
+                                "Port": 0,
+                                "Params": [
+                                    {
+                                        "id": "1",
+                                        "ParamId": "HealthCheckURI",
+                                        "Source": "UserInput",
+                                        "Type": "bigstring",
+                                        "Value": "/AppSecHTTPSHealthCheck",
+                                        "IsDeprecated": false
+                                    },
+                                    {
+                                        "id": "2",
+                                        "ParamId": "PayloadFile",
+                                        "Source": "PayloadProfile",
+                                        "Type": "payload",
+                                        "Value": "1",
+                                        "IsDeprecated": false
+                                    },
+                                    {
+                                        "id": "3",
+                                        "ParamId": "HealthCheckVersion",
+                                        "Source": "UserInput",
+                                        "Type": "bigstring",
+                                        "Value": "1.1",
+                                        "IsDeprecated": false
+                                    }
+                                ]
+                            },
+                            "TCPHealthCheck": {
+                                "Enabled": false,
+                                "Port": 0,
+                                "Params": []
+                            },
+                            "Name": "DUT Network",
+                            "active": false,
+                            "host": "",
+                            "id": "1"
+                        }
+                    ],
+                    "IPNetworkSegment": [
+                        {
+                            "EthRange": {
+                                "Count": 10,
+                                "MacAuto": true,
+                                "MacStart": "01:02:03:04:05:06",
+                                "MacIncr": "00:00:00:00:00:01",
+                                "OneMacPerIP": true
+                            },
+                            "IPRanges": [
+                                {
+                                    "Count": 1,
+                                    "GwAuto": true,
+                                    "GwStart": "10.0.0.1",
+                                    "IpIncr": "0.0.0.1",
+                                    "IpStart": "10.0.0.10",
+                                    "IpRangeName": "IP Range 1",
+                                    "IpAuto": true,
+                                    "NetMaskAuto": true,
+                                    "IpVer": "IPV4",
+                                    "Mss": 1460,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "IP Network Segment 1",
+                            "agentAssignments": {
+                                "ByID": [],
+                                "ByTag": []
+                            },
+                            "id": "1",
+                            "networkTags": [
+                                "Client"
+                            ]
+                        },
+                        {
+                            "EthRange": {
+                                "Count": 10,
+                                "MacAuto": true,
+                                "MacStart": "01:02:03:04:05:06",
+                                "MacIncr": "00:00:00:00:00:01",
+                                "OneMacPerIP": true
+                            },
+                            "IPRanges": [
+                                {
+                                    "Count": 1,
+                                    "GwAuto": true,
+                                    "IpIncr": "0.0.0.1",
+                                    "GwStart": "10.0.0.1",
+                                    "IpStart": "10.0.0.10",
+                                    "IpRangeName": "IP Range 1",
+                                    "IpAuto": true,
+                                    "NetMaskAuto": true,
+                                    "IpVer": "IPV4",
+                                    "Mss": 1460,
+                                    "id": "1"
+                                }
+                            ],
+                            "Name": "IP Network Segment 2",
+                            "agentAssignments": {
+                                "ByID": [],
+                                "ByTag": []
+                            },
+                            "id": "2",
+                            "networkTags": [
+                                "Server"
+                            ]
+                        }
+                    ],
+                    "id": "1"
+                }
+            ],
+            "TrafficProfiles": [
+                {
+                    "Applications": [
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 0,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "Portal",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 0,
+                                    "id": "1"
+                                }
+                            ],
+                            "DataTypes": [],
+                            "Name": "Portal App 1",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "ObjectiveWeight": 4,
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "portal.keysight.io",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Session Cookie Name",
+                                    "ParamId": "app_session_cookie_name",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "SessionID",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "Portal",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Login_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": false,
+                                            "Name": "Login",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "client_login_username",
+                                                    "Name": "Login Username",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "user1",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ParamId": "client_login_password",
+                                                    "Name": "Login Password",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "user1",
+                                                    "id": "1",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "2"
+                                        },
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Search Image_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": false,
+                                            "Name": "Search Image",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "search_query",
+                                                    "Name": "Search Query",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "cars",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "3"
+                                        },
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Upload Image_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": false,
+                                            "Name": "Upload Image",
+                                            "Params": [
+                                                {
+                                                    "ParamId": "uploaded_filename",
+                                                    "Name": "Uploaded File Name",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "11895993_10206540538284549_548429471486607029_n.jpg",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ParamId": "image_raw_bytes",
+                                                    "Name": "Uploaded File",
+                                                    "Source": "PayloadProfile",
+                                                    "Type": "payload",
+                                                    "Value": "file",
+                                                    "id": "1",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "4"
+                                        },
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "Logout_Exchange",
+                                                    "ServerEndpoint": "Server"
+                                                },
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "__Disconnect__",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": false,
+                                            "Name": "Logout",
+                                            "Params": [],
+                                            "id": "5"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "1",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        },
+                        {
+                            "Connections": [
+                                {
+                                    "ClientEndpoint": "Client",
+                                    "ClientPort": 0,
+                                    "ClosingEnd": "",
+                                    "MaxTransactions": 1,
+                                    "Name": "HTTP",
+                                    "ServerEndpoint": "Server",
+                                    "ServerPort": 0,
+                                    "id": "1"
+                                }
+                            ],
+                            "DataTypes": [],
+                            "Name": "HTTP App 1",
+                            "NetworkMapping": {
+                                "ClientNetworkTags": [
+                                    "Client"
+                                ],
+                                "IsModified": false,
+                                "ServerNetworkTags": [
+                                    "Server"
+                                ]
+                            },
+                            "ObjectiveWeight": 1,
+                            "Params": [
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Http Version",
+                                    "ParamId": "http_version",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "1.1",
+                                    "id": "0",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "Hostname",
+                                    "ParamId": "hostname",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "generic.keysight.io",
+                                    "id": "1",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "Name": "User Agent",
+                                    "ParamId": "user_agent",
+                                    "Source": "UserInput",
+                                    "Type": "bigstring",
+                                    "Value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
+                                    "id": "2",
+                                    "IsDeprecated": false
+                                },
+                                {
+                                    "ArrayElementType": "",
+                                    "IsModified": false,
+                                    "Name": "ContentTypeDict",
+                                    "ParamId": "ContentTypeDict",
+                                    "Source": "UserInput",
+                                    "Type": "dictionary",
+                                    "Value": "",
+                                    "id": "3",
+                                    "IsDeprecated": false
+                                }
+                            ],
+                            "ProtocolID": "HTTP",
+                            "Tracks": [
+                                {
+                                    "Actions": [
+                                        {
+                                            "Exchanges": [
+                                                {
+                                                    "ClientEndpoint": "Client",
+                                                    "Name": "HTTP GET_Exchange_0",
+                                                    "ServerEndpoint": "Server"
+                                                }
+                                            ],
+                                            "IsStrike": false,
+                                            "Name": "HTTP GET",
+                                            "Params": [
+                                                {
+                                                    "ArrayElementType": "",
+                                                    "Name": "Response body",
+                                                    "ParamId": "get_resp_message_body",
+                                                    "Source": "PayloadProfile",
+                                                    "Type": "payload",
+                                                    "Value": "file",
+                                                    "id": "0",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "",
+                                                    "Name": "Reason phrase",
+                                                    "ParamId": "get_reason_phrase",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "OK",
+                                                    "id": "1",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "",
+                                                    "Name": "Query",
+                                                    "ParamId": "get_query",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "name1=val1",
+                                                    "id": "2",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "",
+                                                    "Name": "Path",
+                                                    "ParamId": "get_path",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "/file.txt",
+                                                    "id": "3",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "HTTPHeader",
+                                                    "ArrayElements": [
+                                                        {
+                                                            "name": "Sec-Fetch-User",
+                                                            "value": "?1"
+                                                        },
+                                                        {
+                                                            "name": "Sec-Fetch-Site",
+                                                            "value": "none"
+                                                        },
+                                                        {
+                                                            "name": "Accept-Language",
+                                                            "value": "en-US"
+                                                        },
+                                                        {
+                                                            "name": "Upgrade-Insecure-Requests",
+                                                            "value": "1"
+                                                        }
+                                                    ],
+                                                    "Name": "Request headers",
+                                                    "ParamId": "get_req_headers",
+                                                    "Source": "UserInput",
+                                                    "Type": "array_v2",
+                                                    "Value": "",
+                                                    "id": "4",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "",
+                                                    "Name": "Status code",
+                                                    "ParamId": "get_status_code",
+                                                    "Source": "UserInput",
+                                                    "Type": "bigstring",
+                                                    "Value": "200",
+                                                    "id": "5",
+                                                    "IsDeprecated": false
+                                                },
+                                                {
+                                                    "ArrayElementType": "HTTPHeader",
+                                                    "ArrayElements": [
+                                                        {
+                                                            "name": "Etag",
+                                                            "value": "1541025663"
+                                                        },
+                                                        {
+                                                            "name": "Cache-Control",
+                                                            "value": "max-age=604801"
+                                                        }
+                                                    ],
+                                                    "Name": "Response headers",
+                                                    "ParamId": "get_resp_headers",
+                                                    "Source": "UserInput",
+                                                    "Type": "array_v2",
+                                                    "Value": "",
+                                                    "id": "6",
+                                                    "IsDeprecated": false
+                                                }
+                                            ],
+                                            "id": "1"
+                                        }
+                                    ],
+                                    "id": "1"
+                                }
+                            ],
+                            "id": "2",
+                            "ClientHTTPProfile": {
+                                "Name": "Chrome",
+                                "Description": "This profile defines parameters for Chrome-like applications",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "client_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "User-Agent",
+                                                "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+                                            },
+                                            {
+                                                "name": "Accept-Language",
+                                                "value": "en-us,en"
+                                            },
+                                            {
+                                                "name": "Accept-Encoding",
+                                                "value": "gzip,deflate,bzip2"
+                                            },
+                                            {
+                                                "name": "Accept-Charset",
+                                                "value": "ISO-8859-1,*,utf-8"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Chrome"
+                            },
+                            "ServerHTTPProfile": {
+                                "Name": "Apache",
+                                "Description": "This profile defines parameters for Apache-like servers",
+                                "Params": [
+                                    {
+                                        "id": "0",
+                                        "ParamId": "server_profile_headers",
+                                        "Type": "array_v2",
+                                        "Source": "UserInput",
+                                        "ArrayElementType": "HTTPHeader",
+                                        "ArrayElements": [
+                                            {
+                                                "name": "Server",
+                                                "value": "Apache/2.4.18 (Ubuntu)"
+                                            },
+                                            {
+                                                "name": "Accept-Ranges",
+                                                "value": "bytes"
+                                            }
+                                        ],
+                                        "Readonly": true,
+                                        "IsDeprecated": false
+                                    }
+                                ],
+                                "ExternalResourceURL": "http://appsec-resource-service/resources/http-profiles/Apache"
+                            }
+                        }
+                    ],
+                    "DefaultNetworkMapping": {
+                        "ClientNetworkTags": [
+                            "Client"
+                        ],
+                        "ServerNetworkTags": [
+                            "Server"
+                        ]
+                    },
+                    "Name": "Traffic Profile",
+                    "ObjectivesAndTimeline": {
+                        "PrimaryObjective": {
+                            "Type": "Simulated users",
+                            "Unit": "",
+                            "id": "0"
+                        },
+                        "SecondaryObjectives": [],
+                        "TimelineSegments": [
+                            {
+                                "Duration": 60,
+                                "PrimaryObjectiveValue": 100,
+                                "SecondaryObjectiveValues": [],
+                                "SegmentType": "",
+                                "id": "1"
+                            }
+                        ]
+                    },
+                    "TrafficSettings": {
+                        "DefaultTransportProfile": {
+                            "ClientTLSProfile": {
+                                "certificateFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_cert_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVDRENDQXZDZ0F3SUJBZ0lVQkVONWtEN3crREpFV1VacDBzYXgzdEZFUTdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daUXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJREFKWFFqRU1NQW9HQTFVRUJ3d0RTMDlNTVJFdwpEd1lEVlFRS0RBaExSVmxUU1VkSVZERVBNQTBHQTFVRUN3d0dRVkJRVTBWRE1TSXdJQVlEVlFRRERCbFRaV04xCmNtVmtYMUpUUVdSbGN6TmZZMlZ5ZEY4eU1EUTRNU0l3SUFZSktvWklodmNOQVFrQkZoTmhjSEJ6WldOQWEyVjUKYzJsbmFIUXVZMjl0TUI0WERUSXdNREl3TkRFeU5UWXdNbG9YRFRNd01ESXdNVEV5TlRZd01sb3dnWlF4Q3pBSgpCZ05WQkFZVEFrbE9NUXN3Q1FZRFZRUUlEQUpYUWpFTU1Bb0dBMVVFQnd3RFMwOU1NUkV3RHdZRFZRUUtEQWhMClJWbFRTVWRJVkRFUE1BMEdBMVVFQ3d3R1FWQlFVMFZETVNJd0lBWURWUVFEREJsVFpXTjFjbVZrWDFKVFFXUmwKY3pOZlkyVnlkRjh5TURRNE1TSXdJQVlKS29aSWh2Y05BUWtCRmhOaGNIQnpaV05BYTJWNWMybG5hSFF1WTI5dApNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZ3SWMwVmRQR3JianI0dWNpaHZsClZsYlhjRlhXTHZ1bEFiaUlxMS9VYUsya0tMRzcyVFZUTXlxWkhXMzlPYVY1c25NaGhZQTdJa200SkZIZUs5NmwKTXBLVkhoMmlrRlR2c202NVlwWUpHNGpDZ3Q4R09mWTBPMGw3UHA5MUdCV1ZodnlSQnNORVdYOGxKS3JRZ01xeQo0eW1NVWczcGUrcDRtZlNRUUtyNzBvcHh3Slg5WEU0SGl2cG9jMG42ZjdqMGZlVGlVb21TTmFUeGVIb2R2a25OCkw4bGtuLzd6dFdlNTFkcVIwSEZzelRvRHB1V1p3TS9IR1hmSHlhTmNZdEV5cnErakdheWZySEVDNE9mUWFyTlAKcE40VGhIYzhNQUdydmw2VkE5UmQzNGxBRnVSTThkMHc0ZC9xMDRPYlVESit1d1F2UTh1L2xZWTBva0VGQUJTdQpTUUlEQVFBQm8xQXdUakFkQmdOVkhRNEVGZ1FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0h3WURWUjBqCkJCZ3dGb0FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0RBWURWUjBUQkFVd0F3RUIvekFOQmdrcWhraUcKOXcwQkFRc0ZBQU9DQVFFQW9RZmNMV1A5a1dsYWFsclVRQ2hMZXRGaDRTWWJ1L1ltV0kxeHBrcU9uUXI3Q29uQwpKQjF1blZYUjA0bVFpMklQQjV3UW1EOTZXQWh0a1RiSElRYlJsa1F2MStXYXNmYWgrWjk2TXgvY0pmdXA1MllICmdKeDRFL0ZqbEwvL3VYVDJFbzJVdFBFcXBzZ2RUYmorZEdYZHdYV0J6WXJieGdBeVN1RXVaS3dBVVpGY2x2MmEKQkpXS1BSaVYySHp0bWRTTjJyb0xObFY3dEdmUFZTQk5abGNOWkZ2dTFFNThIOXZlUThHVWhJL3ViUHVCWnhaYgpGaElYN3FQNzZDQ2E3c09FMDhiYXBCaVVKckMyL3p1cnJqUTllNzR1SXdpWmg4ZFRMdjEwbWVnV2VlZVRzUTd0CkEvaVhkcjJFbXdmNUJsTkJDbitnRWZ0eWZBL25jMDhXMlVSV1VnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_cert_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "cipher": "AES256-GCM-SHA384",
+                                "dhFile": {
+                                    "id": ""
+                                },
+                                "keyFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_key_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsRDRBMDA0NzcwRjlDRERCNwoKWlo5dDE1QU5JWExncUpkY01lNUJyYjA4V2NiUFU2OUZISndvN0R0VHdJMUdDUnI1K3NJc3EzdHFJcjIvV3c2dQp3cXJ0MlREbFFmaWZWbVJZbFVVVE9JQU4vUVlDazVQNkp3Ukx2L1hwNCtPeXRxQ0QwNnpVTzVpRVAwVEFtOGt1CmRRU0tHbDFIZWtUUFlIMTVvdFJkczNBZ09YdGpzUVR1TXFqTFdkOStyaDlDY2F5RmYvMDFjbUQ5L1ZRQTY4RGwKZk5va2xEdVVjM1NqWUIrbWpVdVBySnBablRTbkZadC9pQjRvcTBpQXFiMzR5U0JWajBQZnJpcE8rTzY3TVhWagp1dGxIbUY0WXN1dTBSclhCSWpPRW5Rb1drMFl6ZWlvWXR0MVVaeXBEQmlQM3dTL05rS3lQNzB0RCtHSDFhWXZXCmFCUUw2T0RuTlMwbGZ4L1Jld1AvMnQ5WVE4N0hoOXN2YVRQNnlOV0NENzJWVm5RS1k3a0NxTVpVajhpRE9pVjcKc1p5dk1jRFBxclVTMFpyTURiR0xKU0E2N1orSFJaRmsxSFFCRUJGbElCcmRDRUVnMUtZSWNLRFNCeTBUWjMvSgpjV0R6YXlzNXJaQVlYRkhZSlpqMHZoN3R1SjZTTGVYbzlJS3haSmpqc3Rqa2txQWdCMHUyOG5jSnVNTnlaMm1OCjJVVDVTS2VzVGtwUnJlQzlUcTJUVHZBeVFqd01mWVUyb3VvcytVSXdFOXJJS2lkVmUxa3daWVdkcERhK1NmbXYKN0hRMXMrMHJUK0xrb2l4amhTSEFNZDlnMnA5NnpIOXlVYjJJdHViNkw4RU82alFFaSsrTk5Cekw2U2RncHp3UgpzR3pESzZSVWlPTTlzTm9WOEExMzdQSFJ1R0pBRGtnMWxRY1ByakgrdkdsWTV1dnd4dUs4T01IZlFzcmNTRURWCjdzVlZkWkUvb2VmbGFUamR0VXZWT25yaWlSbnZ6d2p0ek8rUzBqdzNQRDRwTjBlbDNsVHBaY3hOa2Y3VnRTRHMKYkFTOFNhUjE4NHIrd1lIOGlhdkNyUXhtbXJQazdOdVlUVUd6Qit6RmgyYTh2QUgyWnZOY1MzTUlaV3dnNUJYUQpEeEgwMGpDQlNma1d1SFY1ZHJPV203V0FQblNFYkkwTW1zUWMycmR3QmhDSzdVb3dkTUV5TEU1aWFWVklGa3R5CjliREJ2dk96eWh0KzVBdnhBczh5TXFEN3lBNDB2emc1bzVjZVhTZFNwQUFsWStRTWhjcmc1MkRiaHlFVVNwdEIKS1NYTmhhWGdSeFZqOU03L29QckQ1ZTV3NkFGbDZrU0NmRS9XcEdxOS85NTZ6dERPWW11Q1FweEFHNjN5QmFtbgp5cHJNU24yendSNUgvKzhTN3BXQytTdUE3SUUzSVkyNDA5aXNCV0tld1BZYXVVMnRvbkNPN3ExQUd3L2pFQVFpCk10YkUwN2U3ci9zRHFncHFxWlpta0JIV2V4ZlFLNHAxY08xWWRsTEY3ckhzaFdpYjVHdlRhRGhHNElTVUF3VnMKNE5TWjRUUE1LNEdVVzV5UXZsWVZ6KzdNN2pTNDNmZUpBQUlxMHBIcDVmZ2VTSlVrMlNtNEk1c1JBU1Y2RzRFWgpqODBnek5mcWlKanQwZmlQcS9WY1p2SnR1cFl4Syt5L0JXbFJMcjhnYmVndXkwMm1teWNSNTYzbXJ5YkJLbkc2CkZGdnlZSDRRRTBhelc2em1hK0R0bVZXTVkrcytGdnBPRmNwSGtIdUVxZTR0V1dsOHJiUkZNUDQ4b0FGLzRJQVkKTjREdmxLNHBVRzhCaDlOaHpjL1NhZEcyRG4zYXp1OE1aOXl0bmpuTG5vN3d6cDJJbUN6aUZDNGduZWVMbXVnaQpLZzFaTlBTRGVNUXNvZ0F5M3FOTVB6ZkF0WFYyQ0JzWkZvOEJ4ZWgzQW9qYlJLdzBIdm5OdWlLb0ZhQlZXcG1iCmdRTlBoN1VKV201MU1GbnVsVFNhekhaczNRWHhSRklRb0tibnN1TTl0OCsraVJXS3JBR0RZckFSYkg1cFpEQWgKQVIyS3dib3FVRHJIU3c0bWJzRnlJWXg5SkptWTZQbGErNE9yYUVpemNBdUtodzdJTXVWM2d3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K"
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_key_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "keyFilePassword": "appsec",
+                                "sessionReuseMethod": "DISABLE",
+                                "sessionReuseCount": 0,
+                                "profileId": "TLSProfile",
+                                "version": "TLSv1.2"
+                            },
+                            "IpTos": 0,
+                            "L4ProfileName": "DefaultTransportProfile",
+                            "ServerTLSProfile": {
+                                "certificateFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_cert_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVDRENDQXZDZ0F3SUJBZ0lVQkVONWtEN3crREpFV1VacDBzYXgzdEZFUTdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daUXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJREFKWFFqRU1NQW9HQTFVRUJ3d0RTMDlNTVJFdwpEd1lEVlFRS0RBaExSVmxUU1VkSVZERVBNQTBHQTFVRUN3d0dRVkJRVTBWRE1TSXdJQVlEVlFRRERCbFRaV04xCmNtVmtYMUpUUVdSbGN6TmZZMlZ5ZEY4eU1EUTRNU0l3SUFZSktvWklodmNOQVFrQkZoTmhjSEJ6WldOQWEyVjUKYzJsbmFIUXVZMjl0TUI0WERUSXdNREl3TkRFeU5UWXdNbG9YRFRNd01ESXdNVEV5TlRZd01sb3dnWlF4Q3pBSgpCZ05WQkFZVEFrbE9NUXN3Q1FZRFZRUUlEQUpYUWpFTU1Bb0dBMVVFQnd3RFMwOU1NUkV3RHdZRFZRUUtEQWhMClJWbFRTVWRJVkRFUE1BMEdBMVVFQ3d3R1FWQlFVMFZETVNJd0lBWURWUVFEREJsVFpXTjFjbVZrWDFKVFFXUmwKY3pOZlkyVnlkRjh5TURRNE1TSXdJQVlKS29aSWh2Y05BUWtCRmhOaGNIQnpaV05BYTJWNWMybG5hSFF1WTI5dApNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZ3SWMwVmRQR3JianI0dWNpaHZsClZsYlhjRlhXTHZ1bEFiaUlxMS9VYUsya0tMRzcyVFZUTXlxWkhXMzlPYVY1c25NaGhZQTdJa200SkZIZUs5NmwKTXBLVkhoMmlrRlR2c202NVlwWUpHNGpDZ3Q4R09mWTBPMGw3UHA5MUdCV1ZodnlSQnNORVdYOGxKS3JRZ01xeQo0eW1NVWczcGUrcDRtZlNRUUtyNzBvcHh3Slg5WEU0SGl2cG9jMG42ZjdqMGZlVGlVb21TTmFUeGVIb2R2a25OCkw4bGtuLzd6dFdlNTFkcVIwSEZzelRvRHB1V1p3TS9IR1hmSHlhTmNZdEV5cnErakdheWZySEVDNE9mUWFyTlAKcE40VGhIYzhNQUdydmw2VkE5UmQzNGxBRnVSTThkMHc0ZC9xMDRPYlVESit1d1F2UTh1L2xZWTBva0VGQUJTdQpTUUlEQVFBQm8xQXdUakFkQmdOVkhRNEVGZ1FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0h3WURWUjBqCkJCZ3dGb0FVL2FEYkc4RGJuV3hkNXhYSUVaMlpVTjRJWWo0d0RBWURWUjBUQkFVd0F3RUIvekFOQmdrcWhraUcKOXcwQkFRc0ZBQU9DQVFFQW9RZmNMV1A5a1dsYWFsclVRQ2hMZXRGaDRTWWJ1L1ltV0kxeHBrcU9uUXI3Q29uQwpKQjF1blZYUjA0bVFpMklQQjV3UW1EOTZXQWh0a1RiSElRYlJsa1F2MStXYXNmYWgrWjk2TXgvY0pmdXA1MllICmdKeDRFL0ZqbEwvL3VYVDJFbzJVdFBFcXBzZ2RUYmorZEdYZHdYV0J6WXJieGdBeVN1RXVaS3dBVVpGY2x2MmEKQkpXS1BSaVYySHp0bWRTTjJyb0xObFY3dEdmUFZTQk5abGNOWkZ2dTFFNThIOXZlUThHVWhJL3ViUHVCWnhaYgpGaElYN3FQNzZDQ2E3c09FMDhiYXBCaVVKckMyL3p1cnJqUTllNzR1SXdpWmg4ZFRMdjEwbWVnV2VlZVRzUTd0CkEvaVhkcjJFbXdmNUJsTkJDbitnRWZ0eWZBL25jMDhXMlVSV1VnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_cert_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "cipher": "AES256-GCM-SHA384",
+                                "dhFile": {
+                                    "id": ""
+                                },
+                                "keyFile": {
+                                    "FileValue": {
+                                        "fileName": "Secured_RSAdes3_key_2048.pem",
+                                        "payload": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsRDRBMDA0NzcwRjlDRERCNwoKWlo5dDE1QU5JWExncUpkY01lNUJyYjA4V2NiUFU2OUZISndvN0R0VHdJMUdDUnI1K3NJc3EzdHFJcjIvV3c2dQp3cXJ0MlREbFFmaWZWbVJZbFVVVE9JQU4vUVlDazVQNkp3Ukx2L1hwNCtPeXRxQ0QwNnpVTzVpRVAwVEFtOGt1CmRRU0tHbDFIZWtUUFlIMTVvdFJkczNBZ09YdGpzUVR1TXFqTFdkOStyaDlDY2F5RmYvMDFjbUQ5L1ZRQTY4RGwKZk5va2xEdVVjM1NqWUIrbWpVdVBySnBablRTbkZadC9pQjRvcTBpQXFiMzR5U0JWajBQZnJpcE8rTzY3TVhWagp1dGxIbUY0WXN1dTBSclhCSWpPRW5Rb1drMFl6ZWlvWXR0MVVaeXBEQmlQM3dTL05rS3lQNzB0RCtHSDFhWXZXCmFCUUw2T0RuTlMwbGZ4L1Jld1AvMnQ5WVE4N0hoOXN2YVRQNnlOV0NENzJWVm5RS1k3a0NxTVpVajhpRE9pVjcKc1p5dk1jRFBxclVTMFpyTURiR0xKU0E2N1orSFJaRmsxSFFCRUJGbElCcmRDRUVnMUtZSWNLRFNCeTBUWjMvSgpjV0R6YXlzNXJaQVlYRkhZSlpqMHZoN3R1SjZTTGVYbzlJS3haSmpqc3Rqa2txQWdCMHUyOG5jSnVNTnlaMm1OCjJVVDVTS2VzVGtwUnJlQzlUcTJUVHZBeVFqd01mWVUyb3VvcytVSXdFOXJJS2lkVmUxa3daWVdkcERhK1NmbXYKN0hRMXMrMHJUK0xrb2l4amhTSEFNZDlnMnA5NnpIOXlVYjJJdHViNkw4RU82alFFaSsrTk5Cekw2U2RncHp3UgpzR3pESzZSVWlPTTlzTm9WOEExMzdQSFJ1R0pBRGtnMWxRY1ByakgrdkdsWTV1dnd4dUs4T01IZlFzcmNTRURWCjdzVlZkWkUvb2VmbGFUamR0VXZWT25yaWlSbnZ6d2p0ek8rUzBqdzNQRDRwTjBlbDNsVHBaY3hOa2Y3VnRTRHMKYkFTOFNhUjE4NHIrd1lIOGlhdkNyUXhtbXJQazdOdVlUVUd6Qit6RmgyYTh2QUgyWnZOY1MzTUlaV3dnNUJYUQpEeEgwMGpDQlNma1d1SFY1ZHJPV203V0FQblNFYkkwTW1zUWMycmR3QmhDSzdVb3dkTUV5TEU1aWFWVklGa3R5CjliREJ2dk96eWh0KzVBdnhBczh5TXFEN3lBNDB2emc1bzVjZVhTZFNwQUFsWStRTWhjcmc1MkRiaHlFVVNwdEIKS1NYTmhhWGdSeFZqOU03L29QckQ1ZTV3NkFGbDZrU0NmRS9XcEdxOS85NTZ6dERPWW11Q1FweEFHNjN5QmFtbgp5cHJNU24yendSNUgvKzhTN3BXQytTdUE3SUUzSVkyNDA5aXNCV0tld1BZYXVVMnRvbkNPN3ExQUd3L2pFQVFpCk10YkUwN2U3ci9zRHFncHFxWlpta0JIV2V4ZlFLNHAxY08xWWRsTEY3ckhzaFdpYjVHdlRhRGhHNElTVUF3VnMKNE5TWjRUUE1LNEdVVzV5UXZsWVZ6KzdNN2pTNDNmZUpBQUlxMHBIcDVmZ2VTSlVrMlNtNEk1c1JBU1Y2RzRFWgpqODBnek5mcWlKanQwZmlQcS9WY1p2SnR1cFl4Syt5L0JXbFJMcjhnYmVndXkwMm1teWNSNTYzbXJ5YkJLbkc2CkZGdnlZSDRRRTBhelc2em1hK0R0bVZXTVkrcytGdnBPRmNwSGtIdUVxZTR0V1dsOHJiUkZNUDQ4b0FGLzRJQVkKTjREdmxLNHBVRzhCaDlOaHpjL1NhZEcyRG4zYXp1OE1aOXl0bmpuTG5vN3d6cDJJbUN6aUZDNGduZWVMbXVnaQpLZzFaTlBTRGVNUXNvZ0F5M3FOTVB6ZkF0WFYyQ0JzWkZvOEJ4ZWgzQW9qYlJLdzBIdm5OdWlLb0ZhQlZXcG1iCmdRTlBoN1VKV201MU1GbnVsVFNhekhaczNRWHhSRklRb0tibnN1TTl0OCsraVJXS3JBR0RZckFSYkg1cFpEQWgKQVIyS3dib3FVRHJIU3c0bWJzRnlJWXg5SkptWTZQbGErNE9yYUVpemNBdUtodzdJTXVWM2d3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K"
+                                    },
+                                    "ParamId": "",
+                                    "Source": "",
+                                    "Type": "",
+                                    "Value": "Secured_RSAdes3_key_2048.pem",
+                                    "id": "",
+                                    "IsDeprecated": false
+                                },
+                                "keyFilePassword": "appsec",
+                                "profileId": "TLSProfile",
+                                "version": "TLSv1.2",
+                                "sessionReuseMethod": "DISABLE",
+                                "sessionReuseCount": 0
+                            },
+                            "ClientTcpProfile": {
+                                "CloseWithReset": false,
+                                "DeferAccept": true,
+                                "EcnEnabled": false,
+                                "MaxRto": 3200,
+                                "MaxSrcPort": 65535,
+                                "MinRto": 2000,
+                                "MinSrcPort": 1024,
+                                "PingPong": true,
+                                "PmtuDiscDisabled": false,
+                                "RecycleTwEnabled": true,
+                                "Reordering": false,
+                                "ReuseTwEnabled": true,
+                                "RxBuffer": 4096,
+                                "SackEnabled": false,
+                                "SockGroup": "appsim_group",
+                                "TimestampHdrEnabled": true,
+                                "TxBuffer": 4096,
+                                "UserMss": 1460,
+                                "WscaleEnabled": false
+                            },
+                            "ServerTcpProfile": {
+                                "CloseWithReset": false,
+                                "DeferAccept": true,
+                                "EcnEnabled": false,
+                                "MaxRto": 3200,
+                                "MaxSrcPort": 65535,
+                                "MinRto": 2000,
+                                "MinSrcPort": 1024,
+                                "PingPong": true,
+                                "PmtuDiscDisabled": false,
+                                "RecycleTwEnabled": true,
+                                "Reordering": false,
+                                "ReuseTwEnabled": true,
+                                "RxBuffer": 4096,
+                                "SackEnabled": false,
+                                "SockGroup": "appsim_group",
+                                "TimestampHdrEnabled": true,
+                                "TxBuffer": 4096,
+                                "UserMss": 1460,
+                                "WscaleEnabled": false
+                            },
+                            "UdpProfile": {
+                                "MaxSrcPort": 65535,
+                                "MinSrcPort": 1024,
+                                "RecvBuffSizeIni": 32768,
+                                "RecvBuffSizeRes": 32768,
+                                "RxBuffer": 32768,
+                                "SockGroup": "appsim_group",
+                                "TxBuffer": 32768
+                            },
+                            "VlanPrio": 0
+                        }
+                    },
+                    "id": "1"
+                }
+            ]
+        },
+        "Created": 1588861176,
+        "CreatedAsString": "2020-05-07T14:19:36Z",
+        "Name": "B2B_MyPortal",
+        "OwnerID": "wap-automation@keysight.com",
+        "id": "appsec-11"
+    }
+}
