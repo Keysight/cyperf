@@ -4,8 +4,8 @@ import datetime
 from RESTasV3 import RESTasV3
 from .Statistics import Statistics
 
-mdw_address = sys.argv[1]
-rest = RESTasV3(ipAddress=mdw_address)
+controller_address = sys.argv[1]
+rest = RESTasV3(ipAddress=controller_address)
 
 
 def create_new_config(config_path=None):
