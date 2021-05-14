@@ -1,0 +1,330 @@
+{
+	"B2B":{
+		"general":[
+			{
+				"description": "server-profile, Bytes Received Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Bytes Received'].any() > 0"
+			},
+			{
+				"description": "server-profile, Bytes Sent Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Bytes Sent'].any() > 0"
+			},
+			{
+				"description": "server-profile, Connections Received Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Connections Received'].any() > 0"
+			},
+			{
+				"description": "traffic agents, Connections Initiated has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Initiated'].any()>0"
+			},
+			{
+				"description": "traffic agents, Connections Succeeded has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Succeeded'].any()>0"
+			},
+			{
+				"description": "traffic agents, Connections Received has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Received'].any()>0"
+			},
+			{
+				"description": "traffic agents, Bytes Received has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Bytes Received'].any()>0"
+			},
+			{
+				"description": "traffic agents, Bytes Sent has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Bytes Sent'].any()>0"
+			}
+		],
+		"traffic": [
+			{
+				"description": "client-throughput.Throughput has at least one entry bigger than 0",
+				"condition": "stats['client-throughput']['Throughput'].any() > 0"
+			},
+			{
+				"description": "server-throughput.Throughput has at least one entry bigger than 0",
+				"condition": "stats['server-throughput']['Throughput'].any() > 0"
+			},
+			{
+				"description": "client-application-connection-rate.Connections Failed Per Second is 0",
+				"condition": "stats['client-application-connection-rate']['Connections Failed Per Second'].all() == 0"
+			},
+			{
+				"description": "client-application-user-count.User Count Per Second has at least one entry bigger than 0",
+				"condition": "stats['client-application-user-count']['User Count Per Second'].any() > 0"
+			},
+			{
+				"description": "traffic-agents-client-applications.Applications Initiated has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "traffic-agents-client-applications.Applications Succeeded has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Succeeded'].any() > 0"
+			},
+			{
+				"description": "traffic-agents-client-applications has no Applications Failed",
+				"condition": "stats['traffic-agents-client-applications']['Applications Failed'].any() == 0"
+			},
+			{
+				"description": "traffic-agents-client-applications, Applications Initiated = Applications Succeeded",
+				"condition": "(last(stats['traffic-agents-client-applications'])['Applications Succeeded'] == last(stats['traffic-agents-client-applications'])['Applications Initiated']).all()"
+			},
+			{
+				"description": "traffic-agents-client-applications.Applications Initiated has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Connections Succeeded has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Connections Succeeded'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Connections Initiated has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Connections Initiated'].any() > 0"
+			},
+			{
+				"description": "All agents are sending or receiving traffic",
+				"condition": "(last(stats['traffic-agents'])['Connections Initiated'] + last(stats['traffic-agents'])['Connections Received']).all() >0"
+			},
+			{
+				"description": "client traffic profile, Bytes Received has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Bytes Received'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Bytes Sent has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Bytes Sent'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Applications Initiated has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Applications Succeeded has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Applications Succeeded'].any() > 0"
+			},
+			{
+				"description" : "client traffic profile, Applications Succeeded = Applications Initiated",
+				"condition" : "(last(stats['client-traffic-profile'])['Applications Succeeded'] == last(stats['client-traffic-profile'])['Applications Initiated']).all()"
+			},
+			{
+				"description" : "client traffic profile,Connections Succeeded = Connections Initiated",
+				"condition" : "(last(stats['client-traffic-profile'])['Connections Succeeded'] == last(stats['client-traffic-profile'])['Connections Initiated']).all()"
+			},
+			{
+				"description" : "client traffic profile, Connections Aborted = 0",
+				"condition" : "(last(stats['client-traffic-profile'])['Connections Aborted'] == 0).all()"
+			},
+			{
+				"description" : "client traffic profile, Connections Failed = 0",
+				"condition" : "(last(stats['client-traffic-profile'])['Connections Failed'] == 0).all()"
+			},
+			{
+				"description" : "client traffic profile, Applications Failed = 0",
+				"condition" : "(last(stats['client-traffic-profile'])['Applications Failed'] == 0).all()"
+			},
+			{
+				"description" : "client-traffic-profile-tcp, Connections Established has one element bigger than 0",
+				"condition" : "(last(stats['client-traffic-profile-tcp'])['Connections Established'] > 0).any()"
+			}
+		],
+		"attack":[
+			{
+				"description" : "client-attack-profile-tcp, Connections Established has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile-tcp'])['Connections Established'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Bytes Received has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Bytes Received'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Bytes Sent has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Bytes Sent'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Initiated has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Initiated'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Succeeded has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Succeeded'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Strikes Initiated has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Strikes Initiated'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Succeeded  = Connections Initiated",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Succeeded'] == last(stats['client-attack-profile'])['Connections Initiated']).all()"
+			},
+			{
+				"description" : "client-attack-profile, Strikes Allowed  = Strikes Initiated",
+				"condition" : "(last(stats['client-attack-profile'])['Strikes Allowed'] == last(stats['client-attack-profile'])['Strikes Initiated']).all()"
+			},
+			{
+				"description" : "client-attack-profile, Strikes Blocked  = 0",
+				"condition" : "(last(stats['client-attack-profile'])['Strikes Blocked'] == 0).all()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Aborted  = 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Aborted'] == 0).all()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Failed  = 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Failed'] == 0).all()"
+			}
+		]
+	},
+	"DUT":{
+		"general":[
+			{
+				"description": "client-application-connection-rate.Connections Initiated Per Second has at least one entry bigger than 0",
+				"condition": "stats['client-application-connection-rate']['Connections Initiated Per Second'].any() > 0"
+			},
+			{
+				"description": "client-application-connection-rate.Connections Succeeded Per Second has at least one entry bigger than 0",
+				"condition": "stats['client-application-connection-rate']['Connections Succeeded Per Second'].any() > 0"
+			},
+			{
+				"description": "client-application-user-count.User Count Per Second has at least one entry bigger than 0",
+				"condition": "stats['client-application-user-count']['User Count Per Second'].any() > 0"
+			},
+			{
+				"description": "client-throughput.Throughput has at least one entry bigger than 0",
+				"condition": "stats['client-throughput']['Throughput'].any() > 0"
+			},
+			{
+				"description": "client-throughput.Throughput has at least one entry bigger than 0",
+				"condition": "stats['client-throughput']['Throughput'].any() > 0"
+			},
+			{
+				"description": "server-profile, Bytes Received Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Bytes Received'].any() > 0"
+			},
+			{
+				"description": "server-profile, Bytes Sent Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Bytes Sent'].any() > 0"
+			},
+			{
+				"description": "server-profile, Connections Received Per Second has at least one entry bigger than 0",
+				"condition": "stats['server-profile']['Connections Received'].any() > 0"
+			},
+			{
+				"description": "All agents are sending or receiving traffic",
+				"condition": "(last(stats['traffic-agents'])['Connections Initiated'] + last(stats['traffic-agents'])['Connections Received']).all() >0"
+			},
+			{
+				"description": "traffic agents, Connections Initiated has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Initiated'].any()>0"
+			},
+			{
+				"description": "traffic agents, Connections Succeeded has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Succeeded'].any()>0"
+			},
+			{
+				"description": "traffic agents, Connections Received has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Connections Received'].any()>0"
+			},
+			{
+				"description": "traffic agents, Bytes Received has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Bytes Received'].any()>0"
+			},
+			{
+				"description": "traffic agents, Bytes Sent has at least one value bigger than 0",
+				"condition": "stats['traffic-agents']['Bytes Sent'].any()>0"
+			}
+		],
+		"traffic": [
+			{
+				"description": "traffic-agents-client-applications.Applications Initiated has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "traffic-agents-client-applications.Applications Succeeded has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Succeeded'].any() > 0"
+			},
+			{
+				"description": "traffic-agents-client-applications has no Applications Failed",
+				"condition": "stats['traffic-agents-client-applications']['Applications Failed'].any() == 0"
+			},
+			{
+				"description": "traffic-agents-client-applications, Applications Initiated = Applications Succeeded",
+				"condition": "(last(stats['traffic-agents-client-applications'])['Applications Succeeded'] == last(stats['traffic-agents-client-applications'])['Applications Initiated']).all()"
+			},
+			{
+				"description": "traffic-agents-client-applications.Applications Initiated has at least one entry bigger than 0",
+				"condition": "stats['traffic-agents-client-applications']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Connections Succeeded has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Connections Succeeded'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Connections Initiated has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Connections Initiated'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Bytes Received has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Bytes Received'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Bytes Sent has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Bytes Sent'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Applications Initiated has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Applications Initiated'].any() > 0"
+			},
+			{
+				"description": "client traffic profile, Applications Succeeded has at least one value bigger than 0",
+				"condition" : "stats['client-traffic-profile']['Applications Succeeded'].any() > 0"
+			},
+			{
+				"description" : "client traffic profile, Applications Failed + Applications Succeeded = Applications Initiated",
+				"condition" : "(last(stats['client-traffic-profile'])['Applications Failed'] + last(stats['client-traffic-profile'])['Applications Succeeded'] == last(stats['client-traffic-profile'])['Applications Initiated']).all()"
+			},
+			{
+				"description" : "client traffic profile,Connections Succeeded + Connections Failed + Connections Aborted= Connections Initiated",
+				"condition" : "(last(stats['client-traffic-profile'])['Connections Failed'] + last(stats['client-traffic-profile'])['Connections Aborted'] + last(stats['client-traffic-profile'])['Connections Succeeded'] == last(stats['client-traffic-profile'])['Connections Initiated']).all()"
+			},
+			{
+				"description" : "client-traffic-profile-tcp, Connections Established has one element bigger than 0",
+				"condition" : "(last(stats['client-traffic-profile-tcp'])['Connections Established'] > 0).any()"
+			}
+		],
+		"attack":[
+			{
+				"description" : "client-attack-profile-tcp, Connections Established has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile-tcp'])['Connections Established'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Bytes Received has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Bytes Received'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Bytes Sent has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Bytes Sent'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Initiated has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Initiated'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Succeeded has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Succeeded'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Strikes Initiated has one element bigger than 0",
+				"condition" : "(last(stats['client-attack-profile'])['Strikes Initiated'] > 0).any()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Succeeded  = Connections Initiated",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Succeeded'] == last(stats['client-attack-profile'])['Connections Initiated']).all()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Aborted  = 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Aborted'] == 0).all()"
+			},
+			{
+				"description" : "client-attack-profile, Connections Failed  = 0",
+				"condition" : "(last(stats['client-attack-profile'])['Connections Failed'] == 0).all()"
+			}
+		]
+	}
+}
