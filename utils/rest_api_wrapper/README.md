@@ -19,7 +19,7 @@ If offers support to run sample scripts to help you get started with the CyPerf 
     - WAP_USERNAME
     - WAP_PASSWORD
 3. Go to the sample_scripts\ folder and run a CyPerf test
-    python [sample_test].py [MIDDLEWARE_IP_ADDRESS]
+    python [sample_test].py [CONTROLLER_IP_ADDRESS]
 
 # Known limitations
 (i) The CyPerf Application API functionality is not fully covered by this REST API Wrapper framework.
