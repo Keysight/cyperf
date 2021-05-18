@@ -45,3 +45,8 @@ Notes:
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
+If the deployment was done using -var options, you will also need to provide the same set of parameters to the terraform destroy command
+
+terraform destroy -var input\_variable=&quot;value&quot;
+
+If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.

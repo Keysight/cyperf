@@ -24,7 +24,7 @@ locals {
     "443"
   ]
   GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES = "0.0.0.0/0"  
-  GCP_MDW_INSTANCE_NAME                        = join("", ["cyperf-mdw-v", var.mdw_version])
+  GCP_MDW_INSTANCE_NAME                        = join("", ["cyperf-mdw-", var.mdw_version])
   GCP_MDW_SERIAL_PORT_ENABLE                   = "true"
   GCP_MDW_CAN_IP_FORWARD                       = "false"
   GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME            = var.GCP_PROJECT_NAME
@@ -87,7 +87,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME}/global/images/cyperf-mdw-v${var.mdw_version}"
+      image = "projects/${local.GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.mdw_version}"
     }
   }
   network_interface {

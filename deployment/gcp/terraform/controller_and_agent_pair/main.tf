@@ -140,7 +140,7 @@ resource "google_compute_instance" "GCP_MDW_INSTANCE" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME}/global/images/cyperf-mdw-v${var.mdw_version}"
+      image = "projects/${local.GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.mdw_version}"
     }
   }
   network_interface {
@@ -186,7 +186,6 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
   network_interface {
     network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
     subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
-    network_ip = "172.16.5.101"
     access_config {
       network_tier = "PREMIUM"
     }
@@ -236,7 +235,6 @@ resource "google_compute_instance" "GCP_SERVER_INSTANCE" {
   network_interface {
     network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
     subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
-    network_ip = "172.16.5.102"
     access_config {
       network_tier = "PREMIUM"
     }
