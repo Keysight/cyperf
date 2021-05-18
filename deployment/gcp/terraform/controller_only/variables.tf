@@ -1,7 +1,23 @@
 variable "GCP_PROJECT_NAME" {
   type    = string
-  default = "<specify your project name>"
+  description ="Project name"
 }
+
+variable "GCP_OWNER_TAG" {
+  type    = string
+  description = "GCP owner tag name"
+}
+
+variable "GCP_SSH_KEY" {
+  type = string
+  description = "The gcp public ssh key file path"
+}
+
+variable "GCP_CREDENTIALS_FILE" {
+  type = string
+  description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
+}
+
 
 variable "GCP_REGION_NAME" {
   type    = string
@@ -13,23 +29,9 @@ variable "GCP_ZONE_NAME" {
   default = "us-east1-b"
 }
 
-variable "GCP_OWNER_TAG" {
-  type    = string
-  default = "<specify the gcp owner tag name>"
-}
-
 variable "GCP_PROJECT_TAG" {
   type    = string
   default = "keysight-gcp-cyperf"
-}
-
-variable "GCP_SSH_KEY" {
-  type = string
-  default = "<specify the gcp public ssh key file path>"
-}
-variable "GCP_CREDENTIALS_FILE" {
-  type = string
-  default = "<create gcp credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys>"
 }
 
 variable "GCP_MDW_MACHINE_TYPE" {

@@ -73,14 +73,14 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.AZURE_MDW_MACHINE_TYPE
   admin_username      = "cyperf"
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/cyperf-mdw-images/providers/Microsoft.Compute/images/cyperf-mdw-v${var.mdw_version}"
+  source_image_id     = var.controller_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
 
   admin_ssh_key {
     username   = "cyperf"
-    public_key = file("/var/lib/jenkins/appsec/resources/ssh_keys/id_rsa_ghost.pub")
+    public_key = file(var.public_key)
   }
 
   os_disk {

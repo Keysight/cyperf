@@ -214,7 +214,7 @@ data "aws_ami" "agent_ami" {
     owners = ["self"]
     filter {
       name   = "tag:Name"
-      values = var.agent_version
+      values = [var.agent_version]
     }
 }
 
