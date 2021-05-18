@@ -83,7 +83,7 @@ You are responsible for the cost of the AWS services used while running this man
 8.	Once the **Controller Proxy** deployed, note down its private and public IP address.
 
 9.	After the Controller Proxy deployment is finished, add Controller Proxy IP in CyPerf Controller. 
-10. Browse CyPerf Controller. Select the **gear**  ![gear](images/gear.png) icon in the right top corner.  Select **“Administration”**, followed by **“Message Brokers”** and then add the Controller Proxy IP.
+10. Browse CyPerf Controller. Select the **gear**  ![gear](../../images/gear.png) icon in the right top corner.  Select **“Administration”**, followed by **“Message Brokers”** and then add the Controller Proxy IP.
 
 ## Step 5: Launch the Keysight CyPerf Agents
 
