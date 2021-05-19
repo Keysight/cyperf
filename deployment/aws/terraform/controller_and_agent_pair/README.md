@@ -38,7 +38,8 @@ In the same folder, create a file named terraform.tfvars.
 
 The inside contents should look like this:
 
-variable_1= "value\_2"
+variable_1= "value\_1"
+
 variable_2= "value\_2"
 
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.

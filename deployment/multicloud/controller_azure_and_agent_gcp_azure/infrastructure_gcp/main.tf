@@ -1,31 +1,31 @@
 provider "google" {
   credentials = file(var.GCP_CREDENTIALS)
-  project     = var.GCP_PROJECT_NAME
-  region      = var.GCP_REGION_NAME
-  zone        = var.GCP_ZONE_NAME
+  project     = var.gcp_project_name
+  region      = var.gcp_region_name
+  zone        = var.gcp_zone_name
 }
 
 locals {
-  GCP_PROJECT_NAME                 = var.GCP_PROJECT_NAME
-  GCP_REGION_NAME                  = var.GCP_REGION_NAME
-  GCP_ZONE_NAME                    = var.GCP_ZONE_NAME
-  GCP_OWNER_TAG                    = var.GCP_OWNER_TAG
-  GCP_PROJECT_TAG                  = var.GCP_PROJECT_TAG
-  GCP_OPTIONS_TAG                  = "MANUAL"
-  GCP_MGMT_VPC_NETWORK_NAME        = "management-vpc-network"
-  GCP_MGMT_SUBNET_NAME             = "management-subnet"
-  GCP_MGMT_SUBNET_IP_RANGE         = "172.16.5.0/24"
-  GCP_MGMT_FIREWALL_RULE_NAME      = "management-firewall-rule"
-  GCP_MGMT_FIREWALL_RULE_NAME_ERG  = "management-firewall-rule-erg"
-  GCP_MGMT_FIREWALL_RULE_DIRECTION = "INGRESS"
-  GCP_MGMT_FIREWALL_RULE_PRIORITY  = "1000"
-  GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME = var.GCP_PROJECT_NAME
-  GCP_MGMT_FIREWALL_RULE_PORTS = [
+  gcp_project_name                 = var.gcp_project_name
+  gcp_region_name                  = var.gcp_region_name
+  gcp_zone_name                    = var.gcp_zone_name
+  gcp_owner_tag                    = var.gcp_owner_tag
+  gcp_project_tag                  = var.gcp_project_tag
+  gcp_options_tag                  = "MANUAL"
+  gcp_mgmt_vpc_network_name        = "management-vpc-network"
+  gcp_mgmt_subnet_name             = "management-subnet"
+  gcp_mgmt_subnet_ip_range         = "172.16.5.0/24"
+  gcp_mgmt_firewall_rule_name      = "management-firewall-rule"
+  gcp_mgmt_firewall_rule_name_ERG  = "management-firewall-rule-erg"
+  gcp_mgmt_firewall_rule_direction = "INGRESS"
+  gcp_mgmt_firewall_rule_priority  = "1000"
+  gcp_mdw_custom_image_project_name = var.gcp_project_name
+  gcp_mgmt_firewall_rule_PORTS = [
     "22",
     "80",
     "443"
   ]
-  GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES = "0.0.0.0/0"
+  gcp_mgmt_firewall_rule_SOURCE_IP_RANGES = "0.0.0.0/0"
   GCP_CONSOLE_FIREWALL_RULE_NAME          = "gcp-console-firewall-rule"
   GCP_CONSOLE_FIREWALL_RULE_DIRECTION     = "INGRESS"
   GCP_CONSOLE_FIREWALL_RULE_PRIORITY      = "100"
@@ -62,50 +62,50 @@ locals {
   GCP_CONTROL_FIREWALL_RULE_DIRECTION = "INGRESS"
   GCP_CONTROL_FIREWALL_RULE_PRIORITY  = "1003"
   GCP_CONTROL_FIREWALL_RULE_PORTS     = "all"
-  GCP_TEST_VPC_NETWORK_NAME           = "test-vpc-network"
-  GCP_TEST_SUBNET_NAME                = "test-subnet"
-  GCP_TEST_SUBNET_IP_RANGE            = "10.0.0.0/8"
-  GCP_TEST_FIREWALL_RULE_NAME         = "test-firewall-rule"
-  GCP_TEST_FIREWALL_RULE_DIRECTION    = "INGRESS"
-  GCP_TEST_FIREWALL_RULE_PRIORITY     = "1000"
-  GCP_TEST_FIREWALL_RULE_PORTS        = "all"
-  GCP_TEST_FIREWALL_RULE_SOURCE_IP_RANGES = [
+  gcp_test_vpc_network_name           = "test-vpc-network"
+  gcp_test_subnet_name                = "test-subnet"
+  gcp_test_subnet_ip_range            = "10.0.0.0/8"
+  gcp_test_firewall_rule_name         = "test-firewall-rule"
+  gcp_test_firewall_rule_direction    = "INGRESS"
+  gcp_test_firewall_rule_priority     = "1000"
+  gcp_test_firewall_rule_PORTS        = "all"
+  gcp_test_firewall_rule_source_ip_ranges = [
     "0.0.0.0/0"
   ]
-  GCP_TEST_VPC_NETWORK_PEER_NAME               = "test-vpc-network-peer"
-  GCP_BROKER_SERIAL_PORT_ENABLE                = "true"
-  GCP_BROKER_CAN_IP_FORWARD                    = "false"
-  GCP_BROKER_CUSTOM_IMAGE_PROJECT_NAME         = var.GCP_PROJECT_NAME
-  GCP_agent_SERIAL_PORT_ENABLE                 = "true"
-  GCP_agent_CAN_IP_FORWARD                     = "false"
-  GCP_agent_CUSTOM_IMAGE_PROJECT_NAME          = var.GCP_PROJECT_NAME
+  gcp_test_vpc_network_PEER_NAME               = "test-vpc-network-peer"
+  gcp_broker_serial_port_enable                = "true"
+  gcp_broker_can_ip_forward                    = "false"
+  gcp_broker_custom_image_project_name         = var.gcp_project_name
+  gcp_agent_serial_port_enable                 = "true"
+  gcp_agent_can_ip_forward                     = "false"
+  gcp_agent_custom_image_project_name          = var.gcp_project_name
 }
 
-resource "google_compute_network" "GCP_MGMT_VPC_NETWORK" {
-  name                    = "${local.GCP_OWNER_TAG}-${local.GCP_MGMT_VPC_NETWORK_NAME}"
+resource "google_compute_network" "gcp_mgmt_vpc_network" {
+  name                    = "${local.gcp_owner_tag}-${local.gcp_mgmt_vpc_network_name}"
   auto_create_subnetworks = "false"
   routing_mode            = "GLOBAL"
 }
 
-resource "google_compute_subnetwork" "GCP_MGMT_SUBNET" {
-  name                     = "${local.GCP_OWNER_TAG}-${local.GCP_MGMT_SUBNET_NAME}"
-  ip_cidr_range            = local.GCP_MGMT_SUBNET_IP_RANGE
-  network                  = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-  region                   = local.GCP_REGION_NAME
+resource "google_compute_subnetwork" "gcp_mgmt_subnet" {
+  name                     = "${local.gcp_owner_tag}-${local.gcp_mgmt_subnet_name}"
+  ip_cidr_range            = local.gcp_mgmt_subnet_ip_range
+  network                  = google_compute_network.gcp_mgmt_vpc_network.self_link
+  region                   = local.gcp_region_name
   private_ip_google_access = true
 }
 
-resource "google_compute_network" "GCP_TEST_VPC_NETWORK" {
-  name                    = "${local.GCP_OWNER_TAG}-${local.GCP_TEST_VPC_NETWORK_NAME}"
+resource "google_compute_network" "gcp_test_vpc_network" {
+  name                    = "${local.gcp_owner_tag}-${local.gcp_test_vpc_network_name}"
   auto_create_subnetworks = "false"
   routing_mode            = "GLOBAL"
 }
 
-resource "google_compute_subnetwork" "GCP_TEST_SUBNET" {
-  name                     = "${local.GCP_OWNER_TAG}-${local.GCP_TEST_SUBNET_NAME}"
-  ip_cidr_range            = local.GCP_TEST_SUBNET_IP_RANGE
-  network                  = google_compute_network.GCP_TEST_VPC_NETWORK.self_link
-  region                   = local.GCP_REGION_NAME
+resource "google_compute_subnetwork" "gcp_test_subnet" {
+  name                     = "${local.gcp_owner_tag}-${local.gcp_test_subnet_name}"
+  ip_cidr_range            = local.gcp_test_subnet_ip_range
+  network                  = google_compute_network.gcp_test_vpc_network.self_link
+  region                   = local.gcp_region_name
   private_ip_google_access = true
 }
 

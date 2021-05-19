@@ -38,7 +38,8 @@ In the same folder, create a file named terraform.tfvars.
 
 The inside contents should look like this:
 
-variable_1= "value\_2"
+variable_1= "value\_1"
+
 variable_2= "value\_2"
 
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
@@ -52,3 +53,19 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
+
+## Workspaces
+
+There are certain cases where multiple deployments are required using the same terraform template. To keep the previous deployments states intact, we recommend using the **workspace** feature of the terraform. This will help you to preserve the state of the previous deployments, allowing you to modify/destroy whenever you wish, while also enabling you to create multiple deployments of the same infrastructure.
+
+
+**terraform workspace** has 5 main options
+
+- **create {workspace_name}** will create a workspace
+- **list** will list all the existing workspaces
+- **select {workspace_name}** will select a workspace
+- **show** will print the current selected workspace
+- **delete {workspace_name}** will delete the selected workspace
+
+For more information, please refer to the official terraform documentation:
+https://www.terraform.io/docs/language/state/workspaces.html

@@ -38,7 +38,8 @@ In the same folder, create a file named terraform.tfvars.
 
 The inside contents should look like this:
 
-variable_1= "value\_2"
+variable_1= "value\_1"
+
 variable_2= "value\_2"
 
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
@@ -50,18 +51,18 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
-| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| azure_owner_tag | Requires input | The Azure owner tag name. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_image       | Requires input    | Specify the Azure controller image resource path   |
-| AZURE_REGION_NAME      | eastus       | The Azure region where the deployment will take place. |
-| AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
-| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
-| AZURE_MDW_MACHINE_TYPE | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| controller_image       | Requires input    | Specify the Azure controller image resource id  |
+| azure_region_name      | eastus       | The Azure region where the deployment will take place. |
+| azure_admin_username  | cyperf | The Azure administrator username. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
+| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
 
 ## Destruction

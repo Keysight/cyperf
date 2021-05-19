@@ -38,7 +38,8 @@ In the same folder, create a file named terraform.tfvars.
 
 The inside contents should look like this:
 
-variable_1= "value\_2"
+variable_1= "value\_1"
+
 variable_2= "value\_2"
 
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
@@ -51,20 +52,20 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
-| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| azure_owner_tag | Requires input | The Azure owner tag name. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_proxy_image       | Requires input    | Specify the Azure controller proxy image resource path   |
-| agent_image | Requires input    | Specify the Azure agent image resource path   |
-| AZURE_REGION_NAME      | eastus       | The Azure region where the deployment will take place. |
-| AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
-| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
+| controller_proxy_image       | Requires input    | Specify the Azure controller proxy image resource id  |
+| agent_image | Requires input    | Specify the Azure agent image resource id  |
+| azure_region_name      | eastus       | The Azure region where the deployment will take place. |
+| azure_admin_username  | cyperf | The Azure administrator username. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | AZURE_BROKER_MACHINE_TYPE | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
-| AZURE_AGENT_MACHINE_TYPE   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | broker_image   | keysight-cyperf-controller-proxy-1-0      | The  CyPerf controller proxy image version. |
 | agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
 

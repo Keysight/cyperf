@@ -1,14 +1,14 @@
-variable "GCP_OWNER_TAG" {
+variable "gcp_owner_tag" {
   type    = string
   default = "<specify the gcp owner tag name>"
 }
 
-variable "GCP_PROJECT_NAME" {
+variable "gcp_project_name" {
   type    = string
   default = "<specify your project name>"
 }
 
-variable "GCP_PROJECT_TAG" {
+variable "gcp_project_tag" {
   type    = string
   default = "keysight-gcp-cyperf"
 }
@@ -18,12 +18,12 @@ variable "GCP_CREDENTIALS" {
   default = "<create gcp credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys>"
 }
 
-variable "GCP_REGION_NAME" {
+variable "gcp_region_name" {
   type    = string
   default = "<specify your gcp region name for deployment>"
 }
 
-variable "GCP_ZONE_NAME" {
+variable "gcp_zone_name" {
   type    = string
   default = "<specify your gcp zone name for deployment>"
 }

@@ -10,9 +10,9 @@ provider "azurerm" {
 }
 
 locals {
-  broker_name = "${var.AZURE_OWNER_TAG}-broker-${var.broker_image}"
-  client_name = "${var.AZURE_OWNER_TAG}-client-${var.agent_version}"
-  server_name = "${var.AZURE_OWNER_TAG}-server-${var.agent_version}"
+  broker_name = "${var.azure_owner_tag}-broker-${var.broker_image}"
+  client_name = "${var.azure_owner_tag}-client-${var.agent_version}"
+  server_name = "${var.azure_owner_tag}-server-${var.agent_version}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
       /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_nats_broker.private_ip_address} >> /home/cyperf/azure_image_init_log
@@ -20,16 +20,16 @@ locals {
 }
 
 resource "azurerm_resource_group" "azr_automation" {
-  name     = var.AZURE_OWNER_TAG
-  location = var.AZURE_REGION_NAME
+  name     = var.azure_owner_tag
+  location = var.azure_region_name
 }
 
 resource "azurerm_network_security_group" "azr_automation" {
-  name                = "${var.AZURE_OWNER_TAG}-sg"
+  name                = "${var.azure_owner_tag}-sg"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
     security_rule {
-    name                       = var.AZURE_OWNER_TAG
+    name                       = var.azure_owner_tag
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -42,47 +42,47 @@ resource "azurerm_network_security_group" "azr_automation" {
 }
 
 resource "azurerm_virtual_network" "azr_automation" {
-  name                = "${var.AZURE_OWNER_TAG}-network"
+  name                = "${var.azure_owner_tag}-network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 }
 
 resource "azurerm_subnet" "azr_automation_management_network" {
-  name                 = "${var.AZURE_OWNER_TAG}-management-subnet"
+  name                 = "${var.azure_owner_tag}-management-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "azr_automation_test_network" {
-  name                 = "${var.AZURE_OWNER_TAG}-test-subnet"
+  name                 = "${var.azure_owner_tag}-test-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "azr_automation_client_agent_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent1-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent1-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_public_ip" "azr_automation_client_agent_test_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent1-test-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent1-test-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "azr_automation_client_agent_test_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-client-agent-test-nic"
+  name                = "${var.azure_owner_tag}-client-agent-test-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
   enable_accelerated_networking = true
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-client_agent-test-ip"
+    name                          = "${var.azure_owner_tag}-client_agent-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_client_agent_test_public_ip.id
@@ -90,12 +90,12 @@ resource "azurerm_network_interface" "azr_automation_client_agent_test_nic" {
 }
 
 resource "azurerm_network_interface" "azr_automation_client_agent_mng_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-client-agent-management-nic"
+  name                = "${var.azure_owner_tag}-client-agent-management-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-client-agent-management-ip"
+    name                          = "${var.azure_owner_tag}-client-agent-management-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_client_agent_public_ip.id
@@ -109,7 +109,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   name                = local.client_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_AGENT_MACHINE_TYPE
+  size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
   source_image_id     = var.agent_image
   network_interface_ids = [
@@ -131,26 +131,26 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 }
 
 resource "azurerm_public_ip" "azr_automation_agent_server_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent-server-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent-server-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_public_ip" "azr_automation_agent_server_test_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent-server-test-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent-server-test-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_server_mng_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-server-1-management-nic"
+  name                = "${var.azure_owner_tag}-agent-server-1-management-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-server-management-ip"
+    name                          = "${var.azure_owner_tag}-agent-server-management-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_agent_server_public_ip.id
@@ -158,12 +158,12 @@ resource "azurerm_network_interface" "azr_automation_agent_server_mng_nic" {
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_server_test_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-server-test-nic"
+  name                = "${var.azure_owner_tag}-agent-server-test-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
   enable_accelerated_networking = true
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-server-test-ip"
+    name                          = "${var.azure_owner_tag}-agent-server-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_agent_server_test_public_ip.id
@@ -177,8 +177,8 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   name                = local.server_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_AGENT_MACHINE_TYPE
-  admin_username      = var.AZURE_ADMIN_USERNAME
+  size                = var.azure_agent_machine_type
+  admin_username      = var.azure_admin_username
   source_image_id     = var.agent_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_server_mng_nic.id,
@@ -199,7 +199,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
 }
 
 resource "azurerm_public_ip" "azr_automation_nats_broker_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-nats-broker-ip"
+  name                = "${var.azure_owner_tag}-cyperf-nats-broker-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
@@ -211,7 +211,7 @@ resource "azurerm_network_interface" "azr_automation_nats_broker_nic" {
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-nats-broker-ip"
+    name                          = "${var.azure_owner_tag}-nats-broker-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_nats_broker_public_ip.id
@@ -219,11 +219,11 @@ resource "azurerm_network_interface" "azr_automation_nats_broker_nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "azr_automation_nats_broker" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-nats"
+  name                = "${var.azure_owner_tag}-cyperf-nats"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.AZURE_BROKER_MACHINE_TYPE
-  admin_username      = var.AZURE_ADMIN_USERNAME
+  admin_username      = var.azure_admin_username
   source_image_id     = var.controller_proxy_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_nats_broker_nic.id

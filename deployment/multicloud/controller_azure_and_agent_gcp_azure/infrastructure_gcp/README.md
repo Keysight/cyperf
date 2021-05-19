@@ -34,12 +34,12 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| GCP_OWNER_TAG  | Requires input | The GCP owner tag name. |
-| GCP_PROJECT_NAME            | Requires input   | Specify the GCP project name. |
-| GCP_PROJECT_TAG | keysight-gcp-cyperf |The GCP project tag name. |
+| gcp_owner_tag  | Requires input | The GCP owner tag name. |
+| gcp_project_name            | Requires input   | Specify the GCP project name. |
+| gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | GCP_CREDENTIALS   | Requires input   | The GCP credentials json file must be created using the following specifications https://cloud.google.com/iam/docs/creating-managing-service-account-keys. |
-| GCP_REGION_NAME      | Requires input       | The GCP region where the deployment will take place. |
-| GCP_ZONE_NAME | Requires input | The GCP zone where the deployment will take place. |
+| gcp_region_name      | Requires input       | The GCP region where the deployment will take place. |
+| gcp_zone_name | Requires input | The GCP zone where the deployment will take place. |
 
 ## Destruction
 

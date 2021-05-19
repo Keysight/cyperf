@@ -1,30 +1,30 @@
-variable "AZURE_OWNER_TAG" {
+variable "azure_owner_tag" {
   type    = string
   default = "<specify the azure owner tag name>"
 }
 
-variable "AZURE_PROJECT_NAME" {
+variable "azure_project_name" {
   type    = string
   default = "<specify your project name>"
 }
 
-variable "AZURE_PROJECT_TAG" {
+variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
 }
 
-variable "AZURE_ADMIN_USERNAME" {
+variable "azure_admin_username" {
   type    = string
   default = "cyperf"
 }
 
-variable "AZURE_REGION_NAME" {
+variable "azure_region_name" {
   type    = string
   default = "<specify your azure region name for deployment>"
 }
 
 # Specify the existing network infrastructure in which to deploy the instances
-variable "DEST_AZURE_OWNER_TAG" {
+variable "DEST_azure_owner_tag" {
   type    = string
   default = "<specify your azure owner tag name for the existing infrastructure>"
 }
@@ -45,12 +45,12 @@ variable "TEST_SUBNET_NAME" {
   default = "<specify the azure test subnet name for the existing infrastructure>"
 }
 
-variable "AZURE_MDW_MACHINE_TYPE" {
+variable "azure_mdw_machine_type" {
   type    = string
   default = "Standard_F8s_v2"
 }
 
-variable "AZURE_AGENT_MACHINE_TYPE" {
+variable "azure_agent_machine_type" {
   type    = string
   default = "Standard_F16s_v2"
 }
