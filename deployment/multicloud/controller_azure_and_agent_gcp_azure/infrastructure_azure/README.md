@@ -34,10 +34,10 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
-| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
-| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
-| AZURE_REGION_NAME      | Requires input       | The Azure region where the deployment will take place. |
+| azure_owner_tag | Requires input | The Azure owner tag name. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
+| azure_region_name      | Requires input       | The Azure region where the deployment will take place. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |

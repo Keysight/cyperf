@@ -1,19 +1,19 @@
-variable "AZURE_OWNER_TAG" {
+variable "azure_owner_tag" {
   type    = string
   default = "<specify the azure owner tag name>"
 }
 
-variable "AZURE_PROJECT_NAME" {
+variable "azure_project_name" {
   type    = string
   default = "<specify your project name>"
 }
 
-variable "AZURE_PROJECT_TAG" {
+variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
 }
 
-variable "AZURE_REGION_NAME" {
+variable "azure_region_name" {
   type    = string
   default = "<specify your azure region name for deployment>"
 }

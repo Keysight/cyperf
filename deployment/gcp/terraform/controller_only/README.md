@@ -38,7 +38,8 @@ In the same folder, create a file named terraform.tfvars.
 
 The inside contents should look like this:
 
-variable_1= "value\_2"
+variable_1= "value\_1"
+
 variable_2= "value\_2"
 
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
@@ -51,14 +52,14 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| GCP_PROJECT_NAME            | Requires input   | Specify the GCP project name. |
-| GCP_OWNER_TAG  | Requires input | The GCP owner tag name. |
-| GCP_CREDENTIALS_FILE   | Requires input   | The GCP credentials json file must be created using the following specifications https://cloud.google.com/iam/docs/creating-managing-service-account-keys. |
-| GCP_SSH_KEY | Requires input | The GCP public SSH key file path. |
-| GCP_REGION_NAME      | us-east1       | The GCP region where the deployment will take place. |
-| GCP_ZONE_NAME | us-east1-b | The GCP zone where the deployment will take place. |
-| GCP_PROJECT_TAG | keysight-gcp-cyperf |The GCP project tag name. |
-| GCP_MDW_MACHINE_TYPE    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
+| gcp_project_name            | Requires input   | Specify the GCP project name. |
+| gcp_owner_tag  | Requires input | The GCP owner tag name. |
+| gcp_credential_file   | Requires input   | The GCP credentials json file must be created using the following specifications https://cloud.google.com/iam/docs/creating-managing-service-account-keys. |
+| gcp_ssh_key | Requires input | The GCP public SSH key file path. |
+| gcp_region_name      | us-east1       | The GCP region where the deployment will take place. |
+| gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
+| gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
+| gcp_mdw_machine_type    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
 | mdw_version            | keysight-cyperf-controller-1-0   | The  CyPerf controller image version.    |
 
 ## Destruction

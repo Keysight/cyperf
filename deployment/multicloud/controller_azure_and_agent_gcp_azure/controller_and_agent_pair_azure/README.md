@@ -34,17 +34,17 @@ The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
-| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
-| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
-| AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
-| AZURE_REGION_NAME      | Requires input       | The Azure region where the deployment will take place. |
-| DEST_AZURE_OWNER_TAG | Requires input | The Azure owner tag name for the existing infrastructure. |
+| azure_owner_tag | Requires input | The Azure owner tag name. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
+| azure_admin_username  | cyperf | The Azure administrator username. |
+| azure_region_name      | Requires input       | The Azure region where the deployment will take place. |
+| DEST_azure_owner_tag | Requires input | The Azure owner tag name for the existing infrastructure. |
 | VIRTUAL_NETWORK_NAME | Requires input | The Azure virtual network name for the existing infrastructure. |
 | MANAGEMENT_SUBNET_NAME | Requires input | The Azure management subnet name for the existing infrastructure. |
 | TEST_SUBNET_NAME | Requires input | The Azure test subnet name for the existing infrastructure. |
-| AZURE_MDW_MACHINE_TYPE | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| AZURE_AGENT_MACHINE_TYPE   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | AGENT_BLOB_URI   | Requires input   | The VHD URL for the agent machine. |
 | MDW_BLOB_URI   | Requires input   | The VHD URL for the agent machine. |
 | mdw_version   | keysight-cyperf-controller-1-0         | The  CyPerf controller image version. |

@@ -1,9 +1,9 @@
-variable "AZURE_PROJECT_NAME" {
+variable "azure_project_name" {
   type    = string
   description = "Project name"
 }
 
-variable "AZURE_OWNER_TAG" {
+variable "azure_owner_tag" {
   type    = string
   description = "Owner tag name"
 }
@@ -43,27 +43,27 @@ variable "agent_image" {
   description = "Agent image path"
 }
 
-variable "AZURE_REGION_NAME" {
+variable "azure_region_name" {
   type    = string
   default = "eastus"
 }
 
-variable "AZURE_ADMIN_USERNAME" {
+variable "azure_admin_username" {
   type    = string
   default = "cyperf"
 }
 
-variable "AZURE_PROJECT_TAG" {
+variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
 }
 
-variable "AZURE_MDW_MACHINE_TYPE" {
+variable "azure_mdw_machine_type" {
   type    = string
   default = "Standard_F8s_v2"
 }
 
-variable "AZURE_AGENT_MACHINE_TYPE" {
+variable "azure_agent_machine_type" {
   type    = string
   default = "Standard_F16s_v2"
 }
