@@ -76,7 +76,7 @@ variable "broker_image" {
   description = "Broker image"
 }
 
-variable "AZURE_BROKER_MACHINE_TYPE" {
+variable "azure_broker_machine_type" {
   type        = string
   default     = "Standard_F2s_v2"
   description = "controller-proxy image"
