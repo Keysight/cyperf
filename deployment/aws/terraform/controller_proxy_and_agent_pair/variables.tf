@@ -1,6 +1,6 @@
 variable "aws_access_key" {
   type = string
-  description = "AWS-cli access key>"
+  description = "AWS-cli access key"
 }
 
 variable "aws_secret_key" {

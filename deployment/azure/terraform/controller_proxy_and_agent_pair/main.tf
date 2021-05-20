@@ -222,7 +222,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_nats_broker" {
   name                = "${var.azure_owner_tag}-cyperf-nats"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_BROKER_MACHINE_TYPE
+  size                = var.azure_broker_machine_type
   admin_username      = var.azure_admin_username
   source_image_id     = var.controller_proxy_image
   network_interface_ids = [
