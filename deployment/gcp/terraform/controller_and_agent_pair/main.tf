@@ -129,7 +129,7 @@ resource "google_compute_instance" "gcp_mdw_instance" {
   name                      = "${local.gcp_owner_tag}-${local.gcp_mdw_instance_name}"
   can_ip_forward            = local.gcp_mdw_can_ip_forward
   zone                      = local.gcp_zone_name
-  machine_type              = "zones/${local.gcp_zone_name}/machineTypes/${local.gcp_mdw_machine_type}"
+  machine_type              = local.gcp_mdw_machine_type
   allow_stopping_for_update = true
   tags                      = ["https-server"]
   boot_disk {
@@ -168,7 +168,7 @@ resource "google_compute_instance" "gcp_client_instance" {
   name                      = "${local.gcp_owner_tag}-${local.gcp_client_instance_name}"
   can_ip_forward            = local.gcp_agent_can_ip_forward
   zone                      = local.gcp_zone_name
-  machine_type              = "zones/${local.gcp_zone_name}/machineTypes/${local.gcp_agent_machine_type}"
+  machine_type              = local.gcp_agent_machine_type
   allow_stopping_for_update = true
   
   boot_disk {
@@ -218,7 +218,7 @@ resource "google_compute_instance" "gcp_server_instance" {
   name                      = "${local.gcp_owner_tag}-${local.gcp_server_instance_name}"
   can_ip_forward            = local.gcp_agent_can_ip_forward
   zone                      = local.gcp_zone_name
-  machine_type              = "zones/${local.gcp_zone_name}/machineTypes/${local.gcp_agent_machine_type}"
+  machine_type              = local.gcp_agent_machine_type
   allow_stopping_for_update = true
   boot_disk {
     device_name = "persistent-disk-0"

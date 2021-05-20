@@ -79,7 +79,7 @@ resource "google_compute_instance" "gcp_mdw_instance" {
   name                      = "${local.gcp_owner_tag}-${local.gcp_mdw_instance_name}"
   can_ip_forward            = local.gcp_mdw_can_ip_forward
   zone                      = local.gcp_zone_name
-  machine_type              = "zones/${local.gcp_zone_name}/machineTypes/${local.gcp_mdw_machine_type}"
+  machine_type              = local.gcp_mdw_machine_type
   allow_stopping_for_update = true
   tags                      = ["https-server"]
   boot_disk {
