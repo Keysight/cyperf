@@ -29,7 +29,7 @@ The following table lists the parameters for this deployment in **New VNET**.
 | VHD URL of CyPerf Controller-proxy                   | Requires input            | VHD URL link of CyPerf Controller-proxy. VHD file must present at user’s own storage Account and Container. Example: https://cyperf.blob.core.windows.net/keysight-cyperf/cyperf-*.vhd |
 | VM Size Type for CyPerf Agents                   | Standard_F4s_v2            | VM type for CyPerf Agent. VM type Standard_F4s_v2 and Standard_F16s_v2 are qualified.  |
 | SSH Public Key                   | Requires input            | Public key to enable SSH access to the CyPerf instances. User may create private key & public key using ssh-keygen. Then specify ssh public key here.   |
-| Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP.  |
+| Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”.  |
 | Number of CyPerf Agents                   | 2            | Number of CyPerf agents will be deployed from this template.  |
 
 The following table lists the parameters for this deployment in **Existing VNET**.
@@ -48,7 +48,7 @@ The following table lists the parameters for this deployment in **Existing VNET*
 | VHD URL of CyPerf Controller-proxy                   | Requires input            | VHD URL link of CyPerf Controller-proxy. VHD file must present at user’s own storage Account and Container. Example: https://cyperf.blob.core.windows.net/keysight-cyperf/cyperf-*.vhd |
 | VM Size Type for CyPerf Agents                   | Standard_F4s_v2            | VM type for CyPerf Agent. VM type Standard_F4s_v2 and Standard_F16s_v2 are qualified.  |
 | SSH Public Key                   | Requires input            | Public key to enable SSH access to the CyPerf instances. User may create private key & public key using ssh-keygen. Then specify ssh public key here.   |
-| Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP.  |
+| Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”.  |
 | Number of CyPerf Agents                   | 2            | Number of CyPerf agents will be deployed from this template.  |
 
 **Note:** **CyPerf** and **Cyperf** represents same. ARM templates use **Cyperf** instead of **CyPerf** and it becomes an Azure limitation that introduces extra space.
