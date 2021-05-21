@@ -6,7 +6,7 @@ This is the Terraform approach for Cyperf Application and Cyperf Agents in diffe
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
-This scenario, in particular, tackles a multi-cloud deployment, with an agent places along with the controller in AZURE, and another placed in GCP with a controller proxy.
+This scenario, in particular, tackles a multi-cloud deployment, with an agent placed along with the controller in AZURE, and another placed in GCP with a controller proxy.
 
 # Prerequisites
 
@@ -20,7 +20,7 @@ This scenario, in particular, tackles a multi-cloud deployment, with an agent pl
 
 The  **terraform init ** command is used to initialize a working directory containing Terraform configuration files. This is the first command that should be run after writing a new Terraform configuration or cloning an existing one from version control. It is safe to run this command multiple times.
 
-This command is required the first time you use as template. It is not required to use it unless you modify the template.
+This command is required the first time you use a template. It is not required to use it unless you modify the template.
 
 ## Deployment
 
