@@ -54,3 +54,15 @@ The following table lists the parameters for this deployment in **New VPC**.
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
+
+
+## Post deployment
+
+After successful deployment of stack, flow bellow instructions
+
+-	Go to GCP console and look for the deployed VMs
+-	Select the Controller Proxy instance and check the public IP 
+-	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&Keysight#1)
+-       Select the gear icon in the right top corner. Select “Administration”, followed by “Message Brokers” and then add the Controller Proxy public IP.
+-       Registered CyPerf agents should appear in Controller UI autometically.
+-       CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
