@@ -14,9 +14,9 @@ A configuration File [YAML] and Templates [Python] are used for this Deployment.
 Deployment pre-requisite:
 1.	Download following files from OpenIxia.
 2.	From gcp console, open cloud shell window and upload bellow files. 
-- [cyperf_controller_proxy_and_agent_pair_new_vpc.py](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-gcp/controller_proxy_and_agent_pair/cyperf_controller_proxy_and_agent_pair_new_vpc.py)
-- [cyperf_controller_proxy_and_agent_pair_new_vpc.schema](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-gcp/controller_proxy_and_agent_pair/cyperf_controller_proxy_and_agent_pair_new_vpc.schema)
-- [cyperf_controller_proxy_and_agent_pair_new_vpc.yaml](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-gcp/controller_proxy_and_agent_pair/cyperf_controller_proxy_and_agent_pair_new_vpc.yaml)   
+- [cyperf_controller_proxy_and_agent_pair_new_vpc.py](cyperf_controller_proxy_and_agent_pair_new_vpc.py)
+- [cyperf_controller_proxy_and_agent_pair_new_vpc.schema](cyperf_controller_proxy_and_agent_pair_new_vpc.schema)
+- [cyperf_controller_proxy_and_agent_pair_new_vpc.yaml](cyperf_controller_proxy_and_agent_pair_new_vpc.yaml)   
 
 
 ### Deployment using Python Template:
@@ -37,7 +37,7 @@ The list of exposed parameters is defined in Template parameter section.
 To generate the public key and enable SSH access to the CyPerf instances, perform the following steps:
 
 1. Create private key and public key using [ssh-keygen](https://www.ssh.com/academy/ssh/keygen).
-2. Edit [cyperf_controller_proxy_and_agent_pair_new_vpc.py](https://ixca-gitswarm.lbj.is.keysight.com/TIGER/tiger/tree/main/OpenIxia/cyperf-gcp/controller_proxy_and_agent_pair/cyperf_controller_proxy_and_agent_pair_new_vpc.py), and specify 
+2. Edit [cyperf_controller_proxy_and_agent_pair_new_vpc.py](cyperf_controller_proxy_and_agent_pair_new_vpc.py), and specify 
 `sslkey ='<Replace with ssh public key.>'`.
 
 ## Template Parameters:
