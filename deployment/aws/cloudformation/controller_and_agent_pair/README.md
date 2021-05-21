@@ -24,7 +24,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances.  |
 | Control Subnet for CyPerf Agents                   | 172.16.2.0/24            | CyPerf agents will use this subnet for control plane communication with Controller.  |
 | Test Subnet for CyPerf Agents                   | 172.16.3.0/24            | CyPerf agents will use this subnet for test traffic.  |
-| Allowed Subnet for Security Group                   | 1.1.1.1/1            | Subnet range allowed to access deployed AWS resources. Execute `curl ifconfig.co` to know MyIP. Default value is dummy value. User must use proper subnet range.   |
+| Allowed Subnet for Security Group                   | 1.1.1.1/1            | Subnet range allowed to access deployed AWS resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”. Default value is dummy value. User must use proper subnet range.   |
 
 The following table lists the parameters for this deployment in **Existing VPC**.
 
