@@ -6,6 +6,8 @@ This is the Terraform approach for Cyperf Application and Cyperf Agents in diffe
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
+This scenario, in particular, tackles a multi-cloud deployment, with an agent places along with the controller in AZURE, and another placed in GCP with a controller proxy.
+
 # Prerequisites
 
 - Latest version of Terraform installed. https://learn.hashicorp.com/tutorials/terraform/install-cli
@@ -24,23 +26,59 @@ This command is required the first time you use as template. It is not required 
 
 The  **terraform apply**  command executes the actions proposed in a terraform template. All the default deployment variables may be changed.
 
-terraform apply -var=&quot;GCP_CREDENTIALS=gcp-credentials.json&quot;
+### 1. Using the **-var** command
 
-The -var option can be applied multiple times in order to use multiple parameters.
+terraform apply -var input\_variable=&quot;value&quot;
 
-## Topology
-The multi-cloud topology deployed for this scenario is: 
-- CyPerf controller in Azure
-- CyPerf controller proxy in GCP
-- Agents in Azure (x2), Agents in GCP (x2) 
+The -var option must be applied multiple times to use all the required input parameters.
 
-Notes: 
-1) If network infrastructure is already available in GCP and Azure only the following terraform deployments are needed:
-- controller_and_agent_pair_azure
-- controller_and_agent_pair_gcp
-2) Otherwise, the following terraform deployments are also required to be run as pre-requisites:
-- infrastructure_azure
-- infrastructure_gcp
+If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
+
+### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
+
+In the same folder, create a file named terraform.tfvars.
+
+The inside contents should look like this:
+
+variable_1= "value\_1"
+
+variable_2= "value\_2"
+
+Using this method you can ensure that all further deployments will be done with the same combination of parameters.
+
+**terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
+
+## Template Parameters
+
+The following table lists the parameters for this deployment.
+
+| **Parameter label (name)**                  | **Default**            | **Description**  |
+| ----------------------- | ----------------- | ----- |
+| gcp_project_name            | Requires input   | Specify the GCP project name. |
+| gcp_credential_file   | Requires input   | The GCP credentials json file must be created using the following specifications https://cloud.google.com/iam/docs/creating-managing-service-account-keys. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| deployment_name | Requires input | Prefix for all cloud resources. |
+| subscription_id     | Requires input   | Specify the Azure subscription id.    |
+| client_id       | Requires input   | Specify the Azure client id.   |
+| client_secret     | Requires input     | Specify the Azure client secret.   |
+| tenant_id       | Requires input    | Specify the Azure tenant id.   |
+| public_key       | Requires input    | Specify the public key that will be used to auth into the vms.   |
+| controller_image       | Requires input    | Specify the Azure controller image resource id|
+| agent_image | Requires input    | Specify the Azure agent image resource id |
+| gcp_region_name      | us-east1       | The GCP region where the deployment will take place. |
+| gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
+| gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
+| azure_region_name      | eastus       | The Azure region where the deployment will take place. |
+| azure_admin_username  | cyperf | The Azure administrator username. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
+| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
+| broker_image            | keysight-cyperf-controller-proxy-1-0   | The  CyPerf controller proxy image version.    |
+| gcp_broker_machine_type   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
+| gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
+| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+
 
 ## Destruction
 
