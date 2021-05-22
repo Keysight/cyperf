@@ -16,10 +16,9 @@ The prerequisites are:
 Before you deploy a CloudFormation template, we recommend that you become familiar with the following AWS services:
 - [Amazon EC2](https://docs.aws.amazon.com/ec2/index.html)
 - [Amazon Elastic Block Store (Amazon EBS)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html)
-- [Application Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)
 - [Amazon VPC](https://docs.aws.amazon.com/vpc/index.html)
 - [AWS CloudFormation](https://docs.aws.amazon.com/cloudformation/index.html)
-- [Auto Scaling](https://docs.aws.amazon.com/autoscaling/index.html)
+
 
 If you are new to AWS, see [Getting Started with AWS](https://aws.amazon.com/getting-started/).
 
