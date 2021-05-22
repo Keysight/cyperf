@@ -21,7 +21,7 @@ The Deployment Manager requires a Python template and certain parameters to be s
 The list of exposed parameters is defined in the Template parameter section.
 ### Examples of Deployment using Python Template:
 ```
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:e2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:e2-standard-8
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8
 ```
 ### Example of Deployment using a YAML file:
 ```
@@ -41,8 +41,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | ----------------------- | ----------------- | ----- |
 | zone                   | Requires input            | Preferred Zone name for the deployment.  |
 | region                   | Requires input            | Preferred Region name for the deployment.  |
-| controllerMachineType                   | e2-standard-8            | Preferred machine Type for CyPerf Controller.  |
-| agentMachineType                   | e2-standard-4            | Preferred machine Type for CyPerf Agent.  |
+| controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
+| agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
 | controllerSourceImage                   | Requires input            | Preferred CyPerf Controller image. Published image will be available at Keysight download page.  |
 | agentSourceImage                   | Requires input            | Preferred CyPerf Agent image. Publised image will be available at Keysight download page.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |

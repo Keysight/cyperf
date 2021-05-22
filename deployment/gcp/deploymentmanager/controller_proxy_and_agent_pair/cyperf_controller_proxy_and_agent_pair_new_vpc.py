@@ -290,7 +290,7 @@ def GenerateConfig(context):
             "type": "compute.v1.instance",
             "properties": {
                 "zone": zone,
-                #"machineType": 'zones/'+zone+'/machineTypes/e2-standard-4',
+                #"machineType": 'zones/'+zone+'/machineTypes/c2-standard-4',
                 "machineType": 'zones/'+zone+'/machineTypes/'+context.properties['agentMachineType'],
                 "metadata": {
                     "kind": "compute#metadata",
