@@ -26,7 +26,7 @@ The list of exposed parameters is defined in Template parameter section.
 
 ### Examples of Deployment using Python Template:
 ```
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:e2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium
 ```
 ### Example of Deployment using a YAML file:
 ```
@@ -48,7 +48,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | zone                   | Requires input            | Preferred Zone name for the deployment.  |
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | brokerMachineType                   | e2-medium            | Preferred machine Type for CyPerf Controller-proxy.  |
-| agentMachineType                   | e2-standard-4           | Preferred machine Type for CyPerf Agent.  |
+| agentMachineType                   | c2-standard-4           | Preferred machine Type for CyPerf Agent.  |
 | brokerSourceImage                   | Requires input            | Preferred CyPerf Controller-proxy image. Published image will be available at Keysight download page.  |
 | agentSourceImage                   | Requires input            | Preferred CyPerf Agent image. Published image will be available at Keysight download page. |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
