@@ -47,13 +47,17 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     5. Review the server manifest yaml to decide what `type` of `Service` your use case would require. e.g. `ClusterIP`, `NodePort` etc. and change accordingly.
     6. Decide on how many replicas for CyPerf Agent's client and server pods you would want to start with, and modify `replicas` count accordingly.
     7. Depending on your requirement, you may want to reserve and limit memory and cpu resources for CyPerf Agent pods. For more details please see section - [Managing Resource for CyPerf Agents](#managing-resource-for-cyperf-agents).
-- Apply the manifests. You may scale the deployments later with desired number of replicas.
+- Apply the manifests.
     ```
     kubectl apply -f cyperf-agent-client.yaml
 
     kubectl apply -f cyperf-agent-server.yaml
-
+    
+    ```
+- You may scale the deployments later with desired number of replicas.
+    ```
     kubectl scale deployment.v1.apps/cyperf-agent-server-deployment --replicas=2
+    
     ```
 
 ## Deployment in **AWS EKS**
