@@ -160,7 +160,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
                 memory: "4Gi"
                 cpu: "3.5"
                 ## skipping requests means limits=requests
-                ## witn 3.5 for 8 core node it should be able to run 2 replicas
+                ## within 3.5 for 8 core node it should be able to run 2 replicas
             requests:
                 memory: "2Gi"
     ```
