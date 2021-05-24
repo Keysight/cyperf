@@ -88,3 +88,9 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
+
+## Configuring a B2B test in multicloud scenarios
+
+![UI](configuration.png?raw=true "Test configuration")
+
+When running a B2B test in multi-cloud you will need to specify the public test interface address of the server agent at the DUT section, to make it reachable for the client agent.
