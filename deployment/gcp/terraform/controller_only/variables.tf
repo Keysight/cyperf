@@ -1,38 +1,40 @@
-variable "GCP_PROJECT_NAME" {
+variable "gcp_project_name" {
   type    = string
-  default = "<specify your project name>"
+  description ="Project name"
 }
 
-variable "GCP_REGION_NAME" {
+variable "gcp_owner_tag" {
+  type    = string
+  description = "GCP owner tag name"
+}
+
+variable "gcp_ssh_key" {
+  type = string
+  description = "The gcp public ssh key file path"
+}
+
+variable "gcp_credential_file" {
+  type = string
+  description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
+}
+
+
+variable "gcp_region_name" {
   type    = string
   default = "us-east1"
 }
 
-variable "GCP_ZONE_NAME" {
+variable "gcp_zone_name" {
   type    = string
   default = "us-east1-b"
 }
 
-variable "GCP_OWNER_TAG" {
-  type    = string
-  default = "<specify the gcp owner tag name>"
-}
-
-variable "GCP_PROJECT_TAG" {
+variable "gcp_project_tag" {
   type    = string
   default = "keysight-gcp-cyperf"
 }
 
-variable "GCP_SSH_KEY" {
-  type = string
-  default = "<specify the gcp public ssh key file path>"
-}
-variable "GCP_CREDENTIALS_FILE" {
-  type = string
-  default = "<create gcp credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys>"
-}
-
-variable "GCP_MDW_MACHINE_TYPE" {
+variable "gcp_mdw_machine_type" {
   type    = string
   default = "n1-standard-4"
 }

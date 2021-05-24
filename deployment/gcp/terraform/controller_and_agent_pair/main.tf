@@ -1,94 +1,90 @@
 provider "google" {
-  credentials = file(var.GCP_CREDENTIALS_FILE)
-  project     = var.GCP_PROJECT_NAME
-  region      = var.GCP_REGION_NAME
-  zone        = var.GCP_ZONE_NAME
+  credentials = file(var.gcp_credential_file)
+  project     = var.gcp_project_name
+  region      = var.gcp_region_name
+  zone        = var.gcp_zone_name
 }
 
 locals {
-  GCP_PROJECT_NAME                 = var.GCP_PROJECT_NAME
-  GCP_REGION_NAME                  = var.GCP_REGION_NAME
-  GCP_ZONE_NAME                    = var.GCP_ZONE_NAME
-  GCP_OWNER_TAG                    = var.GCP_OWNER_TAG
-  GCP_PROJECT_TAG                  = var.GCP_PROJECT_TAG
-  GCP_OPTIONS_TAG                  = "MANUAL"
-  GCP_MGMT_VPC_NETWORK_NAME        = "management-vpc-network"
-  GCP_MGMT_SUBNET_NAME             = "management-subnet"
-  GCP_MGMT_SUBNET_IP_RANGE         = "172.16.5.0/24"
-  GCP_MGMT_FIREWALL_RULE_NAME      = "management-firewall-rule"
-  GCP_MGMT_FIREWALL_RULE_NAME_ERG  = "management-firewall-rule-erg"
-  GCP_MGMT_FIREWALL_RULE_DIRECTION = "INGRESS"
-  GCP_MGMT_FIREWALL_RULE_PRIORITY  = "1000"
-  GCP_MGMT_FIREWALL_RULE_PORTS = [
+  gcp_project_name                 = var.gcp_project_name
+  gcp_region_name                  = var.gcp_region_name
+  gcp_zone_name                    = var.gcp_zone_name
+  gcp_owner_tag                    = var.gcp_owner_tag
+  gcp_project_tag                  = var.gcp_project_tag
+  gcp_options_tag                  = "MANUAL"
+  gcp_mgmt_vpc_network_name        = "management-vpc-network"
+  gcp_mgmt_subnet_name             = "management-subnet"
+  gcp_mgmt_subnet_ip_range         = "172.16.5.0/24"
+  gcp_mgmt_firewall_rule_name      = "management-firewall-rule"
+  gcp_mgmt_firewall_rule_name_ERG  = "management-firewall-rule-erg"
+  gcp_mgmt_firewall_rule_direction = "INGRESS"
+  gcp_mgmt_firewall_rule_priority  = "1000"
+  gcp_mgmt_firewall_rule_PORTS = [
     "22",
     "80",
     "443"
   ]
-  GCP_MGMT_FIREWALL_RULE_SOURCE_IP_RANGES = "0.0.0.0/0"
-  GCP_TEST_VPC_NETWORK_NAME           = "test-vpc-network"
-  GCP_TEST_SUBNET_NAME                = "test-subnet"
-  GCP_TEST_SUBNET_IP_RANGE            = "10.0.0.0/8"
-  GCP_TEST_FIREWALL_RULE_NAME         = "test-firewall-rule"
-  GCP_TEST_FIREWALL_RULE_DIRECTION    = "INGRESS"
-  GCP_TEST_FIREWALL_RULE_PRIORITY     = "100"
-  GCP_TEST_FIREWALL_RULE_PORTS        = "all"
-  GCP_TEST_FIREWALL_RULE_SOURCE_IP_RANGES = [
+  gcp_test_vpc_network_name           = "test-vpc-network"
+  gcp_test_subnet_name                = "test-subnet"
+  gcp_test_subnet_ip_range            = "10.0.0.0/8"
+  gcp_test_firewall_rule_name         = "test-firewall-rule"
+  gcp_test_firewall_rule_direction    = "INGRESS"
+  gcp_test_firewall_rule_priority     = "100"
+  gcp_test_firewall_rule_source_ip_ranges = [
     "0.0.0.0/0"
   ]
-  GCP_TEST_VPC_NETWORK_PEER_NAME               = "test-vpc-network-peer"
-  GCP_MDW_INSTANCE_NAME                        = join("", ["cyperf-mdw-v", var.mdw_version])
-  GCP_MDW_SERIAL_PORT_ENABLE                   = "true"
-  GCP_MDW_CAN_IP_FORWARD                       = "false"
-  GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME            = var.GCP_PROJECT_NAME
-  GCP_MDW_MACHINE_TYPE                         = var.GCP_MDW_MACHINE_TYPE
-  GCP_MDW_IFACE_ETH0_PUBLIC_IP_ADDRESS_NAME    = "MDW-IP"
-  GCP_agent_MACHINE_TYPE                       = var.GCP_AGENT_MACHINE_TYPE
-  GCP_CLIENT_INSTANCE_NAME                     = join("-", ["client-agent", var.agent_version])
-  GCP_SERVER_INSTANCE_NAME                     = join("-", ["server-agent", var.agent_version])
-  GCP_agent_SERIAL_PORT_ENABLE                 = "true"
-  GCP_agent_CAN_IP_FORWARD                     = "false"
-  GCP_agent_CUSTOM_IMAGE_PROJECT_NAME          = var.GCP_PROJECT_NAME
-  GCP_SSH_KEY								   = var.GCP_SSH_KEY
-  startup_script = "/bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.GCP_MDW_INSTANCE.network_interface.0.network_ip} >> /home/cyperf/gcp_image_init_log "
+  gcp_mdw_instance_name                        = join("", ["cyperf-", var.mdw_version])
+  gcp_mdw_serial_port_enable                   = "true"
+  gcp_mdw_can_ip_forward                       = "false"
+  gcp_mdw_custom_image_project_name            = var.gcp_project_name
+  gcp_mdw_machine_type                         = var.gcp_mdw_machine_type
+  gcp_agent_machine_type                       = var.gcp_agent_machine_type
+  gcp_client_instance_name                     = join("-", ["client-agent", var.agent_version])
+  gcp_server_instance_name                     = join("-", ["server-agent", var.agent_version])
+  gcp_agent_serial_port_enable                 = "true"
+  gcp_agent_can_ip_forward                     = "false"
+  gcp_agent_custom_image_project_name          = var.gcp_project_name
+  gcp_ssh_key								   = var.gcp_ssh_key
+  startup_script = "/bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_mdw_instance.network_interface.0.network_ip} >> /home/cyperf/gcp_image_init_log "
 }
 
 resource "google_compute_resource_policy" "GCP_AGENT_PLACEMENT_GROUP" {
-  name   = "${local.GCP_OWNER_TAG}-agent-deployment-policy"
-  region = local.GCP_REGION_NAME
+  name   = "${local.gcp_owner_tag}-agent-deployment-policy"
+  region = local.gcp_region_name
   group_placement_policy {
     vm_count = 2
     collocation = "COLLOCATED"
   }
 }
 
-resource "google_compute_network" "GCP_MGMT_VPC_NETWORK" {
-  name                    = "${local.GCP_OWNER_TAG}-${local.GCP_MGMT_VPC_NETWORK_NAME}"
+resource "google_compute_network" "gcp_mgmt_vpc_network" {
+  name                    = "${local.gcp_owner_tag}-${local.gcp_mgmt_vpc_network_name}"
   auto_create_subnetworks = "false"
   routing_mode            = "GLOBAL"
 }
 
-resource "google_compute_subnetwork" "GCP_MGMT_SUBNET" {
-  name                     = "${local.GCP_OWNER_TAG}-${local.GCP_MGMT_SUBNET_NAME}"
-  ip_cidr_range            = local.GCP_MGMT_SUBNET_IP_RANGE
-  network                  = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-  region                   = local.GCP_REGION_NAME
+resource "google_compute_subnetwork" "gcp_mgmt_subnet" {
+  name                     = "${local.gcp_owner_tag}-${local.gcp_mgmt_subnet_name}"
+  ip_cidr_range            = local.gcp_mgmt_subnet_ip_range
+  network                  = google_compute_network.gcp_mgmt_vpc_network.self_link
+  region                   = local.gcp_region_name
   private_ip_google_access = true
 }
 
-resource "google_compute_firewall" "GCP_MGMT_FIREWALL_RULE" {
-  name = "${local.GCP_OWNER_TAG}-${local.GCP_MGMT_FIREWALL_RULE_NAME}"
+resource "google_compute_firewall" "gcp_mgmt_firewall_rule" {
+  name = "${local.gcp_owner_tag}-${local.gcp_mgmt_firewall_rule_name}"
   allow {
     protocol = "all"
   }
-  direction     = local.GCP_MGMT_FIREWALL_RULE_DIRECTION
-  network       = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-  priority      = local.GCP_MGMT_FIREWALL_RULE_PRIORITY
+  direction     = local.gcp_mgmt_firewall_rule_direction
+  network       = google_compute_network.gcp_mgmt_vpc_network.self_link
+  priority      = local.gcp_mgmt_firewall_rule_priority
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_firewall" "MDW_HTTPS_SERVER" {
-  name     = "${local.GCP_OWNER_TAG}-mdw-https-server"
-  network  = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
+resource "google_compute_firewall" "gcp_mdw_https_server_rule" {
+  name     = "${local.gcp_owner_tag}-mdw-https-server"
+  network  = google_compute_network.gcp_mgmt_vpc_network.self_link
   priority = 999
   allow {
     protocol = "tcp"
@@ -100,100 +96,99 @@ resource "google_compute_firewall" "MDW_HTTPS_SERVER" {
   target_tags   = ["https-server"]
 }
 
-resource "google_compute_network" "GCP_TEST_VPC_NETWORK" {
-  name                    = "${local.GCP_OWNER_TAG}-${local.GCP_TEST_VPC_NETWORK_NAME}"
+resource "google_compute_network" "gcp_test_vpc_network" {
+  name                    = "${local.gcp_owner_tag}-${local.gcp_test_vpc_network_name}"
   auto_create_subnetworks = "false"
   routing_mode            = "REGIONAL"
 }
 
-resource "google_compute_subnetwork" "GCP_TEST_SUBNET" {
-  name                     = "${local.GCP_OWNER_TAG}-${local.GCP_TEST_SUBNET_NAME}"
-  ip_cidr_range            = local.GCP_TEST_SUBNET_IP_RANGE
-  network                  = google_compute_network.GCP_TEST_VPC_NETWORK.self_link
-  region                   = local.GCP_REGION_NAME
+resource "google_compute_subnetwork" "gcp_test_subnet" {
+  name                     = "${local.gcp_owner_tag}-${local.gcp_test_subnet_name}"
+  ip_cidr_range            = local.gcp_test_subnet_ip_range
+  network                  = google_compute_network.gcp_test_vpc_network.self_link
+  region                   = local.gcp_region_name
   private_ip_google_access = true
 }
 
-resource "google_compute_firewall" "GCP_TEST_FIREWALL_RULE" {
-  name = "${local.GCP_OWNER_TAG}-${local.GCP_TEST_FIREWALL_RULE_NAME}"
+resource "google_compute_firewall" "gcp_test_firewall_rule" {
+  name = "${local.gcp_owner_tag}-${local.gcp_test_firewall_rule_name}"
   allow {
     protocol = "all"
   }
-  direction     = local.GCP_TEST_FIREWALL_RULE_DIRECTION
-  network       = google_compute_network.GCP_TEST_VPC_NETWORK.self_link
-  priority      = local.GCP_TEST_FIREWALL_RULE_PRIORITY
-  source_ranges = local.GCP_TEST_FIREWALL_RULE_SOURCE_IP_RANGES
+  direction     = local.gcp_test_firewall_rule_direction
+  network       = google_compute_network.gcp_test_vpc_network.self_link
+  priority      = local.gcp_test_firewall_rule_priority
+  source_ranges = local.gcp_test_firewall_rule_source_ip_ranges
 }
 
-resource "google_compute_address" "GCP_MDW_IP" {
-  name = "${local.GCP_OWNER_TAG}-mdw-ip"
+resource "google_compute_address" "gcp_mdw_ip" {
+  name = "${local.gcp_owner_tag}-mdw-ip"
 }
 
-resource "google_compute_instance" "GCP_MDW_INSTANCE" {
-  name                      = "${local.GCP_OWNER_TAG}-${local.GCP_MDW_INSTANCE_NAME}"
-  can_ip_forward            = local.GCP_MDW_CAN_IP_FORWARD
-  zone                      = local.GCP_ZONE_NAME
-  machine_type              = "zones/${local.GCP_ZONE_NAME}/machineTypes/${local.GCP_MDW_MACHINE_TYPE}"
+resource "google_compute_instance" "gcp_mdw_instance" {
+  name                      = "${local.gcp_owner_tag}-${local.gcp_mdw_instance_name}"
+  can_ip_forward            = local.gcp_mdw_can_ip_forward
+  zone                      = local.gcp_zone_name
+  machine_type              = local.gcp_mdw_machine_type
   allow_stopping_for_update = true
   tags                      = ["https-server"]
   boot_disk {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_MDW_CUSTOM_IMAGE_PROJECT_NAME}/global/images/cyperf-mdw-v${var.mdw_version}"
+      image = "projects/${local.gcp_mdw_custom_image_project_name}/global/images/${var.mdw_version}"
     }
   }
   network_interface {
-    network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-    subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
+    network    = google_compute_network.gcp_mgmt_vpc_network.self_link
+    subnetwork = google_compute_subnetwork.gcp_mgmt_subnet.self_link
     network_ip = "172.16.5.100"
     
     access_config {
       network_tier = "PREMIUM"
-      nat_ip = google_compute_address.GCP_MDW_IP.address
+      nat_ip = google_compute_address.gcp_mdw_ip.address
     }
   }
   metadata = {
-    Owner              = local.GCP_OWNER_TAG
-    Project            = local.GCP_PROJECT_TAG
-    Options            = local.GCP_OPTIONS_TAG
-    serial-port-enable = local.GCP_MDW_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
+    Owner              = local.gcp_owner_tag
+    Project            = local.gcp_project_tag
+    Options            = local.gcp_options_tag
+    serial-port-enable = local.gcp_mdw_serial_port_enable
+    ssh-keys           = "cyperf:${file(local.gcp_ssh_key)}"
   }
 
   labels = {
-    owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
-    project = lower(local.GCP_PROJECT_TAG)
-    options = lower(local.GCP_OPTIONS_TAG)
+    owner   = replace(replace(local.gcp_owner_tag, ".", "-"), "@", "-")
+    project = lower(local.gcp_project_tag)
+    options = lower(local.gcp_options_tag)
   }
 }
 
-resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
-  name                      = "${local.GCP_OWNER_TAG}-${local.GCP_CLIENT_INSTANCE_NAME}"
-  can_ip_forward            = local.GCP_agent_CAN_IP_FORWARD
-  zone                      = local.GCP_ZONE_NAME
-  machine_type              = "zones/${local.GCP_ZONE_NAME}/machineTypes/${local.GCP_agent_MACHINE_TYPE}"
+resource "google_compute_instance" "gcp_client_instance" {
+  name                      = "${local.gcp_owner_tag}-${local.gcp_client_instance_name}"
+  can_ip_forward            = local.gcp_agent_can_ip_forward
+  zone                      = local.gcp_zone_name
+  machine_type              = local.gcp_agent_machine_type
   allow_stopping_for_update = true
   
   boot_disk {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.agent_version}"
+      image = "projects/${local.gcp_agent_custom_image_project_name}/global/images/${var.agent_version}"
     }
   }
   tags = [ "gcp-client" ]
   network_interface {
-    network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-    subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
-    network_ip = "172.16.5.101"
+    network    = google_compute_network.gcp_mgmt_vpc_network.self_link
+    subnetwork = google_compute_subnetwork.gcp_mgmt_subnet.self_link
     access_config {
       network_tier = "PREMIUM"
     }
   }
   network_interface {
-    network    = google_compute_network.GCP_TEST_VPC_NETWORK.self_link
-    subnetwork = google_compute_subnetwork.GCP_TEST_SUBNET.self_link
+    network    = google_compute_network.gcp_test_vpc_network.self_link
+    subnetwork = google_compute_subnetwork.gcp_test_subnet.self_link
     network_ip = "10.0.0.2"
     access_config {
       network_tier = "PREMIUM"
@@ -206,44 +201,43 @@ resource "google_compute_instance" "GCP_CLIENT_INSTANCE" {
   resource_policies         = [google_compute_resource_policy.GCP_AGENT_PLACEMENT_GROUP.self_link]
   metadata_startup_script = local.startup_script
   metadata = {
-    Owner              = local.GCP_OWNER_TAG
-    Project            = local.GCP_PROJECT_TAG
-    Options            = local.GCP_OPTIONS_TAG
-    serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
+    Owner              = local.gcp_owner_tag
+    Project            = local.gcp_project_tag
+    Options            = local.gcp_options_tag
+    serial-port-enable = local.gcp_agent_serial_port_enable
+    ssh-keys           = "cyperf:${file(local.gcp_ssh_key)}"
   }
   labels = {
-    owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
-    project = lower(local.GCP_PROJECT_TAG)
-    options = lower(local.GCP_OPTIONS_TAG)
+    owner   = replace(replace(local.gcp_owner_tag, ".", "-"), "@", "-")
+    project = lower(local.gcp_project_tag)
+    options = lower(local.gcp_options_tag)
   }
 }
 
-resource "google_compute_instance" "GCP_SERVER_INSTANCE" {
-  name                      = "${local.GCP_OWNER_TAG}-${local.GCP_SERVER_INSTANCE_NAME}"
-  can_ip_forward            = local.GCP_agent_CAN_IP_FORWARD
-  zone                      = local.GCP_ZONE_NAME
-  machine_type              = "zones/${local.GCP_ZONE_NAME}/machineTypes/${local.GCP_agent_MACHINE_TYPE}"
+resource "google_compute_instance" "gcp_server_instance" {
+  name                      = "${local.gcp_owner_tag}-${local.gcp_server_instance_name}"
+  can_ip_forward            = local.gcp_agent_can_ip_forward
+  zone                      = local.gcp_zone_name
+  machine_type              = local.gcp_agent_machine_type
   allow_stopping_for_update = true
   boot_disk {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.GCP_agent_CUSTOM_IMAGE_PROJECT_NAME}/global/images/${var.agent_version}"
+      image = "projects/${local.gcp_agent_custom_image_project_name}/global/images/${var.agent_version}"
     }
   }
   tags = [ "gcp-server" ]
   network_interface {
-    network    = google_compute_network.GCP_MGMT_VPC_NETWORK.self_link
-    subnetwork = google_compute_subnetwork.GCP_MGMT_SUBNET.self_link
-    network_ip = "172.16.5.102"
+    network    = google_compute_network.gcp_mgmt_vpc_network.self_link
+    subnetwork = google_compute_subnetwork.gcp_mgmt_subnet.self_link
     access_config {
       network_tier = "PREMIUM"
     }
   }
   network_interface {
-    network    = google_compute_network.GCP_TEST_VPC_NETWORK.self_link
-    subnetwork = google_compute_subnetwork.GCP_TEST_SUBNET.self_link
+    network    = google_compute_network.gcp_test_vpc_network.self_link
+    subnetwork = google_compute_subnetwork.gcp_test_subnet.self_link
     network_ip = "10.0.0.3"
     access_config {
       network_tier = "PREMIUM"
@@ -256,38 +250,38 @@ resource "google_compute_instance" "GCP_SERVER_INSTANCE" {
   resource_policies         = [google_compute_resource_policy.GCP_AGENT_PLACEMENT_GROUP.self_link]
   metadata_startup_script = local.startup_script
   metadata = {
-    Owner              = local.GCP_OWNER_TAG
-    Project            = local.GCP_PROJECT_TAG
-    Options            = local.GCP_OPTIONS_TAG
-    serial-port-enable = local.GCP_agent_SERIAL_PORT_ENABLE
-    ssh-keys           = "cyperf:${file(local.GCP_SSH_KEY)}"
+    Owner              = local.gcp_owner_tag
+    Project            = local.gcp_project_tag
+    Options            = local.gcp_options_tag
+    serial-port-enable = local.gcp_agent_serial_port_enable
+    ssh-keys           = "cyperf:${file(local.gcp_ssh_key)}"
   }
   labels = {
-    owner   = replace(replace(local.GCP_OWNER_TAG, ".", "-"), "@", "-")
-    project = lower(local.GCP_PROJECT_TAG)
-    options = lower(local.GCP_OPTIONS_TAG)
+    owner   = replace(replace(local.gcp_owner_tag, ".", "-"), "@", "-")
+    project = lower(local.gcp_project_tag)
+    options = lower(local.gcp_options_tag)
   }
 }
 
 output "mdw_detail" {
   value = {
-    "name": google_compute_instance.GCP_MDW_INSTANCE.name,
-    "private_ip" : google_compute_instance.GCP_MDW_INSTANCE.network_interface.0.network_ip,
-    "public_ip" : google_compute_instance.GCP_MDW_INSTANCE.network_interface.0.access_config.0.nat_ip
+    "name": google_compute_instance.gcp_mdw_instance.name,
+    "private_ip" : google_compute_instance.gcp_mdw_instance.network_interface.0.network_ip,
+    "public_ip" : google_compute_instance.gcp_mdw_instance.network_interface.0.access_config.0.nat_ip
   }
 }
 
 output "agents_detail"{
   value = [
     {
-      "name": google_compute_instance.GCP_CLIENT_INSTANCE.name,
-      "management_private_ip": google_compute_instance.GCP_CLIENT_INSTANCE.network_interface.0.network_ip,
-      "management_public_ip": google_compute_instance.GCP_CLIENT_INSTANCE.network_interface.0.access_config.0.nat_ip
+      "name": google_compute_instance.gcp_client_instance.name,
+      "management_private_ip": google_compute_instance.gcp_client_instance.network_interface.0.network_ip,
+      "management_public_ip": google_compute_instance.gcp_client_instance.network_interface.0.access_config.0.nat_ip
     },
     {
-      "name": google_compute_instance.GCP_SERVER_INSTANCE.name,
-      "management_private_ip": google_compute_instance.GCP_SERVER_INSTANCE.network_interface.0.network_ip,
-      "management_public_ip": google_compute_instance.GCP_SERVER_INSTANCE.network_interface.0.access_config.0.nat_ip
+      "name": google_compute_instance.gcp_server_instance.name,
+      "management_private_ip": google_compute_instance.gcp_server_instance.network_interface.0.network_ip,
+      "management_public_ip": google_compute_instance.gcp_server_instance.network_interface.0.access_config.0.nat_ip
     }
   ]
 }

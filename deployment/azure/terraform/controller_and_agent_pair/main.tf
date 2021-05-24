@@ -8,9 +8,9 @@ provider "azurerm" {
 }
 
 locals {
-  mdw_name = "${var.AZURE_OWNER_TAG}-mdw-${var.mdw_version}"
-  client_name = "${var.AZURE_OWNER_TAG}-client-${var.agent_version}"
-  server_name = "${var.AZURE_OWNER_TAG}-server-${var.agent_version}"
+  mdw_name = "${var.azure_owner_tag}-mdw-${var.mdw_version}"
+  client_name = "${var.azure_owner_tag}-client-${var.agent_version}"
+  server_name = "${var.azure_owner_tag}-server-${var.agent_version}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
       /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
@@ -19,13 +19,13 @@ locals {
 }
 
 resource "azurerm_resource_group" "azr_automation" {
-  name     = var.AZURE_OWNER_TAG
-  location = var.AZURE_REGION_NAME
+  name     = var.azure_owner_tag
+  location = var.azure_region_name
 }
 
 resource "azurerm_proximity_placement_group" "azr_proximity_placement" {
-  name                = "${var.AZURE_OWNER_TAG}-proximity-placement"
-  location            = var.AZURE_REGION_NAME
+  name                = "${var.azure_owner_tag}-proximity-placement"
+  location            = var.azure_region_name
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   tags = {
@@ -34,11 +34,11 @@ resource "azurerm_proximity_placement_group" "azr_proximity_placement" {
 }
 
 resource "azurerm_network_security_group" "azr_automation" {
-  name                = "${var.AZURE_OWNER_TAG}-sg"
+  name                = "${var.azure_owner_tag}-sg"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
     security_rule {
-    name                       = var.AZURE_OWNER_TAG
+    name                       = var.azure_owner_tag
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -51,54 +51,54 @@ resource "azurerm_network_security_group" "azr_automation" {
 }
 
 resource "azurerm_virtual_network" "azr_automation" {
-  name                = "${var.AZURE_OWNER_TAG}-network"
+  name                = "${var.azure_owner_tag}-network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 }
 
 resource "azurerm_subnet" "azr_automation_management_network" {
-  name                 = "${var.AZURE_OWNER_TAG}-management-subnet"
+  name                 = "${var.azure_owner_tag}-management-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "azr_automation_test_network" {
-  name                 = "${var.AZURE_OWNER_TAG}-test-subnet"
+  name                 = "${var.azure_owner_tag}-test-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "azr_automation_mdw_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-mdw-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-mdw-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_public_ip" "azr_automation_agent_1_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent1-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent1-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_public_ip" "azr_automation_agent_2_public_ip" {
-  name                = "${var.AZURE_OWNER_TAG}-cyperf-agent2-public-ip"
+  name                = "${var.azure_owner_tag}-cyperf-agent2-public-ip"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "azr_automation_mdw_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-mdw-management-nic"
+  name                = "${var.azure_owner_tag}-mdw-management-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-mdw-ip"
+    name                          = "${var.azure_owner_tag}-mdw-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_mdw_public_ip.id
@@ -106,12 +106,12 @@ resource "azurerm_network_interface" "azr_automation_mdw_nic" {
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_1_mng_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-1-management-nic"
+  name                = "${var.azure_owner_tag}-agent-1-management-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-1-management-ip"
+    name                          = "${var.azure_owner_tag}-agent-1-management-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_agent_1_public_ip.id
@@ -119,24 +119,24 @@ resource "azurerm_network_interface" "azr_automation_agent_1_mng_nic" {
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_1_test_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-1-test-nic"
+  name                = "${var.azure_owner_tag}-agent-1-test-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
   enable_accelerated_networking = true
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-1-test-ip"
+    name                          = "${var.azure_owner_tag}-agent-1-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_2_mng_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-2-management-nic"
+  name                = "${var.azure_owner_tag}-agent-2-management-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-2-management-ip"
+    name                          = "${var.azure_owner_tag}-agent-2-management-ip"
     subnet_id                     = azurerm_subnet.azr_automation_management_network.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.azr_automation_agent_2_public_ip.id
@@ -144,12 +144,12 @@ resource "azurerm_network_interface" "azr_automation_agent_2_mng_nic" {
 }
 
 resource "azurerm_network_interface" "azr_automation_agent_2_test_nic" {
-  name                = "${var.AZURE_OWNER_TAG}-agent-2-test-nic"
+  name                = "${var.azure_owner_tag}-agent-2-test-nic"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
   enable_accelerated_networking = true
   ip_configuration {
-    name                          = "${var.AZURE_OWNER_TAG}-agent-2-test-ip"
+    name                          = "${var.azure_owner_tag}-agent-2-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
     private_ip_address_allocation = "Dynamic"
   }
@@ -159,16 +159,16 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   name                = local.mdw_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_MDW_MACHINE_TYPE
+  size                = var.azure_mdw_machine_type
   admin_username      = "cyperf"
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/cyperf-mdw-images/providers/Microsoft.Compute/images/cyperf-mdw-v${var.mdw_version}"
+  source_image_id     = var.controller_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
 
   admin_ssh_key {
     username   = "cyperf"
-    public_key = file("/var/lib/jenkins/appsec/resources/ssh_keys/id_rsa_ghost.pub")
+    public_key = file(var.public_key)
   }
 
   os_disk {
@@ -184,9 +184,9 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   name                = local.client_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_AGENT_MACHINE_TYPE
+  size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/${var.agent_version}"
+  source_image_id     = var.agent_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_1_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_1_test_nic.id
@@ -195,7 +195,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 
   admin_ssh_key {
     username   = "cyperf"
-    public_key = file("/var/lib/jenkins/appsec/resources/ssh_keys/id_rsa_ghost.pub")
+    public_key = file(var.public_key)
   }
 
   os_disk {
@@ -212,9 +212,9 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   name                = local.server_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  size                = var.AZURE_AGENT_MACHINE_TYPE
-  admin_username      = var.AZURE_ADMIN_USERNAME
-  source_image_id     = "/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/${var.agent_version}"
+  size                = var.azure_agent_machine_type
+  admin_username      = var.azure_admin_username
+  source_image_id     = var.agent_image
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_2_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_2_test_nic.id
@@ -223,7 +223,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   
   admin_ssh_key {
     username   = "cyperf"
-    public_key = file("/var/lib/jenkins/appsec/resources/ssh_keys/id_rsa_ghost.pub")
+    public_key = file(var.public_key)
   }
 
   os_disk {

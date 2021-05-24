@@ -3,9 +3,14 @@ variable "azure_project_name" {
   description = "Project name"
 }
 
-variable "azure_owner_tag" {
+variable "gcp_project_name" {
   type    = string
-  description = "Owner tag name"
+  description ="Project name"
+}
+
+variable "deployment_name" {
+  type  = string
+  description = "Prefix for all clouds"
 }
 
 variable "subscription_id" {
@@ -26,6 +31,11 @@ variable "client_secret" {
 variable "tenant_id" {
   type = string
   description = "Tenant id"
+}
+
+variable "gcp_credential_file" {
+  type = string
+  description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
 }
 
 variable "public_key" {
@@ -53,9 +63,25 @@ variable "azure_admin_username" {
   default = "cyperf"
 }
 
+variable "gcp_region_name" {
+  type    = string
+  default = "us-east1"
+}
+
+variable "gcp_zone_name" {
+  type    = string
+  default = "us-east1-b"
+}
+
+
 variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
+}
+
+variable "gcp_project_tag" {
+  type    = string
+  default = "keysight-gcp-cyperf"
 }
 
 variable "azure_mdw_machine_type" {
@@ -68,6 +94,16 @@ variable "azure_agent_machine_type" {
   default = "Standard_F16s_v2"
 }
 
+variable "gcp_broker_machine_type" {
+  type    = string
+  default = "n1-standard-2"
+}
+
+variable "gcp_agent_machine_type" {
+  type    = string
+  default = "c2-standard-16"
+}
+
 variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-1-0"
@@ -78,4 +114,10 @@ variable "agent_version" {
   type        = string
   default     = "keysight-cyperf-agent-1-0"
   description = "Image id for the cyperf agent machines"
+}
+
+variable "broker_image" {
+  type        = string
+  default     = "keysight-cyperf-controller-proxy-1-0"
+  description = "Image id for the cyperf controller proxy machines"
 }

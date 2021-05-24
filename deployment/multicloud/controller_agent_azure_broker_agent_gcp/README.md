@@ -6,6 +6,8 @@ This is the Terraform approach for Cyperf Application and Cyperf Agents in diffe
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
+This scenario, in particular, tackles a multi-cloud deployment, with an agent placed along with the controller in AZURE, and another placed in GCP with a controller proxy.
+
 # Prerequisites
 
 - Latest version of Terraform installed. https://learn.hashicorp.com/tutorials/terraform/install-cli
@@ -18,7 +20,7 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 The  **terraform init ** command is used to initialize a working directory containing Terraform configuration files. This is the first command that should be run after writing a new Terraform configuration or cloning an existing one from version control. It is safe to run this command multiple times.
 
-This command is required the first time you use as template. It is not required to use it unless you modify the template.
+This command is required the first time you use a template. It is not required to use it unless you modify the template.
 
 ## Deployment
 
@@ -45,25 +47,38 @@ variable_2= "value\_2"
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
+
 ## Template Parameters
 
 The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
+| gcp_project_name            | Requires input   | Specify the GCP project name. |
+| gcp_credential_file   | Requires input   | The GCP credentials json file must be created using the following specifications https://cloud.google.com/iam/docs/creating-managing-service-account-keys. |
 | azure_project_name     | Requires input   | Specify Azure project name. |
-| azure_owner_tag | Requires input | The Azure owner tag name. |
+| deployment_name | Requires input | Prefix for all cloud resources. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_image       | Requires input    | Specify the Azure controller image resource id  |
+| public_key       | Requires input    | Specify the public key that will be used to auth into the vms.   |
+| controller_image       | Requires input    | Specify the Azure controller image resource id|
+| agent_image | Requires input    | Specify the Azure agent image resource id |
+| gcp_region_name      | us-east1       | The GCP region where the deployment will take place. |
+| gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
+| gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | azure_region_name      | eastus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
+| broker_image            | keysight-cyperf-controller-proxy-1-0   | The  CyPerf controller proxy image version.    |
+| gcp_broker_machine_type   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
+| gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
+| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+
 
 ## Destruction
 
@@ -73,3 +88,9 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
+
+## Configuring a B2B test in multicloud scenarios
+
+![UI](configuration.png?raw=true "Test configuration")
+
+When running a B2B test in multi-cloud you will need to specify the public test interface address of the server agent at the DUT section, to make it reachable for the client agent.
