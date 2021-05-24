@@ -24,10 +24,15 @@ This command is required the first time you use as template. It is not required 
 
 The  **terraform apply**  command executes the actions proposed in a terraform template. All the default deployment variables may be changed.
 
-terraform apply -var=&quot;GCP_CREDENTIALS_FILE=gcp-credentials.json&quot;
+terraform apply -var=&quot;gcp_credential_file=gcp-credentials.json&quot;
 
 The -var option can be applied multiple times in order to use multiple parameters.
 
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
+If the deployment was done using -var options, you will also need to provide the same set of parameters to the terraform destroy command
+
+terraform destroy -var input\_variable=&quot;value&quot;
+
+If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.

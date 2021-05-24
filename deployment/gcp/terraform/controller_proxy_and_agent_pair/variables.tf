@@ -1,45 +1,45 @@
-variable "GCP_PROJECT_NAME" {
+variable "gcp_project_name" {
   type    = string
-  default = "<specify your project name>"
+  description ="Project name"
 }
 
-variable "GCP_REGION_NAME" {
+variable "gcp_owner_tag" {
+  type    = string
+  description = "GCP owner tag name"
+}
+
+variable "gcp_ssh_key" {
+  type = string
+  description = "The gcp public ssh key file path"
+}
+
+variable "gcp_credential_file" {
+  type = string
+  description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
+}
+
+variable "gcp_region_name" {
   type    = string
   default = "us-east1"
 }
 
-variable "GCP_ZONE_NAME" {
+variable "gcp_zone_name" {
   type    = string
   default = "us-east1-b"
 }
 
-variable "GCP_OWNER_TAG" {
-  type    = string
-  default = "<specify the gcp owner tag name>"
-}c2-standard-1
-
-variable "GCP_PROJECT_TAG" {
+variable "gcp_project_tag" {
   type    = string
   default = "keysight-gcp-cyperf"
 }
 
-variable "GCP_SSH_KEY" {
-  type = string
-  default = "<specify the gcp public ssh key file path>"
-}
 
-variable "GCP_CREDENTIALS_FILE" {
-  type = string
-  default = "<create gcp credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys>"
-}
-
-
-variable "GCP_BROKER_MACHINE_TYPE" {
+variable "gcp_broker_machine_type" {
   type    = string
   default = "n1-standard-2"
 }
 
-variable "GCP_AGENT_MACHINE_TYPE" {
+variable "gcp_agent_machine_type" {
   type    = string
   default = "c2-standard-16"
 }
@@ -54,16 +54,4 @@ variable "broker_image" {
   type        = string
   default     = "keysight-cyperf-controller-proxy-1-0"
   description = "Image id for the cyperf controller proxy machines"
-}
-
-variable "network_name" {
-  type = string
-  default = "load-balancer-net"
-  description = "Load balancer network name"
-}
-
-variable "ssl_certificate"{
-  type = string
-  default = "projects/<your project name>/global/sslCertificates/cyper-https-lb"
-  description = "SSL certificate for https load balancers"
 }

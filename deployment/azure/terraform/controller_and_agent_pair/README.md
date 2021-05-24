@@ -24,30 +24,55 @@ This command is required the first time you use as template. It is not required 
 
 The  **terraform apply**  command executes the actions proposed in a terraform template. All the default deployment variables may be changed.
 
-terraform apply -var=&quot;client\_secret=11111111-0000-0000-0000-11111111111&quot;
+### 1. Using the **-var** command
+
+terraform apply -var input\_variable=&quot;value&quot;
 
 The -var option must be applied multiple times to use all the required input parameters.
 
+If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
+
+### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
+
+In the same folder, create a file named terraform.tfvars.
+
+The inside contents should look like this:
+
+variable_1= "value\_1"
+
+variable_2= "value\_2"
+
+Using this method you can ensure that all further deployments will be done with the same combination of parameters.
+
+**terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
 ## Template Parameters
 
 The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| AZURE_PROJECT_NAME     | Requires input   | Specify Azure project name. |
-| AZURE_REGION_NAME      | eastus       | The Azure region where the deployment will take place. |
-| AZURE_OWNER_TAG | Requires input | The Azure owner tag name. |
-| AZURE_ADMIN_USERNAME  | cyperf | The Azure administrator username. |
-| AZURE_PROJECT_TAG | keysight-azure-cyperf |The Azure project tag name. |
-| AZURE_MDW_MACHINE_TYPE | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| AZURE_AGENT_MACHINE_TYPE   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
+| azure_project_name     | Requires input   | Specify Azure project name. |
+| azure_owner_tag | Requires input | The Azure owner tag name. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
+| controller_image       | Requires input    | Specify the Azure controller image resource id|
+| agent_image | Requires input    | Specify the Azure agent image resource id |
+| azure_region_name      | eastus       | The Azure region where the deployment will take place. |
+| azure_admin_username  | cyperf | The Azure administrator username. |
+| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
+| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
 
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
+If the deployment was done using -var options, you will also need to provide the same set of parameters to the terraform destroy command
+
+terraform destroy -var input\_variable=&quot;value&quot;
+
+If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.

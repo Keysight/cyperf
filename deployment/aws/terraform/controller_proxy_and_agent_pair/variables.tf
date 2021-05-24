@@ -1,3 +1,23 @@
+variable "aws_access_key" {
+  type = string
+  description = "AWS-cli access key"
+}
+
+variable "aws_secret_key" {
+  type = string
+  description = "AWS-cli secret key"
+}
+
+variable "aws_stack_name" {
+  type = string
+  description = "Stack name, prefix for all resources"
+}
+
+variable "aws_auth_key" {
+  type = string
+  description = "The key used to ssh into VMs"
+}
+
 variable "aws_region" {
   type    = string
   default = "us-east-2"
@@ -6,28 +26,6 @@ variable "aws_region" {
 variable "availability_zone" {
   type    = string
   default = "us-east-2a"
-}
-
-variable "aws_access_key" {
-  type = string
-  default = "<specify your aws-cli access key>"
-}
-
-variable "aws_secret_key" {
-  type = string
-  default = "<specify your aws-cli secret key>"
-}
-
-variable "aws_stack_name" {
-  type = string
-  default = "<specify your aws stack name>"
-  description = "Stack name, prefix for all resources"
-}
-
-variable "aws_auth_key" {
-  type = string
-  default = "<specify your ssh key file>"
-  description = "The key used to ssh into VMs"
 }
 
 variable "aws_broker_machine_type"{
