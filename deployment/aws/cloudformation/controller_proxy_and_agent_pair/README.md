@@ -13,8 +13,6 @@ Each agent has two interfaces:
 
 During the first deployment, a default Agent is set as the test interface and the management interface is set as the second interface. This means that the deployment test traffic flows only between the first interface of both agents.
 
-After a deployment is successful , the public IP of the controller-proxy EC2 instance is fetched from the AWS console. You can now add this IP to **CyPerf Controller** > **Administration** > **Message Brokers**. 
-Cyperf Agents which are registered with controller-proxy will appear in CyPerf controller.
 
 ## Topology Diagram
 ![controller_proxy_and_agent_pair](cyperf_controller_proxy_and_agent_pair.jpg)
@@ -53,4 +51,16 @@ The following table lists the parameters for this deployment in **Existing VPC**
 |Test Subnet for CyPerf Agents                |Select subnet from drop down        |Preferred Existing Test subnet for CyPerf Agent.                                                                                                                                                                      |
 |Security Group of CyPerf Agent               |Select security group from drop down|Preferred Existing Security group of CyPerf Agent.                                                                                                                                                                    |
 
+## Post deployment
+
+After successful deployment of stack, flow bellow instructions
+
+-	Go to EC2 Dashboard and look for the deployed instance
+-	Select the Controller Proxy instance and check the public IP 
+-	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&Keysight#1)
+-   Select the gear icon in the right top corner. Select “Administration”, followed by “Message Brokers”. 
+    If Controller and Controller Proxy are in same vpc, add the Controller Proxy private IP.
+    Else, add Controller Proxy Public IP. Allow Controller Public IP at Controller proxy's inbound Security rule for port 443.
+-   Registered CyPerf agents should appear in Controller UI autometically.
+-   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
 

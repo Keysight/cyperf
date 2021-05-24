@@ -52,3 +52,15 @@ The following table lists the parameters for this deployment in **Existing VNET*
 | Number of CyPerf Agents                   | 2            | Number of CyPerf agents will be deployed from this template.  |
 
 **Note:** **CyPerf** and **Cyperf** represents same. ARM templates use **Cyperf** instead of **CyPerf** and it becomes an Azure limitation that introduces extra space.
+
+
+## Post deployment
+
+After successful deployment of stack, flow bellow instructions
+
+-	Go to Azure console and look for the deployed VMs
+-	Select the Controller Proxy instance and check the public IP 
+-	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&Keysight#1)
+-   Select the gear icon in the right top corner. Select “Administration”, followed by “Message Brokers” and then add the Controller Proxy public IP.
+-   Registered CyPerf agents should appear in Controller UI autometically.
+-   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
