@@ -29,8 +29,8 @@ Following CyPerf images are publicly available
 - For CyPerf Controller Proxy, keysight-cyperf-controller-proxy-1-0 (Family name)
 
 ## Supported instance types 
-- For CyPerf Controller, supported Machine type e2-standard-8.
-- For CyPerf Agents, supported instance type e2-standard-4 and c2-standard-16.
+- For CyPerf Controller, supported Machine type c2-standard-8.
+- For CyPerf Agents, supported instance type c2-standard-4 and c2-standard-16.
 - For CyPerf Controller Proxy e2-medium.
 
 ### List of Supported CyPerf deployment manager templates for GCP 
