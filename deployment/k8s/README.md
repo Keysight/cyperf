@@ -49,9 +49,9 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     7. Depending on your requirement, you may want to reserve and limit memory and cpu resources for CyPerf Agent pods. For more details please see section - [Managing Resource for CyPerf Agents](#managing-resource-for-cyperf-agents).
 - Apply the manifests. You may scale the deployments later with desired number of replicas.
     ```
-    kubectl apply cyperf-agent-client.yaml
+    kubectl apply -f cyperf-agent-client.yaml
 
-    kubectl apply cyperf-agent-server.yaml
+    kubectl apply -f cyperf-agent-server.yaml
 
     kubectl scale deployment.v1.apps/cyperf-agent-server-deployment --replicas=2
     ```
