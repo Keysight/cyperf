@@ -198,7 +198,7 @@ When configuring CyPerf Controller for a test where CyPerf Agents are running in
     ```
     kubectl get pods -l app=cyperf-agent -o wide
 
-    kubectl get logs [cyperf-agent-pod-id]  > [cyperf-agent-pod-id].log 
+    kubectl logs [cyperf-agent-pod-id]  > [cyperf-agent-pod-id].log 
     ```
 ### * Agents are not visible in CyPerf Controller
 1. Make sure that ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
