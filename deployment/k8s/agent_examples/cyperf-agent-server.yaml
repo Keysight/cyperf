@@ -36,7 +36,7 @@ spec:
                             memory: "4Gi"
                             #cpu: "3.5"
                             ## skipping requests means limits=requests
-                            ## witn 3.5 for 8 core node it should be able to run 2 replicas
+                            ## with 3.5 for 8 core node it should be able to run 2 replicas
                             ## but experiments needed to see how other pods react for perf configs.
                         requests:
                             memory: "2Gi"
