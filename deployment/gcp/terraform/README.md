@@ -68,6 +68,13 @@ This template deploys:
 
 - Two CyPerf Agents, both having two interfaces each. Both Agent interfaces are in a Private subnet. 
 
+### III. [Controller Only](controller_only):
+
+
+This template deploys:
+
+- One CyPerf Controller, in a public subnet.
+
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
