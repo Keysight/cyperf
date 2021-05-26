@@ -46,38 +46,6 @@ Using this method you can ensure that all further deployments will be done with 
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
 
-<<<<<<< HEAD
-=======
-### List of Supported CyPerf terraform scripts for GCP 
-
-The following is a list of the current supported CyPerf terraform scripts. Click the links to view the README files.
-
-### I. [Controller and Agent Pair](controller_and_agent_pair):
- 
-
-This template deploys:
-
-- One CyPerf Controller, in a public subnet.
-
-- Two CyPerf Agents, both having two interfaces each. Both Agent interfaces are in a Private subnet. 
-
-### II. [Controller Proxy and Agent Pair](controller_proxy_and_agent_pair):
-
-
-This template deploys:
-
-- One CyPerf Controller Proxy, in a public subnet.
-
-- Two CyPerf Agents, both having two interfaces each. Both Agent interfaces are in a Private subnet. 
-
-### III. [Controller Only](controller_only):
-
-
-This template deploys:
-
-- One CyPerf Controller, in a public subnet.
-
->>>>>>> 15cc196... Added hyperlink for terraform other toplogys
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
