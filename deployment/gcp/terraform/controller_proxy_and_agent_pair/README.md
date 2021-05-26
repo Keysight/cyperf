@@ -8,13 +8,9 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 # Prerequisites
 
-1. Latest version of Terraform installed. https://learn.hashicorp.com/tutorials/terraform/install-cli
+- Latest version of Terraform installed. https://learn.hashicorp.com/tutorials/terraform/install-cli
 
-2. Credentials for each specific cloud provider need to pe provided.
-
-3. Upload bellow files in the system where terraform installed. 
-- [main.tf](main.tf)
-- [variables.tf](variables.tf)
+- Credentials for each specific cloud provider need to pe provided.
 
 # How to use:
 
