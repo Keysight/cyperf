@@ -34,12 +34,12 @@ properties:
 
   brokerSourceImage:
     type: string
-    default: image-broker-v2
+    default: keysight-cyperf-controller-proxy-1-0
     description: source image for broker
 
   agentSourceImage:
     type: string
-    default: cyperf-agent-1-0-0-888
+    default: keysight-cyperf-agent-1-0
     description: source image for agents
   managementNetworkCIDR:
     type: string

@@ -27,6 +27,10 @@ The list of exposed parameters is defined in Template parameter section.
 ### Examples of Deployment using Python Template:
 ```
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium
+
+Example: 
+
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-1-0,brokerMachineType:e2-medium
 ```
 ### Example of Deployment using a YAML file:
 ```
@@ -49,8 +53,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | brokerMachineType                   | e2-medium            | Preferred machine Type for CyPerf Controller-proxy.  |
 | agentMachineType                   | c2-standard-4           | Preferred machine Type for CyPerf Agent.  |
-| brokerSourceImage                   | Requires input            | Preferred CyPerf Controller-proxy image. Published image will be available at Keysight download page.  |
-| agentSourceImage                   | Requires input            | Preferred CyPerf Agent image. Published image will be available at Keysight download page. |
+| brokerSourceImage                   | keysight-cyperf-controller-proxy-1-0            | Preferred CyPerf Controller-proxy image. |
+| agentSourceImage                   | keysight-cyperf-agent-1-0            | Preferred CyPerf Agent image. |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
