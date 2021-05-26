@@ -12,6 +12,10 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 - Credentials for each specific cloud provider need to pe provided.
 
+- Upload bellow files in the system where terraform installed. 
+- [main.tf](main.tf)
+- [variables.tf](variables.tf)
+
 # How to use:
 
 ## Initialization
