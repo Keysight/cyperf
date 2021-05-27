@@ -32,6 +32,15 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
+terraform apply --auto-approve\
+-var aws_auth_key="name of the auth key in cloud”\
+-var aws_stack_name="test" \
+-var aws_access_key="key" \
+-var aws_secret_key="key"
+
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.
