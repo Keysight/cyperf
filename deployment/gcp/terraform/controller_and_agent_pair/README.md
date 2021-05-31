@@ -35,6 +35,12 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+terraform apply --auto-approve \
+-var gcp_project_name="kt-nas-cyperf-dev" \
+-var gcp_owner_tag="test"  \
+-var gcp_ssh_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub"  \
+-var gcp_credential_file="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/credentials/gcp/kt-nas-cyperf-dev-5b29ff75f49a.json"
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.
@@ -63,7 +69,7 @@ The following table lists the parameters for this deployment.
 | gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
 | gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | gcp_mdw_machine_type    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
-| gcp_agent_machine_type   | c2-standard-16            | The machine type used for deploying the CyPerf agent. |
+| gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
 | mdw_version            | keysight-cyperf-controller-1-0   | The  CyPerf controller image version.    |
 | agent_version       | keysight-cyperf-agent-1-0     | The CyPerf agent image version.   |
 

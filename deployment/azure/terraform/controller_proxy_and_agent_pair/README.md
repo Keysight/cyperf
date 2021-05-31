@@ -32,6 +32,19 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
+terraform apply --auto-approve \
+-var azure_owner_tag="test" \
+-var azure_project_name="kt-nas-cyperf-dev" \
+-var subscription_id="" \
+-var client_id="" \
+-var client_secret="" \
+-var tenant_id="" \
+-var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
+-var controller_proxy_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/broker-images/providers/Microsoft.Compute/images/broker-version-12" \
+-var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/cyperf-agent-1-0-215-master-tiger-1-0-3-173"
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.
@@ -65,7 +78,7 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | AZURE_BROKER_MACHINE_TYPE | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
-| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
 | broker_image   | keysight-cyperf-controller-proxy-1-0      | The  CyPerf controller proxy image version. |
 | agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
 

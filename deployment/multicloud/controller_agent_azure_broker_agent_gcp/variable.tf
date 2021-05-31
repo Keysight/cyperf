@@ -91,7 +91,7 @@ variable "azure_mdw_machine_type" {
 
 variable "azure_agent_machine_type" {
   type    = string
-  default = "Standard_F16s_v2"
+  default = "Standard_F4s_v2"
 }
 
 variable "gcp_broker_machine_type" {
@@ -101,7 +101,7 @@ variable "gcp_broker_machine_type" {
 
 variable "gcp_agent_machine_type" {
   type    = string
-  default = "c2-standard-16"
+  default = "c2-standard-4"
 }
 
 variable "mdw_version" {
