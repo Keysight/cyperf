@@ -32,6 +32,18 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
+terraform apply --auto-approve \
+-var azure_owner_tag="test" \
+-var azure_project_name="kt-nas-cyperf-dev" \
+-var subscription_id="" \
+-var client_id="" \
+-var client_secret="" \
+-var tenant_id="" \
+-var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
+-var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/cyperf-mdw-images/providers/Microsoft.Compute/images/cyperf-mdw-v1-0-0-1581" 
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.
