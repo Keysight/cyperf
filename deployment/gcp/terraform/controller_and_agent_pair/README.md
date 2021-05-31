@@ -35,6 +35,8 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
 terraform apply --auto-approve \
 -var gcp_project_name="kt-nas-cyperf-dev" \
 -var gcp_owner_tag="test"  \
