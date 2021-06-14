@@ -199,7 +199,8 @@
                         "default": "CyPerf Controller Configuration"
                     },
                     "Parameters": [
-                        "ControllerManagementSubnet"
+                        "ControllerManagementSubnet",
+			 "KeyNameForCyPerfController"
                     ]
                 },
                 {
@@ -217,6 +218,9 @@
                 },
                 "ControllerManagementSubnet": {
                     "default": "Management Subnet for CyPerf Controller"
+                },
+	        "KeyNameForCyPerfController": {
+                    "default": "SSH Key"
                 },
                 "AllowedSubnet": {
                     "default": "Allowed Subnet for Security Group"
@@ -255,6 +259,12 @@
             "Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
             "Description": "Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
             "Type": "AWS::EC2::Subnet::Id"
+        },
+	"KeyNameForCyPerfController": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+            "Default": "CyPerf-keypair",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
+            "Type": "AWS::EC2::KeyPair::KeyName"
         },
         "Project": {
             "Default": "CyPerf-AWS",
@@ -375,6 +385,9 @@
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
                 "InstanceType": "c4.2xlarge",
+		"KeyName": {
+                    "Ref": "KeyNameForCyPerfController"
+                },
                 "NetworkInterfaces": [
                     {
                         "DeviceIndex": "0",
