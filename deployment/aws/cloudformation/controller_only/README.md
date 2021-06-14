@@ -19,6 +19,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | VPC | 172.16.0.0/16 |The CIDR block for the VPC. |
 | Availability Zones | Requires input | Availability Zone to use for the subnets in the VPC. Select Availability Zone from the drop-down list. |
 | Management Subnet for CyPerf Controller | 172.16.1.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI. |
+| SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller.  |
 | Allowed Subnet for Security Group      | 1.1.1.1/1      | Subnet range allowed to access deployed AWS resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”. Default value is dummy value. User must use proper subnet range.  |
 
 The following table lists the parameters for this deployment in **Existing VPC**.
@@ -29,14 +30,10 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | Username                  | Requires input            | Email ID of the stack owner. All resources created by this stack are tagged with Username.  | 
 | Project                  | Requires input            | The name of the project where this stack will be used.  | 
 | Availability Zones                  | Requires input            | Availability Zone to use for the subnets in the VPC. Select Availability Zone from the drop-down list.  | 
-| VPC                  | 172.16.0.0/16           | The CIDR block for the VPC.  | 
-| Management Subnet for CyPerf Controller                  | Select subnet from drop down            | Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI.  | 
+| VPC                  | Requires input          | Preferred Existing VPC.  | 
+| Management Subnet for CyPerf Controller                  | Select subnet from drop down            | Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI.  |
+| SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller.  | 
 | Security Group of CyPerf Controller                  | 1.1.1.1/1            | Subnet range allowed to access deployed AWS resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”.  |
-| SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances.  |
-| Control Subnet for CyPerf Agents                   | Select subnet from drop down           | Preferred Existing Control subnet for CyPerf Agent.  |
-| Test Subnet for CyPerf Agents                   | Select subnet from drop down            | Preferred Existing Test subnet for CyPerf Agent.  |
-| Security Group of CyPerf Agent                   | Select security group from drop down            | Preferred Existing Security group of CyPerf Agent.  |
-
 
 ## Post deployment
 
