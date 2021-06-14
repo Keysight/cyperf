@@ -199,7 +199,8 @@
                         "default": "CyPerf Controller Configuration"
                     },
                     "Parameters": [
-                        "ControllerNetworkCIDR"
+                        "ControllerNetworkCIDR",
+			"KeyNameForCyPerfController"
                     ]
                 },
                 {
@@ -220,6 +221,9 @@
                 },
                 "ControllerNetworkCIDR": {
                     "default": "Management Subnet for CyPerf Controller"
+                },
+		"KeyNameForCyPerfController": {
+                    "default": "SSH Key"
                 },
                 "AllowedSubnet": {
                     "default": "Allowed Subnet for Security Group"
@@ -262,6 +266,12 @@
             "MaxLength": "18",
             "MinLength": "9",
             "Type": "String"
+        },
+	"KeyNameForCyPerfController": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+            "Default": "CyPerf-keypair",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
+            "Type": "AWS::EC2::KeyPair::KeyName"
         },
         "AllowedSubnet": {
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
@@ -520,6 +530,9 @@
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
                 "InstanceType": "c4.2xlarge",
+		"KeyName": {
+                    "Ref": "KeyNameForCyPerfController"
+                },
                 "NetworkInterfaces": [
                     {
                         "DeviceIndex": "0",
