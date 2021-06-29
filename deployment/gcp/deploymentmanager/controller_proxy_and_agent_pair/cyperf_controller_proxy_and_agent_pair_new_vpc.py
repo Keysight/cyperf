@@ -27,9 +27,9 @@ def GenerateConfig(context):
    
     agent_base_name = context.env['deployment']+ '-cyperf-agent-'
 
-    sslkey = 'cyperf:' + 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhYQIgIyn5WOdzdmQ+42gjT3hXlOSbMlt8xTxHl1FilbbPFArK6dMVKtipK80uGafovDk8Yj8UxfgedRBDTdxchSdjKIZqxXUXbuyhquZKSFuxa2Eid12kX5RlCs9SqqsZqii2GheM1jNLdfCrBioHbcLVTihDFmENPkNJ5E8wf6g1T43bLu2YFNQVPLplK9fK2cv6kE53a6gNgxIprkeC/Dc1KzFZpjHk09r6D/dnfX4rWuswsl60uY2+RCgbrfvdnw19rFZfxU/mgZQOVA9w2iceeT9wHfkehpSTeMnDj4ZbyxLF7dQvpZCvWzcnf7zaN6+GyB3+e2uHYKkOid7Aw== daniel'
+    sslkey = 'cyperf:' + '<Replace with ssh public key.>'
 
-
+    
     resources = []
     
     ##cyperf Management network 
