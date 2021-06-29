@@ -29,7 +29,7 @@ def GenerateConfig(context):
 
     sslkey = 'cyperf:' + '<Replace with ssh public key.>'
 
-    
+
     resources = []
     
     ##cyperf Management network 
