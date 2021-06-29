@@ -26,10 +26,10 @@ def GenerateConfig(context):
     broker = context.env['deployment']+'-cyperf-broker'
    
     agent_base_name = context.env['deployment']+ '-cyperf-agent-'
-    
-    sslkey ='<Replace with ssh public key.>'
-   
-    
+
+    sslkey = 'cyperf:' + '<Replace with ssh public key.>'
+
+
     resources = []
     
     ##cyperf Management network 
