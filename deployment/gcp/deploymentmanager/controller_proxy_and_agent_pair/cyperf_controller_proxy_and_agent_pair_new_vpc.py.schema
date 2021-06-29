@@ -2,12 +2,12 @@
 
 info: 
   title: CyPerf B2B Agents with Controller Proxy Template
-  author: Soumya N
+  author: keysight-cyperf
   description: Creates a B2B Test Topology with Controller Proxy in GCP 
 
 
 imports:
-  - path: controller-proxy-client-server-agents.py
+  - path: cyperf_controller_proxy_and_agent_pair_new_vpc.py
     name: helper.py
 
 
@@ -39,7 +39,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-1-0
+    default: keysight-cyperf-agent-1-0-update1
     description: source image for agents
   managementNetworkCIDR:
     type: string
