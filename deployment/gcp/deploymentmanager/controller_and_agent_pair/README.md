@@ -13,7 +13,7 @@ A configuration File [YAML] and Templates [Python] are used for this Deployment.
 1.	Download following files from OpenIxia.
 2.	From gcp console, open cloud shell window and upload bellow files. 
 - [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py)
-- [cyperf_controller_and_agent_pair_new_vpc.schema](cyperf_controller_and_agent_pair_new_vpc.schema)
+- [cyperf_controller_and_agent_pair_new_vpc.schema](cyperf_controller_and_agent_pair_new_vpc.py.schema)
 - [cyperf_controller_and_agent_pair_new_vpc.yaml](cyperf_controller_and_agent_pair_new_vpc.yaml)  
 
 ### Deployment using Python Template:
@@ -25,7 +25,7 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-1-0,controllerMachineType:c2-standard-8
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-0-update1,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-1-0-update1,controllerMachineType:c2-standard-8
 ```
 ### Example of Deployment using a YAML file:
 ```
@@ -34,7 +34,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cy
 ### SSH Key:
 To generate the public key and enable SSH access to the CyPerf instances, perform the following steps:
 
-1. Create private key and public key using [ssh-keygen](https://www.ssh.com/academy/ssh/keygen).
+1. Create private key and public key, see [Creating a new SSH key](https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys#createsshkeys).
 2. Edit [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py), and specify 
 `sslkey ='<Replace with ssh public key.>'`.
 
@@ -47,8 +47,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| controllerSourceImage                   | keysight-cyperf-controller-1-0            | Preferred CyPerf Controller image.  |
-| agentSourceImage                   | keysight-cyperf-agent-1-0            | Preferred CyPerf Agent image.  |
+| controllerSourceImage                   | keysight-cyperf-controller-1-0-update1            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-1-0-update1            | Preferred CyPerf Agent image.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
