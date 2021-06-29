@@ -1,8 +1,8 @@
 imports:
-- path: client-server-agents-controller.py
+- path: cyperf_controller_and_agent_pair_new_vpc.py
 
 resources:
 - name: myresources
-  type: client-server-agents-controller.py
+  type: cyperf_controller_and_agent_pair_new_vpc.py
   properties: 
       region: us-east1
