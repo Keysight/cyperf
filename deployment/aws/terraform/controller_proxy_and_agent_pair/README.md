@@ -2,7 +2,11 @@
 
 # Introduction
 
+<<<<<<< HEAD
 This is the Terraform approach for Cyperf Controller and Cyperf Agents in different cloud providers.
+=======
+This is the Terraform approach for CyPerf Application and CyPerf Agents in different cloud providers.
+>>>>>>> 637ab90... Azure documentation changes for CyPerf 1.0-update1 release. Other small typo fixes.
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
