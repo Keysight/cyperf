@@ -2,7 +2,7 @@
 
 # Introduction
 
-This is the Terraform approach for Cyperf Application and Cyperf Agents in different cloud providers.
+This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
@@ -31,6 +31,18 @@ terraform apply -var input\_variable=&quot;value&quot;
 The -var option must be applied multiple times to use all the required input parameters.
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
+
+#### Example
+
+terraform apply --auto-approve \
+-var azure_owner_tag="test" \
+-var azure_project_name="kt-nas-cyperf-dev" \
+-var subscription_id="" \
+-var client_id="" \
+-var client_secret="" \
+-var tenant_id="" \
+-var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
+-var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-0-update1" 
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -63,7 +75,7 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
+| mdw_version   | keysight-cyperf-controller-1-0-update1            | The  CyPerf controller image version. |
 
 ## Destruction
 

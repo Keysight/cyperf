@@ -1,4 +1,4 @@
-# About Cyperf Azure ARM Templates
+# About CyPerf Azure ARM Templates
 ## Introduction
 Welcome to the GitHub repository for Keysight CyPerf ARM templates for deploying CyPerf with Azure portal.
 
@@ -11,12 +11,12 @@ The prerequisites are:
 - Copy CyPerf VHD images to users own storage account. 
 
 ### Specialized knowledge
-Before you deploy this Custom ARM template, we recommend that you become familiar with the following AWS services:
+Before you deploy this Custom ARM template, we recommend that you become familiar with the following Azure services:
 - [Deploy resources from custom template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template)
 - [ARM Template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
 - [Azure Resource Groups](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
 - [Azure Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
-- [Azure Virtual Network ](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
+- [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
 - [Azure Virtual Machines](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)
 
@@ -41,7 +41,13 @@ Alternatively, user may use following PowerShell command from Azure cloud shell 
 
 ### Keysight SAS token for Keysight storage account CyPerf
 ```
-?sv=2020-02-10&ss=b&srt=co&sp=rl&se=2031-04-26T20:08:16Z&st=2021-04-26T12:08:16Z&spr=https&sig=%2Fr0ENUs2QXp3g0%2BdcGwAwcpNAf06aeI4W7WuEmQ6xP8%3D
+?sv=2020-02-10&ss=bfqt&srt=sc&sp=rtfx&se=2023-10-22T19:51:35Z&st=2021-06-30T11:51:35Z&spr=https&sig=yLEthD8rYXuH0lSwP6mgB0w2Q4KQ1VLbvRTdnrNrt34%3D
+
+```
+
+### Keysight SAS token for Keysight container account CyPerf
+```
+sp=r&st=2021-06-30T11:54:22Z&se=2023-10-22T19:54:22Z&spr=https&sv=2020-02-10&sr=c&sig=5p0g90N8%2BYqjcZ88eVCbmE4ILSckbdjlauDh1%2BlSsoU%3D
 
 ```
 ### Pre-requisite for PowerShell command execution:

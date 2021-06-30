@@ -1,6 +1,6 @@
 # About using CyPerf Agents in K8s environments
 ## Introduction
-This document describes about how Keysight CyPerf’s Agents can be deployed inside Kubernetes clusters. Following sections mention the prerequiites for such deployments and elaborate on minimal modifications that will be required in the client and server manifest yaml examples. Some of these modifications are required for updating the manifests for specific user environment and some will be optional or depend on different types of deployment scenarios.
+This document describes about how Keysight CyPerf’s Agents can be deployed inside Kubernetes clusters. Following sections mention the prerequisites for such deployments and elaborate on minimal modifications that will be required in the client and server manifest yaml examples. Some of these modifications are required for updating the manifests for specific user environment and some will be optional or depend on different types of deployment scenarios.
 
 - [Workflow](#workflow)
 - [General Prerequisites](#general-prerequisites)
@@ -14,21 +14,21 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
 
 ## Workflow
-- In order to test some device or service running inside a K8s cluster, user must start with such a cluster already deployed. The containerzied device under test (DUT) is expected to be already deployed in this cluster.
+- In order to test some device or service running inside a K8s cluster, user must start with such a cluster already deployed. The containerized device under test (DUT) is expected to be already deployed in this cluster.
 - There must be a CyPerf Controller already deployed as well. Once the CyPerf Agents are deployed in the cluster following the steps described below, they will automatically get registered to CyPerf Controller and become ready to use.
 - A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
-- User can now introduce CyPerf Agents as client or server or both running inside the cluster by applying the [example manifests](#example-manifests). These manifests will require a few edits for adjusting to specific delpoyment scenario. 
+- User can now introduce CyPerf Agents as client or server or both running inside the cluster by applying the [example manifests](#example-manifests). These manifests will require a few edits for adjusting to specific deployment scenario. 
 - Agents will be visible (by their tags and IP addresses) in the _Agent Assignment_ dialog.
-- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in _DUT Network->Configure DUT_ page in the UI before running the test. _[More details can be found in **_Chapter 3_** of **_Cyperf User Guid 1.0_**.]_ 
+- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in _DUT Network->Configure DUT_ page in the UI before running the test. _[More details can be found in **_Chapter 3_** of **_Cyperf User Guide 1.0_**.]_ 
 
 ## General Prerequisites
 
 1.  A kubernetes cluster along with DUT should be already deployed. For more details on how to deploy the DUT in a K8s cluster, please follow the instructions provided in the deployment guide for a specific DUT. For general information on K8s cluster deployment, please refer to [K8s website](https://kubernetes.io/docs/setup/).  
     *CyPerf Agents can be used in both* **_on-premise_** *K8s cluster (e.g. where nodes can be VMs on ESXi host) or in* **_cloud_** *(e.g. where nodes can be in* **_AWS EKS_***).*
 2.  CyPerf Controller is already deployed. It should be accessible from the nodes inside the kubernetes cluster.  
-    *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guid 1.0_***, which can be downloaded from Keysight's software download portal.*
+    *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guide 1.0_***, which can be downloaded from Keysight's software download portal.*
 3.  A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
-4.  Make sure that ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+4.  Make sure that ingress security rules for CyPerf Controller (or Controller Proxy) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 5.  The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. If you need specific versions, note down CyPerf Agent's container image URL that you want to use. This ECR Public image URL needs to be accessible from the test environment, i.e. from the cluster nodes.
 6.  Assign `agenttype=client` label to the nodes where you want to deploy CyPerf Agents as  test traffic initiating clients and assign `agenttype=server` label to the nodes where you want CyPerf Agents to be simulating the test servers.    
     ```
@@ -45,7 +45,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 - Modifications needed:
     1. Change the place holder container `image` URL with one that you want to use for CyPerf Agent container. Please get this URL from Keysight's software download portal.
     2. Change the place holder `AGENT_CONTROLLER` value with your CyPerf Controller's IP address.  
-    3. Change the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in CyPerf Controller's Agent Assignemnt dialog.
+    3. Change the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in CyPerf Controller's Agent Assignment dialog.
     4. If needed, update `nodeSelector` rule according to your preference. The example manifests assume that `agenttype=client`and `agenttype=server` labels are already assigned to the chosen worker nodes so that CyPerf Agent client pods and server pods are not deployed in the same node.
     5. Review the server manifest yaml to decide what `type` of `Service` your use case would require. e.g. `ClusterIP`, `NodePort` etc. and change accordingly.
     6. Decide on how many replicas for CyPerf Agent's client and server pods you would want to start with, and modify `replicas` count accordingly.
@@ -68,7 +68,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 - All of [General Prerequisites](#general-prerequisites).
 - In this case, the K8s cluster is in EKS which can be deployed using `eksctl` or any other methods described in [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html).  
 
-- **VPC CNI** which is a default choice in AWS EKS is not supported yet in CyPerf version 1.0. You can use **Calico networking** instead until VPC CNI is supportd in future release. For more details, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks). 
+- **VPC CNI** which is a default choice in AWS EKS is not supported yet in CyPerf version 1.0. You can use **Calico networking** instead until VPC CNI is supported in future release. For more details, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks). 
 
 ### *A.* _**East-West**_ *traffic between pods and internal container services and workloads in* _**Amazon Elastic Kubernetes Service (EKS)**_ *environments*
 
@@ -79,7 +79,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
     kubectl get svc cyperf-agent-service -o wide
     ```
-- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
+- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Controller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
     ```
     kubectl get services kube-dns --namespace=kube-system
     ```        
@@ -96,7 +96,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     1. CyPerf Agents outside EKS which are supposed to be simulating clients, for initiating traffic flows.  
     *These client agents can also be running as pods in an on-prem kubernetes cluster or agents running in VM or COTS hardware.*
     2. Collect the FQDN or public IP address for the DUT, which needs to be configured in CyPerf Controller's _DUT Network_.
-    3. In case, FQDN is used for the DUT, this needs to be resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .    
+    3. In case, FQDN is used for the DUT, this needs to be resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Controller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .    
 
 
 ## Deployment in **On-Premise K8s Cluster**
@@ -112,7 +112,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
     kubectl get svc cyperf-agent-service -o wide
     ```
-- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
+- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Controller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
     ```
     kubectl get services kube-dns --namespace=kube-system
     ```
@@ -129,10 +129,10 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     1. CyPerf Agents outside cluster which are supposed to be clients initiating traffic flows destined to the DUT.  
     *These client agents can also be running as pods in an on-prem kubernetes cluster or agents running in VM or COTS hardware.*
     2. Collect the FQDN or public IP address for the DUT, which needs to be configured in CyPerf Controller's _DUT Network_.
-    3. In case, FQDN is used for the DUT, this needs to b resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .
+    3. In case, FQDN is used for the DUT, this needs to b resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Controller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .
 
 ## Managing Resource for CyPerf Agents
-- It is recommended to run CyPerf Agent clients and servers in different worker nodes, although it is not mandatory. The example manifests achive this by using `nodeSelector` and assigning labels in nodes as described in [General Prerequisites](#general-prerequisites).
+- It is recommended to run CyPerf Agent clients and servers in different worker nodes, although it is not mandatory. The example manifests achieve this by using `nodeSelector` and assigning labels in nodes as described in [General Prerequisites](#general-prerequisites).
     ```
         nodeSelector:    
             agenttype: client 
@@ -173,7 +173,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     a. [cni_examples/onprem-kube-flannel.yaml](cni_examples/onprem-kube-flannel.yaml) - [ [source](https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml) ]
 - **Calico:**   
     a. [cni_examples/onprem-calico.yaml](cni_examples/onprem-calico.yaml) - [ [source](https://docs.projectcalico.org/manifests/calico.yaml) ]    
-    - This example modifies the source by changing the mode of enabling IPIP tunneling thorugh `env CALICO_IPV4POOL_IPIP` from `"Always"` to `"CrossSubnet"`, for achieving higher performance when test traffic is flowing in same subnet.    
+    - This example modifies the source by changing the mode of enabling IPIP tunneling through `env CALICO_IPV4POOL_IPIP` from `"Always"` to `"CrossSubnet"`, for achieving higher performance when test traffic is flowing in same subnet.    
 
     b. [cni_examples/eks-calico-vxlan.yaml](cni_examples/eks-calico-vxlan.yaml) - [ [source](https://docs.projectcalico.org/manifests/calico-vxlan.yaml) ]  
 
