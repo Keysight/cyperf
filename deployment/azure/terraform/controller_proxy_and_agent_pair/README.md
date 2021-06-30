@@ -2,7 +2,11 @@
 
 # Introduction
 
+<<<<<<< HEAD
 This is the Terraform approach for Cyperf Controller and Cyperf Agents in different cloud providers.
+=======
+This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
+>>>>>>> 637ab90... Azure documentation changes for CyPerf 1.0-update1 release. Other small typo fixes.
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
@@ -42,8 +46,13 @@ terraform apply --auto-approve \
 -var client_secret="" \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
+<<<<<<< HEAD
 -var controller_proxy_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/broker-images/providers/Microsoft.Compute/images/broker-version-12" \
 -var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/CM_ResourceGroup/providers/Microsoft.Compute/images/cyperf-agent-1-0-215-master-tiger-1-0-3-173"
+=======
+-var controller_proxy_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-proxy-1-0" \
+-var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-0-update1"
+>>>>>>> 637ab90... Azure documentation changes for CyPerf 1.0-update1 release. Other small typo fixes.
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -80,7 +89,7 @@ The following table lists the parameters for this deployment.
 | AZURE_BROKER_MACHINE_TYPE | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
 | azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
 | broker_image   | keysight-cyperf-controller-proxy-1-0      | The  CyPerf controller proxy image version. |
-| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
+| agent_version   | keysight-cyperf-agent-1-0-update1            | The  CyPerf agent image version. |
 
 ## Destruction
 
