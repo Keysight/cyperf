@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is the Terraform approach for CyPerf Application and CyPerf Agents in different cloud providers.
+This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
