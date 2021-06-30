@@ -2,7 +2,11 @@
 
 # Introduction
 
+<<<<<<< HEAD
 This is the Terraform approach for Cyperf Controller and Cyperf Agents in different cloud providers.
+=======
+This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
+>>>>>>> 62ec55a... Updated CyPerf naming and other small typos in the readme files.
 
 All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
 
