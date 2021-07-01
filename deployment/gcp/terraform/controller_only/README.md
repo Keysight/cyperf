@@ -72,7 +72,7 @@ The following table lists the parameters for this deployment.
 | gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
 | gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | gcp_mdw_machine_type    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
-| mdw_version            | keysight-cyperf-controller-1-0   | The  CyPerf controller image version.    |
+| mdw_version            | keysight-cyperf-controller-1-0-update1   | The  CyPerf controller image version.    |
 
 ## Destruction
 

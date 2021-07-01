@@ -77,15 +77,9 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-<<<<<<< HEAD
-| azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_version   | keysight-cyperf-controller-1-0            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-0            | The  CyPerf agent image version. |
-=======
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | mdw_version   | keysight-cyperf-controller-1-0-update1            | The  CyPerf controller image version. |
 | agent_version   | keysight-cyperf-agent-1-0-update1            | The  CyPerf agent image version. |
->>>>>>> 637ab90... Azure documentation changes for CyPerf 1.0-update1 release. Other small typo fixes.
 
 ## Destruction
 
