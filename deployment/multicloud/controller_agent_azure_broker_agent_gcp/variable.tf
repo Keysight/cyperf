@@ -106,13 +106,13 @@ variable "gcp_agent_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-0"
+  default     = "keysight-cyperf-controller-1-0-update1"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-0"
+  default     = "keysight-cyperf-agent-1-0-update1"
   description = "Image id for the cyperf agent machines"
 }
 
