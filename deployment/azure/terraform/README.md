@@ -13,7 +13,7 @@ All the necessary resources will be created from scratch, including VPC, subnets
 - Credentials for each specific cloud provider need to pe provided.
 
 ### Specialized knowledge
-Before you deploy this Custom ARM template, we recommend that you become familiar with the following Azure services:
+Before deployment, we recommend that you become familiar with the following Azure services:
 - [Create a custom image from a VHD file](https://docs.microsoft.com/en-us/azure/devtest-labs/devtest-lab-create-template)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)
 
@@ -27,7 +27,7 @@ For accessing VHD file refer to the URL link:
  - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd)
  - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd)
 
-User may download VHD images and upload those in their own container before using these ARM templates.
+User may download VHD images and upload those in their own container before using the terraform templates.
 Alternatively, user may use following PowerShell command from Azure cloud shell to copy VHD images from Keysight Azure container to User’s Azure container.
 
 ### Keysight SAS token for Keysight storage account CyPerf
