@@ -49,7 +49,7 @@ The following table lists the parameters for this deployment.
 | GCP_BROKER_MACHINE_TYPE   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
 | GCP_AGENT_MACHINE_TYPE   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
 | broker_image            | keysight-cyperf-controller-proxy-1-0   | The  CyPerf controller proxy image version.    |
-| agent_version       | keysight-cyperf-agent-1-0     | The CyPerf agent image version.   |
+| agent_version       | keysight-cyperf-agent-1-0-update1     | The CyPerf agent image version.   |
 
 ## Destruction
 

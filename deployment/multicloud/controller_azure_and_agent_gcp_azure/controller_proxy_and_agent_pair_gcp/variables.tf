@@ -73,7 +73,7 @@ variable "GCP_AGENT_MACHINE_TYPE" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-0"
+  default     = "keysight-cyperf-agent-1-0-update1"
   description = "Image id for the cyperf agent machines"
 }
 
