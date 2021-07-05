@@ -8,7 +8,7 @@ locals{
     main_cidr = "172.16.0.0/16"
     mgmt_cidr = "172.16.1.0/24"
     test_cidr = "172.16.2.0/24"
-    broker_name = "${var.aws_stack_name}-broker-v${var.broker_version}"
+    broker_name = "${var.aws_stack_name}-broker-${var.broker_version}"
     client_name = "${var.aws_stack_name}-client-${var.agent_version}"
     server_name = "${var.aws_stack_name}-server-${var.agent_version}"
     agent_init_cli = <<-EOF
