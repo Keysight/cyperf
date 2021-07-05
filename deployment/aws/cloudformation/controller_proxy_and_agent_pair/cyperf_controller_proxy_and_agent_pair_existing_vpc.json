@@ -431,7 +431,7 @@
                     "Ref": "EC2InstanceProfile"
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxBROKER"] },
-                "InstanceType": "c4.2xlarge",
+                "InstanceType": "t2.medium",
                 "KeyName": {
                     "Ref": "KeyNameForCyPerfAgent"
                 },
