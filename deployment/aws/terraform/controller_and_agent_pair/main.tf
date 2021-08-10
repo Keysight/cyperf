@@ -8,7 +8,7 @@ locals{
     main_cidr = "172.16.0.0/16"
     mgmt_cidr = "172.16.1.0/24"
     test_cidr = "172.16.2.0/24"
-    mdw_name = "${var.aws_stack_name}-mdw-v${var.mdw_version}"
+    mdw_name = "${var.aws_stack_name}-mdw-${var.mdw_version}"
     client_name = "${var.aws_stack_name}-client-${var.agent_version}"
     server_name = "${var.aws_stack_name}-server-${var.agent_version}"
     agent_init_cli = <<-EOF
@@ -203,17 +203,19 @@ resource "aws_network_interface" "aws_server_test_interface" {
 }
 
 data "aws_ami" "mdw_ami" {
-    owners = ["self"]
+    owners = ["001382923476"]
+    most_recent = true
     filter {
-      name   = "tag:Name"
+      name   = "name"
       values = [var.mdw_version]
     }
 }
 
 data "aws_ami" "agent_ami" {
-    owners = ["self"]
+    owners = ["001382923476"]
+    most_recent = true
     filter {
-      name   = "tag:Name"
+      name   = "name"
       values = [var.agent_version]
     }
 }
