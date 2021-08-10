@@ -5,15 +5,16 @@ provider "aws" {
 }
 
 locals{
-    mdw_name = "${var.aws_stack_name}-mdw-v${var.mdw_version}"
+    mdw_name = "${var.aws_stack_name}-mdw-${var.mdw_version}"
     main_cidr = "172.16.0.0/16"
     mgmt_cidr = "172.16.1.0/24"
 }
 
 data "aws_ami" "mdw_ami" {
-    owners = ["self"]
+    owners = ["001382923476"]
+    most_recent = true
     filter {
-      name   = "tag:Name"
+      name   = "name"
       values = [var.mdw_version]
     }
 }
