@@ -4,15 +4,15 @@ import datetime
 from RESTasV3 import RESTasV3
 from .Statistics import Statistics
 
-controller_address = sys.argv[1]
-rest = RESTasV3(ipAddress=controller_address)
+mdw_address = sys.argv[1]
+rest = RESTasV3(ipAddress=mdw_address)
 
 
 def create_new_config(config_path=None):
     """
     Creates an empty CyPerf config with network assigned (or Imports a custom config)
 
-    config_path (str): path to the json config file to be imported
+    config_path (str): path to the zip config file to be imported
     """
     config = config_path if config_path else None
     rest.setup(config)
