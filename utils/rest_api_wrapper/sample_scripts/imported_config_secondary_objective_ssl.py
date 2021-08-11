@@ -5,7 +5,7 @@ from lib.REST_WRAPPER import rest, create_new_config, run_test, collect_stats
 
 # CyPerf API test with 1 imported test config, Primary/Secondary objectives, SSL enabled and B2B agents
 test_duration = 60
-create_new_config("../test_configs/B2B_MyPortal.json")
+create_new_config("../test_configs/b2b_portal_chrome_to_apache.zip")
 rest.set_test_duration(test_duration)
 rest.set_primary_objective(objective="Throughput")
 rest.add_secondary_objective()
