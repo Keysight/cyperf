@@ -203,17 +203,19 @@ resource "aws_network_interface" "aws_server_test_interface" {
 }
 
 data "aws_ami" "broker_ami" {
-    owners = ["self"]
+    owners = ["001382923476"]
+    most_recent = true
     filter {
-      name   = "tag:Name"
+      name   = "name"
       values = [var.broker_version]
     }
 }
 
 data "aws_ami" "agent_ami" {
-    owners = ["self"]
+    owners = ["001382923476"]
+    most_recent = true
     filter {
-      name   = "tag:Name"
+      name   = "name"
       values = [var.agent_version]
     }
 }

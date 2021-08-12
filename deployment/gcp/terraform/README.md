@@ -32,6 +32,15 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
+terraform apply --auto-approve \
+-var gcp_project_name= "project_name” \
+-var gcp_owner_tag="test"  \
+-var gcp_ssh_key="path/to/public/key"  \
+-var gcp_credential_file=”path/to/credential/file/”
+
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.

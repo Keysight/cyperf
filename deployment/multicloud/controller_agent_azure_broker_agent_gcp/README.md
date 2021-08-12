@@ -77,7 +77,7 @@ The following table lists the parameters for this deployment.
 | gcp_broker_machine_type   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
 | gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
 
 
 ## Destruction

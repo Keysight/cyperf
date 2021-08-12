@@ -40,7 +40,7 @@ variable "gcp_mdw_machine_type" {
 
 variable "gcp_agent_machine_type" {
   type    = string
-  default = "c2-standard-16"
+  default = "c2-standard-4"
 }
 
 variable "mdw_version" {
