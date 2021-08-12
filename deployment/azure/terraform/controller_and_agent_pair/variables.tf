@@ -65,7 +65,7 @@ variable "azure_mdw_machine_type" {
 
 variable "azure_agent_machine_type" {
   type    = string
-  default = "Standard_F16s_v2"
+  default = "Standard_F4s_v2"
 }
 
 variable "mdw_version" {

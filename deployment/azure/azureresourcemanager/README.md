@@ -7,7 +7,7 @@ To start using CyPerf's ARM templates, please refer the **README** files in each
 ## Prerequisites
 The prerequisites are:
 - SSH Key pair for management access to CyPerf instances.
-- For existing VNET deployment, an existing VNET, two existing subnets in that VNET (one for test and one for Management) and existing security groups for  CyPerf Application and CyPerf Agent.
+- For existing VNET deployment, an existing VNET, two existing subnets in that VNET (one for test and one for Management) and existing security groups for CyPerf Controller and CyPerf Agent.
 - Copy CyPerf VHD images to users own storage account. 
 
 ### Specialized knowledge

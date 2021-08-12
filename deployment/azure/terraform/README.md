@@ -73,6 +73,19 @@ The -var option must be applied multiple times to use all the required input par
 
 If no -var option is applied, upon running terraform apply, you will be asked for a value for each required variable.
 
+#### Example
+
+terraform apply --auto-approve \
+-var azure_owner_tag="deployment_name" \
+-var azure_project_name="project_name \
+-var subscription_id="id" \
+-var client_id="id " \
+-var client_secret="secret" \
+-var tenant_id="id" \
+-var public_key="path/to/public/key" \
+-var controller_image="path/to/azure/image/” \
+-var agent_image="path/to/azure/image/”
+
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
 In the same folder, create a file named terraform.tfvars.
@@ -86,6 +99,36 @@ variable_2= "value\_2"
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
+
+### List of Supported CyPerf terraform scripts for AZURE 
+
+The following is a list of the current supported CyPerf terraform scripts. Click the links to view the README files.
+
+### I. [Controller and Agent Pair](controller_and_agent_pair):
+ 
+
+This template deploys:
+
+- One CyPerf Controller, in a public subnet.
+
+- Two CyPerf Agents, both having two interfaces each. Both Agent interfaces are in a Private subnet. 
+
+### II. [Controller Proxy and Agent Pair](controller_proxy_and_agent_pair):
+
+
+This template deploys:
+
+- One CyPerf Controller Proxy, in a public subnet.
+
+- Two CyPerf Agents, both having two interfaces each. Both Agent interfaces are in a Private subnet. 
+
+### III. [Controller Only](controller_only):
+
+
+This template deploys:
+
+- One CyPerf Controller, in a public subnet.
+
 ## Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
