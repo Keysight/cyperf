@@ -33,6 +33,11 @@ variable "gcp_project_tag" {
   default = "keysight-gcp-cyperf"
 }
 
+variable "gcp_allowed_cidr" {
+  type = list(string)
+  default = ["0.0.0.0/0"]
+}
+
 variable "gcp_mdw_machine_type" {
   type    = string
   default = "n1-standard-4"
