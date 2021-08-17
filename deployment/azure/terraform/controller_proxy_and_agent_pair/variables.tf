@@ -35,17 +35,19 @@ variable "public_key" {
 
 variable "controller_proxy_image" {
   type = string
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd"
   description = "Controller proxy image path"
 }
 
 variable "agent_image" {
   type = string
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd"
   description = "Agent image path"
 }
 
 variable "azure_region_name" {
   type    = string
-  default = "eastus"
+  default = "centralus"
 }
 
 variable "azure_admin_username" {
@@ -58,6 +60,11 @@ variable "azure_project_tag" {
   default = "keysight-azure-cyperf"
 }
 
+variable "azure_allowed_cidr" {
+  type = list(string)
+  default = ["0.0.0.0/0"]
+  description = "List of allowed IP ranges on the machines"
+}
 
 variable "azure_agent_machine_type" {
   type    = string

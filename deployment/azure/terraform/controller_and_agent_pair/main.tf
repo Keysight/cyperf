@@ -15,8 +15,36 @@ locals {
       #!/bin/bash
       /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
-  
+  mgmt_iprange = ["10.0.1.0/24"]
+  test_iprange = ["10.0.2.0/24"]
+  firewall_ip_range = var.azure_allowed_cidr
 }
+
+
+resource "azurerm_image" "controller" {
+  name                = "cyperf-controller"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.controller_image
+  }
+}
+
+resource "azurerm_image" "agent" {
+  name                = "cyperf-agent"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.agent_image
+  }
+}
+
 
 resource "azurerm_resource_group" "azr_automation" {
   name     = var.azure_owner_tag
@@ -33,15 +61,37 @@ resource "azurerm_proximity_placement_group" "azr_proximity_placement" {
   }
 }
 
-resource "azurerm_network_security_group" "azr_automation" {
+resource "azurerm_network_security_group" "azr_automation_nsg" {
   name                = "${var.azure_owner_tag}-sg"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
-    security_rule {
-    name                       = var.azure_owner_tag
-    priority                   = 100
+  security_rule {
+    name                       = "${var.azure_owner_tag}-generic-access-inbound"
+    priority                   = 999
     direction                  = "Inbound"
     access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefixes      = local.firewall_ip_range
+    destination_address_prefixes = local.firewall_ip_range
+  }
+  security_rule {
+    name                       = "${var.azure_owner_tag}-generic-access-outbound"
+    priority                   = 999
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefixes      = local.firewall_ip_range
+    destination_address_prefixes = local.firewall_ip_range
+  }
+  security_rule {
+    name                       = "${var.azure_owner_tag}-deny-public-access"
+    priority                   = 1000
+    direction                  = "Inbound"
+    access                     = "Deny"
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
@@ -49,6 +99,13 @@ resource "azurerm_network_security_group" "azr_automation" {
     destination_address_prefix = "*"
   }
 }
+
+resource "azurerm_subnet_network_security_group_association" "azr_mgmt_nsga" {
+  depends_on = [azurerm_linux_virtual_machine.azr_automation_mdw, azurerm_linux_virtual_machine.azr_automation_client_agent, azurerm_linux_virtual_machine.azr_automation_server_agent]
+  subnet_id                 = azurerm_subnet.azr_automation_management_network.id
+  network_security_group_id = azurerm_network_security_group.azr_automation_nsg.id
+}
+
 
 resource "azurerm_virtual_network" "azr_automation" {
   name                = "${var.azure_owner_tag}-network"
@@ -61,14 +118,14 @@ resource "azurerm_subnet" "azr_automation_management_network" {
   name                 = "${var.azure_owner_tag}-management-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
-  address_prefixes     = ["10.0.1.0/24"]
+  address_prefixes     = local.mgmt_iprange
 }
 
 resource "azurerm_subnet" "azr_automation_test_network" {
   name                 = "${var.azure_owner_tag}-test-subnet"
   resource_group_name  = azurerm_resource_group.azr_automation.name
   virtual_network_name = azurerm_virtual_network.azr_automation.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = local.test_iprange
 }
 
 resource "azurerm_public_ip" "azr_automation_mdw_public_ip" {
@@ -156,12 +213,13 @@ resource "azurerm_network_interface" "azr_automation_agent_2_test_nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
+  depends_on = [azurerm_image.controller]
   name                = local.mdw_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_mdw_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.controller_image
+  source_image_id     = azurerm_image.controller.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
@@ -179,14 +237,15 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
 
 resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   depends_on = [
-    azurerm_linux_virtual_machine.azr_automation_mdw
+    azurerm_linux_virtual_machine.azr_automation_mdw,
+    azurerm_image.agent
   ]
   name                = local.client_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.agent_image
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_1_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_1_test_nic.id
@@ -207,14 +266,15 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 
 resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   depends_on = [
-    azurerm_linux_virtual_machine.azr_automation_mdw
+    azurerm_linux_virtual_machine.azr_automation_mdw,
+    azurerm_image.agent
   ]
   name                = local.server_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = var.azure_admin_username
-  source_image_id     = var.agent_image
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_2_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_2_test_nic.id
