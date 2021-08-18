@@ -24,6 +24,7 @@ locals {
     "80",
     "443"
   ]
+  gcp_allowed_cidr                 = concat(var.gcp_allowed_cidr, [local.gcp_mgmt_subnet_ip_range])
   gcp_test_vpc_network_name           = "test-vpc-network"
   gcp_test_subnet_name                = "test-subnet"
   gcp_test_subnet_ip_range            = "10.0.0.0/8"
@@ -79,7 +80,7 @@ resource "google_compute_firewall" "gcp_mgmt_firewall_rule" {
   direction     = local.gcp_mgmt_firewall_rule_direction
   network       = google_compute_network.gcp_mgmt_vpc_network.self_link
   priority      = local.gcp_mgmt_firewall_rule_priority
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = local.gcp_allowed_cidr
 }
 
 resource "google_compute_firewall" "gcp_mdw_https_server_rule" {
@@ -92,7 +93,7 @@ resource "google_compute_firewall" "gcp_mdw_https_server_rule" {
   }
 
   // Allow traffic from everywhere to instances with an http-server tag
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = local.gcp_allowed_cidr
   target_tags   = ["https-server"]
 }
 

@@ -16,6 +16,7 @@ locals{
                 sudo sudo chmod 777 /var/log/
                 sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_broker.private_ip} >> /var/log/Appsec_init.log
     EOF
+    firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr],[local.test_cidr])
 }
 
 resource "aws_vpc" "aws_main_vpc" {
@@ -68,7 +69,7 @@ resource "aws_security_group_rule" "aws_cyperf_agent_ingress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = local.firewall_cidr
   ipv6_cidr_blocks  = ["::/0"]
   security_group_id = aws_security_group.aws_agent_security_group.id
 }
@@ -88,7 +89,7 @@ resource "aws_security_group_rule" "aws_cyperf_ui_ingress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = local.firewall_cidr
   ipv6_cidr_blocks  = ["::/0"]
   security_group_id = aws_security_group.aws_cyperf_security_group.id
 }
