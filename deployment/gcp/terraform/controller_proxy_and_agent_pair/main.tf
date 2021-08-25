@@ -27,6 +27,7 @@ locals {
   gcp_mgmt_firewall_rule_direction = "INGRESS"
   gcp_mgmt_firewall_rule_priority  = "1000"
   gcp_mdw_custom_image_project_name = var.gcp_project_name
+  gcp_allowed_cidr                 = concat(var.gcp_allowed_cidr, [local.gcp_mgmt_subnet_ip_range])
   gcp_test_vpc_network_name           = "test-vpc-network"
   gcp_test_subnet_name                = "test-subnet"
   gcp_test_subnet_ip_range            = "10.0.0.0/8"
@@ -77,7 +78,7 @@ resource "google_compute_firewall" "gcp_mgmt_firewall_rule" {
   direction     = local.gcp_mgmt_firewall_rule_direction
   network       = google_compute_network.gcp_mgmt_vpc_network.self_link
   priority      = local.gcp_mgmt_firewall_rule_priority
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = local.gcp_allowed_cidr
 }
 
 resource "google_compute_firewall" "gcp_nats_https_server" {
