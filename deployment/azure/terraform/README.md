@@ -153,3 +153,17 @@ There are certain cases where multiple deployments are required using the same t
 
 For more information, please refer to the official terraform documentation:
 https://www.terraform.io/docs/language/state/workspaces.html
+
+## Authentication parameters
+
+You will need to provide 4 parameters in order to create those deployments:
+
+1. subscription_id
+2. client_id
+3. client_secret
+4. tenant_id
+
+You can get those by follwoing the Azure Active Directory (Azure AD) guide provided in the following link:
+
+https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal
+
