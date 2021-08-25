@@ -163,7 +163,8 @@ You will need to provide 4 parameters in order to create those deployments:
 3. client_secret
 4. tenant_id
 
-You can get those by follwoing the Azure Active Directory (Azure AD) guide provided in the following link:
+You can get those by following the Azure Active Directory (Azure AD) guide provided in the following link:
 
 https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal
 
+Check with your IT department for Registered App provisioning.
