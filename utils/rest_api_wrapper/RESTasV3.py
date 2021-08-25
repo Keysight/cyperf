@@ -750,6 +750,15 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions'.format(self.sessionID, tp_id, app_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()
 
+    def set_application_action_value(self, app_id, action_id, param_id, value, file_value=None, source=None, tp_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
+        payload = {"Value": value, "FileValue": file_value, "Source": source}
+        self.__sendPatch(apiPath, payload)
+
+    def delete_application_action(self, app_id, action_id, tp_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}'.format(self.sessionID, tp_id, app_id, action_id)
+        self.__sendDelete(apiPath, self.headers)
+
     def add_attack_action(self, att_id, action_name, ap_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions'.format(self.sessionID, ap_id, att_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()

@@ -8,6 +8,7 @@ locals{
     mdw_name = "${var.aws_stack_name}-mdw-${var.mdw_version}"
     main_cidr = "172.16.0.0/16"
     mgmt_cidr = "172.16.1.0/24"
+    firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr])
 }
 
 data "aws_ami" "mdw_ami" {
@@ -80,7 +81,7 @@ resource "aws_security_group_rule" "aws_cyperf_ui_ingress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = local.firewall_cidr
   ipv6_cidr_blocks  = ["::/0"]
   security_group_id = aws_security_group.aws_cyperf_security_group.id
 }

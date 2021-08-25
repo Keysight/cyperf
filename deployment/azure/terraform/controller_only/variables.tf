@@ -34,14 +34,16 @@ variable "public_key" {
 }
 
 variable "controller_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-0-update1.vhd"
   type = string
   description = "Controller image path"
 }
 
 variable "azure_region_name" {
   type    = string
-  default = "eastus"
+  default = "centralus"
 }
+
 variable "azure_admin_username" {
   type    = string
   default = "cyperf"
@@ -50,6 +52,12 @@ variable "azure_admin_username" {
 variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
+}
+
+variable "azure_allowed_cidr" {
+  type = list(string)
+  default = ["0.0.0.0/0"]
+  description = "List of allowed IP ranges on the machines"
 }
 
 variable "azure_mdw_machine_type" {
