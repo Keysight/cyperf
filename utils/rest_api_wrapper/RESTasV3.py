@@ -653,6 +653,16 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response['testId']
 
+    def wait_event_success(self, apiPath, timeout):
+        counter = 1
+        while timeout > 0:
+            response = self.__sendGet(apiPath, 200).json()
+            if response['state'] == "SUCCESS":
+                return response
+            else:
+                timeout -= counter
+                time.sleep(counter)
+
     def get_available_stats_name(self):
         apiPath = '/api/v2/results/{}/stats'.format(self.get_test_id())
         response = self.__sendGet(apiPath, 200).json()
@@ -667,25 +677,33 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def get_all_stats(self, csvLocation, exportTimeout=120):
+    def get_capture_files(self, captureLocation, exportTimeout=180):
+        test_id = self.get_test_id()
+        apiPath = '/api/v2/results/{}/operations/generate-results'.format(test_id)
+        response = self.__sendPost(apiPath, None).json()
+        apiPath = response['url'][len(self.host):]
+        response = self.wait_event_success(apiPath, timeout=exportTimeout)
+        if not response:
+            raise TimeoutError("Failed to download Captures. Timeout reached = {} seconds".format(exportTimeout))
+        apiPath = response['resultUrl']
+        response = self.__sendGet(apiPath, 200, debug=False)
+        zf = ZipFile(io.BytesIO(response.content), 'r')
+        zf.extractall(captureLocation)
+        for arh in glob.iglob(os.path.join(captureLocation, "*.zip")):
+            files = os.path.splitext(os.path.basename(arh))[0]
+            zf = ZipFile(arh)
+            zf.extractall(path=os.path.join(captureLocation, "pcaps", files))
+        return response
+
+    def get_all_stats(self, csvLocation, exportTimeout=180):
         test_id = self.get_test_id()
         apiPath = '/api/v2/results/{}/operations/generate-csv'.format(test_id)
         response = self.__sendPost(apiPath, None).json()
-        status_url = response['url']
-        apiPath = status_url[len(self.host):]
-        start_export_time = time.time()
-        exportDone = False
-        while not exportDone:
-            response = self.__sendGet(apiPath, 200).json()
-            if response['progress'] == 100:
-                exportDone = True
-                apiPath = response['resultUrl']
-            else:
-                time.sleep(1)
-            current_export_time = time.time()
-            dt = current_export_time-start_export_time
-            if dt > exportTimeout:
-                raise TimeoutError('Failed to download CSVs')
+        apiPath = response['url'][len(self.host):]
+        response = self.wait_event_success(apiPath, timeout=exportTimeout)
+        if not response:
+            raise TimeoutError("Failed to download CSVs. Timeout reached = {} seconds".format(exportTimeout))
+        apiPath = response['resultUrl']
         response = self.__sendGet(apiPath, 200, debug=False)
         zf = ZipFile(io.BytesIO(response.content), 'r')
         zf.extractall(csvLocation)
