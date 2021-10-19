@@ -41,7 +41,7 @@ variable "controller_proxy_image" {
 
 variable "agent_image" {
   type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-agent-1-1.vhd"
   description = "Agent image path"
 }
 

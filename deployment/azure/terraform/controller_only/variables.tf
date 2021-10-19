@@ -34,7 +34,7 @@ variable "public_key" {
 }
 
 variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-controller-1-1.vhd"
   type = string
   description = "Controller image path"
 }
