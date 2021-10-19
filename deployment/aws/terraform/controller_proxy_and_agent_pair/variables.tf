@@ -48,7 +48,7 @@ variable "aws_agent_machine_type" {
 
 variable "broker_version" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-1-0"
+  default     = "keysight-cyperf-controller-proxy-1-1"
   description = "Image id for the controller-proxy machine"
 }
 

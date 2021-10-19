@@ -35,13 +35,13 @@ variable "public_key" {
 
 variable "controller_proxy_image" {
   type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-1.vhd"
   description = "Controller proxy image path"
 }
 
 variable "agent_image" {
   type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-1.vhd"
   description = "Agent image path"
 }
 
@@ -73,13 +73,13 @@ variable "azure_agent_machine_type" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-0-update1"
+  default     = "keysight-cyperf-agent-1-1"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-1-0"
+  default     = "keysight-cyperf-controller-proxy-1-1"
   description = "Broker image"
 }
 

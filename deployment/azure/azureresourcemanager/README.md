@@ -32,9 +32,9 @@ The supported instance types are:
 Azure images will be available at Keysight Azure Blob container **keysight-cyperf-1-0-update1**.
 For accessing VHD file refer to the URL link:
 
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-0-update1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-0-update1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-0.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-1.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-1.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-1.vhd)
 
 User may download VHD images and upload those in their own container before using these ARM templates.
 Alternatively, user may use following PowerShell command from Azure cloud shell to copy VHD images from Keysight Azure container to User’s Azure container.

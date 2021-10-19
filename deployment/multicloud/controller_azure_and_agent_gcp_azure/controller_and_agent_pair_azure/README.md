@@ -47,8 +47,8 @@ The following table lists the parameters for this deployment.
 | AZURE_AGENT_MACHINE_TYPE   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | AGENT_BLOB_URI   | Requires input   | The VHD URL for the agent machine. |
 | MDW_BLOB_URI   | Requires input   | The VHD URL for the agent machine. |
-| mdw_version   | keysight-cyperf-controller-1-0-update1         | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-0-update1            | The  CyPerf agent image version. |
+| mdw_version   | keysight-cyperf-controller-1-1         | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-1-1            | The  CyPerf agent image version. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
