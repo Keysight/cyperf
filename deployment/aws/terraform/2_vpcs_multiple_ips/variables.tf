@@ -78,6 +78,6 @@ variable "broker_version" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1.0-update1"
+  default     = "keysight-cyperf-agent-1-1"
   description = "Image id for the cyperf agent machines"
 }
