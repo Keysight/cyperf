@@ -74,7 +74,7 @@ The following table lists the parameters for this deployment.
 | agent_number   | 5           | Number of agents deployed per vpc |
 | ip_number   | 11           | Number of test IPs per agent |
 | mdw_version   | keysight-cyperf-controller-1-1           | The CyPerf controller image version. |
-| broker_version   | keysight-cyperf-controller-1-1           | The CyPerf controller proxy image version. |
+| broker_version   | keysight-cyperf-controller-proxy-1-1         | The CyPerf controller proxy image version. |
 | agent_version       | keysight-cyperf-agent-1-1     | The CyPerf agent image version.   |
 
 ## Destruction
