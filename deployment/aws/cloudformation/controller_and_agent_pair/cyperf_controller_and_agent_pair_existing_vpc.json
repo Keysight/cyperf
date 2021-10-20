@@ -4,36 +4,36 @@
     "Mappings" : {
 		"RegionMap" : {
 			"us-east-1" : {
-				"AMIxAPPLICATION" : "ami-0a7ec40fcd5fa2b5a",
-				"AMIxBROKER" : "ami-0c0dd64e6ea117644",
-				"AMIxAGENT" : "ami-003f6b132c97deddc",
+				"AMIxAPPLICATION" : "ami-0f0a064ea6a7359b8",
+				"AMIxBROKER" : "ami-084936f7f6543d74a",
+				"AMIxAGENT" : "ami-09117c78c9fd14237",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
 				"EC2xREGION" : "US East (N. Virginia)",
 				"REGIONxTAG" : "US_EAST_1"
 			},
 			"us-east-2" : {
-				"AMIxAPPLICATION" : "ami-059f32c195c136297",
-				"AMIxBROKER" : "ami-03ce4c179f8077e6e",
-				"AMIxAGENT" : "ami-06ee740153fa2e6e9",
+				"AMIxAPPLICATION" : "ami-02b10466c12ff6cfe",
+				"AMIxBROKER" : "ami-0aa18efc6680f03fb",
+				"AMIxAGENT" : "ami-065d01ec8c0d1fbfd",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "3.16.146.0/29",
 				"EC2xREGION" : "US East (Ohio)",
 				"REGIONxTAG" : "US_EAST_2"
 			},
 			"us-west-1" : {
-				"AMIxAPPLICATION" : "ami-05d3d0b9c9b69714a",
-				"AMIxBROKER" : "ami-0a0193a5019a1472a",
-				"AMIxAGENT" : "ami-00aa3ac8cb3bfa4d1",
+				"AMIxAPPLICATION" : "ami-0fb253d6c8dfef3f2",
+				"AMIxBROKER" : "ami-0d68babe0aff26974",
+				"AMIxAGENT" : "ami-056bfa5334cb2f8d4",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.52.6.112/29",
 				"EC2xREGION" : "US West (N. California)",
 				"REGIONxTAG" : "US_WEST_1"
 			},
 			"us-west-2" : {
-				"AMIxAPPLICATION" : "ami-0952a7e2ea81eedea",
-				"AMIxBROKER" : "ami-05ad4e4fc10e719e4",
-				"AMIxAGENT" : "ami-059e2162ab70e07ee",
+				"AMIxAPPLICATION" : "ami-0ab580c7f1f661794",
+				"AMIxBROKER" : "ami-0aab71c8f3dc9d3cf",
+				"AMIxAGENT" : "ami-06c6778787d83e75d",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "18.237.140.160/29",
 				"EC2xREGION" : "US West (Oregon)",
@@ -49,99 +49,99 @@
 				"REGIONxTAG" : "AP_EAST_1"
 			},
 			"ap-south-1" : {
-				"AMIxAPPLICATION" : "ami-023641337c2988725",
-				"AMIxBROKER" : "ami-0396507f5af6f3cba",
-				"AMIxAGENT" : "ami-08a5b8ec4cae8dc3e",
+				"AMIxAPPLICATION" : "ami-0e30c15dc6852215d",
+				"AMIxBROKER" : "ami-05620095768442508",
+				"AMIxAGENT" : "ami-0b9c5594e516bdf5a",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.233.177.0/29",
 				"EC2xREGION" : "Asia Pacific (Mumbai)",
 				"REGIONxTAG" : "AP_SOUTH_1"
 			},
 			"ap-northeast-2" : {
-				"AMIxAPPLICATION" : "ami-0231d8320a97d3190",
-				"AMIxBROKER" : "ami-0fd9513a06c1ab5f1",
-				"AMIxAGENT" : "ami-00879c26bd018f1ec",
+				"AMIxAPPLICATION" : "ami-0d7008566c42fe9e4",
+				"AMIxBROKER" : "ami-0ea053c327c1cd15a",
+				"AMIxAGENT" : "ami-01ee813f7f1db6ef9",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.209.1.56/29",
 				"EC2xREGION" : "Asia Pacific (Seoul)",
 				"REGIONxTAG" : "AP_NORTHEAST_2"
 			},
 			"ap-southeast-1" : {
-				"AMIxAPPLICATION" : "ami-05ec918533890ed8e",
-				"AMIxBROKER" : "ami-0d1f51e056a3e622a",
-				"AMIxAGENT" : "ami-07a19b460b8d472de",
+				"AMIxAPPLICATION" : "ami-04e660329da94dddf",
+				"AMIxBROKER" : "ami-0d2d105fb5b4071f6",
+				"AMIxAGENT" : "ami-0361c3fb01e78beb3",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "3.0.5.32/29",
 				"EC2xREGION" : "Asia Pacific (Singapore)",
 				"REGIONxTAG" : "AP_SOUTHEAST_1"
 			},
 			"ap-southeast-2" : {
-				"AMIxAPPLICATION" : "ami-0b326d76938d8efbb",
-				"AMIxBROKER" : "ami-00d1c13664c375302",
-				"AMIxAGENT" : "ami-0ea30918d5e08d353",
+				"AMIxAPPLICATION" : "ami-05aafc3cb441de3aa",
+				"AMIxBROKER" : "ami-0244db66df53f36af",
+				"AMIxAGENT" : "ami-09f929d249d3880d9",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.239.158.0/29",
 				"EC2xREGION" : "Asia Pacific (Sydney)",
 				"REGIONxTAG" : "AP_SOUTHEAST_2"
 			},
 			"ap-northeast-1" : {
-				"AMIxAPPLICATION" : "ami-0696ea36fdb067a8f",
-				"AMIxBROKER" : "ami-0f159e07065eb2182",
-				"AMIxAGENT" : "ami-02868386d7cf3ba24",
+				"AMIxAPPLICATION" : "ami-05681a21b8efd8c00",
+				"AMIxBROKER" : "ami-09da5dc6fbd710e14",
+				"AMIxAGENT" : "ami-03edc89cf80af8856",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "3.112.23.0/29",
 				"EC2xREGION" : "Asia Pacific (Tokyo)",
 				"REGIONxTAG" : "AP_NORTHEAST_1"
 			},
 			"ca-central-1" : {
-				"AMIxAPPLICATION" : "ami-0c16f2e11d942fcde",
-				"AMIxBROKER" : "ami-0eb12630e4e123cea",
-				"AMIxAGENT" : "ami-0c7f3150f0409cbf1",
+				"AMIxAPPLICATION" : "ami-093a5132b55c863f3",
+				"AMIxBROKER" : "ami-0ca00ceb73deb33f8",
+				"AMIxAGENT" : "ami-016c4515e30a719be",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "35.183.92.176/29",
 				"EC2xREGION" : "Canada (Central)",
 				"REGIONxTAG" : "CA_CENTRAL_1"
 			},
 			"eu-central-1" : {
-				"AMIxAPPLICATION" : "ami-05ea8767ecde8851f",
-				"AMIxBROKER" : "ami-0ca95ed64807ff9d6",
-				"AMIxAGENT" : "ami-058cde9fe6a6204c9",
+				"AMIxAPPLICATION" : "ami-06bb9699aaf9d4d64",
+				"AMIxBROKER" : "ami-0beea20b571a8a7d2",
+				"AMIxAGENT" : "ami-086f84c28cdee341f",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "3.120.181.40/29",
 				"EC2xREGION" : "EU (Frankfurt)",
 				"REGIONxTAG" : "EU_CENTRAL_1"
 			},
 			"eu-west-1" : {
-				"AMIxAPPLICATION" : "ami-0b1410c884b3cd9fd",
-				"AMIxBROKER" : "ami-0860bb3f33e5d2bd9",
-				"AMIxAGENT" : "ami-07d34fec2baf3102c",
+				"AMIxAPPLICATION" : "ami-0e8a94f336e559367",
+				"AMIxBROKER" : "ami-0af21ee2215c6d5ad",
+				"AMIxAGENT" : "ami-08f69e27dff0337e2",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "18.202.216.48/29",
 				"EC2xREGION" : "EU (Ireland)",
 				"REGIONxTAG" : "EU_WEST_1"
 			},
 			"eu-west-2" : {
-				"AMIxAPPLICATION" : "ami-0984138be2d7b7a2b",
-				"AMIxBROKER" : "ami-084f1d73040c14377",
-				"AMIxAGENT" : "ami-09d55ac725e933d45",
+				"AMIxAPPLICATION" : "ami-0ef33063364548f9d",
+				"AMIxBROKER" : "ami-0b1bc17ae8312ae90",
+				"AMIxAGENT" : "ami-04df1f1eb61a7e9e4",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "3.8.37.24/29",
 				"EC2xREGION" : "EU (London)",
 				"REGIONxTAG" : "EU_WEST_2"
 			},
 			"eu-west-3" : {
-				"AMIxAPPLICATION" : "ami-07f3d9df3222b2223",
-				"AMIxBROKER" : "ami-06a0dbcbe986fa9dc",
-				"AMIxAGENT" : "ami-0c24743406c7e3a9c",
+				"AMIxAPPLICATION" : "ami-0b7d98cffebc84d5d",
+				"AMIxBROKER" : "ami-07a3ea610824ec471",
+				"AMIxAGENT" : "ami-072e0e76166ba69cb",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "35.180.112.80/29",
 				"EC2xREGION" : "EU (Paris)",
 				"REGIONxTAG" : "EU_WEST_3"
 			},
 			"eu-north-1" : {
-				"AMIxAPPLICATION" : "ami-00a03ea91e2304573",
-				"AMIxBROKER" : "ami-067ac1872f97291e9",
-				"AMIxAGENT" : "ami-05719b32ff26829d8",
+				"AMIxAPPLICATION" : "ami-039b794ae1f0ad42d",
+				"AMIxBROKER" : "ami-002af6721d38184db",
+				"AMIxAGENT" : "ami-04a548542ea6d09f0",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
 				"EC2xREGION" : "EU (Stockholm)",
@@ -157,9 +157,9 @@
 				"REGIONxTAG" : "ME_SOUTH_1"
 			},
 			"sa-east-1" : {
-				"AMIxAPPLICATION" : "ami-07a3b571f7388a367",
-				"AMIxBROKER" : "ami-09c7814ad679f7b0d",
-				"AMIxAGENT" : "ami-01e96945c93d88c5f",
+				"AMIxAPPLICATION" : "ami-068a332c4ad17173d",
+				"AMIxBROKER" : "ami-06b8466d8eb78c9f9",
+				"AMIxAGENT" : "ami-0543a46631799a287",
 				"AMIxLICENSE" : "ami-00000000000000000",
 				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
 				"EC2xREGION" : "South America (Sao Paulo)",
@@ -169,9 +169,7 @@
 		"VariableMap" : {
 			"global" : {
                 "OPTIONSxTAG" : "MANUAL",
-                "PROJECTxTAG" : "CyPerf",
-                "FLOWxLOGxRESOURCExTYPE" : "VPC",
-				"FLOWxLOGxTRAFFICxTYPE" : "REJECT"
+                "PROJECTxTAG" : "CyPerf"
 			}
 		}
     },
@@ -190,8 +188,7 @@
                     "Parameters": [
                         "Username",
                         "Project",
-                        "VPCCIDR",
-                        "AvailabilityZone"
+                        "VPCCIDR"
                     ]
                 },
                 {
@@ -208,31 +205,29 @@
                         "default": "CyPerf Agent Configuration"
                     },
                     "Parameters": [
+                        "DeployClientAgent",
+                        "DeployServerAgent",
+                        "EC2RoleForTags",
                         "InstanceTypeForCyPerfAgent",
                         "KeyNameForCyPerfAgent",
                         "AgentControlSubnet",
                         "AgentTestSubnet",
                         "AgentSecurityGroup"
                      ]
-                },
-                {
-                    "Label": {
-                        "default": "Security-Group Configuration"
-                    },
-                    "Parameters": [
-                        "AllowedSubnet"
-                    ]
                 }
             ],
             "ParameterLabels": {
-                "AvailabilityZone": {
-                    "default": "Availability Zone"
-                },
                 "InstanceTypeForCyPerfAgent": {
                     "default": "Instance Type for CyPerf Agents"
                 },
                 "KeyNameForCyPerfAgent": {
                     "default": "SSH Key"
+                },
+                "DeployClientAgent": {
+                    "default": "Deploy Client Agent"
+                },
+                "DeployServerAgent": {
+                    "default": "Deploy Server Agent"
                 },
                 "ControllerManagementSubnet": {
                     "default": "Management Subnet for CyPerf Controller"
@@ -242,9 +237,6 @@
                 },
                 "AgentTestSubnet": {
                     "default": "Test Subnet for CyPerf Agents"
-                },
-                "AllowedSubnet": {
-                    "default": "Allowed Subnet for Security Group"
                 },
                 "CyPerfUISecurityGroup": {
                     "default": "Security Group of CyPerf Contoller"
@@ -277,11 +269,6 @@
         }
     },
     "Parameters": {
-        "AvailabilityZone": {
-            "Default": "<Select preferred availability zone from drop down list>",
-            "Description": "Preffered Availability Zone",
-            "Type": "AWS::EC2::AvailabilityZone::Name"
-        },
         "InstanceTypeForCyPerfAgent": {
             "AllowedValues": [
                 "c4.2xlarge",
@@ -336,10 +323,37 @@
             "Default": "<Select VPC from drop down list>",
             "Description": "Preferred Existing VPC",
             "Type": "AWS::EC2::VPC::Id"
+        },
+        "DeployClientAgent" : {
+            "Description" : "Want to deploy Client Agent?",
+            "Default" : "yes",
+            "Type" : "String",
+            "AllowedValues" : ["yes", "no"],
+            "ConstraintDescription" : "must specify yes or no."
+        },
+        "DeployServerAgent" : {
+            "Description" : "Want to deploy Server Agent?",
+            "Default" : "yes",
+            "Type" : "String",
+            "AllowedValues" : ["yes", "no"],
+            "ConstraintDescription" : "must specify yes or no."
+        },
+        "EC2RoleForTags" : {
+            "Description" : "Want to fetch tags for Agent?",
+            "Default" : "yes",
+            "Type" : "String",
+            "AllowedValues" : ["yes", "no"],
+            "ConstraintDescription" : "must specify yes or no."
         }
+    },
+    "Conditions": {
+        "CreateClientAgent" : {"Fn::Equals" : [{"Ref" : "DeployClientAgent"}, "yes"]},
+        "CreateServerAgent" : {"Fn::Equals" : [{"Ref" : "DeployServerAgent"}, "yes"]},
+        "FetchTagsForAgent" : {"Fn::Equals" : [{"Ref" : "EC2RoleForTags"}, "yes"]}
     },
     "Resources": {
         "EC2IfaceRole": {
+            "Condition" : "FetchTagsForAgent",
             "Properties": {
                 "AssumeRolePolicyDocument": {
                     "Statement": [
@@ -402,6 +416,7 @@
             "Type": "AWS::IAM::Role"
         },
         "EC2InstanceProfile": {
+            "Condition" : "FetchTagsForAgent",
             "DependsOn": "EC2IfaceRole",
             "Properties": {
                 "Roles": [
@@ -414,8 +429,7 @@
         },
         "CyPerfUI": {
             "DependsOn": [
-                "mdweth0",
-                "EC2InstanceProfile"
+                "mdweth0"
             ],
             "Properties": {
                 "BlockDeviceMappings": [
@@ -427,9 +441,6 @@
                         }
                     }
                 ],
-                "IamInstanceProfile": {
-                    "Ref": "EC2InstanceProfile"
-                },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
                 "InstanceType": "c4.2xlarge",
                 "KeyName": {
@@ -475,11 +486,11 @@
             "Type": "AWS::EC2::Instance"
         },
         "ClientAgent": {
+            "Condition" : "CreateClientAgent",
             "DependsOn": [
                 "clieth0",
                 "clieth1",
-                "CyPerfUI",
-                "EC2InstanceProfile"
+                "CyPerfUI"
             ],
             "Properties": {
                 "BlockDeviceMappings": [
@@ -492,7 +503,11 @@
                     }
                 ],
                 "IamInstanceProfile": {
-                    "Ref": "EC2InstanceProfile"
+                    "Fn::If" : [
+                        "FetchTagsForAgent",
+                        {"Ref" : "EC2InstanceProfile"},
+                        ""
+                    ]
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAGENT"] },
                 "InstanceType": {
@@ -573,11 +588,11 @@
             "Type": "AWS::EC2::Instance"
         },
         "ServerAgent": {
+            "Condition" : "CreateServerAgent",
             "DependsOn": [
                 "svreth0",
                 "svreth1",
-                "CyPerfUI",
-                "EC2InstanceProfile"
+                "CyPerfUI"
             ],
             "Properties": {
                 "BlockDeviceMappings": [
@@ -590,7 +605,11 @@
                     }
                 ],
                 "IamInstanceProfile": {
-                    "Ref": "EC2InstanceProfile"
+                    "Fn::If" : [
+                        "FetchTagsForAgent",
+                        {"Ref" : "EC2InstanceProfile"},
+                        ""
+                    ]
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAGENT"] },
                 "InstanceType": {
@@ -671,6 +690,7 @@
             "Type": "AWS::EC2::Instance"
         },
         "clieth0": {
+            "Condition" : "CreateClientAgent",
             "Properties": {
                 "Description": "Client Agent eth0/ens4",
                 "GroupSet": [
@@ -714,6 +734,7 @@
             "Type": "AWS::EC2::NetworkInterface"
         },
         "clieth1": {
+            "Condition" : "CreateClientAgent",
             "Properties": {
                 "Description": "Client Agent eth1/ens5",
                 "GroupSet": [
@@ -757,6 +778,7 @@
             "Type": "AWS::EC2::NetworkInterface"
         },
         "svreth0": {
+            "Condition" : "CreateServerAgent",
             "Properties": {
                 "Description": "Server Agent eth0/ens4",
                 "GroupSet": [
@@ -800,6 +822,7 @@
             "Type": "AWS::EC2::NetworkInterface"
         },
         "svreth1": {
+            "Condition" : "CreateServerAgent",
             "Properties": {
                 "Description": "Server Agent eth1/ens5",
                 "GroupSet": [
