@@ -35,7 +35,7 @@ variable "public_key" {
 
 variable "controller_proxy_image" {
   type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0/keysight-cyperf-controller-proxy-1-1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-controller-proxy-1-1.vhd"
   description = "Controller proxy image path"
 }
 
