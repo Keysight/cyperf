@@ -16,7 +16,7 @@ Control subnet should reside behind NAT gateway, if Agents need to reach outside
 
 ## Step 2: Subscribe to the AMIs Used by the Manual Deployment
 This manual deployment uses publicly available Keysight CyPerf Controller, Agent, and Controller Proxy AMIs. 
-The following AMIs are available for CyPerf 1.0-Update1 release.
+The following AMIs are available for CyPerf 1.1 release.
 
 -	keysight-cyperf-controller-1-1 
 
