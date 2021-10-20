@@ -34,13 +34,13 @@ variable "public_key" {
 }
 
 variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-controller-1-0-update1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-controller-1-1.vhd"
   type = string
   description = "Controller image path"
 }
 
 variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-0-update1/keysight-cyperf-agent-1-0-update1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-agent-1-1.vhd"
   type = string
   description = "Agent image path"
 }
@@ -68,22 +68,22 @@ variable "azure_allowed_cidr" {
 
 variable "azure_mdw_machine_type" {
   type    = string
-  default = "Standard_F8s_v2"
+  default = "Standard_F16s_v2"
 }
 
 variable "azure_agent_machine_type" {
   type    = string
-  default = "Standard_F4s_v2"
+  default = "Standard_F16s_v2"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-0-update1"
+  default     = "keysight-cyperf-controller-1-1"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-0-update1"
+  default     = "keysight-cyperf-agent-1-1"
   description = "Image id for the cyperf agent machines"
 }

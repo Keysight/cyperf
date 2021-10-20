@@ -34,7 +34,8 @@ class Statistics:
         self.stats = {}
         self.include_baseline_file = True
         for csv in os.listdir(csvs_path):
-            self.stats[csv[:-4]] = self.make_dataframe(os.path.join(csvs_path, csv))
+            if csv.endswith(".csv"):
+                self.stats[csv[:-4]] = self.make_dataframe(os.path.join(csvs_path, csv))
 
     def make_dataframe(self, csv_file_path):
         '''
