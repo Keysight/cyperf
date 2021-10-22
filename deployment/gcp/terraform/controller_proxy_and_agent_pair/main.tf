@@ -37,7 +37,7 @@ locals {
   gcp_test_firewall_rule_source_ip_ranges = [
     "0.0.0.0/0"
   ]
-  gcp_nats_instance_name                     = join("-", ["cyperf-broker", var.broker_image])
+  gcp_nats_instance_name                       =  var.broker_image
   gcp_broker_serial_port_enable                = "true"
   gcp_broker_can_ip_forward                    = "false"
   gcp_broker_custom_image_project_name         = var.gcp_project_name
