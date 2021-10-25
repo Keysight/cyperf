@@ -73,7 +73,7 @@ The following table lists the parameters for this deployment.
 | gcp_allowed_cidr | ["0.0.0.0/0"] |The GCP allowed CIDR. |
 | gcp_mdw_machine_type    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
 | gcp_agent_machine_type   | c2-standard-16            | The machine type used for deploying the CyPerf agent. |
-| mdw_version            | keysight-cyperf-controller-1-update1   | The  CyPerf controller image version.    |
+| mdw_version            | keysight-cyperf-controller-1-1   | The  CyPerf controller image version.    |
 | agent_version       | keysight-cyperf-agent-1-1     | The CyPerf agent image version.   |
 
 ## Destruction
