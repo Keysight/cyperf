@@ -22,6 +22,8 @@ def GenerateConfig(context):
     region = context.properties['region']
     
     zone = context.properties['zone']
+
+    service_account_email  = context.properties['serviceAccountEmail']
     
     broker = context.env['deployment']+'-cyperf-broker'
    
@@ -230,7 +232,7 @@ def GenerateConfig(context):
                         "autoDelete": True,
                         "deviceName": "boot",
                         "initializeParams": {
-                            "sourceImage": 'global/images/'+context.properties['brokerSourceImage'],
+                            "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + 'global/images/'+context.properties['brokerSourceImage'],
                             "diskType": 'zones/'+zone+'/diskTypes/pd-standard',
                             "diskSizeGb": "10",
                             "labels": {},
@@ -319,7 +321,7 @@ def GenerateConfig(context):
                         "boot": True,
                         "autoDelete": True,
                         "initializeParams": {
-                            "sourceImage": 'global/images/'+context.properties['agentSourceImage'],
+                            "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + 'global/images/'+context.properties['agentSourceImage'],
                             "diskType": 'zones/'+ zone+'/diskTypes/pd-standard',
                             "diskSizeGb": "10",
                         },
@@ -364,7 +366,7 @@ def GenerateConfig(context):
                 "reservationAffinity": {"consumeReservationType": "ANY_RESERVATION"},
                 "serviceAccounts": [
                     {
-                        "email": "290801949079-compute@developer.gserviceaccount.com",
+                        "email": service_account_email,
                         "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
                     }
                 ],

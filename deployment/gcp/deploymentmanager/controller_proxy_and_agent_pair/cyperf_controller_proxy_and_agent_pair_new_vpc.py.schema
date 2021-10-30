@@ -27,6 +27,11 @@ properties:
     default: us-east1-c
     description: Zone to deploy 
 
+  serviceAccountEmail:
+    type: string
+    default: 290801949079-compute@developer.gserviceaccount.com
+    description: Service account with compute admin and compute network admin role.
+
   agentMachineType:
     type: string
     default: c2-standard-4
