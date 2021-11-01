@@ -22,6 +22,8 @@ def GenerateConfig(context):
     region = context.properties['region']
     
     zone = context.properties['zone']
+
+    service_account_email  = context.properties['serviceAccountEmail']
     
     broker = context.env['deployment']+'-cyperf-broker'
    
