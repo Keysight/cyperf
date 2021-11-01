@@ -86,7 +86,7 @@ resource "google_compute_instance" "gcp_mdw_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_mdw_custom_image_project_name}/global/images/${var.mdw_version}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.mdw_version}"
     }
   }
   network_interface {
