@@ -10,6 +10,7 @@ To start using CyPerf's Python templates and yaml configuration, please refer th
 The prerequisites are:
 - SSH Key pair for management access to CyPerf VM instances.
 - GCP shared images. Exact image name will be published in Keysight download page.
+- GCP service account with 'compute admin' and 'compute network admin' role.
 
 ### Specialized knowledge
 Before you deploy this Python template, we recommend that you become familiar with the following GCP services.
@@ -19,6 +20,7 @@ Before you deploy this Python template, we recommend that you become familiar wi
 - [Compute Engine](https://cloud.google.com/compute)
 - [GCP Images](https://cloud.google.com/compute/docs/images)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)
+- [service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
 
 **Note:** If you are new to GCP, see [Getting Started with GCP](https://cloud.google.com/gcp/getting-started).
 

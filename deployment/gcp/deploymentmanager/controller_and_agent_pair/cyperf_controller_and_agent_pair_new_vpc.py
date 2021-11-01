@@ -220,7 +220,7 @@ def GenerateConfig(context):
               "autoDelete": True,
               "deviceName": "boot",
               "initializeParams": {
-                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + 'global/images/' + context.properties['controllerSourceImage'],
+                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['controllerSourceImage'],
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "100",
                   "labels": {},
@@ -304,7 +304,7 @@ def GenerateConfig(context):
               "boot": True,
               "autoDelete": True,
               "initializeParams": {
-                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + 'global/images/' + context.properties['agentSourceImage'],
+                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['agentSourceImage'],
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "10",
               },
@@ -344,7 +344,7 @@ def GenerateConfig(context):
               "consumeReservationType": "ANY_RESERVATION"
           },
           "serviceAccounts": [{
-              "email": "290801949079-compute@developer.gserviceaccount.com",
+              "email": service_account_email,
               "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
           }],
           "shieldedInstanceConfig": {},
