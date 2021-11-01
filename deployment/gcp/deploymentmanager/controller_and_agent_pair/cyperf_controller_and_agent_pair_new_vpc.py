@@ -218,11 +218,7 @@ def GenerateConfig(context):
               "autoDelete": True,
               "deviceName": "boot",
               "initializeParams": {
-<<<<<<< HEAD
-                  "sourceImage": 'global/images/' + context.properties['controllerSourceImage'],
-=======
                   "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['controllerSourceImage'],
->>>>>>> ea181eb... usergiude update for gcp service account
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "100",
                   "labels": {},
@@ -306,11 +302,7 @@ def GenerateConfig(context):
               "boot": True,
               "autoDelete": True,
               "initializeParams": {
-<<<<<<< HEAD
-                  "sourceImage": 'global/images/' + context.properties['agentSourceImage'],
-=======
                   "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['agentSourceImage'],
->>>>>>> ea181eb... usergiude update for gcp service account
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "10",
               },
