@@ -52,7 +52,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
-| serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Add serviceAccoutEmail in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
+| serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
 
 
 ## Post detploy
