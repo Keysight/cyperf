@@ -136,7 +136,7 @@ resource "google_compute_instance" "gcp_nats_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_mdw_custom_image_project_name}/global/images/${var.broker_image}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.broker_image}"
     }
   }
   network_interface {
@@ -172,7 +172,7 @@ resource "google_compute_instance" "gcp_client_agent_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_agent_custom_image_project_name}/global/images/${var.agent_version}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.agent_version}"
     }
   }
   network_interface {
@@ -217,7 +217,7 @@ resource "google_compute_instance" "gcp_server_agent_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_agent_custom_image_project_name}/global/images/${var.agent_version}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.agent_version}"
     }
   }
   network_interface {
