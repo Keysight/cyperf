@@ -62,6 +62,30 @@ locals {
                     SCRIPT
 }
 
+resource "azurerm_image" "controller" {
+  name                = "cyperf-controller"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.controller_image
+  }
+}
+
+resource "azurerm_image" "agent" {
+  name                = "cyperf-agent"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.agent_image
+  }
+}
+
 resource "azurerm_resource_group" "azr_automation" {
   name     = var.deployment_name
   location = var.azure_region_name
@@ -175,7 +199,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_mdw_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.controller_image
+  source_image_id     = azurerm_image.controller.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
@@ -200,7 +224,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.agent_image
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_1_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_1_test_nic.id
@@ -299,7 +323,7 @@ resource "google_compute_instance" "gcp_nats_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_mdw_custom_image_project_name}/global/images/${var.broker_image}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.broker_image}"
     }
   }
   network_interface {
@@ -335,7 +359,7 @@ resource "google_compute_instance" "gcp_server_agent_instance" {
     device_name = "persistent-disk-0"
     auto_delete = "true"
     initialize_params {
-      image = "projects/${local.gcp_agent_custom_image_project_name}/global/images/${var.agent_version}"
+      image = "projects/kt-nas-cyperf-dev/global/images/${var.agent_version}"
     }
   }
   network_interface {
