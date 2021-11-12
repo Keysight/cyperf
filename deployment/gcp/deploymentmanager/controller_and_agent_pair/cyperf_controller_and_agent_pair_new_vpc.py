@@ -22,6 +22,8 @@ def GenerateConfig(context):
   region = context.properties['region']
   
   zone = context.properties['zone']
+
+  service_account_email  = context.properties['serviceAccountEmail']
   
   service_account_email  = context.properties['serviceAccountEmail']
   
@@ -30,6 +32,8 @@ def GenerateConfig(context):
   controller = context.env['deployment'] + '-cyperf-controller'
 
   sslkey = 'cyperf:' + '<Replace with ssh public key.>'
+
+
 
 
   resources = []
