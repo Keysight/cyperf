@@ -24,7 +24,8 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 ## General Prerequisites
 
 1.  A kubernetes cluster along with DUT should be already deployed. For more details on how to deploy the DUT in a K8s cluster, please follow the instructions provided in the deployment guide for a specific DUT. For general information on K8s cluster deployment, please refer to [K8s website](https://kubernetes.io/docs/setup/).  
-    *CyPerf Agents can be used in both* **_on-premise_** *K8s cluster (e.g. where nodes can be VMs on ESXi host) or in* **_cloud_** *(e.g. where nodes can be in* **_AWS EKS_***).*
+    - K8s version 1.20 or 1.21 is recommended.
+    - *CyPerf Agents can be used in both* **_on-premise_** *K8s cluster (e.g. where nodes can be VMs on ESXi host) or in* **_cloud_** *(e.g. where nodes can be in* **_AWS EKS_***).*
 2.  CyPerf Controller is already deployed. It should be accessible from the nodes inside the kubernetes cluster.  
     *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guid 1.0_***, which can be downloaded from Keysight's software download portal.*
 3.  A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
@@ -44,7 +45,16 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
 - Modifications needed:
     1. Change the place holder container `image` URL with one that you want to use for CyPerf Agent container. Please get this URL from Keysight's software download portal.
-    2. Change the place holder `AGENT_CONTROLLER` value with your CyPerf Controller's IP address.  
+    2. Change the place holder `AGENT_CONTROLLER` value with your CyPerf Controller's IP address. If controller IP is not known yet, this variable must be ommitted from the yaml and using cyperfagent CLI can be set after controller deployment.
+    3. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select that as management interface. The same interface will be used for test traffic too. In case there is a need for explicitly selecting management or test interface, following `env` variables can be used. These are mentioned in the example yaml scripts as comments.
+
+    ```
+        #   name: AGENT_MANAGEMENT_INTERFACE
+        #   value: "eth0"
+        #   name: AGENT_TEST_INTERFACE
+        #   value: "eth1"
+    ```
+    
     3. Change the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in CyPerf Controller's Agent Assignemnt dialog.
     4. If needed, update `nodeSelector` rule according to your preference. The example manifests assume that `agenttype=client`and `agenttype=server` labels are already assigned to the chosen worker nodes so that CyPerf Agent client pods and server pods are not deployed in the same node.
     5. Review the server manifest yaml to decide what `type` of `Service` your use case would require. e.g. `ClusterIP`, `NodePort` etc. and change accordingly.
@@ -61,6 +71,14 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     ```
     kubectl scale deployment.v1.apps/cyperf-agent-server-deployment --replicas=2
     
+    ```
+- When there is a requirement for increasing server agent replica while a test is running, enable `readinessProbe` so that test traffic is forwarded to a server agent when it is ready.
+    ```
+        readinessProbe:
+            httpGet:
+                path: /CyPerfHTTPHealthCheck
+                port: 80
+            periodSeconds: 5
     ```
 
 ## Deployment in **AWS EKS**
@@ -190,7 +208,7 @@ When configuring CyPerf Controller for a test where CyPerf Agents are running in
 3. CyPerf Agents simulating clients will send traffic to _Destination port_ as configured in _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` is used. If DUT uses any non-default destination port for incoming connections, this configuration must be set appropriately.
 4. CyPerf Agents simulating servers will listen on _Server port_ as configured in  _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` is used. If DUT uses any non-default destination port for outgoing connections, this configuration must be set appropriately.
 5. Make sure that DUT is forwarding the traffic to a port same as the `port` mentioned in manifest yaml for `cyperf-agent-service`, while CyPerf server Agents will have to be listening on `targetPort`. For changing any of these values, configurations for DUT or CyPerf Contoller need to be adjusted appropriately.
-6. In the manifest yaml for CyPerf server Agent,`readinessProbe` is configured for `httpGet` where `path` is specified as `/CyPerfHTTPHealthCheck` and `port` as `80`. These must match with _HTTP Health Check->Parameters_, _Target URL_ and _Port_ respectively as cofigured in _DUT Network_ in CyPerf Controller UI and _HTTP Health Check_ must be enabled.
+6. When `readinessProbe` is used in the manifest yaml for CyPerf server Agent, note that it is configured for `httpGet` where `path` is specified as `/CyPerfHTTPHealthCheck` and `port` as `80`. These must match with _HTTP Health Check->Parameters_, _Target URL_ and _Port_ respectively as cofigured in _DUT Network_ in CyPerf Controller UI and _HTTP Health Check_ must be enabled.
 7. In case DUT is also configured for HTTP health check, use the same configuration as described above. 
      
 
@@ -215,8 +233,13 @@ When configuring CyPerf Controller for a test where CyPerf Agents are running in
 TO BE CONTINUED ...
 -->   
    
+## Known Limitations
+1. CyPerf does not support IPv6 address for management interface yet.
+
 
 ## Releases
+
+- TBD <for KB to update sections for current and previous release>
 
 - **CyPerf 1.0-Update1** - [July, 2021]
     - Image URI: 
