@@ -18,6 +18,10 @@ spec:
                     env:
                     -   name: AGENT_CONTROLLER
                         value: "10.36.66.111"
+                    #   name: AGENT_MANAGEMENT_INTERFACE
+                    #   value: "eth0"
+                    #   name: AGENT_TEST_INTERFACE
+                    #   value: "eth1"
                     -   name: AGENT_TAGS
                         value: "K8s-Group=CyPerf-Agent-Client,node-owner=User"
                     securityContext:

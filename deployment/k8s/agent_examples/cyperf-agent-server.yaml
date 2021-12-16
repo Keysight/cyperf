@@ -20,17 +20,21 @@ spec:
                     env:
                     -   name: AGENT_CONTROLLER
                         value: "10.36.66.111"
+                    #   name: AGENT_MANAGEMENT_INTERFACE
+                    #   value: "eth0"
+                    #   name: AGENT_TEST_INTERFACE
+                    #   value: "eth1"                        
                     -   name: AGENT_TAGS
                         value: "K8s-Group=CyPerf-Agent-Server,node-owner=User"
                     securityContext:
                         privileged: false
                         capabilities:
                           add: ["NET_ADMIN", "IPC_LOCK"]
-                    readinessProbe:
-                        httpGet:
-                            path: /CyPerfHTTPHealthCheck
-                            port: 80
-                        periodSeconds: 5
+                    #readinessProbe:
+                    #   httpGet:
+                    #        path: /CyPerfHTTPHealthCheck
+                    #        port: 80
+                    #    periodSeconds: 5
                     resources:
                         limits:
                             memory: "4Gi"
