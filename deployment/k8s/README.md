@@ -239,7 +239,15 @@ TO BE CONTINUED ...
 
 ## Releases
 
-- TBD <for KB to update sections for current and previous release>
+- TBD <for KB to update sections for current release>
+
+- **CyPerf 1.1** - [October, 2021]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release1.1
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.233  
+
+    - Change history:
+        
 
 - **CyPerf 1.0-Update1** - [July, 2021]
     - Image URI: 
