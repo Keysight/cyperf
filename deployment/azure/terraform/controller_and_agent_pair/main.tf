@@ -259,7 +259,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
   custom_data = base64encode(local.custom_data)
 }

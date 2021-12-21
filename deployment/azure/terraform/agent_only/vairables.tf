@@ -54,14 +54,14 @@ variable "public_key" {
 }
 
 variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-agent-1-1.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-agent-1-1-update1.vhd"
   type = string
   description = "Agent image path"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-1"
+  default     = "keysight-cyperf-agent-1-1-update1"
   description = "Image id for the agent machines"
 }
 
