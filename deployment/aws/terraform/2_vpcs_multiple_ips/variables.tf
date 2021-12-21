@@ -54,19 +54,19 @@ variable "aws_broker_machine_type"{
 
 variable "ip_number"{
   type = number
-  default = 11
+  default = 4
   description = "Number of test IPs per agent"
 }
 
 variable "agent_number"{
   type = number
-  default = 5
+  default = 2
   description = "Number of agents deployed per vpc"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-1"
+  default     = "keysight-cyperf-controller-1-1-update1"
   description = "Image id for the cyperf controller machine"
 }
 
@@ -78,6 +78,6 @@ variable "broker_version" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-1"
+  default     = "keysight-cyperf-agent-1-1-update1"
   description = "Image id for the cyperf agent machines"
 }

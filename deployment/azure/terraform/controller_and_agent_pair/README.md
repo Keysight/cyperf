@@ -42,8 +42,8 @@ terraform apply --auto-approve \
 -var client_secret="" \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
--var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-1" \
--var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-1"
+-var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-1-update1" \
+-var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-1-update1"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -79,8 +79,8 @@ The following table lists the parameters for this deployment.
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_version   | keysight-cyperf-controller-1-1            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-1            | The  CyPerf agent image version. |
+| mdw_version   | keysight-cyperf-controller-1-1-update1            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-1-1-update1            | The  CyPerf agent image version. |
 
 ## Destruction
 
