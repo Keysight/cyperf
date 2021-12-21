@@ -207,7 +207,7 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def set_license_server(self, licenseServerIP, retries=3, wait=30):
+    def set_license_server(self, licenseServerIP):
         apiPath = '/api/v2/license-servers'
         self.__sendPost(apiPath, payload={"hostName": licenseServerIP})
 
@@ -252,7 +252,7 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def nats_update_route(self, nats_address, retries=3, wait=120):
+    def nats_update_route(self, nats_address):
         apiPath = '/api/v2/brokers'
         self.__sendPost(apiPath, payload={"host": nats_address})
 
