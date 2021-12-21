@@ -218,14 +218,20 @@ TO BE CONTINUED ...
 
 ## Releases
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a485815... Perforce CL@11007362 incorporated
 - **CyPerf 1.1-Update1** - [December, 2021]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release1.1-update1
         - public.ecr.aws/keysight/cyperf-agent:1.0.3.249  
 
     - Change history:
+<<<<<<< HEAD
 
+=======
+>>>>>>> a485815... Perforce CL@11007362 incorporated
 
 - **CyPerf 1.1** - [October, 2021]
     - Image URI: 
