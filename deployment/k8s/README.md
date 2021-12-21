@@ -219,7 +219,10 @@ TO BE CONTINUED ...
 ## Releases
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> a485815... Perforce CL@11007362 incorporated
 =======
 >>>>>>> a485815... Perforce CL@11007362 incorporated
 - **CyPerf 1.1-Update1** - [December, 2021]
@@ -229,7 +232,10 @@ TO BE CONTINUED ...
 
     - Change history:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> a485815... Perforce CL@11007362 incorporated
 =======
 >>>>>>> a485815... Perforce CL@11007362 incorporated
 
