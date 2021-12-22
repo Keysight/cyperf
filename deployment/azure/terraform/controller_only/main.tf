@@ -121,7 +121,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
 }
 

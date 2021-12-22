@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import datetime
 from RESTasV3 import RESTasV3
 from .Statistics import Statistics
@@ -119,3 +120,18 @@ def validate_stats(results_path):
     else:
         print("All stats PASSED validation")
 
+
+def wait_for_eula(timeout=600):
+    init_timeout = timeout
+    count = 2
+
+    while timeout > 0:
+        response = rest.get_automation_token()
+        if "KEYSIGHT SOFTWARE END USER LICENSE AGREEMENT" in response.text.upper():
+            print("Keysight EULA has was prompted")
+            return True
+        else:
+            time.sleep(count)
+            timeout -= count
+    else:
+        raise Exception("CyPerf controller did not properly boot after timeout {}s".format(init_timeout))
