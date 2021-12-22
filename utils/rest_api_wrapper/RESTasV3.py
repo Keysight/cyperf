@@ -16,13 +16,14 @@ from resources.configuration import WAP_USERNAME, WAP_PASSWORD, WAP_CLIENT_ID
 
 class RESTasV3:
 
-    def __init__(self, ipAddress):
+    def __init__(self, ipAddress, verify=True):
         self.ipAddress = ipAddress
+        self.verify = verify
         self.session = requests.Session()
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         self.session.verify = False
         self.host = 'https://{}'.format(ipAddress)
-        self.cookie = self.get_automation_token(username=WAP_USERNAME, password=WAP_PASSWORD)
+        self.cookie = self.get_automation_token()
         self.headers = {'authorization': self.cookie}
         self.startTime = None
         self.startTrafficTime = None
@@ -49,11 +50,11 @@ class RESTasV3:
                                          headers=customHeaders if customHeaders else self.headers, data=payload,
                                          files=files, verify=False)
             print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code not in expectedResponse:
+        if self.verify and response.status_code not in expectedResponse:
             raise Exception(
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-        else:
-            return response
+
+        return response
 
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
@@ -67,11 +68,11 @@ class RESTasV3:
             response = self.session.get('{}{}'.format(self.host, url),
                                         headers=customHeaders if customHeaders else self.headers)
             print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code != expectedResponse:
+        if self.verify and response.status_code != expectedResponse:
             raise Exception(
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-        else:
-            return response
+
+        return response
 
     def __sendPut(self, url, payload, debug=True):
         print("PUT at URL: {} with payload: {}".format(url, payload))
@@ -84,9 +85,11 @@ class RESTasV3:
             self.refresh_access_token()
             response = self.session.put('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
             print("PUT response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code not in expectedResponse:
+        if self.verify and response.status_code not in expectedResponse:
             raise Exception(
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
 
     def __sendPatch(self, url, payload, debug=True):
         print("PATCH at URL: {} with payload: {}".format(url, payload))
@@ -99,11 +102,11 @@ class RESTasV3:
             self.refresh_access_token()
             response = self.session.patch('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
             print("PATCH response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code not in expectedResponse:
+        if self.verify and response.status_code not in expectedResponse:
             raise Exception(
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-        else:
-            return response
+
+        return response
 
     def __sendDelete(self, url, headers=None, debug=True):
         print("DELETE at URL: {}".format(url))
@@ -116,29 +119,34 @@ class RESTasV3:
             self.refresh_access_token()
             response = self.session.delete('%s%s' % (self.host, url), headers=headers)
             print("DELETE response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code not in expectedResponse:
+        if self.verify and response.status_code not in expectedResponse:
             raise Exception(
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-        return response.status_code
 
-    def get_automation_token(self, username=None, password=None):
+        return response
+
+    def get_automation_token(self):
         apiPath = '/auth/realms/keysight/protocol/openid-connect/token'
         headers = {"content-type": "application/x-www-form-urlencoded"}
 
-        if username and password:
-            payload = {"username": username,
-                       "password": password,
-                       "grant_type": "password",
-                       "client_id": WAP_CLIENT_ID}
-        else:
-            raise Exception('No authentification credentials provided')
+        payload = {"username": WAP_USERNAME,
+                   "password": WAP_PASSWORD,
+                   "grant_type": "password",
+                   "client_id": WAP_CLIENT_ID}
 
-        response = self.__sendPost(apiPath, payload, customHeaders=headers).json()
-        print('Access Token: {}'.format(response["access_token"]))
-        return response['access_token']
+        response = self.__sendPost(apiPath, payload, customHeaders=headers)
+        if self.verify:
+            if response.headers.get('content-type') == 'application/json':
+                response = response.json()
+                print('Access Token: {}'.format(response["access_token"]))
+                return response['access_token']
+            else:
+                raise Exception('Fail to obtain authentication token')
+
+        return response
 
     def refresh_access_token(self):
-        access_token = self.get_automation_token(username=WAP_USERNAME, password=WAP_PASSWORD)
+        access_token = self.get_automation_token()
         self.headers = {'authorization': access_token}
         print('Authentication token refreshed!')
 
@@ -228,7 +236,10 @@ class RESTasV3:
         apiPath = '/api/v2/licensing/operations/deactivate'
         response = self.__sendPost(apiPath, payload=[{"activationCode": activation_code, "quantity": quantity}]).json()
         apiPath = '/api/v2/licensing/operations/deactivate/{}'.format(response["id"])
-        if not self.wait_event_success(apiPath, timeout):
+        if "The Activation Code : \'{}\' is not installed.".format(activation_code) == \
+                self.__sendGet(apiPath, 200).json()['message']:
+            print('License code {} is not installed'.format(activation_code))
+        elif not self.wait_event_success(apiPath, timeout):
             raise TimeoutError("Failed to deactivate license. Timeout reached = {} seconds".format(timeout))
 
     def get_license_statistics(self, timeout=30):
@@ -1155,5 +1166,6 @@ class RESTasV3:
         apiPath = '/api/v2/diagnostics/operations/export'
         response = self.__sendPost(apiPath, payload={"componentList": [], "sessionId": self.sessionID}).json()
         apiPath = '/api/v2/diagnostics/operations/export/{}'.format(response["id"])
-        if not self.wait_event_success(apiPath, timeout):
-            raise TimeoutError("Failed to collect diagnostics. Timeout reached = {} seconds".format(timeout))
+        response = self.wait_event_success(apiPath, timeout)
+
+        return response['id']
