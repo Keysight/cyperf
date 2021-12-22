@@ -25,8 +25,6 @@ def GenerateConfig(context):
 
   service_account_email  = context.properties['serviceAccountEmail']
   
-  service_account_email  = context.properties['serviceAccountEmail']
-  
   agent_base_name = context.env['deployment'] + '-cyperf-agent-'
   
   controller = context.env['deployment'] + '-cyperf-controller'
