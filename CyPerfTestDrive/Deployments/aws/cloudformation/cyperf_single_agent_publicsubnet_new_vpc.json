@@ -1,179 +1,179 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
-    "Mappings" : {
-		"RegionMap" : {
-			"us-east-1" : {
-				"AMIxAPPLICATION" : "ami-0f0a064ea6a7359b8",
-				"AMIxBROKER" : "ami-084936f7f6543d74a",
-				"AMIxAGENT" : "ami-09117c78c9fd14237",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "US East (N. Virginia)",
-				"REGIONxTAG" : "US_EAST_1"
-			},
-			"us-east-2" : {
-				"AMIxAPPLICATION" : "ami-04e6cb0686a59cb29",
-				"AMIxBROKER" : "ami-0aa18efc6680f03fb",
-				"AMIxAGENT" : "ami-0afdb6c7e300fd389",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.16.146.0/29",
-				"EC2xREGION" : "US East (Ohio)",
-				"REGIONxTAG" : "US_EAST_2"
-			},
-			"us-west-1" : {
-				"AMIxAPPLICATION" : "ami-0fb253d6c8dfef3f2",
-				"AMIxBROKER" : "ami-0d68babe0aff26974",
-				"AMIxAGENT" : "ami-056bfa5334cb2f8d4",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.52.6.112/29",
-				"EC2xREGION" : "US West (N. California)",
-				"REGIONxTAG" : "US_WEST_1"
-			},
-			"us-west-2" : {
-				"AMIxAPPLICATION" : "ami-0ab580c7f1f661794",
-				"AMIxBROKER" : "ami-0aab71c8f3dc9d3cf",
-				"AMIxAGENT" : "ami-06c6778787d83e75d",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.237.140.160/29",
-				"EC2xREGION" : "US West (Oregon)",
-				"REGIONxTAG" : "US_WEST_2"
-			},
-			"ap-east-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Asia Pacific (Hong Kong)",		
-				"REGIONxTAG" : "AP_EAST_1"
-			},
-			"ap-south-1" : {
-				"AMIxAPPLICATION" : "ami-0e30c15dc6852215d",
-				"AMIxBROKER" : "ami-05620095768442508",
-				"AMIxAGENT" : "ami-0b9c5594e516bdf5a",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.233.177.0/29",
-				"EC2xREGION" : "Asia Pacific (Mumbai)",
-				"REGIONxTAG" : "AP_SOUTH_1"
-			},
-			"ap-northeast-2" : {
-				"AMIxAPPLICATION" : "ami-0d7008566c42fe9e4",
-				"AMIxBROKER" : "ami-0ea053c327c1cd15a",
-				"AMIxAGENT" : "ami-01ee813f7f1db6ef9",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.209.1.56/29",
-				"EC2xREGION" : "Asia Pacific (Seoul)",
-				"REGIONxTAG" : "AP_NORTHEAST_2"
-			},
-			"ap-southeast-1" : {
-				"AMIxAPPLICATION" : "ami-04e660329da94dddf",
-				"AMIxBROKER" : "ami-0d2d105fb5b4071f6",
-				"AMIxAGENT" : "ami-0361c3fb01e78beb3",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.0.5.32/29",
-				"EC2xREGION" : "Asia Pacific (Singapore)",
-				"REGIONxTAG" : "AP_SOUTHEAST_1"
-			},
-			"ap-southeast-2" : {
-				"AMIxAPPLICATION" : "ami-05aafc3cb441de3aa",
-				"AMIxBROKER" : "ami-0244db66df53f36af",
-				"AMIxAGENT" : "ami-09f929d249d3880d9",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.239.158.0/29",
-				"EC2xREGION" : "Asia Pacific (Sydney)",
-				"REGIONxTAG" : "AP_SOUTHEAST_2"
-			},
-			"ap-northeast-1" : {
-				"AMIxAPPLICATION" : "ami-05681a21b8efd8c00",
-				"AMIxBROKER" : "ami-09da5dc6fbd710e14",
-				"AMIxAGENT" : "ami-03edc89cf80af8856",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.112.23.0/29",
-				"EC2xREGION" : "Asia Pacific (Tokyo)",
-				"REGIONxTAG" : "AP_NORTHEAST_1"
-			},
-			"ca-central-1" : {
-				"AMIxAPPLICATION" : "ami-093a5132b55c863f3",
-				"AMIxBROKER" : "ami-0ca00ceb73deb33f8",
-				"AMIxAGENT" : "ami-016c4515e30a719be",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.183.92.176/29",
-				"EC2xREGION" : "Canada (Central)",
-				"REGIONxTAG" : "CA_CENTRAL_1"
-			},
-			"eu-central-1" : {
-				"AMIxAPPLICATION" : "ami-06bb9699aaf9d4d64",
-				"AMIxBROKER" : "ami-0beea20b571a8a7d2",
-				"AMIxAGENT" : "ami-086f84c28cdee341f",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.120.181.40/29",
-				"EC2xREGION" : "EU (Frankfurt)",
-				"REGIONxTAG" : "EU_CENTRAL_1"
-			},
-			"eu-west-1" : {
-				"AMIxAPPLICATION" : "ami-0e8a94f336e559367",
-				"AMIxBROKER" : "ami-0af21ee2215c6d5ad",
-				"AMIxAGENT" : "ami-08f69e27dff0337e2",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.202.216.48/29",
-				"EC2xREGION" : "EU (Ireland)",
-				"REGIONxTAG" : "EU_WEST_1"
-			},
-			"eu-west-2" : {
-				"AMIxAPPLICATION" : "ami-0ef33063364548f9d",
-				"AMIxBROKER" : "ami-0b1bc17ae8312ae90",
-				"AMIxAGENT" : "ami-04df1f1eb61a7e9e4",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.8.37.24/29",
-				"EC2xREGION" : "EU (London)",
-				"REGIONxTAG" : "EU_WEST_2"
-			},
-			"eu-west-3" : {
-				"AMIxAPPLICATION" : "ami-0b7d98cffebc84d5d",
-				"AMIxBROKER" : "ami-07a3ea610824ec471",
-				"AMIxAGENT" : "ami-072e0e76166ba69cb",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.180.112.80/29",
-				"EC2xREGION" : "EU (Paris)",
-				"REGIONxTAG" : "EU_WEST_3"
-			},
-			"eu-north-1" : {
-				"AMIxAPPLICATION" : "ami-039b794ae1f0ad42d",
-				"AMIxBROKER" : "ami-002af6721d38184db",
-				"AMIxAGENT" : "ami-04a548542ea6d09f0",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "EU (Stockholm)",
-				"REGIONxTAG" : "EU_NORTH_1"
-			},
-			"me-south-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Middle East (Bahrain)",		
-				"REGIONxTAG" : "ME_SOUTH_1"
-			},
-			"sa-east-1" : {
-				"AMIxAPPLICATION" : "ami-068a332c4ad17173d",
-				"AMIxBROKER" : "ami-06b8466d8eb78c9f9",
-				"AMIxAGENT" : "ami-0543a46631799a287",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "South America (Sao Paulo)",
-				"REGIONxTAG" : "SA_EAST_1"
-			}
-		},
-		"VariableMap" : {
-			"global" : {
-                "OPTIONSxTAG" : "MANUAL",
-                "PROJECTxTAG" : "CyPerf",
-                "FLOWxLOGxRESOURCExTYPE" : "VPC",
-				"FLOWxLOGxTRAFFICxTYPE" : "REJECT"
-			}
-		}
+    "Mappings": {
+        "RegionMap": {
+            "us-east-1": {
+                "AMIxAPPLICATION": "ami-08ab3665f1d5b90a2",
+                "AMIxBROKER": "ami-084936f7f6543d74a",
+                "AMIxAGENT": "ami-02bcc48f9a2960e2a",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "18.206.107.24/29",
+                "EC2xREGION": "US East (N. Virginia)",
+                "REGIONxTAG": "US_EAST_1"
+            },
+            "us-east-2": {
+                "AMIxAPPLICATION": "ami-04e6cb0686a59cb29",
+                "AMIxBROKER": "ami-0aa18efc6680f03fb",
+                "AMIxAGENT": "ami-0afdb6c7e300fd389",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "3.16.146.0/29",
+                "EC2xREGION": "US East (Ohio)",
+                "REGIONxTAG": "US_EAST_2"
+            },
+            "us-west-1": {
+                "AMIxAPPLICATION": "ami-0740775f911be6858",
+                "AMIxBROKER": "ami-0d68babe0aff26974",
+                "AMIxAGENT": "ami-0843a0aac6a140566",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.52.6.112/29",
+                "EC2xREGION": "US West (N. California)",
+                "REGIONxTAG": "US_WEST_1"
+            },
+            "us-west-2": {
+                "AMIxAPPLICATION": "ami-06c470ae058e55707",
+                "AMIxBROKER": "ami-0aab71c8f3dc9d3cf",
+                "AMIxAGENT": "ami-059b88d8237cfdeef",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "18.237.140.160/29",
+                "EC2xREGION": "US West (Oregon)",
+                "REGIONxTAG": "US_WEST_2"
+            },
+            "ap-east-1": {
+                "AMIxAPPLICATION": "ami-00000000000000000",
+                "AMIxBROKER": "ami-00000000000000000",
+                "AMIxAGENT": "ami-00000000000000000",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "18.206.107.24/29",
+                "EC2xREGION": "Asia Pacific (Hong Kong)",
+                "REGIONxTAG": "AP_EAST_1"
+            },
+            "ap-south-1": {
+                "AMIxAPPLICATION": "ami-0ac5de698544fc683",
+                "AMIxBROKER": "ami-05620095768442508",
+                "AMIxAGENT": "ami-07c5170eeaf6605a2",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.233.177.0/29",
+                "EC2xREGION": "Asia Pacific (Mumbai)",
+                "REGIONxTAG": "AP_SOUTH_1"
+            },
+            "ap-northeast-2": {
+                "AMIxAPPLICATION": "ami-0ac7a32ba5d153e83",
+                "AMIxBROKER": "ami-0ea053c327c1cd15a",
+                "AMIxAGENT": "ami-0e00f9a3a244da57c",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.209.1.56/29",
+                "EC2xREGION": "Asia Pacific (Seoul)",
+                "REGIONxTAG": "AP_NORTHEAST_2"
+            },
+            "ap-southeast-1": {
+                "AMIxAPPLICATION": "ami-08c47af4a90f3a26c",
+                "AMIxBROKER": "ami-0d2d105fb5b4071f6",
+                "AMIxAGENT": "ami-049f2326177509ac2",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "3.0.5.32/29",
+                "EC2xREGION": "Asia Pacific (Singapore)",
+                "REGIONxTAG": "AP_SOUTHEAST_1"
+            },
+            "ap-southeast-2": {
+                "AMIxAPPLICATION": "ami-07601e3862f5c87c3",
+                "AMIxBROKER": "ami-0244db66df53f36af",
+                "AMIxAGENT": "ami-0f64bab17af57992f",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.239.158.0/29",
+                "EC2xREGION": "Asia Pacific (Sydney)",
+                "REGIONxTAG": "AP_SOUTHEAST_2"
+            },
+            "ap-northeast-1": {
+                "AMIxAPPLICATION": "ami-02d6333f8b3dba8ad",
+                "AMIxBROKER": "ami-09da5dc6fbd710e14",
+                "AMIxAGENT": "ami-06840472ad79ab126",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "3.112.23.0/29",
+                "EC2xREGION": "Asia Pacific (Tokyo)",
+                "REGIONxTAG": "AP_NORTHEAST_1"
+            },
+            "ca-central-1": {
+                "AMIxAPPLICATION": "ami-0f409932bb81434d2",
+                "AMIxBROKER": "ami-0ca00ceb73deb33f8",
+                "AMIxAGENT": "ami-0a9e78a744d13d9c2",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "35.183.92.176/29",
+                "EC2xREGION": "Canada (Central)",
+                "REGIONxTAG": "CA_CENTRAL_1"
+            },
+            "eu-central-1": {
+                "AMIxAPPLICATION": "ami-064eaf2e8ff1a1c27",
+                "AMIxBROKER": "ami-0beea20b571a8a7d2",
+                "AMIxAGENT": "ami-06ccb8e181dbf55ba",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "3.120.181.40/29",
+                "EC2xREGION": "EU (Frankfurt)",
+                "REGIONxTAG": "EU_CENTRAL_1"
+            },
+            "eu-west-1": {
+                "AMIxAPPLICATION": "ami-00c322c4ab51e0b51",
+                "AMIxBROKER": "ami-0af21ee2215c6d5ad",
+                "AMIxAGENT": "ami-08a5bae66db4c3e74",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "18.202.216.48/29",
+                "EC2xREGION": "EU (Ireland)",
+                "REGIONxTAG": "EU_WEST_1"
+            },
+            "eu-west-2": {
+                "AMIxAPPLICATION": "ami-0aedf969abb15337f",
+                "AMIxBROKER": "ami-0b1bc17ae8312ae90",
+                "AMIxAGENT": "ami-02a24c91c493fc5d5",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "3.8.37.24/29",
+                "EC2xREGION": "EU (London)",
+                "REGIONxTAG": "EU_WEST_2"
+            },
+            "eu-west-3": {
+                "AMIxAPPLICATION": "ami-0e7ac84abce19adca",
+                "AMIxBROKER": "ami-07a3ea610824ec471",
+                "AMIxAGENT": "ami-086294ab305047081",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "35.180.112.80/29",
+                "EC2xREGION": "EU (Paris)",
+                "REGIONxTAG": "EU_WEST_3"
+            },
+            "eu-north-1": {
+                "AMIxAPPLICATION": "ami-08632abb9cf6063df",
+                "AMIxBROKER": "ami-002af6721d38184db",
+                "AMIxAGENT": "ami-0671a9d7dd3c5544d",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.48.4.200/30",
+                "EC2xREGION": "EU (Stockholm)",
+                "REGIONxTAG": "EU_NORTH_1"
+            },
+            "me-south-1": {
+                "AMIxAPPLICATION": "ami-00000000000000000",
+                "AMIxBROKER": "ami-00000000000000000",
+                "AMIxAGENT": "ami-00000000000000000",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "18.206.107.24/29",
+                "EC2xREGION": "Middle East (Bahrain)",
+                "REGIONxTAG": "ME_SOUTH_1"
+            },
+            "sa-east-1": {
+                "AMIxAPPLICATION": "ami-012d0097a78e1edfb",
+                "AMIxBROKER": "ami-06b8466d8eb78c9f9",
+                "AMIxAGENT": "ami-08b60815f86683e86",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.48.4.200/30",
+                "EC2xREGION": "South America (Sao Paulo)",
+                "REGIONxTAG": "SA_EAST_1"
+            }
+        },
+        "VariableMap": {
+            "global": {
+                "OPTIONSxTAG": "MANUAL",
+                "PROJECTxTAG": "CyPerf",
+                "FLOWxLOGxRESOURCExTYPE": "VPC",
+                "FLOWxLOGxTRAFFICxTYPE": "REJECT"
+            }
+        }
     },
     "Metadata": {
         "AWS::CloudFormation::Interface": {
@@ -204,7 +204,7 @@
                         "AgentControlCIDR",
                         "AgentTestCIDR",
                         "Controller"
-                     ]
+                    ]
                 },
                 {
                     "Label": {
@@ -243,8 +243,7 @@
             }
         }
     },
-    "Outputs": {
-    },
+    "Outputs": {},
     "Parameters": {
         "AvailabilityZone": {
             "Default": "<Select preffered availability zone from drop down>",
@@ -254,9 +253,7 @@
         "InstanceTypeForCyPerfAgent": {
             "AllowedValues": [
                 "c4.2xlarge",
-                "c5n.9xlarge",
-				"c5.large",
-				"c5.4xlarge"
+                "c5n.9xlarge"
             ],
             "Default": "c4.2xlarge",
             "Description": "CyPerf instance type",
@@ -281,7 +278,7 @@
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
             "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
             "Default": "1.1.1.1/1",
-            "Description": "Subnet range allowed to access deployed AWS resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”",
+            "Description": "Subnet range allowed to access deployed AWS resources. Execute 'curl ifconfig.co' to know MyIP or google for \u201cwhat is my IP\u201d",
             "MaxLength": "18",
             "MinLength": "9",
             "Type": "String"
@@ -405,14 +402,24 @@
             },
             "Type": "AWS::IAM::InstanceProfile"
         },
-		"DefaultEgress1": {
-			"Type" : "AWS::EC2::SecurityGroupEgress",
-			"Properties" : {
-				"GroupId": { "Fn::GetAtt" : ["VPC", "DefaultSecurityGroup"] },
-				"IpProtocol": "-1",
-				"SourceSecurityGroupId": { "Fn::GetAtt" : ["VPC", "DefaultSecurityGroup"] }
-			}
-		},
+        "DefaultEgress1": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": {
+                    "Fn::GetAtt": [
+                        "VPC",
+                        "DefaultSecurityGroup"
+                    ]
+                },
+                "IpProtocol": "-1",
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                        "VPC",
+                        "DefaultSecurityGroup"
+                    ]
+                }
+            }
+        },
         "InternetGateway": {
             "Properties": {
                 "Tags": [
@@ -432,15 +439,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
@@ -488,7 +505,7 @@
                         "IpProtocol": "tcp",
                         "ToPort": "443"
                     },
-		    {
+                    {
                         "CidrIp": "0.0.0.0/0",
                         "Description": "Custom TCP",
                         "FromPort": "80",
@@ -521,7 +538,6 @@
                         "ToPort": "22"
                     },
                     {
-
                         "CidrIp": {
                             "Fn::Join": [
                                 "",
@@ -537,7 +553,7 @@
                         "FromPort": "-1",
                         "IpProtocol": "-1",
                         "ToPort": "-1"
-                    } 
+                    }
                 ],
                 "Tags": [
                     {
@@ -556,15 +572,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ],
                 "VpcId": {
@@ -585,14 +611,22 @@
                         "DeviceName": "/dev/sda1",
                         "Ebs": {
                             "VolumeSize": "8",
-                            "DeleteOnTermination" : true
+                            "DeleteOnTermination": true
                         }
                     }
                 ],
                 "IamInstanceProfile": {
                     "Ref": "EC2InstanceProfile"
                 },
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAGENT"] },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMIxAGENT"
+                    ]
+                },
                 "InstanceType": {
                     "Ref": "InstanceTypeForCyPerfAgent"
                 },
@@ -626,7 +660,7 @@
                                         "",
                                         [
                                             {
-                                                "Ref": "Controller"   
+                                                "Ref": "Controller"
                                             }
                                         ]
                                     ]
@@ -653,15 +687,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
@@ -753,15 +797,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ],
                 "VpcId": {
@@ -795,15 +849,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ],
                 "VpcId": {
@@ -828,15 +892,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
@@ -857,15 +931,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
@@ -892,41 +976,99 @@
             },
             "Type": "AWS::IAM::Role"
         },
-        "KeyVpcFlowLog" : {
-			"Type" : "AWS::EC2::FlowLog",
-			"Properties" : {
-				"DeliverLogsPermissionArn" : { "Fn::GetAtt" : ["KeyVPCFlowLogAccessRole", "Arn"] },
-				"LogGroupName" : { "Fn::Join" : [ "_", [ { "Ref": "AWS::StackName" }, { "Fn::FindInMap" : [ "VariableMap", "global", "PROJECTxTAG"] }, "VPC_FLOW_LOG", 
-							{ "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "REGIONxTAG"]} ] ] },
-				"ResourceId" : { "Ref" : "VPC" },
-				"ResourceType" : { "Fn::FindInMap" : [ "VariableMap", "global", "FLOWxLOGxRESOURCExTYPE"] },
-				"TrafficType" : { "Fn::FindInMap" : [ "VariableMap", "global", "FLOWxLOGxTRAFFICxTYPE"] }
-			}
-		},
-        "AgentControlAddress" : {
-            "Type" : "AWS::EC2::EIP",
-            "Properties" : {
-                "Domain" : "vpc"
+        "KeyVpcFlowLog": {
+            "Type": "AWS::EC2::FlowLog",
+            "Properties": {
+                "DeliverLogsPermissionArn": {
+                    "Fn::GetAtt": [
+                        "KeyVPCFlowLogAccessRole",
+                        "Arn"
+                    ]
+                },
+                "LogGroupName": {
+                    "Fn::Join": [
+                        "_",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            {
+                                "Fn::FindInMap": [
+                                    "VariableMap",
+                                    "global",
+                                    "PROJECTxTAG"
+                                ]
+                            },
+                            "VPC_FLOW_LOG",
+                            {
+                                "Fn::FindInMap": [
+                                    "RegionMap",
+                                    {
+                                        "Ref": "AWS::Region"
+                                    },
+                                    "REGIONxTAG"
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "ResourceId": {
+                    "Ref": "VPC"
+                },
+                "ResourceType": {
+                    "Fn::FindInMap": [
+                        "VariableMap",
+                        "global",
+                        "FLOWxLOGxRESOURCExTYPE"
+                    ]
+                },
+                "TrafficType": {
+                    "Fn::FindInMap": [
+                        "VariableMap",
+                        "global",
+                        "FLOWxLOGxTRAFFICxTYPE"
+                    ]
+                }
             }
         },
-        "AssociateAgentControlInterface" : {
-            "Type" : "AWS::EC2::EIPAssociation",
-            "Properties" : {
-                "AllocationId" : { "Fn::GetAtt" : [ "AgentControlAddress", "AllocationId" ]},
-                "NetworkInterfaceId" : { "Ref" : "agenteth0" }
+        "AgentControlAddress": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
             }
         },
-        "AgentTestAddress" : {
-            "Type" : "AWS::EC2::EIP",
-            "Properties" : {
-                "Domain" : "vpc"
+        "AssociateAgentControlInterface": {
+            "Type": "AWS::EC2::EIPAssociation",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": [
+                        "AgentControlAddress",
+                        "AllocationId"
+                    ]
+                },
+                "NetworkInterfaceId": {
+                    "Ref": "agenteth0"
+                }
             }
         },
-        "AssociateAgentTestInterface" : {
-            "Type" : "AWS::EC2::EIPAssociation",
-            "Properties" : {
-                "AllocationId" : { "Fn::GetAtt" : [ "AgentTestAddress", "AllocationId" ]},
-                "NetworkInterfaceId" : { "Ref" : "agenteth1" }
+        "AgentTestAddress": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+        "AssociateAgentTestInterface": {
+            "Type": "AWS::EC2::EIPAssociation",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": [
+                        "AgentTestAddress",
+                        "AllocationId"
+                    ]
+                },
+                "NetworkInterfaceId": {
+                    "Ref": "agenteth1"
+                }
             }
         },
         "agenteth0": {
@@ -958,15 +1100,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
@@ -1001,15 +1153,25 @@
                     },
                     {
                         "Key": "Project",
-                        "Value": { "Ref": "Project" }
+                        "Value": {
+                            "Ref": "Project"
+                        }
                     },
-					{
-						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
-					},
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
                     {
                         "Key": "Owner",
-                        "Value": { "Ref": "Username" }
+                        "Value": {
+                            "Ref": "Username"
+                        }
                     }
                 ]
             },
