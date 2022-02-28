@@ -6,7 +6,7 @@ Welcome to the GitHub repository for CyPerf Test Drive
 
 This repo contains all the resources and info needed to run the CyPerf Test Drive for which you can register for free [here](https://www.keysight.com/zz/en/products/network-test/cloud-test/cyperf.html).
 
-Before starting the test drive, please watch the introduction video (stream it from [here](https://keysighttech-my.sharepoint.com/personal/a-joseph_dupre_keysight_com/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa%2Djoseph%5Fdupre%5Fkeysight%5Fcom%2FDocuments%2FVideos%2F2022%2F2022%2D02%2FCyPerf%20Test%20Drive%20Intro%20Video%2Emp4&parent=%2Fpersonal%2Fa%2Djoseph%5Fdupre%5Fkeysight%5Fcom%2FDocuments%2FVideos%2F2022%2F2022%2D02&wdLOR=c76F74D14%2D0CAA%2D2C4A%2D8FC1%2D9080CAD6ADD1), or download it from [here](CyPerf_Test_Drive_Intro_Video.mp4)).
+Before starting the test drive, please watch the introduction video (stream it from [here](https://youtu.be/L6olvE43-mw), or download it from [here](CyPerf_Test_Drive_Intro_Video.mp4)).
 
 ## Contents
 
