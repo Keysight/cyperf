@@ -2,9 +2,9 @@
 
 # Introduction
 
-This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
-
-All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
+This is the Terraform approach for deploying a single agent in an existing infrastructure.
+If the agent is not deployed in the same subnet with a controller proxy or a controller,
+the user needs to ensure the communication between the agent management subnet and controller management subnet.
 
 # Prerequisites
 
@@ -42,7 +42,8 @@ terraform apply --auto-approve \
 -var client_secret="" \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
--var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-5" 
+-var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-5" \
+-var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-5"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -57,26 +58,30 @@ variable_2= "value\_2"
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
+
+For this deployment, we recommend this method, due to the large number of parameters that need to be provided.
+
 ## Template Parameters
 
 The following table lists the parameters for this deployment.
 
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
-| azure_project_name     | Requires input   | Specify Azure project name. |
-| azure_owner_tag | Requires input | The Azure owner tag name. |
+| azure_agent_name | Requires input | The Azure agent name. |
 | subscription_id     | Requires input   | Specify the Azure subscription id.    |
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_image       | Requires input    | Specify the Azure controller VHD images|
-| azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
-| azure_region_name      | eastus       | The Azure region where the deployment will take place. |
-| azure_admin_username  | cyperf | The Azure administrator username. |
-| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| mdw_version   | keysight-cyperf-controller-1-5            | The  CyPerf controller image version. |
+| resource_group_name     | Requires input   | Specify Azure resource group name. |
+| resource_group_location     | Requires input   | Specify Azure resource group location. |
+| mgmt_subnet | Requires input    | Management subnet id |
+| test_subnet | Requires input    | Test subnet id |
+| controller_ip | Requires input    | Test subnet id |
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
+| agent_image | "https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-agent-1-5.vhd"   | Specify the Azure agent VHD image |
+| agent_version   | keysight-cyperf-agent-1-5            | The  CyPerf agent image version. |
+| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
+| agent_role | azure-agent | This will act as a tag in controller UI and will enable assignment by tag|
 
 ## Destruction
 
@@ -86,3 +91,19 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
+
+## AZ Login
+
+For users who have configured the az CLI on their machine, you can use Terraform deployments only with the subscription id.
+This means that the provider block, that can be found in the main.tf should look like this:
+
+```terraform
+provider "azurerm" {
+  features {}
+
+  subscription_id = var.subscription_id
+//  client_id = var.client_id
+//  client_secret = var.client_secret
+//  tenant_id = var.tenant_id
+}
+```

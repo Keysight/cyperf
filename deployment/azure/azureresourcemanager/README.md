@@ -32,9 +32,9 @@ The supported instance types are:
 Azure images will be available at Keysight Azure Blob container **keysight-cyperf-1-5**.
 For accessing VHD file refer to the URL link:
 
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-controller-1-1-update1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-controller-1-1-update1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-agent-1-1-update1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-agent-1-1-update1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-controller-proxy-1-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-1/keysight-cyperf-controller-proxy-1-1.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-1-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-1-5.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-agent-1-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-agent-1-5.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-proxy-1-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-proxy-1-5.vhd)
 
 User may download VHD images and upload those in their own container before using these ARM templates.
 Alternatively, user may use following PowerShell command from Azure cloud shell to copy VHD images from Keysight Azure container to User’s Azure container.
@@ -56,7 +56,7 @@ Alternatively, user may use following PowerShell command from Azure cloud shell 
 
 ```
 # azcopy copy
-"https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
+"https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
 --recursive=true
 
 ```
