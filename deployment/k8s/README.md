@@ -19,7 +19,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 - A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
 - User can now introduce CyPerf Agents as client or server or both running inside the cluster by applying the [example manifests](#example-manifests). These manifests will require a few edits for adjusting to specific delpoyment scenario. 
 - Agents will be visible (by their tags and IP addresses) in the _Agent Assignment_ dialog.
-- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in _DUT Network->Configure DUT_ page in the UI before running the test. _[More details can be found in **_Chapter 3_** of **_Cyperf User Guid 1.0_**.]_ 
+- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in _DUT Network->Configure DUT_ page in the UI before running the test. _[More details can be found in **_Chapter 3_** of **_Cyperf User Guide_**.]_ 
 
 ## General Prerequisites
 
@@ -27,7 +27,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     - K8s version 1.20 or 1.21 is recommended.
     - *CyPerf Agents can be used in both* **_on-premise_** *K8s cluster (e.g. where nodes can be VMs on ESXi host) or in* **_cloud_** *(e.g. where nodes can be in* **_AWS EKS_***).*
 2.  CyPerf Controller is already deployed. It should be accessible from the nodes inside the kubernetes cluster.  
-    *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guid 1.0_***, which can be downloaded from Keysight's software download portal.*
+    *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guide_ ***, which can be downloaded from Keysight's software download portal.*
 3.  A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
 4.  Make sure that ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 5.  The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. If you need specific versions, note down CyPerf Agent's container image URL that you want to use. This ECR Public image URL needs to be accessible from the test environment, i.e. from the cluster nodes.
