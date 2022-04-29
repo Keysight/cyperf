@@ -1,912 +1,935 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
-    "Mappings" : {
-		"RegionMap" : {
-			"us-east-1" : {
-				"AMIxAPPLICATION" : "ami-03ad33f209d392b4d",
-				"AMIxBROKER" : "ami-06921400e1caa9c26",
-				"AMIxAGENT" : "ami-0b26f31be671d0900",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "US East (N. Virginia)",
-				"REGIONxTAG" : "US_EAST_1"
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
+	"Mappings": {
+		"RegionMap": {
+			"us-east-1": {
+				"AMIxAPPLICATION": "ami-03ad33f209d392b4d",
+				"AMIxBROKER": "ami-06921400e1caa9c26",
+				"AMIxAGENT": "ami-0b26f31be671d0900",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "US East (N. Virginia)",
+				"REGIONxTAG": "US_EAST_1"
 			},
-			"us-east-2" : {
-				"AMIxAPPLICATION" : "ami-0c9ee8f59db9ef631",
-				"AMIxBROKER" : "ami-0d81bc6d1832e755f",
-				"AMIxAGENT" : "ami-0de5d13c8de3b3abd",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.16.146.0/29",
-				"EC2xREGION" : "US East (Ohio)",
-				"REGIONxTAG" : "US_EAST_2"
+			"us-east-2": {
+				"AMIxAPPLICATION": "ami-0c9ee8f59db9ef631",
+				"AMIxBROKER": "ami-0d81bc6d1832e755f",
+				"AMIxAGENT": "ami-0de5d13c8de3b3abd",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.16.146.0/29",
+				"EC2xREGION": "US East (Ohio)",
+				"REGIONxTAG": "US_EAST_2"
 			},
-			"us-west-1" : {
-				"AMIxAPPLICATION" : "ami-0494d7a77acfff939",
-				"AMIxBROKER" : "ami-0c4d172f3cc68508b",
-				"AMIxAGENT" : "ami-0be715e9212eee1f8",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.52.6.112/29",
-				"EC2xREGION" : "US West (N. California)",
-				"REGIONxTAG" : "US_WEST_1"
+			"us-west-1": {
+				"AMIxAPPLICATION": "ami-0494d7a77acfff939",
+				"AMIxBROKER": "ami-0c4d172f3cc68508b",
+				"AMIxAGENT": "ami-0be715e9212eee1f8",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.52.6.112/29",
+				"EC2xREGION": "US West (N. California)",
+				"REGIONxTAG": "US_WEST_1"
 			},
-			"us-west-2" : {
-				"AMIxAPPLICATION" : "ami-03e2c1317766b1ab3",
-				"AMIxBROKER" : "ami-041c972f11f275db4",
-				"AMIxAGENT" : "ami-01e4391df5a76131e",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.237.140.160/29",
-				"EC2xREGION" : "US West (Oregon)",
-				"REGIONxTAG" : "US_WEST_2"
+			"us-west-2": {
+				"AMIxAPPLICATION": "ami-03e2c1317766b1ab3",
+				"AMIxBROKER": "ami-041c972f11f275db4",
+				"AMIxAGENT": "ami-01e4391df5a76131e",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.237.140.160/29",
+				"EC2xREGION": "US West (Oregon)",
+				"REGIONxTAG": "US_WEST_2"
 			},
-			"ap-east-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Asia Pacific (Hong Kong)",		
-				"REGIONxTAG" : "AP_EAST_1"
+			"ap-east-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "Asia Pacific (Hong Kong)",
+				"REGIONxTAG": "AP_EAST_1"
 			},
-			"ap-south-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.233.177.0/29",
-				"EC2xREGION" : "Asia Pacific (Mumbai)",
-				"REGIONxTAG" : "AP_SOUTH_1"
+			"ap-south-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.233.177.0/29",
+				"EC2xREGION": "Asia Pacific (Mumbai)",
+				"REGIONxTAG": "AP_SOUTH_1"
 			},
-			"ap-northeast-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.209.1.56/29",
-				"EC2xREGION" : "Asia Pacific (Seoul)",
-				"REGIONxTAG" : "AP_NORTHEAST_2"
+			"ap-northeast-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.209.1.56/29",
+				"EC2xREGION": "Asia Pacific (Seoul)",
+				"REGIONxTAG": "AP_NORTHEAST_2"
 			},
-			"ap-southeast-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.0.5.32/29",
-				"EC2xREGION" : "Asia Pacific (Singapore)",
-				"REGIONxTAG" : "AP_SOUTHEAST_1"
+			"ap-southeast-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.0.5.32/29",
+				"EC2xREGION": "Asia Pacific (Singapore)",
+				"REGIONxTAG": "AP_SOUTHEAST_1"
 			},
-			"ap-southeast-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.239.158.0/29",
-				"EC2xREGION" : "Asia Pacific (Sydney)",
-				"REGIONxTAG" : "AP_SOUTHEAST_2"
+			"ap-southeast-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.239.158.0/29",
+				"EC2xREGION": "Asia Pacific (Sydney)",
+				"REGIONxTAG": "AP_SOUTHEAST_2"
 			},
-			"ap-northeast-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.112.23.0/29",
-				"EC2xREGION" : "Asia Pacific (Tokyo)",
-				"REGIONxTAG" : "AP_NORTHEAST_1"
+			"ap-northeast-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.112.23.0/29",
+				"EC2xREGION": "Asia Pacific (Tokyo)",
+				"REGIONxTAG": "AP_NORTHEAST_1"
 			},
-			"ca-central-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.183.92.176/29",
-				"EC2xREGION" : "Canada (Central)",
-				"REGIONxTAG" : "CA_CENTRAL_1"
+			"ca-central-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "35.183.92.176/29",
+				"EC2xREGION": "Canada (Central)",
+				"REGIONxTAG": "CA_CENTRAL_1"
 			},
-			"eu-central-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.120.181.40/29",
-				"EC2xREGION" : "EU (Frankfurt)",
-				"REGIONxTAG" : "EU_CENTRAL_1"
+			"eu-central-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.120.181.40/29",
+				"EC2xREGION": "EU (Frankfurt)",
+				"REGIONxTAG": "EU_CENTRAL_1"
 			},
-			"eu-west-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.202.216.48/29",
-				"EC2xREGION" : "EU (Ireland)",
-				"REGIONxTAG" : "EU_WEST_1"
+			"eu-west-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.202.216.48/29",
+				"EC2xREGION": "EU (Ireland)",
+				"REGIONxTAG": "EU_WEST_1"
 			},
-			"eu-west-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.8.37.24/29",
-				"EC2xREGION" : "EU (London)",
-				"REGIONxTAG" : "EU_WEST_2"
+			"eu-west-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.8.37.24/29",
+				"EC2xREGION": "EU (London)",
+				"REGIONxTAG": "EU_WEST_2"
 			},
-			"eu-west-3" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.180.112.80/29",
-				"EC2xREGION" : "EU (Paris)",
-				"REGIONxTAG" : "EU_WEST_3"
+			"eu-west-3": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "35.180.112.80/29",
+				"EC2xREGION": "EU (Paris)",
+				"REGIONxTAG": "EU_WEST_3"
 			},
-			"eu-north-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "EU (Stockholm)",
-				"REGIONxTAG" : "EU_NORTH_1"
+			"eu-north-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.48.4.200/30",
+				"EC2xREGION": "EU (Stockholm)",
+				"REGIONxTAG": "EU_NORTH_1"
 			},
-			"me-south-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Middle East (Bahrain)",		
-				"REGIONxTAG" : "ME_SOUTH_1"
+			"me-south-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "Middle East (Bahrain)",
+				"REGIONxTAG": "ME_SOUTH_1"
 			},
-			"sa-east-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "South America (Sao Paulo)",
-				"REGIONxTAG" : "SA_EAST_1"
+			"sa-east-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.48.4.200/30",
+				"EC2xREGION": "South America (Sao Paulo)",
+				"REGIONxTAG": "SA_EAST_1"
 			}
 		},
-		"VariableMap" : {
-			"global" : {
-                "OPTIONSxTAG" : "MANUAL",
-                "PROJECTxTAG" : "CyPerf"
+		"VariableMap": {
+			"global": {
+				"OPTIONSxTAG": "MANUAL",
+				"PROJECTxTAG": "CyPerf"
 			}
 		}
-    },
-    "Metadata": {
-        "AWS::CloudFormation::Interface": {
-            "ParameterGroups": [
-                {
-                    "Label": {
-                        "default": "NETWORK CONFIGURATION"
-                    }
-                },
-                {
-                    "Label": {
-                        "default": "VPC Configuration"
-                    },
-                    "Parameters": [
-                        "Username",
-                        "Project",
-                        "VPCCIDR"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "CyPerf Controller Configuration"
-                    },
-                    "Parameters": [
-                        "ControllerManagementSubnet",
-                        "CyPerfUISecurityGroup"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "CyPerf Agent Configuration"
-                    },
-                    "Parameters": [
-                        "DeployClientAgent",
-                        "DeployServerAgent",
-                        "EC2RoleForTags",
-                        "InstanceTypeForCyPerfAgent",
-                        "KeyNameForCyPerfAgent",
-                        "AgentControlSubnet",
-                        "AgentTestSubnet",
-                        "AgentSecurityGroup"
-                     ]
-                }
-            ],
-            "ParameterLabels": {
-                "InstanceTypeForCyPerfAgent": {
-                    "default": "Instance Type for CyPerf Agents"
-                },
-                "KeyNameForCyPerfAgent": {
-                    "default": "SSH Key"
-                },
-                "DeployClientAgent": {
-                    "default": "Deploy Client Agent"
-                },
-                "DeployServerAgent": {
-                    "default": "Deploy Server Agent"
-                },
-                "ControllerManagementSubnet": {
-                    "default": "Management Subnet for CyPerf Controller"
-                },
-                "AgentControlSubnet": {
-                    "default": "Control Subnet for CyPerf Agents"
-                },
-                "AgentTestSubnet": {
-                    "default": "Test Subnet for CyPerf Agents"
-                },
-                "CyPerfUISecurityGroup": {
-                    "default": "Security Group of CyPerf Contoller"
-                },
-                "AgentSecurityGroup": {
-                    "default": "Security Group of CyPerf Agent"
-                },
-                "VPCCIDR": {
-                    "default": "VPC"
-                }
-            }
-        }
-    },
-    "Outputs": {
-        "CyPerfUIINstanceDNS": {
-            "Description": "DNS name of CyPerf Controller instance",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        {
-                            "Fn::GetAtt": [
-                                "CyPerfUI",
-                                "PublicDnsName"
-                            ]
-                        }
-                    ]
-                ]
-            }
-        }
-    },
-    "Parameters": {
-        "InstanceTypeForCyPerfAgent": {
-            "AllowedValues": [
-                "c4.2xlarge",
-                "c5n.9xlarge"
-            ],
-            "Default": "c4.2xlarge",
-            "Description": "CyPerf instance type",
-            "Type": "String"
-        },        
-        "CyPerfUISecurityGroup": {
-            "Default": "<Select CyPerf Controller security group from drop down list>",
-            "Description": "Preffered Existing Security group of CyPerf Controller",
-            "Type": "AWS::EC2::SecurityGroup::Id"
-        },
-        "AgentSecurityGroup": {
-            "Default": "<Select CyPerf Agent security group from drop down list>",
-            "Description": "Preffered Existing Security group of CyPerf Agent",
-            "Type": "AWS::EC2::SecurityGroup::Id"
-        },
-        "KeyNameForCyPerfAgent": {
-            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
-            "Default": "CyPerf-keypair",
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances",
-            "Type": "AWS::EC2::KeyPair::KeyName"
-        },
-        "AgentControlSubnet": {
-            "Default": "<Select Control Subnet for CyPerf Agents from drop down list>",
-            "Description": "Preferred Existing Control subnet for CyPerf Agent",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "AgentTestSubnet": {
-            "Default": "<Select Test Subnet for CyPerf Agents from drop down list>",
-            "Description": "Preferred Existing Test subnet for CyPerf Agent",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "ControllerManagementSubnet": {
-            "Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
-            "Description": "Preferred Existing Management subnet for CyPerf Controller.This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "Project": {
-            "Default": "CyPerf-AWS",
-            "Description": "Project Name",
-            "Type": "String"
-        },
-        "Username": {
-            "Default": "<UserName>@<domainname>",
-            "Description": "Team or Individual email id responsible for the Stack",
-            "Type": "String"
-        },
-        "VPCCIDR": {
-            "Default": "<Select VPC from drop down list>",
-            "Description": "Preferred Existing VPC",
-            "Type": "AWS::EC2::VPC::Id"
-        },
-        "DeployClientAgent" : {
-            "Description" : "Want to deploy Client Agent?",
-            "Default" : "yes",
-            "Type" : "String",
-            "AllowedValues" : ["yes", "no"],
-            "ConstraintDescription" : "must specify yes or no."
-        },
-        "DeployServerAgent" : {
-            "Description" : "Want to deploy Server Agent?",
-            "Default" : "yes",
-            "Type" : "String",
-            "AllowedValues" : ["yes", "no"],
-            "ConstraintDescription" : "must specify yes or no."
-        },
-        "EC2RoleForTags" : {
-            "Description" : "Want to fetch tags for Agent?",
-            "Default" : "yes",
-            "Type" : "String",
-            "AllowedValues" : ["yes", "no"],
-            "ConstraintDescription" : "must specify yes or no."
-        }
-    },
-    "Conditions": {
-        "CreateClientAgent" : {"Fn::Equals" : [{"Ref" : "DeployClientAgent"}, "yes"]},
-        "CreateServerAgent" : {"Fn::Equals" : [{"Ref" : "DeployServerAgent"}, "yes"]},
-        "FetchTagsForAgent" : {"Fn::Equals" : [{"Ref" : "EC2RoleForTags"}, "yes"]}
-    },
-    "Resources": {
-        "EC2IfaceRole": {
-            "Condition" : "FetchTagsForAgent",
-            "Properties": {
-                "AssumeRolePolicyDocument": {
-                    "Statement": [
-                        {
-                            "Action": "sts:AssumeRole",
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": "ec2.amazonaws.com"
-                            }
-                        }
-                    ],
-                    "Version": "2012-10-17"
-                },
-                "Path": "/",
-                "Policies": [
-                    {
-                        "PolicyDocument": {
-                            "Statement": [
-                                {
-                                    "Action": [
-                                        "ec2:CreateNetworkInterface",
-                                        "ec2:DescribeInstances",
-                                        "ec2:ModifyNetworkInterfaceAttribute",
-                                        "ec2:AttachNetworkInterface",
-                                        "ec2:DescribeSubnets",
-                                        "ec2:DescribeSecurityGroups",
-                                        "ec2:DescribeTags"
-                                    ],
-                                    "Effect": "Allow",
-                                    "Resource": "*"
-                                }
-                            ],
-                            "Version": "2012-10-17"
-                        },
-                        "PolicyName": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "EC2IfacePolicy"
-                                ]
-                            ]
-                        }
-                    }
-                ],
-                "RoleName": {
-                    "Fn::Join": [
-                        "-",
-                        [
-                            {
-                                "Ref": "AWS::StackName"
-                            },
-                            "EC2IfaceRole"
-                        ]
-                    ]
-                }
-            },
-            "Type": "AWS::IAM::Role"
-        },
-        "EC2InstanceProfile": {
-            "Condition" : "FetchTagsForAgent",
-            "DependsOn": "EC2IfaceRole",
-            "Properties": {
-                "Roles": [
-                    {
-                        "Ref": "EC2IfaceRole"
-                    }
-                ]
-            },
-            "Type": "AWS::IAM::InstanceProfile"
-        },
-        "CyPerfUI": {
-            "DependsOn": [
-                "mdweth0"
-            ],
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "100",
-                            "DeleteOnTermination" : true
-                        }
-                    }
-                ],
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
-                "InstanceType": "c4.2xlarge",
-                "KeyName": {
-                    "Ref": "KeyNameForCyPerfAgent"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "mdweth0"
-                        }
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "Controller"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+	},
+	"Metadata": {
+		"AWS::CloudFormation::Interface": {
+			"ParameterGroups": [{
+					"Label": {
+						"default": "NETWORK CONFIGURATION"
+					}
+				},
+				{
+					"Label": {
+						"default": "VPC Configuration"
+					},
+					"Parameters": [
+						"Username",
+						"Project",
+						"VPCCIDR"
+					]
+				},
+				{
+					"Label": {
+						"default": "CyPerf Controller Configuration"
+					},
+					"Parameters": [
+						"ControllerManagementSubnet",
+						"CyPerfUISecurityGroup"
+					]
+				},
+				{
+					"Label": {
+						"default": "CyPerf Agent Configuration"
+					},
+					"Parameters": [
+						"DeployClientAgent",
+						"DeployServerAgent",
+						"EC2RoleForTags",
+						"InstanceTypeForCyPerfAgent",
+						"KeyNameForCyPerfAgent",
+						"AgentControlSubnet",
+						"AgentTestSubnet",
+						"AgentSecurityGroup"
+					]
+				}
+			],
+			"ParameterLabels": {
+				"InstanceTypeForCyPerfAgent": {
+					"default": "Instance Type for CyPerf Agents"
+				},
+				"KeyNameForCyPerfAgent": {
+					"default": "SSH Key"
+				},
+				"DeployClientAgent": {
+					"default": "Deploy Client Agent"
+				},
+				"DeployServerAgent": {
+					"default": "Deploy Server Agent"
+				},
+				"ControllerManagementSubnet": {
+					"default": "Management Subnet for CyPerf Controller"
+				},
+				"AgentControlSubnet": {
+					"default": "Control Subnet for CyPerf Agents"
+				},
+				"AgentTestSubnet": {
+					"default": "Test Subnet for CyPerf Agents"
+				},
+				"CyPerfUISecurityGroup": {
+					"default": "Security Group of CyPerf Contoller"
+				},
+				"AgentSecurityGroup": {
+					"default": "Security Group of CyPerf Agent"
+				},
+				"VPCCIDR": {
+					"default": "VPC"
+				}
+			}
+		}
+	},
+	"Outputs": {
+		"CyPerfUIINstanceDNS": {
+			"Description": "DNS name of CyPerf Controller instance",
+			"Value": {
+				"Fn::Join": [
+					"",
+					[{
+						"Fn::GetAtt": [
+							"CyPerfUI",
+							"PublicDnsName"
+						]
+					}]
+				]
+			}
+		}
+	},
+	"Parameters": {
+		"InstanceTypeForCyPerfAgent": {
+			"AllowedValues": [
+				"c4.2xlarge",
+				"c5n.9xlarge"
+			],
+			"Default": "c4.2xlarge",
+			"Description": "CyPerf instance type",
+			"Type": "String"
+		},
+		"CyPerfUISecurityGroup": {
+			"Default": "<Select CyPerf Controller security group from drop down list>",
+			"Description": "Preffered Existing Security group of CyPerf Controller",
+			"Type": "AWS::EC2::SecurityGroup::Id"
+		},
+		"AgentSecurityGroup": {
+			"Default": "<Select CyPerf Agent security group from drop down list>",
+			"Description": "Preffered Existing Security group of CyPerf Agent",
+			"Type": "AWS::EC2::SecurityGroup::Id"
+		},
+		"KeyNameForCyPerfAgent": {
+			"ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+			"Default": "CyPerf-keypair",
+			"Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances",
+			"Type": "AWS::EC2::KeyPair::KeyName"
+		},
+		"AgentControlSubnet": {
+			"Default": "<Select Control Subnet for CyPerf Agents from drop down list>",
+			"Description": "Preferred Existing Control subnet for CyPerf Agent",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"AgentTestSubnet": {
+			"Default": "<Select Test Subnet for CyPerf Agents from drop down list>",
+			"Description": "Preferred Existing Test subnet for CyPerf Agent",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"ControllerManagementSubnet": {
+			"Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
+			"Description": "Preferred Existing Management subnet for CyPerf Controller.This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"Project": {
+			"Default": "CyPerf-AWS",
+			"Description": "Project Name",
+			"Type": "String"
+		},
+		"Username": {
+			"Default": "<UserName>@<domainname>",
+			"Description": "Team or Individual email id responsible for the Stack",
+			"Type": "String"
+		},
+		"VPCCIDR": {
+			"Default": "<Select VPC from drop down list>",
+			"Description": "Preferred Existing VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		},
+		"DeployClientAgent": {
+			"Description": "Want to deploy Client Agent?",
+			"Default": "yes",
+			"Type": "String",
+			"AllowedValues": ["yes", "no"],
+			"ConstraintDescription": "must specify yes or no."
+		},
+		"DeployServerAgent": {
+			"Description": "Want to deploy Server Agent?",
+			"Default": "yes",
+			"Type": "String",
+			"AllowedValues": ["yes", "no"],
+			"ConstraintDescription": "must specify yes or no."
+		},
+		"EC2RoleForTags": {
+			"Description": "Want to fetch tags for Agent?",
+			"Default": "yes",
+			"Type": "String",
+			"AllowedValues": ["yes", "no"],
+			"ConstraintDescription": "must specify yes or no."
+		}
+	},
+	"Conditions": {
+		"CreateClientAgent": {
+			"Fn::Equals": [{
+				"Ref": "DeployClientAgent"
+			}, "yes"]
+		},
+		"CreateServerAgent": {
+			"Fn::Equals": [{
+				"Ref": "DeployServerAgent"
+			}, "yes"]
+		},
+		"FetchTagsForAgent": {
+			"Fn::Equals": [{
+				"Ref": "EC2RoleForTags"
+			}, "yes"]
+		}
+	},
+	"Resources": {
+		"EC2IfaceRole": {
+			"Condition": "FetchTagsForAgent",
+			"Properties": {
+				"AssumeRolePolicyDocument": {
+					"Statement": [{
+						"Action": "sts:AssumeRole",
+						"Effect": "Allow",
+						"Principal": {
+							"Service": "ec2.amazonaws.com"
+						}
+					}],
+					"Version": "2012-10-17"
+				},
+				"Path": "/",
+				"Policies": [{
+					"PolicyDocument": {
+						"Statement": [{
+							"Action": [
+								"ec2:CreateNetworkInterface",
+								"ec2:DescribeInstances",
+								"ec2:ModifyNetworkInterfaceAttribute",
+								"ec2:AttachNetworkInterface",
+								"ec2:DescribeSubnets",
+								"ec2:DescribeSecurityGroups",
+								"ec2:DescribeTags"
+							],
+							"Effect": "Allow",
+							"Resource": "*"
+						}],
+						"Version": "2012-10-17"
+					},
+					"PolicyName": {
+						"Fn::Join": [
+							"-",
+							[{
+									"Ref": "AWS::StackName"
+								},
+								"EC2IfacePolicy"
+							]
+						]
+					}
+				}],
+				"RoleName": {
+					"Fn::Join": [
+						"-",
+						[{
+								"Ref": "AWS::StackName"
+							},
+							"EC2IfaceRole"
+						]
+					]
+				}
+			},
+			"Type": "AWS::IAM::Role"
+		},
+		"EC2InstanceProfile": {
+			"Condition": "FetchTagsForAgent",
+			"DependsOn": "EC2IfaceRole",
+			"Properties": {
+				"Roles": [{
+					"Ref": "EC2IfaceRole"
+				}]
+			},
+			"Type": "AWS::IAM::InstanceProfile"
+		},
+		"CyPerfUI": {
+			"DependsOn": [
+				"mdweth0"
+			],
+			"Properties": {
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeSize": "100",
+						"DeleteOnTermination": true
+					}
+				}],
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMIxAPPLICATION"]
+				},
+				"InstanceType": "c4.2xlarge",
+				"KeyName": {
+					"Ref": "KeyNameForCyPerfAgent"
+				},
+				"NetworkInterfaces": [{
+					"DeviceIndex": "0",
+					"NetworkInterfaceId": {
+						"Ref": "mdweth0"
+					}
+				}],
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"Controller"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "ClientAgent": {
-            "Condition" : "CreateClientAgent",
-            "DependsOn": [
-                "clieth0",
-                "clieth1",
-                "CyPerfUI"
-            ],
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "8",
-                            "DeleteOnTermination" : true
-                        }
-                    }
-                ],
-                "IamInstanceProfile": {
-                    "Fn::If" : [
-                        "FetchTagsForAgent",
-                        {"Ref" : "EC2InstanceProfile"},
-                        ""
-                    ]
-                },
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAGENT"] },
-                "InstanceType": {
-                    "Ref": "InstanceTypeForCyPerfAgent"
-                },
-                "KeyName": {
-                    "Ref": "KeyNameForCyPerfAgent"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "clieth0"
-                        }
-                    },
-                    {
-                        "DeviceIndex": "1",
-                        "NetworkInterfaceId": {
-                            "Ref": "clieth1"
-                        }
-                    }
-                ],
-                "UserData": {
-                    "Fn::Base64": {
-                        "Fn::Join": [
-                            "",
-                            [
-                                "#!/bin/bash -xe\n",
-                                "cd /opt/keysight/tiger/active/bin/\n",
-                                "sh /opt/keysight/tiger/active/bin/Appsec_init ",
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            {
-                                                "Fn::GetAtt": [
-                                                    "CyPerfUI",
-                                                    "PrivateIp"
-                                                ]
-                                            }
-                                        ]
-                                    ]
-                                },
-                                " >> /var/log/Appsec_init.log\n"
-                            ]
-                        ]
-                    }
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "ClientAgent"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::Instance"
+		},
+		"ClientAgent": {
+			"Condition": "CreateClientAgent",
+			"DependsOn": [
+				"clieth0",
+				"clieth1",
+				"CyPerfUI"
+			],
+			"Properties": {
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeSize": "8",
+						"DeleteOnTermination": true
+					}
+				}],
+				"IamInstanceProfile": {
+					"Fn::If": [
+						"FetchTagsForAgent",
+						{
+							"Ref": "EC2InstanceProfile"
+						},
+						""
+					]
+				},
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMIxAGENT"]
+				},
+				"InstanceType": {
+					"Ref": "InstanceTypeForCyPerfAgent"
+				},
+				"KeyName": {
+					"Ref": "KeyNameForCyPerfAgent"
+				},
+				"NetworkInterfaces": [{
+						"DeviceIndex": "0",
+						"NetworkInterfaceId": {
+							"Ref": "clieth0"
+						}
+					},
+					{
+						"DeviceIndex": "1",
+						"NetworkInterfaceId": {
+							"Ref": "clieth1"
+						}
+					}
+				],
+				"UserData": {
+					"Fn::Base64": {
+						"Fn::Join": [
+							"",
+							[
+								"#!/bin/bash -xe\n",
+								"cd /opt/keysight/tiger/active/bin/\n",
+								"sh /opt/keysight/tiger/active/bin/Appsec_init ",
+								{
+									"Fn::Join": [
+										"",
+										[{
+											"Fn::GetAtt": [
+												"CyPerfUI",
+												"PrivateIp"
+											]
+										}]
+									]
+								},
+								" >> /var/log/Appsec_init.log\n"
+							]
+						]
+					}
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"ClientAgent"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "ServerAgent": {
-            "Condition" : "CreateServerAgent",
-            "DependsOn": [
-                "svreth0",
-                "svreth1",
-                "CyPerfUI"
-            ],
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "8",
-                            "DeleteOnTermination" : true
-                        }
-                    }
-                ],
-                "IamInstanceProfile": {
-                    "Fn::If" : [
-                        "FetchTagsForAgent",
-                        {"Ref" : "EC2InstanceProfile"},
-                        ""
-                    ]
-                },
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAGENT"] },
-                "InstanceType": {
-                    "Ref": "InstanceTypeForCyPerfAgent"
-                },
-                "KeyName": {
-                    "Ref": "KeyNameForCyPerfAgent"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "svreth0"
-                        }
-                    },
-                    {
-                        "DeviceIndex": "1",
-                        "NetworkInterfaceId": {
-                            "Ref": "svreth1"
-                        }
-                    }
-                ],
-                "UserData": {
-                    "Fn::Base64": {
-                        "Fn::Join": [
-                            "",
-                            [
-                                "#!/bin/bash -xe\n",
-                                "cd /opt/keysight/tiger/active/bin/\n",
-                                "sh /opt/keysight/tiger/active/bin/Appsec_init ",
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            {
-                                                "Fn::GetAtt": [
-                                                    "CyPerfUI",
-                                                    "PrivateIp"
-                                                ]
-                                            }
-                                        ]
-                                    ]
-                                },
-                                " >> /var/log/Appsec_init.log\n"
-                            ]
-                        ]
-                    }
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "ServerAgent"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::Instance"
+		},
+		"ServerAgent": {
+			"Condition": "CreateServerAgent",
+			"DependsOn": [
+				"svreth0",
+				"svreth1",
+				"CyPerfUI"
+			],
+			"Properties": {
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeSize": "8",
+						"DeleteOnTermination": true
+					}
+				}],
+				"IamInstanceProfile": {
+					"Fn::If": [
+						"FetchTagsForAgent",
+						{
+							"Ref": "EC2InstanceProfile"
+						},
+						""
+					]
+				},
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMIxAGENT"]
+				},
+				"InstanceType": {
+					"Ref": "InstanceTypeForCyPerfAgent"
+				},
+				"KeyName": {
+					"Ref": "KeyNameForCyPerfAgent"
+				},
+				"NetworkInterfaces": [{
+						"DeviceIndex": "0",
+						"NetworkInterfaceId": {
+							"Ref": "svreth0"
+						}
+					},
+					{
+						"DeviceIndex": "1",
+						"NetworkInterfaceId": {
+							"Ref": "svreth1"
+						}
+					}
+				],
+				"UserData": {
+					"Fn::Base64": {
+						"Fn::Join": [
+							"",
+							[
+								"#!/bin/bash -xe\n",
+								"cd /opt/keysight/tiger/active/bin/\n",
+								"sh /opt/keysight/tiger/active/bin/Appsec_init ",
+								{
+									"Fn::Join": [
+										"",
+										[{
+											"Fn::GetAtt": [
+												"CyPerfUI",
+												"PrivateIp"
+											]
+										}]
+									]
+								},
+								" >> /var/log/Appsec_init.log\n"
+							]
+						]
+					}
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"ServerAgent"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "clieth0": {
-            "Condition" : "CreateClientAgent",
-            "Properties": {
-                "Description": "Client Agent eth0/ens4",
-                "GroupSet": [
-                    {
-                        "Ref": "AgentSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "AgentControlSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "CA-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::Instance"
+		},
+		"clieth0": {
+			"Condition": "CreateClientAgent",
+			"Properties": {
+				"Description": "Client Agent eth0/ens4",
+				"GroupSet": [{
+					"Ref": "AgentSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "AgentControlSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"CA-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        },
-        "clieth1": {
-            "Condition" : "CreateClientAgent",
-            "Properties": {
-                "Description": "Client Agent eth1/ens5",
-                "GroupSet": [
-                    {
-                        "Ref": "AgentSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "AgentTestSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "CA-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		},
+		"clieth1": {
+			"Condition": "CreateClientAgent",
+			"Properties": {
+				"Description": "Client Agent eth1/ens5",
+				"GroupSet": [{
+					"Ref": "AgentSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "AgentTestSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"CA-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        },
-        "svreth0": {
-            "Condition" : "CreateServerAgent",
-            "Properties": {
-                "Description": "Server Agent eth0/ens4",
-                "GroupSet": [
-                    {
-                        "Ref": "AgentSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "AgentControlSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "SA-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		},
+		"svreth0": {
+			"Condition": "CreateServerAgent",
+			"Properties": {
+				"Description": "Server Agent eth0/ens4",
+				"GroupSet": [{
+					"Ref": "AgentSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "AgentControlSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"SA-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        },
-        "svreth1": {
-            "Condition" : "CreateServerAgent",
-            "Properties": {
-                "Description": "Server Agent eth1/ens5",
-                "GroupSet": [
-                    {
-                        "Ref": "AgentSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "AgentTestSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "SA-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		},
+		"svreth1": {
+			"Condition": "CreateServerAgent",
+			"Properties": {
+				"Description": "Server Agent eth1/ens5",
+				"GroupSet": [{
+					"Ref": "AgentSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "AgentTestSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"SA-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        },
-        "mdweth0": {
-            "Properties": {
-                "Description": "MDW eth0",
-                "GroupSet": [
-                    {
-                        "Ref": "CyPerfUISecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "ControllerManagementSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "MB-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		},
+		"mdweth0": {
+			"Properties": {
+				"Description": "MDW eth0",
+				"GroupSet": [{
+					"Ref": "CyPerfUISecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "ControllerManagementSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"MB-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        }
-    }
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		}
+	}
 }

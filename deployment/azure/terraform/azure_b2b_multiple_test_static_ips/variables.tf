@@ -5,7 +5,7 @@ variable "azure_project_name" {
 
 variable "azure_owner_tag" {
   type    = string
-  description = "Owner tag name"
+  description = "Deployment name"
 }
 
 variable "subscription_id" {
@@ -31,12 +31,6 @@ variable "tenant_id" {
 variable "public_key" {
   type = string
   description = "Path to the public key used to ssh into machine"
-}
-
-variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-1-5.vhd"
-  type = string
-  description = "Controller image path"
 }
 
 variable "azure_region_name" {
@@ -65,8 +59,37 @@ variable "azure_mdw_machine_type" {
   default = "Standard_F8s_v2"
 }
 
+variable "azure_agent_machine_type" {
+  type    = string
+  default = "Standard_F4s_v2"
+}
+
+variable "agents" {
+  type = number
+  default = 2
+  description = "Number of agents to be deployed"
+}
+
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-5"
+  default     = "keysight-cyperf-controller-1-1-update1"
   description = "Image id for the cyperf controller machine"
+}
+
+variable "agent_version" {
+  type        = string
+  default     = "keysight-cyperf-agent-1-1-update1"
+  description = "Image id for the cyperf agent machines"
+}
+
+variable "controller_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-controller-1-1-update1.vhd"
+  type = string
+  description = "Controller image path"
+}
+
+variable "agent_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-1-update1/keysight-cyperf-agent-1-1-update1.vhd"
+  type = string
+  description = "Agent image path"
 }
