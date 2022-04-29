@@ -1,492 +1,509 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
-    "Mappings" : {
-		"RegionMap" : {
-			"us-east-1" : {
-				"AMIxAPPLICATION" : "ami-03ad33f209d392b4d",
-				"AMIxBROKER" : "ami-06921400e1caa9c26",
-				"AMIxAGENT" : "ami-0b26f31be671d0900",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "US East (N. Virginia)",
-				"REGIONxTAG" : "US_EAST_1"
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
+	"Mappings": {
+		"RegionMap": {
+			"us-east-1": {
+				"AMIxAPPLICATION": "ami-03ad33f209d392b4d",
+				"AMIxBROKER": "ami-06921400e1caa9c26",
+				"AMIxAGENT": "ami-0b26f31be671d0900",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "US East (N. Virginia)",
+				"REGIONxTAG": "US_EAST_1"
 			},
-			"us-east-2" : {
-				"AMIxAPPLICATION" : "ami-0c9ee8f59db9ef631",
-				"AMIxBROKER" : "ami-0d81bc6d1832e755f",
-				"AMIxAGENT" : "ami-0de5d13c8de3b3abd",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.16.146.0/29",
-				"EC2xREGION" : "US East (Ohio)",
-				"REGIONxTAG" : "US_EAST_2"
+			"us-east-2": {
+				"AMIxAPPLICATION": "ami-0c9ee8f59db9ef631",
+				"AMIxBROKER": "ami-0d81bc6d1832e755f",
+				"AMIxAGENT": "ami-0de5d13c8de3b3abd",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.16.146.0/29",
+				"EC2xREGION": "US East (Ohio)",
+				"REGIONxTAG": "US_EAST_2"
 			},
-			"us-west-1" : {
-				"AMIxAPPLICATION" : "ami-0494d7a77acfff939",
-				"AMIxBROKER" : "ami-0c4d172f3cc68508b",
-				"AMIxAGENT" : "ami-0be715e9212eee1f8",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.52.6.112/29",
-				"EC2xREGION" : "US West (N. California)",
-				"REGIONxTAG" : "US_WEST_1"
+			"us-west-1": {
+				"AMIxAPPLICATION": "ami-0494d7a77acfff939",
+				"AMIxBROKER": "ami-0c4d172f3cc68508b",
+				"AMIxAGENT": "ami-0be715e9212eee1f8",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.52.6.112/29",
+				"EC2xREGION": "US West (N. California)",
+				"REGIONxTAG": "US_WEST_1"
 			},
-			"us-west-2" : {
-				"AMIxAPPLICATION" : "ami-03e2c1317766b1ab3",
-				"AMIxBROKER" : "ami-041c972f11f275db4",
-				"AMIxAGENT" : "ami-01e4391df5a76131e",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.237.140.160/29",
-				"EC2xREGION" : "US West (Oregon)",
-				"REGIONxTAG" : "US_WEST_2"
+			"us-west-2": {
+				"AMIxAPPLICATION": "ami-03e2c1317766b1ab3",
+				"AMIxBROKER": "ami-041c972f11f275db4",
+				"AMIxAGENT": "ami-01e4391df5a76131e",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.237.140.160/29",
+				"EC2xREGION": "US West (Oregon)",
+				"REGIONxTAG": "US_WEST_2"
 			},
-			"ap-east-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Asia Pacific (Hong Kong)",		
-				"REGIONxTAG" : "AP_EAST_1"
+			"ap-east-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "Asia Pacific (Hong Kong)",
+				"REGIONxTAG": "AP_EAST_1"
 			},
-			"ap-south-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.233.177.0/29",
-				"EC2xREGION" : "Asia Pacific (Mumbai)",
-				"REGIONxTAG" : "AP_SOUTH_1"
+			"ap-south-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.233.177.0/29",
+				"EC2xREGION": "Asia Pacific (Mumbai)",
+				"REGIONxTAG": "AP_SOUTH_1"
 			},
-			"ap-northeast-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.209.1.56/29",
-				"EC2xREGION" : "Asia Pacific (Seoul)",
-				"REGIONxTAG" : "AP_NORTHEAST_2"
+			"ap-northeast-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.209.1.56/29",
+				"EC2xREGION": "Asia Pacific (Seoul)",
+				"REGIONxTAG": "AP_NORTHEAST_2"
 			},
-			"ap-southeast-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.0.5.32/29",
-				"EC2xREGION" : "Asia Pacific (Singapore)",
-				"REGIONxTAG" : "AP_SOUTHEAST_1"
+			"ap-southeast-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.0.5.32/29",
+				"EC2xREGION": "Asia Pacific (Singapore)",
+				"REGIONxTAG": "AP_SOUTHEAST_1"
 			},
-			"ap-southeast-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.239.158.0/29",
-				"EC2xREGION" : "Asia Pacific (Sydney)",
-				"REGIONxTAG" : "AP_SOUTHEAST_2"
+			"ap-southeast-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.239.158.0/29",
+				"EC2xREGION": "Asia Pacific (Sydney)",
+				"REGIONxTAG": "AP_SOUTHEAST_2"
 			},
-			"ap-northeast-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.112.23.0/29",
-				"EC2xREGION" : "Asia Pacific (Tokyo)",
-				"REGIONxTAG" : "AP_NORTHEAST_1"
+			"ap-northeast-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.112.23.0/29",
+				"EC2xREGION": "Asia Pacific (Tokyo)",
+				"REGIONxTAG": "AP_NORTHEAST_1"
 			},
-			"ca-central-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.183.92.176/29",
-				"EC2xREGION" : "Canada (Central)",
-				"REGIONxTAG" : "CA_CENTRAL_1"
+			"ca-central-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "35.183.92.176/29",
+				"EC2xREGION": "Canada (Central)",
+				"REGIONxTAG": "CA_CENTRAL_1"
 			},
-			"eu-central-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.120.181.40/29",
-				"EC2xREGION" : "EU (Frankfurt)",
-				"REGIONxTAG" : "EU_CENTRAL_1"
+			"eu-central-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.120.181.40/29",
+				"EC2xREGION": "EU (Frankfurt)",
+				"REGIONxTAG": "EU_CENTRAL_1"
 			},
-			"eu-west-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.202.216.48/29",
-				"EC2xREGION" : "EU (Ireland)",
-				"REGIONxTAG" : "EU_WEST_1"
+			"eu-west-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.202.216.48/29",
+				"EC2xREGION": "EU (Ireland)",
+				"REGIONxTAG": "EU_WEST_1"
 			},
-			"eu-west-2" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "3.8.37.24/29",
-				"EC2xREGION" : "EU (London)",
-				"REGIONxTAG" : "EU_WEST_2"
+			"eu-west-2": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "3.8.37.24/29",
+				"EC2xREGION": "EU (London)",
+				"REGIONxTAG": "EU_WEST_2"
 			},
-			"eu-west-3" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "35.180.112.80/29",
-				"EC2xREGION" : "EU (Paris)",
-				"REGIONxTAG" : "EU_WEST_3"
+			"eu-west-3": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "35.180.112.80/29",
+				"EC2xREGION": "EU (Paris)",
+				"REGIONxTAG": "EU_WEST_3"
 			},
-			"eu-north-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "EU (Stockholm)",
-				"REGIONxTAG" : "EU_NORTH_1"
+			"eu-north-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.48.4.200/30",
+				"EC2xREGION": "EU (Stockholm)",
+				"REGIONxTAG": "EU_NORTH_1"
 			},
-			"me-south-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-				"AMIxBROKER" : "ami-00000000000000000",
-				"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "18.206.107.24/29",
-				"EC2xREGION" : "Middle East (Bahrain)",		
-				"REGIONxTAG" : "ME_SOUTH_1"
+			"me-south-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "18.206.107.24/29",
+				"EC2xREGION": "Middle East (Bahrain)",
+				"REGIONxTAG": "ME_SOUTH_1"
 			},
-			"sa-east-1" : {
-				"AMIxAPPLICATION" : "ami-00000000000000000",
-                		"AMIxBROKER" : "ami-00000000000000000",
-                		"AMIxAGENT" : "ami-00000000000000000",
-				"AMIxLICENSE" : "ami-00000000000000000",
-				"EC2xCONNECTxCIDR" : "13.48.4.200/30",
-				"EC2xREGION" : "South America (Sao Paulo)",
-				"REGIONxTAG" : "SA_EAST_1"
+			"sa-east-1": {
+				"AMIxAPPLICATION": "ami-00000000000000000",
+				"AMIxBROKER": "ami-00000000000000000",
+				"AMIxAGENT": "ami-00000000000000000",
+				"AMIxLICENSE": "ami-00000000000000000",
+				"EC2xCONNECTxCIDR": "13.48.4.200/30",
+				"EC2xREGION": "South America (Sao Paulo)",
+				"REGIONxTAG": "SA_EAST_1"
 			}
 		},
-		"VariableMap" : {
-			"global" : {
-                "OPTIONSxTAG" : "MANUAL",
-                "PROJECTxTAG" : "CyPerf"
+		"VariableMap": {
+			"global": {
+				"OPTIONSxTAG": "MANUAL",
+				"PROJECTxTAG": "CyPerf"
 			}
 		}
-    },
-    "Metadata": {
-        "AWS::CloudFormation::Interface": {
-            "ParameterGroups": [
-                {
-                    "Label": {
-                        "default": "NETWORK CONFIGURATION"
-                    }
-                },
-                {
-                    "Label": {
-                        "default": "VPC Configuration"
-                    },
-                    "Parameters": [
-                        "Username",
-                        "Project",
-                        "VPC"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "CyPerf Controller Configuration"
-                    },
-                    "Parameters": [
-                        "ControllerDeploymentType",
-                        "ControllerManagementSubnet",
-			            "KeyNameForCyPerfController",
-                        "CyPerfControllerSecurityGroup"
-                    ]
-                }
-            ],
-            "ParameterLabels": {
-                "ControllerManagementSubnet": {
-                    "default": "Management Subnet for CyPerf Controller"
-                },
-	            "KeyNameForCyPerfController": {
-                    "default": "SSH Key"
-                },
-                "ControllerDeploymentType": {
-                    "default": "CyPerf Controller/UI, Controller-proxy"
-                },
-                "VPC": {
-                    "default": "VPC"
-                }
-            }
-        }
-    },
-    "Outputs": {
-        "CyPerfUIINstanceDNS": {
-            "Description": "DNS name of CyPerf Controller instance",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        {
-                            "Fn::GetAtt": [
-                                "CyPerfUI",
-                                "PublicDnsName"
-                            ]
-                        }
-                    ]
-                ]
-            }
-        }
-    },
-    "Parameters": {
-        "CyPerfControllerSecurityGroup": {
-            "Default": "<Select CyPerf Contoller security group from drop down list>",
-            "Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 30422 and 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
-            "Type": "AWS::EC2::SecurityGroup::Id"
-        },   
-        "ControllerManagementSubnet": {
-            "Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
-            "Description": "Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "ControllerDeploymentType" : {
-            "Description" : "If Contoller deployment type is 'controller', CyPerf controller will be dployed and Agents will registered to controller. If type is 'controller-proxy', CyPerf controller-proxy will be dployed and Agents will registered to controller-proxy.",
-            "Default" : "controller",
-            "Type" : "String",
-            "AllowedValues" : ["controller", "controller-proxy"],
-            "ConstraintDescription" : "must specify controller , controller-proxy"
-        },
-	    "KeyNameForCyPerfController": {
-            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
-            "Default": "CyPerf-keypair",
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
-            "Type": "AWS::EC2::KeyPair::KeyName"
-        },
-        "Project": {
-            "Default": "CyPerf-AWS",
-            "Description": "Project Name",
-            "Type": "String"
-        },
-        "Username": {
-            "Default": "<UserName>@<domainname>",
-            "Description": "Team or Individual email id responsible for the Stack",
-            "Type": "String"
-        },
-        "VPC": {
-            "Default": "<Select VPC from drop down list>",
-            "Description": "Preferred Existing VPC",
-            "Type": "AWS::EC2::VPC::Id"
-        }
-    },
-    "Conditions" : {
-        "CreateController" : {"Fn::Equals" : [{"Ref" : "ControllerDeploymentType"}, "controller"]},
-        "CreateControllerProxy" : {"Fn::Equals" : [{"Ref" : "ControllerDeploymentType"}, "controller-proxy"]}
-    },
-    "Resources": {
-        "CyPerfUI": {
-            "Condition" : "CreateController",
-            "DependsOn": [
-                "mdweth0"
-            ],
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "100",
-                            "DeleteOnTermination" : true
-                        }
-                    }
-                ],
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
-                "InstanceType": "c4.2xlarge",
-		        "KeyName": {
-                    "Ref": "KeyNameForCyPerfController"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "mdweth0"
-                        }
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "Controller"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+	},
+	"Metadata": {
+		"AWS::CloudFormation::Interface": {
+			"ParameterGroups": [{
+					"Label": {
+						"default": "NETWORK CONFIGURATION"
+					}
+				},
+				{
+					"Label": {
+						"default": "VPC Configuration"
+					},
+					"Parameters": [
+						"Username",
+						"Project",
+						"VPC"
+					]
+				},
+				{
+					"Label": {
+						"default": "CyPerf Controller Configuration"
+					},
+					"Parameters": [
+						"ControllerDeploymentType",
+						"ControllerManagementSubnet",
+						"KeyNameForCyPerfController",
+						"CyPerfControllerSecurityGroup"
+					]
+				}
+			],
+			"ParameterLabels": {
+				"ControllerManagementSubnet": {
+					"default": "Management Subnet for CyPerf Controller"
+				},
+				"KeyNameForCyPerfController": {
+					"default": "SSH Key"
+				},
+				"ControllerDeploymentType": {
+					"default": "CyPerf Controller/UI, Controller-proxy"
+				},
+				"VPC": {
+					"default": "VPC"
+				}
+			}
+		}
+	},
+	"Outputs": {
+		"CyPerfUIINstanceDNS": {
+			"Description": "DNS name of CyPerf Controller instance",
+			"Value": {
+				"Fn::Join": [
+					"",
+					[{
+						"Fn::GetAtt": [
+							"CyPerfUI",
+							"PublicDnsName"
+						]
+					}]
+				]
+			}
+		}
+	},
+	"Parameters": {
+		"CyPerfControllerSecurityGroup": {
+			"Default": "<Select CyPerf Contoller security group from drop down list>",
+			"Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 30422 and 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
+			"Type": "AWS::EC2::SecurityGroup::Id"
+		},
+		"ControllerManagementSubnet": {
+			"Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
+			"Description": "Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"ControllerDeploymentType": {
+			"Description": "If Contoller deployment type is 'controller', CyPerf controller will be dployed and Agents will registered to controller. If type is 'controller-proxy', CyPerf controller-proxy will be dployed and Agents will registered to controller-proxy.",
+			"Default": "controller",
+			"Type": "String",
+			"AllowedValues": ["controller", "controller-proxy"],
+			"ConstraintDescription": "must specify controller , controller-proxy"
+		},
+		"KeyNameForCyPerfController": {
+			"ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+			"Default": "CyPerf-keypair",
+			"Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
+			"Type": "AWS::EC2::KeyPair::KeyName"
+		},
+		"Project": {
+			"Default": "CyPerf-AWS",
+			"Description": "Project Name",
+			"Type": "String"
+		},
+		"Username": {
+			"Default": "<UserName>@<domainname>",
+			"Description": "Team or Individual email id responsible for the Stack",
+			"Type": "String"
+		},
+		"VPC": {
+			"Default": "<Select VPC from drop down list>",
+			"Description": "Preferred Existing VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		}
+	},
+	"Conditions": {
+		"CreateController": {
+			"Fn::Equals": [{
+				"Ref": "ControllerDeploymentType"
+			}, "controller"]
+		},
+		"CreateControllerProxy": {
+			"Fn::Equals": [{
+				"Ref": "ControllerDeploymentType"
+			}, "controller-proxy"]
+		}
+	},
+	"Resources": {
+		"CyPerfUI": {
+			"Condition": "CreateController",
+			"DependsOn": [
+				"mdweth0"
+			],
+			"Properties": {
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeSize": "100",
+						"DeleteOnTermination": true
+					}
+				}],
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMIxAPPLICATION"]
+				},
+				"InstanceType": "c4.2xlarge",
+				"KeyName": {
+					"Ref": "KeyNameForCyPerfController"
+				},
+				"NetworkInterfaces": [{
+					"DeviceIndex": "0",
+					"NetworkInterfaceId": {
+						"Ref": "mdweth0"
+					}
+				}],
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"Controller"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "mdweth0": {
-            "Condition" : "CreateController",
-            "Properties": {
-                "Description": "MDW eth0",
-                "GroupSet": [
-                    {
-                        "Ref": "CyPerfControllerSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "ControllerManagementSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "MB-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::Instance"
+		},
+		"mdweth0": {
+			"Condition": "CreateController",
+			"Properties": {
+				"Description": "MDW eth0",
+				"GroupSet": [{
+					"Ref": "CyPerfControllerSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "ControllerManagementSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"MB-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        },
-        "CyPerfControllerProxy": {
-            "DependsOn": [
-                "proxyeth0"
-            ],
-            "Condition" : "CreateControllerProxy",
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "8",
-                            "DeleteOnTermination" : true
-                        }
-                    }
-                ],
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxBROKER"] },
-                "InstanceType": "t2.medium",
-                "KeyName": {
-                    "Ref": "KeyNameForCyPerfController"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "proxyeth0"
-                        }
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "ControllerProxy"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		},
+		"CyPerfControllerProxy": {
+			"DependsOn": [
+				"proxyeth0"
+			],
+			"Condition": "CreateControllerProxy",
+			"Properties": {
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeSize": "8",
+						"DeleteOnTermination": true
+					}
+				}],
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMIxBROKER"]
+				},
+				"InstanceType": "t2.medium",
+				"KeyName": {
+					"Ref": "KeyNameForCyPerfController"
+				},
+				"NetworkInterfaces": [{
+					"DeviceIndex": "0",
+					"NetworkInterfaceId": {
+						"Ref": "proxyeth0"
+					}
+				}],
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"ControllerProxy"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "proxyeth0": {
-            "Condition" : "CreateControllerProxy",
-            "Properties": {
-                "Description": "Controller Proxy eth0",
-                "GroupSet": [
-                    {
-                        "Ref": "CyPerfControllerSecurityGroup"
-                    }
-                ],
-                "SourceDestCheck": "true",
-                "SubnetId": {
-                    "Ref": "ControllerManagementSubnet"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "ControllerProxy-Interface"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": { "Ref": "Project" }
-                    },
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::Instance"
+		},
+		"proxyeth0": {
+			"Condition": "CreateControllerProxy",
+			"Properties": {
+				"Description": "Controller Proxy eth0",
+				"GroupSet": [{
+					"Ref": "CyPerfControllerSecurityGroup"
+				}],
+				"SourceDestCheck": "true",
+				"SubnetId": {
+					"Ref": "ControllerManagementSubnet"
+				},
+				"Tags": [{
+						"Key": "Name",
+						"Value": {
+							"Fn::Join": [
+								"-",
+								[{
+										"Ref": "AWS::StackName"
+									},
+									"ControllerProxy-Interface"
+								]
+							]
+						}
+					},
+					{
+						"Key": "Project",
+						"Value": {
+							"Ref": "Project"
+						}
+					},
 					{
 						"Key": "Options",
-						"Value": { "Fn::FindInMap" : [ "VariableMap", "global", "OPTIONSxTAG"] }
+						"Value": {
+							"Fn::FindInMap": ["VariableMap", "global", "OPTIONSxTAG"]
+						}
 					},
-                    {
-                        "Key": "Owner",
-                        "Value": { "Ref": "Username" }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::NetworkInterface"
-        }
-    }
+					{
+						"Key": "Owner",
+						"Value": {
+							"Ref": "Username"
+						}
+					}
+				]
+			},
+			"Type": "AWS::EC2::NetworkInterface"
+		}
+	}
 }
