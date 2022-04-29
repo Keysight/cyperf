@@ -31,7 +31,7 @@ You are responsible for the cost of the AWS services used while running this man
 Keysight CyPerf license needs to be procured for further usage. These licenses need to be configured at **“Administration” -> “License Manager”** on CyPerf controller gear menu. For further details, see the pricing pages for each AWS service you will be using in this manual deployment guide. Prices are subject to change.
 
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and select **“keysight-cyperf-controller-1-1-update1”**. 
+2.	Go to **Community AMIs** and select **“keysight-cyperf-controller-1-5”**. 
 3.	Select Instance Type **“c4.2xlarge”** and move next. 
 4.	Select your preferred **VPC**, preferred public subnet in that **VPC** and move next. 
 5.	Keep default storage size **100 GiB** and move next. 
@@ -61,7 +61,7 @@ Keysight CyPerf license needs to be procured for further usage. These licenses n
 **Note:**
 You are responsible for the cost of the AWS services used while running this manual deployment. There is no additional cost for using this manual deployment. For further details, see the pricing pages for each AWS service you will be using in this manual deployment guide. Prices are subject to change.
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and then select **“keysight-cyperf-controller-proxy-1-1”**. 
+2.	Go to **Community AMIs** and then select **“keysight-cyperf-controller-proxy-1-5”**. 
 3.	Select Instance Type **“t2.medium”** and move next. 
 4.	Select your preferred **VPC**, preferred public subnet in that **VPC** and move next. 
 5.	Keep default storage size **8 GiB** and move next. 
@@ -94,7 +94,7 @@ You are responsible for the cost of the AWS services used while running this man
 Private subnets require NAT gateways or NAT instances in their route tables to allow the instances to download packages and software without exposing them to the internet. You will also need the domain name option configured in the DHCP options as explained in the [Amazon VPC documentation](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html).
 
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and search and select **“keysight-cyperf-agent-1-1-update1”**. 
+2.	Go to **Community AMIs** and search and select **“keysight-cyperf-agent-1-5”**. 
 3.	Specify Number of instances minimum **2**.
 4.	Select Instance Type **“c4.2xlarge”** or **“c5n.9xlarge”** and move next. 
 5.	Select your preferred **VPC** and then select,
