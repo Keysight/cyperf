@@ -214,20 +214,39 @@ When configuring CyPerf Controller for a test where CyPerf Agents are running in
 
 ## Troubleshooting
 
-### * Collecting CyPerf Agent Logs
+1. Collecting CyPerf Agent Logs
 - At present, CyPerf Agent running as a container does not publish logs when collecting diagnostics from CyPerf Controller UI. However, individual pod's logs can be collected manually. First identify the pod showing the details of all pods labeled as cyprf-agent, and use the ID for redirecting logs to a file; then transfer manually.        
     ```
     kubectl get pods -l app=cyperf-agent -o wide
 
     kubectl logs [cyperf-agent-pod-id]  > [cyperf-agent-pod-id].log 
     ```
-### * Agents are not visible in CyPerf Controller
-1. Make sure that ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
-2. Also check that Agent pods are in ready state after deployment.
+2. Agents not visible in CyPerf Controller
+- Make sure that ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
+- Also check that Agent pods are in ready state after deployment.
     ```
     kubectl get pods -l app=cyperf-agent -o wide
     ```  
      If pods are stuck in pending state, check available resource in the nodes vs requested resource in manifest yaml. Adjust requested resource or available resource in the node and redeploy.
+
+3. Repeating pattern of connection failures in the test
+
+- There can be several reasons for connection failures, like misconfigurations in general. For example, connections for test traffic might fail if some gateway or DUT is not reachable from the client. However, there could be intermittent connection failures observed in a high scale test which might be puzzling. Such cases may show repeated pattern for connection failures during the test.
+
+    In K8s, some CNIs like Calico use "conntrack", which is a feature of the Linux kernel’s networking stack. It allows the kernel to keep track of all logical network connections or flows, so that all of the packets for individual flows can be handled consistently together. The conntrack table has a configurable maximum size and, if it fills up, connections will start getting dropped. A few scenarios where the conntrack table is responsible for connection failures are mentioned bellow.
+
+    * The most obvious case is if the test is supposed to maintain an extremely high number of active connections. For example, if conntrack table size is configured to be 128k entries but the test tries to open more than 128k simultaneous connections, it will hit table overflow issue.
+
+    * The slightly less obvious case is if the test is generating an extremely high number of connections per second. Even if the connections are short-lived, connections continue to be tracked for a short timeout period (120 seconds by default). For example, if the conntrack table size is configured to be 128k and generated connections per second is 1200, that is going to exceed conntrack table size even if connections are very short-lived (1200 per sec * 120 sec = 144k, which is greater than 128k). 
+
+    * Another possibility could be when a test that was using ClusterIP as the connection destination, is changed to use server pod’s IP as the new destination or the other way round, conntrack may get confused. If these two consecutive tests are run without waiting for 120 seconds there will be chances that some conntrack table entries are still in the TIME_WAIT state, which may result in connection failures as well. 
+
+Therefore, it is recommended to wait for at least 120 seconds between test runs. 
+To know more about how conntrack works and how to to disable that you can refer to following articles
+
+https://projectcalico.docs.tigera.io/security/high-connection-workloads#extreme-high-connection-workloads
+
+https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/
 
 <!--
 TO BE CONTINUED ...
@@ -238,6 +257,13 @@ TO BE CONTINUED ...
 
 
 ## Releases
+
+- **CyPerf 1.5** - [April, 2022]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release1.5
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.378  
+
+    - Change history:
 
 - **CyPerf 1.1-Update1** - [December, 2021]
     - Image URI: 
