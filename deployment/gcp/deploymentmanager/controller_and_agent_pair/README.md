@@ -55,12 +55,12 @@ The following table lists the parameters for this deployment in **New VPC**.
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
 
 
-## Post detploy
+## Post deploy
 
 After successful deployment of stack, flow bellow instructions
 
 -	Go to GCP console and look for the deployed VMs
 -	Select the Controller instance and check the public IP 
--	Open your browser and access CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&Keysight#1)
+-	Open your browser and access CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&\Keysight#1)
 -   Registered CyPerf agents should appear in Controller UI automatically.
 -   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
