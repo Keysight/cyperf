@@ -30,7 +30,7 @@ The list of exposed parameters is defined in Template parameter section.
 
 Example: 
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-1-update1,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-1-1,brokerMachineType:e2-medium
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-5,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-1-5,brokerMachineType:e2-medium
 ```
 ### Example of Deployment using a YAML file:
 ```
@@ -53,8 +53,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | brokerMachineType                   | e2-medium            | Preferred machine Type for CyPerf Controller-proxy.  |
 | agentMachineType                   | c2-standard-4           | Preferred machine Type for CyPerf Agent.  |
-| brokerSourceImage                   | keysight-cyperf-controller-proxy-1-1            | Preferred CyPerf Controller-proxy image. |
-| agentSourceImage                   | keysight-cyperf-agent-1-1-update1            | Preferred CyPerf Agent image. |
+| brokerSourceImage                   | keysight-cyperf-controller-proxy-1-5            | Preferred CyPerf Controller-proxy image. |
+| agentSourceImage                   | keysight-cyperf-agent-1-5            | Preferred CyPerf Agent image. |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
@@ -66,7 +66,7 @@ After successful deployment of stack, flow bellow instructions
 
 -	Go to GCP console and look for the deployed VMs
 -	Select the Controller Proxy instance and check the public IP 
--	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf&Keysight#1)
+-	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/ CyPerf&Keysight#1)
 -   Select the gear icon in the right top corner. Select “Administration”, followed by “Controller Proxies” and then add the Controller Proxy public IP.
 -   Registered CyPerf agents should appear in Controller UI automatically.
 -   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.

@@ -42,6 +42,6 @@ variable "aws_mdw_machine_type"{
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-1-update1"
+  default     = "keysight-cyperf-controller-1-5"
   description = "Image id for the cyperf controller machine"
 }
