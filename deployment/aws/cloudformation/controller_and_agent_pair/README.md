@@ -50,6 +50,6 @@ After successful deployment of stack, flow bellow instructions
 
 -	Go to EC2 Dashboard and look for the deployed instance
 -	Select the Controller instance and check the public IP 
--	Open your browser and access CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/CyPerf\&Keysight#1)
+-	Open your browser and access CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin\/CyPerf\&Keysight#1)
 -   Registered CyPerf agents should appear in Controller UI automatically.
 -   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
