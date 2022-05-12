@@ -57,7 +57,7 @@ After successful deployment of stack, flow bellow instructions
 
 -	Go to EC2 Dashboard and look for the deployed instance
 -	Select the Controller Proxy instance and check the public IP 
--	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/ CyPerf&Keysight#1)
+-	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: admin/`CyPerf&Keysight#1`)
 -   Select the gear icon in the right top corner. Select “Administration”, followed by Controller Proxies. 
     If Controller and Controller Proxy are in same vpc, add the Controller Proxy private IP.
     Else, add Controller Proxy Public IP. Allow Controller Public IP at Controller proxy's inbound Security rule for port 443.
