@@ -43,7 +43,7 @@ terraform apply --auto-approve \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
 -var controller_proxy_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-proxy-1-5" \
--var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-5"
+-var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-6"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -81,7 +81,7 @@ The following table lists the parameters for this deployment.
 | AZURE_BROKER_MACHINE_TYPE | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
 | azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
 | broker_image   | keysight-cyperf-controller-proxy-1-5      | The  CyPerf controller proxy image version. |
-| agent_version   | keysight-cyperf-agent-1-5            | The  CyPerf agent image version. |
+| agent_version   | keysight-cyperf-agent-1-6            | The  CyPerf agent image version. |
 
 ## Destruction
 
