@@ -29,7 +29,7 @@ spec:
                     securityContext:
                         privileged: false
                         capabilities:
-                          add: ["NET_ADMIN", "IPC_LOCK"]
+                          add: ["NET_ADMIN", "IPC_LOCK", "NET_RAW"]
                     #readinessProbe:
                     #   httpGet:
                     #        path: /CyPerfHTTPHealthCheck
