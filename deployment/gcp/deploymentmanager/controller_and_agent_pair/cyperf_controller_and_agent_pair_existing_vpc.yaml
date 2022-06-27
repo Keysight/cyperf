@@ -1,0 +1,8 @@
+imports:
+- path: cyperf_controller_and_agent_pair_existing_vpc.py
+
+resources:
+- name: myresources
+  type: cyperf_controller_and_agent_pair_existing_vpc.py
+  properties: 
+      region: us-east1
