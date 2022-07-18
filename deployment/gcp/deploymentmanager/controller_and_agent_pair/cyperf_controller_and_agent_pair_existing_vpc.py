@@ -15,7 +15,9 @@ def GenerateConfig(context):
   region = context.properties['region']
   
   zone = context.properties['zone']
-  
+ 
+  service_account_email  = context.properties['serviceAccountEmail']
+
   agent_base_name = context.env['deployment'] + '-cyperf-agent-'
   
   controller = context.env['deployment'] + '-cyperf-controller'
@@ -78,8 +80,8 @@ def GenerateConfig(context):
           "reservationAffinity": {
               "consumeReservationType": "ANY_RESERVATION"
           },
-          "serviceAccounts": [{
-              "email": "290801949079-compute@developer.gserviceaccount.com",
+         "serviceAccounts": [{
+              "email": service_account_email,
               "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
           }],
           "shieldedInstanceConfig": {},
@@ -173,7 +175,7 @@ def GenerateConfig(context):
               "consumeReservationType": "ANY_RESERVATION"
           },
           "serviceAccounts": [{
-              "email": "290801949079-compute@developer.gserviceaccount.com",
+              "email": service_account_email,
               "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
           }],
           "shieldedInstanceConfig": {},
