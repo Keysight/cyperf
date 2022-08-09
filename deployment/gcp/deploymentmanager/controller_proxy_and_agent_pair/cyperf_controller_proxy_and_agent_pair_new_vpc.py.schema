@@ -44,7 +44,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-1-6
+    default: cyperf-agent-1-0-635-master-tiger-1-0-0-1296
     description: source image for agents
   managementNetworkCIDR:
     type: string

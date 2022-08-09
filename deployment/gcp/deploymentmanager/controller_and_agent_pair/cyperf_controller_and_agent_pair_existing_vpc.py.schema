@@ -29,7 +29,7 @@ properties:
 
   serviceAccountEmail:
     type: string
-    default: 290801949079-compute@developer.gserviceaccount.com
+    default: 926635126278-compute@developer.gserviceaccount.com
     description: Service account with compute admin and compute network admin role.
 
   zone:
