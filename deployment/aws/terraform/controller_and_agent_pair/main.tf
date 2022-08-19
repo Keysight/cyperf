@@ -204,20 +204,20 @@ resource "aws_network_interface" "aws_server_test_interface" {
 }
 
 data "aws_ami" "mdw_ami" {
-    owners = ["001382923476"]
+    owners = ["aws-marketplace"]
     most_recent = true
     filter {
-      name   = "name"
-      values = [var.mdw_version]
+      name   = "product-code"
+      values = [var.mdw_product_code]
     }
 }
 
 data "aws_ami" "agent_ami" {
-    owners = ["001382923476"]
+    owners = ["aws-marketplace"]
     most_recent = true
     filter {
-      name   = "name"
-      values = [var.agent_version]
+      name   = "product-code"
+      values = [var.agent_product_code]
     }
 }
 

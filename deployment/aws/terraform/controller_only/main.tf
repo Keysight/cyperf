@@ -12,11 +12,11 @@ locals{
 }
 
 data "aws_ami" "mdw_ami" {
-    owners = ["001382923476"]
+    owners = ["aws-marketplace"]
     most_recent = true
     filter {
-      name   = "name"
-      values = [var.mdw_version]
+      name   = "product-code"
+      values = [var.mdw_product_code]
     }
 }
 

@@ -43,5 +43,11 @@ variable "aws_mdw_machine_type"{
 variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-1-7"
-  description = "Image id for the cyperf controller machine"
+  description = "Version for the cyperf controller machine"
+}
+
+variable "mdw_product_code" {
+  type        = string
+  default     = "8nmwoluc06w5z6vbutcwyueje"
+  description = "Product code from the AWS Marketplace for the cyperf controller"
 }
