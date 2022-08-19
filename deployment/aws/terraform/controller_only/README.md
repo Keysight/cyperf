@@ -69,6 +69,7 @@ The following table lists the parameters for this deployment.
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
 | aws_mdw_machine_type   | c4.2xlarge   | The machine type used for deploying the CyPerf controller. |
 | mdw_version   | keysight-cyperf-controller-1-7           | The CyPerf controller image version. |
+| mdw_product_code   | 8nmwoluc06w5z6vbutcwyueje           | The CyPerf controller marketplace product code. |
 
 ## Destruction
 

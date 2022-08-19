@@ -48,7 +48,7 @@ variable "aws_agent_machine_type" {
 
 variable "aws_broker_machine_type"{
   type = string
-  default = "t2.xlarge"
+  default = "t2.medium"
   description = "MDW instance type"
 }
 
@@ -67,17 +67,35 @@ variable "agent_number"{
 variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-1-7"
-  description = "Image id for the cyperf controller machine"
+  description = "Version for the cyperf controller machine"
+}
+
+variable "mdw_product_code" {
+  type        = string
+  default     = "8nmwoluc06w5z6vbutcwyueje"
+  description = "Product code from the AWS Marketplace for the cyperf controller"
 }
 
 variable "broker_version" {
   type        = string
   default     = "keysight-cyperf-controller-proxy-1-5"
-  description = "Image id for the controller-proxy machine"
+  description = "Version for the controller-proxy machine"
+}
+
+variable "broker_product_code" {
+  type        = string
+  default     = "3fezxyt55evlaoi1pkcqtonsj"
+  description = "Product code from the AWS Marketplace for the controller-proxy machine"
 }
 
 variable "agent_version" {
   type        = string
   default     = "keysight-cyperf-agent-1-7"
-  description = "Image id for the cyperf agent machines"
+  description = "Version for the cyperf agent"
+}
+
+variable "agent_product_code" {
+  type        = string
+  default     = "zskzjts7t5crpmiic5drkq0j"
+  description = "Product code from the AWS Marketplace for the cyperf agent"
 }

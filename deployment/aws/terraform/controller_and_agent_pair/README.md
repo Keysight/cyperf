@@ -72,6 +72,8 @@ The following table lists the parameters for this deployment.
 | aws_agent_machine_type    | c4.2xlarge   |The machine type used for deploying the CyPerf agent.  |
 | mdw_version   | keysight-cyperf-controller-1-7           | The CyPerf controller image version. |
 | agent_version       | keysight-cyperf-agent-1-7     | The CyPerf agent image version.   |
+| mdw_product_code   | 8nmwoluc06w5z6vbutcwyueje           | The CyPerf controller marketplace product code. |
+| agent_product_code       | zskzjts7t5crpmiic5drkq0j     | The CyPerf agent marketplace product code.   
 
 ## Destruction
 

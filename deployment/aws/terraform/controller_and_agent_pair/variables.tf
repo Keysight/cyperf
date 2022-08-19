@@ -51,11 +51,23 @@ variable "aws_agent_machine_type" {
 variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-1-7"
-  description = "Image id for the cyperf controller"
+  description = "Version for the cyperf controller"
+}
+
+variable "mdw_product_code" {
+  type        = string
+  default     = "8nmwoluc06w5z6vbutcwyueje"
+  description = "Product code from the AWS Marketplace for the cyperf controller"
 }
 
 variable "agent_version" {
   type        = string
   default     = "keysight-cyperf-agent-1-7"
-  description = "Image id for the cyperf agent"
+  description = "Version for the cyperf agent"
+}
+
+variable "agent_product_code" {
+  type        = string
+  default     = "zskzjts7t5crpmiic5drkq0j"
+  description = "Product code from the AWS Marketplace the cyperf agent"
 }
