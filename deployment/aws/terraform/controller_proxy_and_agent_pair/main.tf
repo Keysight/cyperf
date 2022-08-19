@@ -204,20 +204,20 @@ resource "aws_network_interface" "aws_server_test_interface" {
 }
 
 data "aws_ami" "broker_ami" {
-    owners = ["001382923476"]
+    owners = ["aws-marketplace"]
     most_recent = true
     filter {
-      name   = "name"
-      values = [var.broker_version]
+      name   = "product-code"
+      values = [var.broker_product_code]
     }
 }
 
 data "aws_ami" "agent_ami" {
-    owners = ["001382923476"]
+    owners = ["aws-marketplace"]
     most_recent = true
     filter {
-      name   = "name"
-      values = [var.agent_version]
+      name   = "product-code"
+      values = [var.agent_product_code]
     }
 }
 
@@ -252,8 +252,6 @@ resource "aws_instance" "aws_broker" {
     tags = {
         Name = local.broker_name
     }
-
-
     ami           = data.aws_ami.broker_ami.image_id 
     instance_type = var.aws_broker_machine_type
 
