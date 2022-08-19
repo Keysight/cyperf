@@ -41,7 +41,7 @@ variable "controller_proxy_image" {
 
 variable "agent_image" {
   type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-6/keysight-cyperf-agent-1-6.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd"
   description = "Agent image path"
 }
 
@@ -73,7 +73,7 @@ variable "azure_agent_machine_type" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-6"
+  default     = "keysight-cyperf-agent-1-7"
   description = "Image id for the cyperf agent machines"
 }
 
