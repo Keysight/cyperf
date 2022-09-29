@@ -71,10 +71,10 @@ The following table lists the parameters for this deployment.
 | gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
 | gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | gcp_allowed_cidr | ["0.0.0.0/0"] |The GCP allowed CIDR. |
-| gcp_mdw_machine_type    | n1-standard-4   | The machine type used for deploying the CyPerf controller.  |
-| gcp_agent_machine_type   | c2-standard-16            | The machine type used for deploying the CyPerf agent. |
-| mdw_version            | keysight-cyperf-controller-1-7   | The  CyPerf controller image version.    |
-| agent_version       | keysight-cyperf-agent-1-7     | The CyPerf agent image version.   |
+| gcp_mdw_machine_type    | c2-standard-8    | The machine type used for deploying the CyPerf controller.  |
+| gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
+| mdw_version            | keysight-cyperf-controller-2-0   | The  CyPerf controller image version.    |
+| agent_version       | keysight-cyperf-agent-2-0     | The CyPerf agent image version.   |
 
 ## Destruction
 

@@ -13,13 +13,13 @@ A configuration File [YAML] and Templates [Python] are used for this Deployment.
 1.	Download following files from OpenIxia.
 2.	From gcp console, open cloud shell window and upload bellow files. 
 - [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py)
-- [cyperf_controller_and_agent_pair_new_vpc.schema](cyperf_controller_and_agent_pair_new_vpc.py.schema)
+- [cyperf_controller_and_agent_pair_new_vpc.py.schema](cyperf_controller_and_agent_pair_new_vpc.py.schema)
 - [cyperf_controller_and_agent_pair_new_vpc.yaml](cyperf_controller_and_agent_pair_new_vpc.yaml)  
 
 ### Deployment using Python Template:
 The Deployment Manager requires a Python template and certain parameters to be supplied at command line in the cloud shell.
 The list of exposed parameters is defined in the Template parameter section.
-### Examples of Deployment using Python Template:
+### Examples of Deployment using Python Template **New VPC**:
 ```
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8
 
@@ -27,7 +27,8 @@ Example:
 
 $ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-1-7,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-1-7,controllerMachineType:c2-standard-8
 ```
-### Example of Deployment using a YAML file:
+
+### Example of Deployment using a YAML file **New VPC**:
 ```
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --config cyperf_controller_and_agent_pair_new_vpc.yaml
 ```
@@ -47,8 +48,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| controllerSourceImage                   | keysight-cyperf-controller-1-7            | Preferred CyPerf Controller image.  |
-| agentSourceImage                   | keysight-cyperf-agent-1-7            | Preferred CyPerf Agent image.  |
+| controllerSourceImage                   | keysight-cyperf-controller-2-0            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-2-0            | Preferred CyPerf Agent image.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |

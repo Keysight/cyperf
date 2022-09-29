@@ -19,7 +19,7 @@ locals {
   client_name = "${var.deployment_name}-client-${var.agent_version}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
+      sh /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   gcp_project_name                 = var.gcp_project_name
   gcp_region_name                  = var.gcp_region_name
@@ -60,30 +60,6 @@ locals {
                             /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_nats_instance.network_interface.0.network_ip} >> image_init_behind_alb_log
                             sudo cyperfagent configuration reload"
                     SCRIPT
-}
-
-resource "azurerm_image" "controller" {
-  name                = "cyperf-controller"
-  location = var.azure_region_name
-  resource_group_name = azurerm_resource_group.azr_automation.name
-  hyper_v_generation  = "V1"
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = var.controller_image
-  }
-}
-
-resource "azurerm_image" "agent" {
-  name                = "cyperf-agent"
-  location = var.azure_region_name
-  resource_group_name = azurerm_resource_group.azr_automation.name
-  hyper_v_generation  = "V1"
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = var.agent_image
-  }
 }
 
 resource "azurerm_resource_group" "azr_automation" {
@@ -191,15 +167,12 @@ resource "azurerm_network_interface" "azr_automation_agent_1_test_nic" {
   }
 }
 
-
-
 resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   name                = local.mdw_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_mdw_machine_type
   admin_username      = "cyperf"
-  source_image_id     = azurerm_image.controller.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
@@ -213,6 +186,19 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+
+  plan {
+    name = "keysight-cyperf-controller"
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = "keysight-cyperf-controller"
+    version   = var.cyperf_version
+  }
 }
 
 resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
@@ -224,7 +210,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_1_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_1_test_nic.id
@@ -240,6 +225,20 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+  
+  plan {
+    name = "keysight-cyperf-agent"
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = "keysight-cyperf-agent"
+    version   = var.cyperf_version
+  }
+
   custom_data = base64encode(local.custom_data)
 }
 

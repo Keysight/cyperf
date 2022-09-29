@@ -43,18 +43,6 @@ variable "public_key" {
   description = "Path to the public key used to ssh into machine"
 }
 
-variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-controller-1-7.vhd"
-  type = string
-  description = "Controller image path"
-}
-
-variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd"
-  type = string
-  description = "Agent image path"
-}
-
 variable "azure_region_name" {
   type    = string
   default = "centralus"
@@ -106,15 +94,21 @@ variable "gcp_agent_machine_type" {
   default = "c2-standard-4"
 }
 
+variable "cyperf_version" {
+  type        = string
+  default     = "0.2.0"
+  description = "CyPerf release version to get the images from Azure Marketplace"
+}
+
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-7"
+  default     = "keysight-cyperf-controller-2-0"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-7"
+  default     = "keysight-cyperf-agent-2-0"
   description = "Image id for the cyperf agent machines"
 }
 
