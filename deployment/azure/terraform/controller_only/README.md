@@ -42,7 +42,6 @@ terraform apply --auto-approve \
 -var client_secret="" \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
--var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-7" 
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -69,14 +68,14 @@ The following table lists the parameters for this deployment.
 | client_id       | Requires input   | Specify the Azure client id.   |
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
-| controller_image       | Requires input    | Specify the Azure controller VHD images|
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | eastus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| mdw_version   | keysight-cyperf-controller-1-7            | The  CyPerf controller image version. |
+| cyperf_version   | 0.2.0           | CyPerf release version. |
+| mdw_name   | keysight-cyperf-controller-2-0            | Name for the cyperf controller machine. |
 
 ## Destruction
 
@@ -86,20 +85,3 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
-
-
-## AZ Login
-
-For users who have configured the az CLI on their machine, you can use Terraform deployments only with the subscription id.
-This means that the provider block, that can be found in the main.tf should look like this:
-
-```terraform
-provider "azurerm" {
-  features {}
-
-  subscription_id = var.subscription_id
-//  client_id = var.client_id
-//  client_secret = var.client_secret
-//  tenant_id = var.tenant_id
-}
-```

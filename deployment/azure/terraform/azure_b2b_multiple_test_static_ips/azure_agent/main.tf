@@ -1,7 +1,7 @@
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      sh /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
 }
 
@@ -14,8 +14,6 @@ resource "azurerm_public_ip" "agent_mgmt_public_ip" {
     owner = var.azure_owner
   }
 }
-
-
 
 resource "azurerm_network_interface" "azr_automation_agent_mng_nic" {
   name                = "${var.azure_agent_name}-mgmt-nic"
@@ -70,7 +68,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   location            = var.resource_group.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.agent_version
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_test_nic.id
@@ -85,6 +82,20 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+
+  plan {
+    name = "keysight-cyperf-agent"
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = "keysight-cyperf-agent"
+    version   = var.agent_version
+  }
+
   custom_data = base64encode(local.custom_data)
   tags = {
     owner = var.azure_owner

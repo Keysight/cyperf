@@ -2,28 +2,28 @@ provider "azurerm" {
   features {}
 
   subscription_id = var.subscription_id
-//  client_id = var.client_id
-//  client_secret = var.client_secret
-//  tenant_id = var.tenant_id
+  client_id = var.client_id
+  client_secret = var.client_secret
+  tenant_id = var.tenant_id
 }
 
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      sh /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
 }
 
-resource "azurerm_image" "agent" {
-  name     = "cyperf-agent-image"
-  location = var.resource_group_location
-  resource_group_name = var.resource_group_name
-  hyper_v_generation  = "V1"
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = var.agent_image
-  }
+data "azurerm_subnet" "mgmt_subnet" {
+  name                 = var.mgmt_subnet
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = var.virtual_network_name
+}
+
+data "azurerm_subnet" "test_subnet" {
+  name                 = var.test_subnet
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = var.virtual_network_name
 }
 
 resource "azurerm_public_ip" "agent_mgmt_public_ip" {
@@ -33,8 +33,6 @@ resource "azurerm_public_ip" "agent_mgmt_public_ip" {
   allocation_method   = "Dynamic"
 }
 
-
-
 resource "azurerm_network_interface" "azr_automation_agent_mng_nic" {
   name                = "${var.azure_agent_name}-mgmt-nic"
   resource_group_name = var.resource_group_name
@@ -42,7 +40,7 @@ resource "azurerm_network_interface" "azr_automation_agent_mng_nic" {
 
   ip_configuration {
     name                          = "${var.azure_agent_name}-management-ip"
-    subnet_id                     = var.mgmt_subnet
+    subnet_id                     = data.azurerm_subnet.mgmt_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.agent_mgmt_public_ip.id
   }
@@ -55,7 +53,7 @@ resource "azurerm_network_interface" "azr_automation_agent_test_nic" {
   enable_accelerated_networking = true
   ip_configuration  {
     name                          = "${var.azure_agent_name}-test-ip-1"
-    subnet_id                     = var.test_subnet
+    subnet_id                     = data.azurerm_subnet.test_subnet.id
     primary = true
     private_ip_address_allocation = "Dynamic"
   }
@@ -67,7 +65,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   location            = var.resource_group_location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_test_nic.id
@@ -81,6 +78,18 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
+  }
+  plan {
+    name = "keysight-cyperf-agent"
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = "keysight-cyperf-agent"
+    version   = var.cyperf_version
   }
   custom_data = base64encode(local.custom_data)
   tags = {

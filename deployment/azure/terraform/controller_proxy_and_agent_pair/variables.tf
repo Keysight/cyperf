@@ -33,18 +33,6 @@ variable "public_key" {
   description = "Path to the public key used to ssh into machine"
 }
 
-variable "controller_proxy_image" {
-  type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-proxy-1-5.vhd"
-  description = "Controller proxy image path"
-}
-
-variable "agent_image" {
-  type = string
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd"
-  description = "Agent image path"
-}
-
 variable "azure_region_name" {
   type    = string
   default = "centralus"
@@ -71,16 +59,28 @@ variable "azure_agent_machine_type" {
   default = "Standard_F4s_v2"
 }
 
-variable "agent_version" {
+variable "cyperf_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-7"
-  description = "Image id for the cyperf agent machines"
+  default     = "0.2.0"
+  description = "CyPerf release version"
 }
 
-variable "broker_image" {
+variable "broker_version" {
+  type        = string
+  default     = "0.1.5"
+  description = "CyPerf release version"
+}
+
+variable "agent_name" {
+  type        = string
+  default     = "keysight-cyperf-agent-2-0"
+  description = "Name for the cyperf agent machines"
+}
+
+variable "broker_name" {
   type        = string
   default     = "keysight-cyperf-controller-proxy-1-5"
-  description = "Broker image"
+  description = "Name for the cyperf broker machines"
 }
 
 variable "azure_broker_machine_type" {

@@ -33,14 +33,19 @@ variable "resource_group_location" {
   description = "Resource group location"
 }
 
+variable "virtual_network_name" {
+  type = string
+  description = "Virtual network name"
+}
+
 variable "mgmt_subnet" {
   type = string
-  description = "Management subnet id"
+  description = "Management subnet name"
 }
 
 variable "test_subnet" {
   type = string
-  description = "Test subnet id"
+  description = "Test subnet name"
 }
 
 variable "controller_ip" {
@@ -53,16 +58,10 @@ variable "public_key" {
   description = "Path to the public key. This will be uesd to authenticate into the vm"
 }
 
-variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd"
-  type = string
-  description = "Agent image path"
-}
-
-variable "agent_version" {
+variable "cyperf_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-7"
-  description = "Image id for the agent machines"
+  default     = "0.2.0"
+  description = "CyPerf release version"
 }
 
 variable "azure_agent_machine_type" {

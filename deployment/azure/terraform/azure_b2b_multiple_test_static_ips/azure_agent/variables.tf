@@ -34,7 +34,6 @@ variable "controller_ip" {
 
 variable "agent_version" {
   type        = string
-  default     = "1-0-377-master-tiger-1-0-3-233"
   description = "Image id for the agent machines"
 }
 

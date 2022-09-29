@@ -41,12 +41,12 @@ variable "gcp_allowed_cidr" {
 
 variable "gcp_mdw_machine_type" {
   type    = string
-  default = "n1-standard-4"
+  default = "c2-standard-8"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-1-7"
+  default     = "keysight-cyperf-controller-2-0"
   description = "Image id for the cyperf controller machine"
 }
 
