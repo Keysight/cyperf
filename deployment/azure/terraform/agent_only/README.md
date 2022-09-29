@@ -35,15 +35,18 @@ If no -var option is applied, upon running terraform apply, you will be asked fo
 #### Example
 
 terraform apply --auto-approve \
--var azure_owner_tag="test" \
--var azure_project_name="kt-nas-cyperf-dev" \
+-var azure_agent_name="agent" \
 -var subscription_id="" \
 -var client_id="" \
 -var client_secret="" \
 -var tenant_id="" \
+-var resource_group_name="" \
+-var resource_group_location="" \
+-var virtual_network_name="" \
+-var mgmt_subnet="" \
+-var test_subnet="" \
+-var controller_ip="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
--var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-7" \
--var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-7"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -74,12 +77,13 @@ The following table lists the parameters for this deployment.
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | resource_group_name     | Requires input   | Specify Azure resource group name. |
 | resource_group_location     | Requires input   | Specify Azure resource group location. |
+| virtual_network_name     | Requires input   | Virtual network name. |
 | mgmt_subnet | Requires input    | Management subnet id |
 | test_subnet | Requires input    | Test subnet id |
 | controller_ip | Requires input    | Test subnet id |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
-| agent_image | "https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd"   | Specify the Azure agent VHD image |
-| agent_version   | keysight-cyperf-agent-1-7            | The  CyPerf agent image version. |
+| cyperf_version   | 0.2.0            | CyPerf release version. |
+| agent_version   | keysight-cyperf-agent-2-0            | The  CyPerf agent image version. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | agent_role | azure-agent | This will act as a tag in controller UI and will enable assignment by tag|
 

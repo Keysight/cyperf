@@ -14,43 +14,9 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 ### Specialized knowledge
 Before deployment, we recommend that you become familiar with the following Azure services:
-- [Create a custom image from a VHD file](https://docs.microsoft.com/en-us/azure/devtest-labs/devtest-lab-create-template)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)
 
 **Note:** If you are new to Azure, see [Getting Started with Azure](https://azure.microsoft.com/en-in/get-started/).
-
-## Copy VHD images 
-Azure images will be available at Keysight Azure Blob container **keysight-cyperf-1-7**.
-For accessing VHD file refer to the URL link:
-
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-controller-1-7.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-controller-1-7.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-agent-1-7.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-proxy-1-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-5/keysight-cyperf-controller-proxy-1-5.vhd)
-
-User may download VHD images and upload those in their own container before using the terraform templates.
-Alternatively, user may use following PowerShell command from Azure cloud shell to copy VHD images from Keysight Azure container to User’s Azure container.
-
-### Keysight SAS token for Keysight storage account CyPerf
-```
-?sv=2020-02-10&ss=b&srt=co&sp=rl&se=2031-04-26T20:08:16Z&st=2021-04-26T12:08:16Z&spr=https&sig=%2Fr0ENUs2QXp3g0%2BdcGwAwcpNAf06aeI4W7WuEmQ6xP8%3D
-```
-
-### Pre-requisite for PowerShell command execution:
-1.	User’s own Azure storage account name
-2.	User’s own Azure container name.
-3.	User’s own SAS key for their storage account.
-
-### Execution of PowerShell command:
-1.	Open PowerShell window from Azure portal 
-2.	Execute:
-
-```
-# azcopy copy
-"https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
-"https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
---recursive=true
-
-```
 
 **Note:** Please replace string placed in **<>** with proper value.
 
@@ -84,8 +50,6 @@ terraform apply --auto-approve \
 -var client_secret="secret" \
 -var tenant_id="id" \
 -var public_key="path/to/public/key" \
--var controller_image="path/to/azure/image/” \
--var agent_image="path/to/azure/image/”
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 

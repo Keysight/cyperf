@@ -45,8 +45,6 @@ terraform apply --auto-approve \
 -var client_secret="" \
 -var tenant_id="" \
 -var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
--var controller_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-controller-1-7" \
--var agent_image="/subscriptions/908fce0d-1b5e-475a-a419-2a30b8c01f6b/resourceGroups/keysight-cyperf-rg/providers/Microsoft.Compute/images/keysight-cyperf-agent-1-7"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -74,16 +72,16 @@ The following table lists the parameters for this deployment.
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
-| controller_image       | Requires input    | Specify the Azure controller VHD image|
-| agent_image | Requires input    | Specify the Azure agent VHD image |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | centralus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_version   | keysight-cyperf-controller-1-7            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-7            | The  CyPerf agent image version. |
+| agents   | 2            | Number of agents to be deployed. |
+| cyperf_version   | 0.2.0            | CyPerf release version. |
+| mdw_name   | keysight-cyperf-controller-2-0            | Name for the cyperf controller machine. |
+| agent_name   | keysight-cyperf-agent-2-0            | Name for the cyperf agent machines. |
 
 ## Destruction
 

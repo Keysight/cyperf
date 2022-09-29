@@ -60,7 +60,7 @@ variable "broker_product_code" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-1-7"
+  default     = "keysight-cyperf-agent-2-0"
   description = "Version for the cyperf agent machines"
 }
 

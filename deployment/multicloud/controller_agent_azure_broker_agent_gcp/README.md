@@ -63,16 +63,15 @@ The following table lists the parameters for this deployment.
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the public key that will be used to auth into the vms.   |
-| controller_image       | Requires input    | Specify the Azure controller image resource id|
-| agent_image | Requires input    | Specify the Azure agent image resource id |
 | gcp_region_name      | us-east1       | The GCP region where the deployment will take place. |
 | gcp_zone_name | us-east1-b | The GCP zone where the deployment will take place. |
 | gcp_project_tag | keysight-gcp-cyperf |The GCP project tag name. |
 | azure_region_name      | eastus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| mdw_version   | keysight-cyperf-controller-1-7            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-1-7           | The  CyPerf agent image version. |
+| cyperf_version   | 0.2.0            | CyPerf release version to get the images from Azure Marketplace. |
+| mdw_version   | keysight-cyperf-controller-2-0            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-2-0           | The  CyPerf agent image version. |
 | broker_image            | keysight-cyperf-controller-proxy-1-5   | The  CyPerf controller proxy image version.    |
 | gcp_broker_machine_type   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
 | gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
