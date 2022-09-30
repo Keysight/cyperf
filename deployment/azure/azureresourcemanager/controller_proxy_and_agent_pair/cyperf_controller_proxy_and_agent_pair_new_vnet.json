@@ -638,7 +638,7 @@
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
                     "sku": "keysight-cyperf-controller-proxy",
-                    "version": "[parameters('Cyperf Version')]"
+                    "version": "latest"
                     }
                 },
 
