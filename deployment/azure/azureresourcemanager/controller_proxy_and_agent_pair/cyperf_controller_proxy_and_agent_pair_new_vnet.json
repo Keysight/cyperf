@@ -26,10 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.1.6",
+            "defaultValue": "0.2.0",
 
             "allowedValues": [
-              "0.1.6"
+              "0.2.0"
             ],
 
             "metadata": {
