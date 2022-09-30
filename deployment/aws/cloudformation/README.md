@@ -11,6 +11,7 @@ The prerequisites are:
 - Permissions to create AWS Identity and Management (IAM) roles; these roles are required for Keysight CyPerf Agent to interact with the AWS environment.
 - Permissions to create subnets.
 - Permissions to create and access interfaces.
+- Before template deployment, subscribe required Keysight CyPerf marketplace product version from [aws marketplace](https://aws.amazon.com/marketplace).
 
 ## Specialized knowledge
 Before you deploy a CloudFormation template, we recommend that you become familiar with the following AWS services:
