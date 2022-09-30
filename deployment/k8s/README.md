@@ -258,6 +258,13 @@ TO BE CONTINUED ...
 
 ## Releases
 
+- **CyPerf 2.0** - [September, 2022]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release2.0
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.450  
+
+    - Change history:
+
 - **CyPerf 1.7** - [August, 2022]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release1.7
