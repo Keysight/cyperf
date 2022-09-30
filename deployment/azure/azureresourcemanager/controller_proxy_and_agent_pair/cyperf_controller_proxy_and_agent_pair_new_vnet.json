@@ -21,6 +21,23 @@
             }
 
         },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.1.6",
+
+            "allowedValues": [
+              "0.1.6"
+            ],
+
+            "metadata": {
+
+              "description": "The CyPerf release version."
+
+            }
+        },
         
         "Proximity Placement Group": {
             
@@ -81,30 +98,6 @@
             "metadata": {
 
                 "description": "CyPerf agents will use this subnet for test traffic"
-
-            }
-
-        },
-
-        "VHD URL Cyperf Agents": {
-
-            "type": "string",
-
-            "metadata": {
-
-                "description": "VHD URL of CyPerf Agents"
-
-            }
-
-        },
-
-        "VHD URL Cyperf Controller Proxy": {
-
-            "type": "string",
-
-            "metadata": {
-
-                "description": "VHD URL of CyPerf Controller Proxy"
 
             }
 
@@ -182,10 +175,6 @@
 
         "location"  :     "[resourceGroup().location]",
 
-        "agent_image_name": "[concat(variables('stackname'),'-agentimage')]",
-
-        "controllerproxy_image_name": "[concat(variables('stackname'),'-controllerproxyimage')]",
-
         "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
 
         "vnet"  :     "[concat(variables('stackname'),'-virtualnetwork')]",
@@ -219,87 +208,6 @@
     },
 
     "resources": [
-
-       {
-
-         "comments": "creation of agent image from vhd which will be later used as a reference for the virtual machine creation",
-         
-         "type": "Microsoft.Compute/images",
-         
-         "name": "[variables('agent_image_name')]",
-         
-         "apiVersion": "2019-07-01",
-         
-         "location": "[variables('location')]",
-         
-         "properties": {
-             
-             "hyperVGeneration": "V1",
-             
-             "storageProfile": {
-                 
-                 "dataDisks": [],
-                 
-                 "osDisk": {
-                     
-                     "osType": "Linux",
-                     
-                     "osState": "Generalized",
-                     
-                     "blobUri": "[parameters('VHD URL Cyperf Agents')]",
-                     
-                     "caching": "None",
-                     
-                     "storageAccountType": "Premium_LRS"
-                     
-                     }
-                     
-                }
-                
-            }
-
-        },
-
-        {
-
-         "comments": "creation of controllerproxy image from vhd which will be later used as a reference for the virtual machine creation",
-         
-         "type": "Microsoft.Compute/images",
-         
-         "name": "[variables('controllerproxy_image_name')]",
-         
-         "apiVersion": "2019-07-01",
-         
-         "location": "[variables('location')]",
-         
-         "properties": {
-             
-             "hyperVGeneration": "V1",
-             
-             "storageProfile": {
-                 
-                 "dataDisks": [],
-                 
-                 "osDisk": {
-                     
-                     "osType": "Linux",
-                     
-                     "osState": "Generalized",
-                     
-                     "blobUri": "[parameters('VHD URL Cyperf Controller Proxy')]",
-                     
-                     "caching": "None",
-                     
-                     "storageAccountType": "Premium_LRS"
-                     
-                     }
-                     
-                }
-                
-            }
-
-        },
-
 
         {
 
@@ -665,6 +573,16 @@
 
             "location": "[variables('location')]",
 
+            "plan": {
+
+                "name": "keysight-cyperf-controller-proxy",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
             "dependsOn": [
 
                 "updateIP"
@@ -710,13 +628,18 @@
                 },
 
                 "storageProfile": {
-
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
                     "imageReference": {
-
-                        "id": "[resourceId('Microsoft.Compute/images',variables('controllerproxy_image_name'))]"
-
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-controller-proxy",
+                    "version": "[parameters('Cyperf Version')]"
                     }
-
                 },
 
                 "networkProfile": {
@@ -851,6 +774,16 @@
 
             "location": "[variables('location')]",
 
+            "plan": {
+
+                "name": "keysight-cyperf-agent",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
             "copy": {
 
                 "name": "agentscopy",
@@ -863,9 +796,7 @@
 
                 "[variables('vmname_controllerproxy')]",
 
-                "[variables('proximity_pg_name')]",
-
-                "[variables('agent_image_name')]"
+                "[variables('proximity_pg_name')]"
 
             ],
 
@@ -912,13 +843,18 @@
                 },
 
                 "storageProfile": {
-
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
                     "imageReference": {
-
-                        "id": "[resourceId('Microsoft.Compute/images',variables('agent_image_name'))]"
-
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-agent",
+                    "version": "[parameters('Cyperf Version')]"
                     }
-
                 },
 
                 "networkProfile": {
