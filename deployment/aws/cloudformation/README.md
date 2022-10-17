@@ -12,6 +12,28 @@ The prerequisites are:
 - Permissions to create subnets.
 - Permissions to create and access interfaces.
 - Before template deployment, subscribe required Keysight CyPerf marketplace product version from [aws marketplace](https://aws.amazon.com/marketplace).
+- User must be associated with managed IAM policy "AWSCloudFormationFullAcess" and a custom IAM policy
+
+Note:
+    JSON format for custom policy
+
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "VisualEditor0",
+                "Effect": "Allow",
+                "Action": [
+                    "iam:*",
+                    "s3:*",
+                    "lambda:*",
+                    "cloudformation:*",
+                    "ec2:*"
+                ],
+                "Resource": "*"
+            }
+        ]
+    }
 
 ## Specialized knowledge
 Before you deploy a CloudFormation template, we recommend that you become familiar with the following AWS services:

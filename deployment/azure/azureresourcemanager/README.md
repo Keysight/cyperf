@@ -8,7 +8,38 @@ To start using CyPerf's ARM templates, please refer the **README** files in each
 The prerequisites are:
 - SSH Key pair for management access to CyPerf instances.
 - For existing VNET deployment, an existing VNET, two existing subnets in that VNET (one for test and one for Management) and existing security groups for CyPerf Controller and CyPerf Agent.
-- Copy CyPerf VHD images to users own storage account. 
+- User should have atlest Contributor IAM role. This is Azure BuiltInRole.
+
+Note:
+    JSON format for Contributor role
+
+    {
+        "id": "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c",
+        "properties": {
+            "roleName": "Contributor",
+            "description": "Grants full access to manage all resources, but does not allow you to assign roles in Azure RBAC, manage assignments in Azure Blueprints, or share image galleries.",
+            "assignableScopes": [
+                "/"
+            ],
+            "permissions": [
+                {
+                    "actions": [
+                        "*"
+                    ],
+                    "notActions": [
+                        "Microsoft.Authorization/*/Delete",
+                        "Microsoft.Authorization/*/Write",
+                        "Microsoft.Authorization/elevateAccess/Action",
+                        "Microsoft.Blueprint/blueprintAssignments/write",
+                        "Microsoft.Blueprint/blueprintAssignments/delete",
+                        "Microsoft.Compute/galleries/share/action"
+                    ],
+                    "dataActions": [],
+                    "notDataActions": []
+                }
+            ]
+        }
+    }   
 
 ### Specialized knowledge
 Before you deploy this Custom ARM template, we recommend that you become familiar with the following Azure services:
