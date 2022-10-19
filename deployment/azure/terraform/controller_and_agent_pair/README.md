@@ -34,14 +34,14 @@ If no -var option is applied, upon running terraform apply, you will be asked fo
 
 #### Example
 
-terraform apply --auto-approve \
--var azure_owner_tag="test" \
--var azure_project_name="kt-nas-cyperf-dev" \
--var subscription_id="" \
--var client_id="" \
--var client_secret="" \
--var tenant_id="" \
--var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub" \
+terraform apply --auto-approve \  
+-var azure_owner_tag="test" \  
+-var azure_project_name="kt-nas-cyperf-dev" \  
+-var subscription_id="" \  
+-var client_id="" \  
+-var client_secret="" \  
+-var tenant_id="" \  
+-var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub"
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
