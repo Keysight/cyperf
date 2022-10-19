@@ -34,10 +34,10 @@ If no -var option is applied, upon running terraform apply, you will be asked fo
 
 #### Example
 
-terraform apply --auto-approve \
--var gcp_project_name= "project_name” \
--var gcp_owner_tag="test"  \
--var gcp_ssh_key="path/to/public/key"  \
+terraform apply --auto-approve \  
+-var gcp_project_name= "project_name” \  
+-var gcp_owner_tag="test"  \  
+-var gcp_ssh_key="path/to/public/key"  \  
 -var gcp_credential_file=”path/to/credential/file/”
 
 

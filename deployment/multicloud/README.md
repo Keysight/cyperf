@@ -34,17 +34,17 @@ If no -var option is applied, upon running terraform apply, you will be asked fo
 
 #### Example
 
-terraform apply --auto-approve \
--var gcp_project_name= "project_name” \
--var gcp_credential_file=”path/to/credential/file/”
--var azure_project_name="project_name \
--var subscription_id="id" \
--var client_id="id " \
--var client_secret="secret" \
--var tenant_id="id" \
--var public_key="path/to/public/key" \
--var controller_image="path/to/azure/image/” \
--var agent_image="path/to/azure/image/” \
+terraform apply --auto-approve \  
+-var gcp_project_name= "project_name” \  
+-var gcp_credential_file=”path/to/credential/file/” \  
+-var azure_project_name="project_name \  
+-var subscription_id="id" \  
+-var client_id="id " \  
+-var client_secret="secret" \  
+-var tenant_id="id" \  
+-var public_key="path/to/public/key" \  
+-var controller_image="path/to/azure/image/” \  
+-var agent_image="path/to/azure/image/” \  
 -var deployment_name=multicloud
 
 
