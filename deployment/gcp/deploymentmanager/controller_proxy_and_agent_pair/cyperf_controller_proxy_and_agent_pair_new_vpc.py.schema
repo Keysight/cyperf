@@ -57,4 +57,4 @@ properties:
   agentCount:
     type: integer
     default: 2
-    description: number of agnets
+    description: number of agents
