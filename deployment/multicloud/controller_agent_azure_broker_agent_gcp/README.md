@@ -70,9 +70,9 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | cyperf_version   | 0.2.0            | CyPerf release version to get the images from Azure Marketplace. |
-| mdw_version   | keysight-cyperf-controller-2-0            | The  CyPerf controller image version. |
-| agent_version   | keysight-cyperf-agent-2-0           | The  CyPerf agent image version. |
-| broker_image            | keysight-cyperf-controller-proxy-1-5   | The  CyPerf controller proxy image version.    |
+| mdw_version   | keysight-cyperf-controller-2-1            | The  CyPerf controller image version. |
+| agent_version   | keysight-cyperf-agent-2-1           | The  CyPerf agent image version. |
+| broker_image            | keysight-cyperf-controller-proxy-2-1   | The  CyPerf controller proxy image version.    |
 | gcp_broker_machine_type   | n1-standard-2            | The machine type used for deploying the CyPerf controller proxy. |
 | gcp_agent_machine_type   | c2-standard-4            | The machine type used for deploying the CyPerf agent. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |

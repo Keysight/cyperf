@@ -102,18 +102,18 @@ variable "cyperf_version" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-2-0"
+  default     = "keysight-cyperf-controller-2-1"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-2-0"
+  default     = "keysight-cyperf-agent-2-1"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-1-5"
+  default     = "keysight-cyperf-controller-proxy-2-1"
   description = "Image id for the cyperf controller proxy machines"
 }
