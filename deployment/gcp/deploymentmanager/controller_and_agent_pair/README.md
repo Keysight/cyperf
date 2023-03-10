@@ -15,6 +15,9 @@ A configuration File [YAML] and Templates [Python] are used for this Deployment.
 - [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py)
 - [cyperf_controller_and_agent_pair_new_vpc.py.schema](cyperf_controller_and_agent_pair_new_vpc.py.schema)
 - [cyperf_controller_and_agent_pair_new_vpc.yaml](cyperf_controller_and_agent_pair_new_vpc.yaml)  
+- [cyperf_controller_and_agent_pair_existing_vpc.py](cyperf_controller_and_agent_pair_existing_vpc.py)
+- [cyperf_controller_and_agent_pair_existing_vpc.py.schema](cyperf_controller_and_agent_pair_existing_vpc.py.schema)
+- [cyperf_controller_and_agent_pair_existing_vpc.yaml](cyperf_controller_and_agent_pair_existing_vpc.yaml) 
 
 ### Deployment using Python Template:
 The Deployment Manager requires a Python template and certain parameters to be supplied at command line in the cloud shell.
@@ -25,18 +28,33 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-1-7,controllerMachineType:c2-standard-8
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-1,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-2-1,controllerMachineType:c2-standard-8
+```
+### Examples of Deployment using Python Template **Existing VPC**:
+```
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,management_subnet:<Existing subnet from prior mentioned region and zone>,test_subnet:<Existing subnet from prior mentioned region and zone>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8
+
+Example:
+
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-1,agentCount:2,controllerSourceImage:keysight-cyperf-controller-2-1,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
 ```
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --config cyperf_controller_and_agent_pair_new_vpc.yaml
 ```
+
+### Example of Deployment using a YAML file **Existing VPC**:
+```
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --config cyperf_controller_and_agent_pair_existing_vpc.yaml
+```
 ### SSH Key:
 To generate the public key and enable SSH access to the CyPerf instances, perform the following steps:
 
 1. Create private key and public key, see [Creating a new SSH key](https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys#createsshkeys).
-2. Edit [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py), and specify 
+2. For New VPC Edit [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py), and specify 
+`sslkey ='<Replace with ssh public key.>'`.
+3. For Existing VPC Edit [cyperf_controller_and_agent_pair_existing_vpc.py](cyperf_controller_and_agent_pair_existing_vpc.py), and specify 
 `sslkey ='<Replace with ssh public key.>'`.
 
 ## Template Parameters:
@@ -48,13 +66,28 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| controllerSourceImage                   | keysight-cyperf-controller-2-0            | Preferred CyPerf Controller image.  |
-| agentSourceImage                   | keysight-cyperf-agent-2-0            | Preferred CyPerf Agent image.  |
+| controllerSourceImage                   | keysight-cyperf-controller-2-1            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-2-1            | Preferred CyPerf Agent image.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
 
+## Template Parameters:
+The following table lists the parameters for this deployment in **Existing VPC**.
+
+| Parameter label (name)                   | Default            | Description  |
+| ----------------------- | ----------------- | ----- |
+| zone                   | Requires input            | Preferred Zone name for the deployment.  |
+| region                   | Requires input            | Preferred Region name for the deployment.  |
+| controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
+| agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
+| controllerSourceImage                   | keysight-cyperf-controller-2-1            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-2-1            | Preferred CyPerf Agent image.  |
+| management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
+| test_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"    | CyPerf agents will use this subnet for test traffic.  |
+| agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
+| serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
 
 ## Post deploy
 

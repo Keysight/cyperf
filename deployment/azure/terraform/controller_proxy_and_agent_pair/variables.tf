@@ -73,13 +73,13 @@ variable "broker_version" {
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-2-0"
+  default     = "keysight-cyperf-agent-2-1"
   description = "Name for the cyperf agent machines"
 }
 
 variable "broker_name" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-1-5"
+  default     = "keysight-cyperf-controller-proxy-2-1"
   description = "Name for the cyperf broker machines"
 }
 

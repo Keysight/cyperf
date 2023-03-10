@@ -7,20 +7,20 @@ info:
 
 
 imports:
-  - path: cyperf_controller_and_agent_pair_new_vpc.py
+  - path: cyperf_controller_proxy_and_agent_pair_existing_vpc.py
     name: helper.py
 
 
 properties: 
-  controllerMachineType:
+  controllerProxyMachineType:
     type: string
-    default: c2-standard-8
-    description: machine type for controller
+    default: e2-medium
+    description: machine type for controller proxy
  
-  controllerSourceImage:
+  controllerProxySourceImage:
     type: string
-    default: keysight-cyperf-controller-2-1
-    description: sample source image of controller 
+    default: keysight-cyperf-controller-proxy-2-1
+    description: sample source image of controller proxy
 
   region:
     type: string
@@ -40,22 +40,22 @@ properties:
   agentMachineType:
     type: string
     default: c2-standard-4
-    description: agent machine type
+    description: Zone to deploy
 
   agentSourceImage:
     type: string
     default: keysight-cyperf-agent-2-1
     description: source image for agents
 
-  managementNetworkCIDR:
+  management_subnetwork:
+    description: Specify the name of the subnet to use for management traffic, for example 'management-subnetwork'.
     type: string
-    default: 172.16.5.0/24
-    description: CIDR for  for mngt network
-  testNetworkCIDR:
+  
+  test_subnetwork:
+    description: Specify the name of the subnet to use for test traffic, for example 'test-subnetwork'.
     type: string
-    default: 10.0.0.0/8
-    description: CIDR for  for test network
+
   agentCount:
     type: integer
     default: 2
-    description: number of agents
+    description: number of agnets
