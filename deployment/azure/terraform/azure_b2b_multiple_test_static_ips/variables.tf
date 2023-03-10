@@ -78,12 +78,12 @@ variable "cyperf_version" {
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-2-0"
+  default     = "keysight-cyperf-controller-2-1"
   description = "Name for the cyperf controller machine"
 }
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-2-0"
+  default     = "keysight-cyperf-agent-2-1"
   description = "Name for the cyperf agent machines"
 }

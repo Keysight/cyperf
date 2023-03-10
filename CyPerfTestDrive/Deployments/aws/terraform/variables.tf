@@ -1,6 +1,6 @@
 
 variable "AgentAmiName" {
-	default = "keysight-cyperf-agent-2-0"
+	default = "keysight-cyperf-agent-2-1"
 	description = "AMI name used for deploying Agent instances"
 	type = string
 }
@@ -106,7 +106,7 @@ variable "ApplicationLBHTTPSListenerPort" {
 }
 
 variable "ControllerAmiName" {
-	default = "keysight-cyperf-controller-2-0"
+	default = "keysight-cyperf-controller-2-1"
 	description = "AMI name used for deploying Controller instances"
 	type = string
 }

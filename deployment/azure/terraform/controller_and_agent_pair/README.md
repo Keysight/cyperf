@@ -76,8 +76,8 @@ The following table lists the parameters for this deployment.
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | cyperf_version   | 0.2.0            | CyPerf release version. |
-| mdw_name   | keysight-cyperf-controller-2-0            | Name for the cyperf controller machine. |
-| agent_name   | keysight-cyperf-agent-2-0            | Name for the cyperf agent machines. |
+| mdw_name   | keysight-cyperf-controller-2-1            | Name for the cyperf controller machine. |
+| agent_name   | keysight-cyperf-agent-2-1            | Name for the cyperf agent machines. |
 
 ## Destruction
 
