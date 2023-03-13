@@ -1,65 +1,74 @@
-# About using CyPerf Agents in K8s environments
+# CyPerf Agents in Kubernetes (K8s) environments
 ## Introduction
-This document describes about how Keysight CyPerf’s Agents can be deployed inside Kubernetes clusters. Following sections mention the prerequiites for such deployments and elaborate on minimal modifications that will be required in the client and server manifest yaml examples. Some of these modifications are required for updating the manifests for specific user environment and some will be optional or depend on different types of deployment scenarios.
+This document describes how you can deploy the Keysight CyPerf agents inside Kubernetes clusters. The Following sections contain information about the prerequisites for deployments and also explain the modifications that are required in the client and server manifest yaml examples. Some modifications are mandatory for updating the manifests for specific user environment whereas some of them are optional and depend on different types of deployment scenarios.
 
-- [Workflow](#workflow)
 - [General Prerequisites](#general-prerequisites)
-- [Example Manifests](#example-manifests)
-- [Deployment in **AWS EKS**](#deployment-in-aws-eks)
+- [Workflow](#workflow)
+    - [Example Manifests](#example-manifests)
+- [Deployment in **AWS EKS OR AZURE AKS**](#deployment-in-aws-eks-or-azure-aks)
 - [Deployment in **On-Premise K8s Cluster**](#deployment-in-on-premise-k8s-cluster)
-- [Managing Resource for CyPerf Agents](#managing-resource-for-cyperf-agents)
+- [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents)
 - [Supported CNIs](#supported-cnis)
 - [Test Configuration Checklist](#test-configuration-checklist)
 - [Troubleshooting](#troubleshooting)
 
 
-## Workflow
-- In order to test some device or service running inside a K8s cluster, user must start with such a cluster already deployed. The containerzied device under test (DUT) is expected to be already deployed in this cluster.
-- There must be a CyPerf Controller already deployed as well. Once the CyPerf Agents are deployed in the cluster following the steps described below, they will automatically get registered to CyPerf Controller and become ready to use.
-- A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
-- User can now introduce CyPerf Agents as client or server or both running inside the cluster by applying the [example manifests](#example-manifests). These manifests will require a few edits for adjusting to specific delpoyment scenario. 
-- Agents will be visible (by their tags and IP addresses) in the _Agent Assignment_ dialog.
-- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in _DUT Network->Configure DUT_ page in the UI before running the test. _[More details can be found in **_Chapter 3_** of **_Cyperf User Guide_**.]_ 
-
 ## General Prerequisites
+To deploy a Keysight CyPerf agent inside Kubernetes, you need the following:
+1. You can use the *CyPerf Agents in both* **_on-premise_** *K8s cluster (For example: **nodes in VMs on ESXi host**) and in* **_cloud_** *(For example: nodes in **_AWS EKS_***).
+    - K8s version 1.20 or 1.21 is recommended for On-Premise K8s Cluster.
+    - K8s version 1.24 is recommended for EKS and AKS Clusters.
+    
+2. A kubernetes cluster along with a containerzied device under test (DUT) that is already deployed in the same cluster. 
+  
+    - **_NOTE:_** For more information on how to deploy the DUT in a K8s cluster, follow the instructions provided in the [Cyperf Deployment Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_Deployment_Guide.pdf) for a specific DUT . For general information on K8s cluster deployment, see [Kubernetes Documentation](https://kubernetes.io/docs/setup/).
 
-1.  A kubernetes cluster along with DUT should be already deployed. For more details on how to deploy the DUT in a K8s cluster, please follow the instructions provided in the deployment guide for a specific DUT. For general information on K8s cluster deployment, please refer to [K8s website](https://kubernetes.io/docs/setup/).  
-    - K8s version 1.20 or 1.21 is recommended.
-    - *CyPerf Agents can be used in both* **_on-premise_** *K8s cluster (e.g. where nodes can be VMs on ESXi host) or in* **_cloud_** *(e.g. where nodes can be in* **_AWS EKS_***).*
-2.  CyPerf Controller is already deployed. It should be accessible from the nodes inside the kubernetes cluster.  
-    *Details on how to deploy CyPerf Controller and use it, how to manage licenses etc. can be found in* **_Chapter 2_** *of* **_Cyperf User Guide_ ***, which can be downloaded from Keysight's software download portal.*
-3.  A CyPerf Controller Proxy is required in some hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy is configured in the CyPerf Controller.
-4.  Make sure that ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
-5.  The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. If you need specific versions, note down CyPerf Agent's container image URL that you want to use. This ECR Public image URL needs to be accessible from the test environment, i.e. from the cluster nodes.
-6.  Assign `agenttype=client` label to the nodes where you want to deploy CyPerf Agents as  test traffic initiating clients and assign `agenttype=server` label to the nodes where you want CyPerf Agents to be simulating the test servers.    
+3.  A CyPerf Controller that is already deployed and accessible from the nodes inside the kubernetes cluster.  
+    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
+3.  A CyPerf Controller Proxy in hybrid deployment scenario, where each of the distributed agent cannot directly access the CyPerf Controller. 
+For example: If a CyPerf controller is deployed on premise and the other is deployed in the cloud, they can still communicate through a CyPerf Controller Proxy. In that case, agents that are registered to the Controller Proxy and the public IP address of the Controller Proxy are configured in the CyPerf Controller.
+4.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allows port numbers **443** and **30422** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+5.  Place holder container image URL for the CyPerf Agent container. The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. For specific versions, use the CyPerf Agent's container image URL. This ECR Public image URL needs to be accessible from the test environment, for example: _the cluster nodes_.
+6.  Assign `agenttype=client` label to the nodes if you want to deploy CyPerf Agents as test traffic to initiate the clients and assign `agenttype=server` label to the nodes if you want the CyPerf Agents to simulate the test servers.    
     ```
     kubectl get nodes --show-labels
 
     kubectl label nodes <your-node-name> agenttype=client
     kubectl label nodes <your-node-name> agenttype=server
     ```
+## Workflow
+To test a device or a service that is running inside a K8s cluster, do the following:
+- Select and start with a cluster that is already deployed. The containerzied device under test (DUT) is also expected to be deployed in the same cluster.
+- There must be a CyPerf Controller already deployed as well. Once the CyPerf Agents are deployed in the cluster following the steps described below, they will automatically get registered to CyPerf Controller and become ready to use.
+- A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, when the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, Agents register to the Controller Proxy and the public IP address of the Controller Proxy that is configured in the CyPerf Controller.
+- Introduce the CyPerf Agent as a client or a server or as both that is running inside the cluster. This can be achieved by applying the [example manifests](#example-manifests). These manifests will require a few modifications for adjusting to specific delpoyment scenario. 
+    - **_NOTE:_** Agents will be visible (by their tags and IP addresses) in the _Agent Assignment_ dialog.
+- Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in the _DUT Network->Configure DUT_ page in the UI before running the test. 
+  - **_NOTE:_** For more information, see _Chapter 3_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
 
-## Example Manifests
+###  **Example Manifests**
 - Client: [agent_examples/cyperf-agent-client.yaml](agent_examples/cyperf-agent-client.yaml) 
 - Server: [agent_examples/cyperf-agent-server.yaml](agent_examples/cyperf-agent-server.yaml)        
 
-- Modifications needed:
-    1. Change the place holder container `image` URL with one that you want to use for CyPerf Agent container. Please get this URL from Keysight's software download portal.
-    2. Change the place holder `AGENT_CONTROLLER` value with your CyPerf Controller's IP address. If controller IP is not known yet, this variable must be ommitted from the yaml and using cyperfagent CLI can be set after controller deployment.
-    3. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select that as management interface. The same interface will be used for test traffic too. In case there is a need for explicitly selecting management or test interface, following `env` variables can be used. These are mentioned in the example yaml scripts as comments.
+- Modifications that are required to delpoy a CyPerf Agent, are as follows:
+    1. Replace the place holder container `image` URL with the specific version, that you want to use for the CyPerf Agent container. You can get this URL from [Keysight software download portal](https://support.ixiacom.com/keysight-cyperf-software-downloads-documentation).
+    2. Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then this variable must be ommitted from the yaml. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
+    3. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also. If you need to select a management or test interface explicitly, use the following `env` variables. You can find these variables in the example yaml scripts as comments.
 
-    ```
-        #   name: AGENT_MANAGEMENT_INTERFACE
-        #   value: "eth0"
-        #   name: AGENT_TEST_INTERFACE
-        #   value: "eth1"
-    ```
+        ```
+            #   name: AGENT_MANAGEMENT_INTERFACE
+            #   value: "eth0"
+            #   name: AGENT_TEST_INTERFACE
+            #   value: "eth1"
+        ```
     
-    3. Change the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in CyPerf Controller's Agent Assignemnt dialog.
-    4. If needed, update `nodeSelector` rule according to your preference. The example manifests assume that `agenttype=client`and `agenttype=server` labels are already assigned to the chosen worker nodes so that CyPerf Agent client pods and server pods are not deployed in the same node.
-    5. Review the server manifest yaml to decide what `type` of `Service` your use case would require. e.g. `ClusterIP`, `NodePort` etc. and change accordingly.
-    6. Decide on how many replicas for CyPerf Agent's client and server pods you would want to start with, and modify `replicas` count accordingly.
-    7. Depending on your requirement, you may want to reserve and limit memory and cpu resources for CyPerf Agent pods. For more details please see section - [Managing Resource for CyPerf Agents](#managing-resource-for-cyperf-agents).
+    3. Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
+    4. Update the `nodeSelector` rule according to your preference, if required. The example manifests assume that the `agenttype=client`and `agenttype=server` labels are already assigned to the chosen worker nodes, so that the CyPerf Agent client and server pods are not deployed in the same node.
+    5. Review the server manifest yaml to decide which `type` of `Service` is required in your use case (for example: `ClusterIP`, `NodePort`, and etc.) and change accordingly.
+    6. Decide the number of replicas that are required to start with the CyPerf Agent client and server pods and modify the count accordingly.
+    7. Reserve and limit the memory and cpu resources for CyPerf Agent pods, depending on your requirement. 
+        
+        **_NOTE:_** For more information, see [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents).
 - Apply the manifests.
     ```
     kubectl apply -f cyperf-agent-client.yaml
@@ -67,12 +76,12 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
     kubectl apply -f cyperf-agent-server.yaml
 
     ```
-- You may scale the deployments later with desired number of replicas.
+- You may scale the deployments later with the desired number of replicas.
     ```
     kubectl scale deployment.v1.apps/cyperf-agent-server-deployment --replicas=2
     
     ```
-- When there is a requirement for increasing server agent replica while a test is running, enable `readinessProbe` so that test traffic is forwarded to a server agent when it is ready.
+- If you need to increase the number of the server agent replica while a test is running, enable the `readinessProbe` so that the test traffic is forwarded to a server agent when it is ready.
     ```
         readinessProbe:
             httpGet:
@@ -81,75 +90,82 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
             periodSeconds: 5
     ```
 
-## Deployment in **AWS EKS**
-#### Prerequisites
-- All of [General Prerequisites](#general-prerequisites).
-- In this case, the K8s cluster is in EKS which can be deployed using `eksctl` or any other methods described in [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html).  
+## Deployment in **AWS EKS OR AZURE AKS**
+### Prerequisites
+1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section. 
+2. For AWS EKS, select a K8s cluster in EKS which can be deployed by using 'eksctl' or any other methods that are described in the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html).
+3. For AZURE AKS, select a K8s cluster in AKS which can be deployed by using 'az aks' or any other methods that are described in [Getting started with Azure AKS](https://docs.microsoft.com/en-us/azure/aks/).
+
+    **_NOTE:_** Along with all the general prerequisites, the following are also required.
+    - CyPerf Agents outside the EKS, which can simulate clients, for initiating the traffic flows.  
+    _These client agents can also run as pods in an on-premise kubernetes cluster or on the agents that are running in VM or COTS hardware._
+    - Collect the FQDN (Fully qualified domain name) or the public IP address for the DUT, which needs to be configured in the CyPerf Controller's _DUT Network_.   
+    - If FQDN is used for the DUT, that needs to be resolved by the CyPerf client Agents. Configure a _Name Server_ IP address in the CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_.
 
 
-### *A.* _**East-West**_ *traffic between pods and internal container services and workloads in* _**Amazon Elastic Kubernetes Service (EKS)**_ *environments*
+### Deployment on CyPerf
+You can deploy in AWS EKS OR in AZURE AKS in the following two ways:
+#### 1. _**East-West** traffic between the pods and the internal container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) OR Azure Kubernetes Service (AKS)** environments._
 
 - Deploy both client and server for CyPerf Agents.
-- Depending on if CyPerf Agent servers need to be configured in DUT using `podIP` or the `ClusterIP` of the service, collect the values by checking the pod or service properties respectively.
+- Collect the values by checking the pod or service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service.
     ```
     kubectl get pods -l run=cyperf-agent-server -o wide
 
     kubectl get svc cyperf-agent-service -o wide
     ```
-- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
+- Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_, if FQDN is used for the DUT. For example: if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address by using the following command.
     ```
     kubectl get services kube-dns --namespace=kube-system
     ```        
 
-### *B.* _**North-South**_ *traffic destined to container services and workloads in* _**Amazon Elastic Kubernetes Service (EKS)**_ *environments*
+#### 2. _**North-South** traffic that is destined to the container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) OR Azure Kubernetes Service (AKS)** environments._
 - Deploy CyPerf Agent as server(s) behind the DUT.
-- Depending on if CyPerf Agent servers need to be configured in DUT using `podIP` or the `ClusterIP` of the service, collect the values by checking the pod or service properties respectively.
-    ```
+- Collect the values by checking the pod or service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service. 
+    ``` 
     kubectl get pods -l run=cyperf-agent-server -o wide
 
     kubectl get svc cyperf-agent-service -o wide
-    ```
-- Besides all of the [General Prerequisites](#general-prerequisites), followings are needed.
-    1. CyPerf Agents outside EKS which are supposed to be simulating clients, for initiating traffic flows.  
-    *These client agents can also be running as pods in an on-prem kubernetes cluster or agents running in VM or COTS hardware.*
-    2. Collect the FQDN or public IP address for the DUT, which needs to be configured in CyPerf Controller's _DUT Network_.
-    3. In case, FQDN is used for the DUT, this needs to be resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .    
-
-
+    ```  
 ## Deployment in **On-Premise K8s Cluster**
-#### Prerequisites
-- All of [General Prerequisites](#general-prerequisites).
+### Prerequisites
+1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section.
+    
+    **_NOTE:_** Along with all the general prerequisites, the following are also required.
 
-### *A. Traffic between pods and services within on-premise kubernetes cluster*
+    - CyPerf Agents outside the cluster which are supposed to be simulating clients to initiate traffic flows that are destined to the DUT.
+    _These client agents can also run as pods in an on-premise kubernetes cluster or as agents running in a VM or COTS hardware._
+    - Collect the FQDN or the public IP address for the DUT, which needs to be configured in the CyPerf Controller's DUT Network.
+    - If FQDN is used for the DUT, this needs to be resolved by the CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver page for clients' Network Segments_.
+
+### Deployment on CyPerf
+You can deploy in On-Premise K8s Cluster in the following two ways:
+
+#### 1. _Traffic between the pods and the services within the on-premise kubernetes cluster._
 
 - Deploy both client and server for CyPerf Agents.
-- Depending on if CyPerf Agent servers need to be configured in DUT using `podIP` or the `ClusterIP` of the service, collect the values by checking the pod or service properties respectively.
+- Collect the values by checking the pod or the service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service. 
     ```
     kubectl get pods -l run=cyperf-agent-server -o wide
 
     kubectl get svc cyperf-agent-service -o wide
     ```
-- In case, FQDN is used for the DUT, configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_. For example, if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address using following command.
+- Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_, if FQDN is used for the DUT. For example: if the cluster is using CoreDNS cluster addon (application name kube-dns), you can collect the DNS server IP address by using the following command.
     ```
     kubectl get services kube-dns --namespace=kube-system
     ```
 
-### *B. Traffic destined to container services in on-premise kubernetes cluster*
+#### 2. _Traffic that are destined to the container services in the on-premise kubernetes cluster._
 - Deploy CyPerf Agent as server(s) behind the DUT.
-- Depending on if CyPerf Agent servers need to be configured in DUT using `podIP` or the `ClusterIP` of the service, collect the values by checking the pod or service properties respectively.
+- Collect the values by checking the pod or service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service. 
     ```
     kubectl get pods -l run=cyperf-agent-server -o wide
 
     kubectl get svc cyperf-agent-service -o wide
     ```
-- Besides all of the [General Prerequisites](#general-prerequisites), followings are needed.
-    1. CyPerf Agents outside cluster which are supposed to be clients initiating traffic flows destined to the DUT.  
-    *These client agents can also be running as pods in an on-prem kubernetes cluster or agents running in VM or COTS hardware.*
-    2. Collect the FQDN or public IP address for the DUT, which needs to be configured in CyPerf Controller's _DUT Network_.
-    3. In case, FQDN is used for the DUT, this needs to b resolved by CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_ .
 
-## Managing Resource for CyPerf Agents
-- It is recommended to run CyPerf Agent clients and servers in different worker nodes, although it is not mandatory. The example manifests achive this by using `nodeSelector` and assigning labels in nodes as described in [General Prerequisites](#general-prerequisites).
+## Managing Resources for the CyPerf Agents
+- It is recommended to run the CyPerf Agent clients and servers in different worker nodes. The example manifests can achive this by using the `nodeSelector` and by assigning labels in the nodes as described in the [General Prerequisites](#general-prerequisites) section.
     ```
         nodeSelector:    
             agenttype: client 
@@ -159,7 +175,7 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
         nodeSelector:    
             agenttype: server 
     ```
-- It is also recommended to run one Cyperf Agent in one worker node for best performance. It is not mandatory though. To ensure that even same type of CyPerf Agents are not sharing a node, following `podAntiAffinity` rule can be used.
+- It is also recommended to run one Cyperf Agent in one worker node for the best performance. To ensure that, multiple CyPerf Agents of the same type are not sharing a single node, follow the `podAntiAffinity` rule:
     ```
         affinity:
             podAntiAffinity:
@@ -173,7 +189,9 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
                   topologyKey: "kubernetes.io/hostname"
 
     ``` 
-- If you still want to share resources among multiple CyPerf Agents, for example when multiple server pods runing in the same node, then use `limits` and `requests` for `cpu` and `memory` `resources` for more deterministic behaviour.
+- If you still need to share the resources among multiple CyPerf Agents, (for example: when multiple server pods are runing in the same node) then use the following:
+    * `limits` and `requests` for `cpu`
+    * `memory` and `resources` for more deterministic behaviour.
     ```
         resources:
             limits:
@@ -187,66 +205,78 @@ This document describes about how Keysight CyPerf’s Agents can be deployed ins
 
 ## Supported CNIs
 - **Flannel:**  
-    a. [cni_examples/onprem-kube-flannel.yaml](cni_examples/onprem-kube-flannel.yaml) - [ [source](https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml) ]
+    [cni_examples/onprem-kube-flannel.yaml](cni_examples/onprem-kube-flannel.yaml) - [ [source](https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml) ]
 - **Calico:**   
     a. [cni_examples/onprem-calico.yaml](cni_examples/onprem-calico.yaml) - [ [source](https://docs.projectcalico.org/manifests/calico.yaml) ]    
-    - This example modifies the source by changing the mode of enabling IPIP tunneling thorugh `env CALICO_IPV4POOL_IPIP` from `"Always"` to `"CrossSubnet"`, for achieving higher performance when test traffic is flowing in same subnet.    
+    - This example modifies the source by changing the mode of enabling IPIP tunneling thorugh `env CALICO_IPV4POOL_IPIP` from `"Always"` to `"CrossSubnet"`. You can use this to achieve higher performance when test traffic is flowing in the same subnet.    
 
     b. [cni_examples/eks-calico-vxlan.yaml](cni_examples/eks-calico-vxlan.yaml) - [ [source](https://docs.projectcalico.org/manifests/calico-vxlan.yaml) ]  
 
-    - For more details, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-calico-networking).
+    - For more information, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-calico-networking).
 
 - **AWS VPC CNI:**  
-This is the default CNI in AWS EKS, and is now supported starting from CyPerf version 1.0-Update1. 
-    - For more details, see [Install EKS with Amazon VPC networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-amazon-vpc-networking).
+This is the default CNI in the AWS EKS and is now supported by CyPerf version 1.0-Update1 and higher.
+    - For more information, see [Install EKS with Amazon VPC networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-amazon-vpc-networking).
 
 ## Test Configuration Checklist
-When configuring CyPerf Controller for a test where CyPerf Agents are running inside K8s cluster, ensure that following configurations are appropriate.
+Ensure that the following configurations are appropriate, when configuring the CyPerf Controller for a test where CyPerf Agents are running inside the K8s cluster. 
 
-1. _NetWork Segment_ using Agent(s) inside a cluster should use  _Automatic IP_, _Automatic IP prefix length_ and _Automatic gateway_ for the _IP Range_ configuration.
-2. _NetWork Segment_ using Agent(s) simulating clients inside a cluster, should use correct IP address for _Name server_ in _DNS Resolver_ configuration which can resolve FQDN of the DUT. This is not applicable if _DUT Network_ is configured for _Host_ with IP address of DUT.
-3. CyPerf Agents simulating clients will send traffic to _Destination port_ as configured in _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` is used. If DUT uses any non-default destination port for incoming connections, this configuration must be set appropriately.
-4. CyPerf Agents simulating servers will listen on _Server port_ as configured in  _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` is used. If DUT uses any non-default destination port for outgoing connections, this configuration must be set appropriately.
-5. Make sure that DUT is forwarding the traffic to a port same as the `port` mentioned in manifest yaml for `cyperf-agent-service`, while CyPerf server Agents will have to be listening on `targetPort`. For changing any of these values, configurations for DUT or CyPerf Contoller need to be adjusted appropriately.
-6. When `readinessProbe` is used in the manifest yaml for CyPerf server Agent, note that it is configured for `httpGet` where `path` is specified as `/CyPerfHTTPHealthCheck` and `port` as `80`. These must match with _HTTP Health Check->Parameters_, _Target URL_ and _Port_ respectively as cofigured in _DUT Network_ in CyPerf Controller UI and _HTTP Health Check_ must be enabled.
-7. In case DUT is also configured for HTTP health check, use the same configuration as described above. 
+1. _NetWork Segment_ that is using a Cyperf Agent(s) inside a cluster, should use the  _Automatic IP_, _Automatic IP prefix length_, and _Automatic gateway_ for the _IP Range_ configuration.
+2. _NetWork Segment_ that is using a Cyperf Agent(s) that is simulating clients inside a cluster, should use the correct IP address for _Name server_ in _DNS Resolver_ configuration to resolve FQDN of the DUT. This is not applicable if the _DUT Network_ is configured for the _Host_ with IP address of the DUT.
+3. CyPerf Agents that are simulating clients will send traffic to _Destination port_ as configured in _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` are used. If the DUT uses any non-default destination port for the incoming connections, you need to set this configuration appropriately.
+4. CyPerf Agents that are simulating servers will listen to the on _Server port_ as configured in  _Connection Properties_ for _Application->Connections_. By default (indicated as `0` in UI), HTTP port `80` and TLS port `443` are used. If the DUT uses any non-default destination port for outgoing connections, you need to set this configuration appropriately.
+5. Make sure that the DUT is forwarding the traffic to a port which is same as the `port` mentioned in the manifest yaml for `cyperf-agent-service`, while the CyPerf server Agents are listening to the `targetPort`. Adjust the configurations for the DUT or the CyPerf Contoller appropriately, to change any of these values.
+6. When the `readinessProbe` is used in the manifest yaml for the CyPerf server Agent, note that it is configured for `httpGet` where the `path` is specified as `/CyPerfHTTPHealthCheck` and `port` as `80`. These parameters must match with the _HTTP Health Check->Parameters_ and the  _Target URL_ and the _Port_ respectively, as cofigured in the _DUT Network_ in CyPerf Controller UI and _HTTP Health Check_ which must be enabled.
+7. If the DUT is also configured for the HTTP health check, use the same configuration as described above. 
      
 
 ## Troubleshooting
 
 1. Collecting CyPerf Agent Logs
-- At present, CyPerf Agent running as a container does not publish logs when collecting diagnostics from CyPerf Controller UI. However, individual pod's logs can be collected manually. First identify the pod showing the details of all pods labeled as cyprf-agent, and use the ID for redirecting logs to a file; then transfer manually.        
+- At present, CyPerf Agent that is running as a container does not publish logs when collecting diagnostics from CyPerf Controller UI. However, individual pod logs can be collected manually. First identify the pod can show the details of all pods labeled as cyprf-agent, and then use the ID for redirecting the logs to a file. You need to transfer them manually.        
     ```
     kubectl get pods -l app=cyperf-agent -o wide
 
     kubectl logs [cyperf-agent-pod-id]  > [cyperf-agent-pod-id].log 
     ```
 2. Agents not visible in CyPerf Controller
-- Make sure that ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
-- Also check that Agent pods are in ready state after deployment.
+- Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
+- Also check that the Agent pods are in ready state after deployment.
     ```
     kubectl get pods -l app=cyperf-agent -o wide
     ```  
-     If pods are stuck in pending state, check available resource in the nodes vs requested resource in manifest yaml. Adjust requested resource or available resource in the node and redeploy.
+     If pods are stuck in pending state, check the available resource in the nodes against the requested resource in the manifest yaml. Also, adjust the requested resource or the available resource in the node and redeploy.
 
 3. Repeating pattern of connection failures in the test
 
-- There can be several reasons for connection failures, like misconfigurations in general. For example, connections for test traffic might fail if some gateway or DUT is not reachable from the client. However, there could be intermittent connection failures observed in a high scale test which might be puzzling. Such cases may show repeated pattern for connection failures during the test.
+- There can be several reasons for connection failures, like misconfigurations in general. For example, connections for test traffic might fail if some of the gateways or the DUT are not reachable from the client. However, there could be intermittent connection failures observed in a high scale test which might create confusions. In such cases, you can see a repeated pattern for the connection failures during the test.
 
-    In K8s, some CNIs like Calico use "conntrack", which is a feature of the Linux kernel’s networking stack. It allows the kernel to keep track of all logical network connections or flows, so that all of the packets for individual flows can be handled consistently together. The conntrack table has a configurable maximum size and, if it fills up, connections will start getting dropped. A few scenarios where the conntrack table is responsible for connection failures are mentioned bellow.
+    In K8s, some of the CNIs (for example: Calico) use the "conntrack", which is a feature of the Linux kernel networking stack. It allows the kernel to keep track of all the logical network connections or flows, so that all of the packets for individual flows can be handled consistently together. The conntrack table has a configurable maximum size. If it fills up, connections will start getting dropped.
+    
+    The scenarios where the conntrack table is responsible for connection failures are as follows:
 
-    * The most obvious case is if the test is supposed to maintain an extremely high number of active connections. For example, if conntrack table size is configured to be 128k entries but the test tries to open more than 128k simultaneous connections, it will hit table overflow issue.
+    1. When the test is responsible to maintain an extremely high number of active connections. 
+    
+        For example: when the conntrack table size is configured for 128k entries but the test is trying to open more than 128k simultaneous connections, it will hit the table overflow issue. 
 
-    * The slightly less obvious case is if the test is generating an extremely high number of connections per second. Even if the connections are short-lived, connections continue to be tracked for a short timeout period (120 seconds by default). For example, if the conntrack table size is configured to be 128k and generated connections per second is 1200, that is going to exceed conntrack table size even if connections are very short-lived (1200 per sec * 120 sec = 144k, which is greater than 128k). 
+        **_NOTE:_** It is a scenario that can occur very often with a test case. 
 
-    * Another possibility could be when a test that was using ClusterIP as the connection destination, is changed to use server pod’s IP as the new destination or the other way round, conntrack may get confused. If these two consecutive tests are run without waiting for 120 seconds there will be chances that some conntrack table entries are still in the TIME_WAIT state, which may result in connection failures as well. 
+    2. When the test is generating an extremely high number of connections per second. 
+    
+        Even if the connections are short-lived, you can track them for a short timeout period (by default, 120 seconds). 
+        For example: if the conntrack table size is configured for 128k and the generated connections per second is 1200, it will exceed the conntrack table size, even if the connections are very short-lived (1200 per sec * 120 sec = 144k, which is greater than 128k). 
 
-Therefore, it is recommended to wait for at least 120 seconds between test runs. 
-To know more about how conntrack works and how to to disable that you can refer to following articles
+    3. When a test is using a ClusterIP as the connection destination and is modified to use a server pod IP as a new destination or is modified the other way round, the conntrack may get confused. 
+    
+        If you run these two tests consecutively without waiting for 120 seconds, there can be possibilities that some of the conntrack table entries will still remain in the TIME_WAIT state, which may result in connection failures also. 
+        
+        
+        **_NOTE:_** It is recommended to wait for at least 120 seconds, before you run a new test. 
+        For more information on conntrack, see the following articles:
 
-https://projectcalico.docs.tigera.io/security/high-connection-workloads#extreme-high-connection-workloads
+    * https://projectcalico.docs.tigera.io/security/high-connection-workloads#extreme-high-connection-workloads
 
-https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/
+    * https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/
 
 <!--
 TO BE CONTINUED ...
@@ -258,17 +288,24 @@ TO BE CONTINUED ...
 
 ## Releases
 
+- **CyPerf 2.1** - [March, 2023]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release2.1
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.523
+
+    - Change history:
+
 - **CyPerf 2.0** - [September, 2022]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release2.0
-        - public.ecr.aws/keysight/cyperf-agent:1.0.3.450  
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.450
 
     - Change history:
 
 - **CyPerf 1.7** - [August, 2022]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release1.7
-        - public.ecr.aws/keysight/cyperf-agent:1.0.3.423  
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.423
 
     - Change history:
 
