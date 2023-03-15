@@ -44,7 +44,7 @@ def create_traffic_profile(apps, objective, objective_value, objective_unit, dur
         rest.set_traffic_profile_server_tls(version=ssl)
 
 
-def create_attack_profile(attacks, objective_value, max_concurrent_attacks, duration, iteration_count=0, ssl=None):
+def create_attack_profile(attacks, objective_value, max_concurrent_attacks, duration, iteration_count=0, ssl=None, ssl_status=False):
     """
     Creates an attack profile in the current test configuration
 
@@ -66,8 +66,8 @@ def create_attack_profile(attacks, objective_value, max_concurrent_attacks, dura
         iteration_count=iteration_count
     )
     if ssl:
-        rest.set_attack_profile_client_tls(version=ssl)
-        rest.set_attack_profile_server_tls(version=ssl)
+        rest.set_attack_profile_client_tls(version=ssl, status=ssl_status)
+        rest.set_attack_profile_server_tls(version=ssl, status=ssl_status)
 
 
 def run_test():
