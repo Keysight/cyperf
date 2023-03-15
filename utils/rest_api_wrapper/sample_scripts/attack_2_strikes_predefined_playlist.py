@@ -11,7 +11,8 @@ create_attack_profile(
     objective_value=50,
     max_concurrent_attacks=5,
     duration=test_duration,
-    ssl="TLSv1.2")
+    ssl="tls12Enabled",
+    ssl_status=True)
 rest.set_attack_custom_playlist(
     attackName="Portal XSS Attack on Apache server 1",
     actionName="Login",
