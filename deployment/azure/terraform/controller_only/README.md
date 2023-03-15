@@ -69,12 +69,12 @@ The following table lists the parameters for this deployment.
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
+| controller_image       | Requires input    | Specify the Azure controller VHD image |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | eastus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| cyperf_version   | 0.2.0           | CyPerf release version. |
 | mdw_name   | keysight-cyperf-controller-2-1            | Name for the cyperf controller machine. |
 
 ## Destruction

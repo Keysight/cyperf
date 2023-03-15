@@ -68,6 +68,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   location            = var.resource_group.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
+  source_image_id     = var.agent_version
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_test_nic.id
@@ -80,20 +81,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  plan {
-    name = "keysight-cyperf-agent"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
-  }
-
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-agent"
-    version   = var.agent_version
+    storage_account_type = "StandardSSD_LRS"
   }
 
   custom_data = base64encode(local.custom_data)
