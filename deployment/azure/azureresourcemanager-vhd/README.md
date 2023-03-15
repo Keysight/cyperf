@@ -29,7 +29,7 @@ The supported instance types are:
 
 
 ## Copy VHD images 
-Azure images will be available at Keysight Azure Blob container **keysight-cyperf-1-7**.
+Azure images will be available at Keysight Azure Blob container **keysight-cyperf-2-1**.
 For accessing VHD file refer to the URL link:
 
  - [https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-controller-2-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-1-7/keysight-cyperf-controller-2-1.vhd)
