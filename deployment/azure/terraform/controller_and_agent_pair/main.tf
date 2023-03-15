@@ -20,6 +20,30 @@ locals {
   firewall_ip_range = var.azure_allowed_cidr
 }
 
+resource "azurerm_image" "controller" {
+  name                = "cyperf-controller"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.controller_image
+  }
+}
+
+resource "azurerm_image" "agent" {
+  name                = "cyperf-agent"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.agent_image
+  }
+}
+
 resource "azurerm_resource_group" "azr_automation" {
   name     = var.azure_owner_tag
   location = var.azure_region_name
@@ -191,6 +215,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_mdw_machine_type
+  source_image_id     = azurerm_image.controller.id
   admin_username      = "cyperf"
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
@@ -203,20 +228,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  plan {
-    name = "keysight-cyperf-controller"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
-  }
-
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-controller"
-    version   = var.cyperf_version
+    storage_account_type = "StandardSSD_LRS"
   }
 }
 
@@ -229,6 +241,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_1_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_1_test_nic.id
@@ -245,19 +258,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
     storage_account_type = "StandardSSD_LRS"
   }
 
-  plan {
-    name = "keysight-cyperf-agent"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
-  }
-
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-agent"
-    version   = var.cyperf_version
-  }
-
   custom_data = base64encode(local.custom_data)
 }
 
@@ -270,6 +270,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = var.azure_admin_username
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_2_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_2_test_nic.id
@@ -283,20 +284,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  plan {
-    name = "keysight-cyperf-agent"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
-  }
-
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-agent"
-    version   = var.cyperf_version
+    storage_account_type = "StandardSSD_LRS"
   }
 
   custom_data = base64encode(local.custom_data)

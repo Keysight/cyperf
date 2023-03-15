@@ -21,6 +21,30 @@ locals {
   firewall_ip_range = concat(var.azure_allowed_cidr,local.mgmt_iprange,local.test_iprange)
 }
 
+resource "azurerm_image" "controller" {
+  name                = "cyperf-controller"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.controller_image
+  }
+}
+
+resource "azurerm_image" "agent" {
+  name                = "cyperf-agent"
+  location = var.azure_region_name
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.agent_image
+  }
+}
+
 resource "azurerm_resource_group" "azr_automation" {
   name     = var.azure_owner_tag
   location = var.azure_region_name
@@ -89,6 +113,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_mdw_machine_type
   admin_username      = "cyperf"
+  source_image_id     = azurerm_image.controller.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_mdw_nic.id,
   ]
@@ -101,19 +126,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
-  }
-
-  plan {
-    name = "keysight-cyperf-controller"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
-  }
-
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-controller"
-    version   = var.cyperf_version
   }
 
   tags = {
@@ -133,7 +145,7 @@ module "agents" {
   mgmt_subnet = azurerm_subnet.azr_automation_management_network.id
   test_subnet = azurerm_subnet.azr_automation_test_network.id
   controller_ip = azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address
-  agent_version = var.cyperf_version
+  agent_version = azurerm_image.agent.id
   azure_agent_machine_type = var.azure_agent_machine_type
   public_key = var.public_key
   agent_role = "azure"
