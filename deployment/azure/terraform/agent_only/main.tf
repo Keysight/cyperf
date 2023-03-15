@@ -26,6 +26,18 @@ data "azurerm_subnet" "test_subnet" {
   virtual_network_name = var.virtual_network_name
 }
 
+resource "azurerm_image" "agent" {
+  name     = "cyperf-agent-image"
+  location = var.resource_group_location
+  resource_group_name = var.resource_group_name
+  hyper_v_generation  = "V1"
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    blob_uri = var.agent_image
+  }
+}
+
 resource "azurerm_public_ip" "agent_mgmt_public_ip" {
   name                = "${var.azure_agent_name}-mgmt-public-ip"
   resource_group_name = var.resource_group_name
@@ -65,6 +77,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   location            = var.resource_group_location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
+  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_test_nic.id
@@ -77,20 +90,9 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-  plan {
-    name = "keysight-cyperf-agent"
-    product = "keysight-cyperf"
-    publisher = "keysighttechnologies_cyperf"
+    storage_account_type = "StandardSSD_LRS"
   }
 
-  source_image_reference {
-    publisher = "keysighttechnologies_cyperf"
-    offer     = "keysight-cyperf"
-    sku       = "keysight-cyperf-agent"
-    version   = var.cyperf_version
-  }
   custom_data = base64encode(local.custom_data)
   tags = {
     role = var.agent_role

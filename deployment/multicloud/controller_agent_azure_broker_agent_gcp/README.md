@@ -69,7 +69,8 @@ The following table lists the parameters for this deployment.
 | azure_region_name      | eastus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| cyperf_version   | 0.2.0            | CyPerf release version to get the images from Azure Marketplace. |
+| controller_image       | Requires input    | Specify the Azure controller VHD image |
+| agent_image | Requires input    | Specify the Azure agent VHD image |
 | mdw_version   | keysight-cyperf-controller-2-1            | The  CyPerf controller image version. |
 | agent_version   | keysight-cyperf-agent-2-1           | The  CyPerf agent image version. |
 | broker_image            | keysight-cyperf-controller-proxy-2-1   | The  CyPerf controller proxy image version.    |
