@@ -21,6 +21,23 @@
             }
 
         },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.2.0",
+
+            "allowedValues": [
+              "0.2.0"
+            ],
+
+            "metadata": {
+
+              "description": "The CyPerf release version."
+
+            }
+        },
         
         "Proximity Placement Group": {
             
@@ -48,11 +65,9 @@
 
             "type": "string",
 
-            "defaultValue": "172.16.0.0/16",
-
             "metadata": {
 
-                "description": "CIDR range for the Virtual Network"
+                "description": "Name of an existing Virtual Network"
 
             }
 
@@ -62,11 +77,9 @@
 
             "type": "string",
 
-            "defaultValue": "172.16.2.0/24",
-
             "metadata":{
 
-                "description": "This subnet is attached to CyPerf controller proxy & CyPerf agents will use this subnet for control plane communication with controller proxy"
+                "description": "Name of an existing Management subnet.This subnet is attached to CyPerf controller proxy & CyPerf agents will use this subnet for control plane communication with controller proxy"
 
             }
 
@@ -76,35 +89,9 @@
 
             "type": "string",
 
-            "defaultValue":"172.16.3.0/24",
-
             "metadata": {
 
-                "description": "CyPerf agents will use this subnet for test traffic"
-
-            }
-
-        },
-
-        "VHD URL Cyperf Agents": {
-
-            "type": "string",
-
-            "metadata": {
-
-                "description": "VHD URL of CyPerf Agents"
-
-            }
-
-        },
-
-        "VHD URL Cyperf Controller Proxy": {
-
-            "type": "string",
-
-            "metadata": {
-
-                "description": "VHD URL of CyPerf Controller Proxy"
+                "description": "Name of an existing Test subnet for CyPerf agents.This subnet will be used for test traffic"
 
             }
 
@@ -144,13 +131,13 @@
 
         },
 
-        "Allowed Subnet for Security Group": {
+        "Security Group of Cyperf Controller Proxy": {
 
             "type": "string",
 
             "metadata": {
 
-                "description": "Subnet range allowed to access deployed Azure resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”"
+                "description": "Name of an existing Security group of CyPerf Controller Proxy"
 
             }
 
@@ -182,14 +169,6 @@
 
         "location"  :     "[resourceGroup().location]",
 
-        "agent_image_name": "[concat(variables('stackname'),'-agentimage')]",
-
-        "controllerproxy_image_name": "[concat(variables('stackname'),'-controllerproxyimage')]",
-
-        "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
-
-        "vnet"  :     "[concat(variables('stackname'),'-virtualnetwork')]",
-
         "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
         
         "proximity_id": {
@@ -199,10 +178,6 @@
             },
 
         "controllerproxy_publicIP"  :     "[concat(variables('stackname'),'-controllerproxypublicIP')]",
-
-        "mgmtsubnet"  :     "[concat(variables('stackname'),'-mgmtsubnet')]",
-
-        "agenttestsubnet"  :     "[concat(variables('stackname'),'-agenttestsubnet')]",
 
         "controllerproxy_interface"  :     "[concat(variables('stackname'),'-controllerproxyinterface')]",
 
@@ -219,167 +194,6 @@
     },
 
     "resources": [
-
-       {
-
-         "comments": "creation of agent image from vhd which will be later used as a reference for the virtual machine creation",
-         
-         "type": "Microsoft.Compute/images",
-         
-         "name": "[variables('agent_image_name')]",
-         
-         "apiVersion": "2019-07-01",
-         
-         "location": "[variables('location')]",
-         
-         "properties": {
-             
-             "hyperVGeneration": "V1",
-             
-             "storageProfile": {
-                 
-                 "dataDisks": [],
-                 
-                 "osDisk": {
-                     
-                     "osType": "Linux",
-                     
-                     "osState": "Generalized",
-                     
-                     "blobUri": "[parameters('VHD URL Cyperf Agents')]",
-                     
-                     "caching": "None",
-                     
-                     "storageAccountType": "Premium_LRS"
-                     
-                     }
-                     
-                }
-                
-            }
-
-        },
-
-        {
-
-         "comments": "creation of controllerproxy image from vhd which will be later used as a reference for the virtual machine creation",
-         
-         "type": "Microsoft.Compute/images",
-         
-         "name": "[variables('controllerproxy_image_name')]",
-         
-         "apiVersion": "2019-07-01",
-         
-         "location": "[variables('location')]",
-         
-         "properties": {
-             
-             "hyperVGeneration": "V1",
-             
-             "storageProfile": {
-                 
-                 "dataDisks": [],
-                 
-                 "osDisk": {
-                     
-                     "osType": "Linux",
-                     
-                     "osState": "Generalized",
-                     
-                     "blobUri": "[parameters('VHD URL Cyperf Controller Proxy')]",
-                     
-                     "caching": "None",
-                     
-                     "storageAccountType": "Premium_LRS"
-                     
-                     }
-                     
-                }
-                
-            }
-
-        },
-
-
-        {
-
-            "comments": "creates security group which is used by controllerproxy & allows ssh,https traffic from external(public) subnet ",
-
-            "type": "Microsoft.Network/networkSecurityGroups",
-
-            "name": "[variables('securitygroup')]",
-
-            "apiVersion": "2020-05-01",
-
-            "location": "[variables('location')]",
-
-            "properties": {
-
-                "securityRules": [
-
-                    {
-
-                        "name":"ssh-allowed",
-
-                        "properties": {
-
-                            "protocol": "Tcp",
-
-                            "priority": 100,
-
-                            "direction": "Inbound",
-
-                            "access": "Allow",
-
-                            "destinationPortRange": "22",
-
-                            "destinationAddressPrefix": "VirtualNetwork",
-
-                            "sourcePortRange": "*",
-
-                            "sourceAddressPrefixes": [
-
-                                "[parameters('Allowed Subnet for Security Group')]"
-
-                            ]
-
-                        }
-
-                    },
-                    {
-                        "name": "https-allowed",
-
-                        "properties": {
-
-                            "protocol": "Tcp",
-
-                            "priority": 101,
-
-                            "direction": "Inbound",
-
-                            "access": "Allow",
-
-                            "destinationPortRange": "443",
-
-                            "destinationAddressPrefix": "VirtualNetwork",
-
-                            "sourcePortRange": "*",
-
-                            "sourceAddressPrefixes": [
-
-                                "[parameters('Allowed Subnet for Security Group')]"
-
-                            ]
-                        }
-
-                    }
-                    
-
-                ]
-
-            }
-
-        },
 
         {
 
@@ -426,63 +240,6 @@
         },
 
         {
-            "comments": "create Vnet having two subnets",
-
-            "type": "Microsoft.Network/virtualNetworks",
-
-            "name": "[variables('vnet')]",
-
-            "apiVersion": "2020-05-01",
-
-            "location": "[variables('location')]",
-
-            "dependsOn": [
-                "[variables('securitygroup')]"
-            ],
-
-            "properties": {
-
-                "addressSpace": {
-
-                    "addressPrefixes": [
-
-                        "[parameters('Virtual Network')]"
-
-                    ]
-
-                },
-
-                "subnets": [
-
-                    {
-                        "name": "[variables('mgmtsubnet')]",
-
-                        "properties": {
-
-                            "addressPrefix": "[parameters('Management Subnet for Cyperf Controller Proxy and Agent')]"
-
-                        }
-
-                    },
-
-                    {
-                        "name": "[variables('agenttestsubnet')]",
-
-                        "properties": {
-
-                            "addressPrefix": "[parameters('Test Subnet for Cyperf Agents')]"
-
-                        }
-
-                    }
-
-                ]
-
-            }
-
-        },
-
-        {
 
             "comments": "creates a interface for controllerproxy & associates a public IP(created earlier) to it along with private IP",
 
@@ -495,8 +252,6 @@
             "apiVersion": "2020-05-01",
 
             "dependsOn": [
-
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
 
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('controllerproxy_publicIP'))]"
 
@@ -516,7 +271,7 @@
 
                             "subnet": {
 
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
 
                             },
 
@@ -536,7 +291,7 @@
 
                 "networkSecurityGroup": {
 
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller Proxy'))]"
                   }
 
                 }
@@ -563,12 +318,6 @@
 
             },
 
-            "dependsOn": [
-
-                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet'))]"
-
-            ],
-
             "properties": {
 
                 "ipConfigurations": [
@@ -583,7 +332,7 @@
 
                             "subnet": {
 
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
 
                             }
 
@@ -617,12 +366,6 @@
 
             },
 
-            "dependsOn": [
-
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
-
-            ],
-
             "properties": {
 
                 "enableAcceleratedNetworking": true,
@@ -639,7 +382,7 @@
 
                             "subnet": {
 
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('agenttestsubnet'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
 
                             }
 
@@ -664,6 +407,16 @@
             "apiVersion": "2019-07-01",
 
             "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "keysight-cyperf-controller-proxy",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
 
             "dependsOn": [
 
@@ -710,13 +463,18 @@
                 },
 
                 "storageProfile": {
-
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
                     "imageReference": {
-
-                        "id": "[resourceId('Microsoft.Compute/images',variables('controllerproxy_image_name'))]"
-
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-controller-proxy",
+                    "version": "latest"
                     }
-
                 },
 
                 "networkProfile": {
@@ -805,7 +563,7 @@
 
                                  "subnet": {
 
-                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('mgmtsubnet'))]"
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('Virtual Network'), parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
 
                                     },
 
@@ -823,7 +581,7 @@
 
                     "networkSecurityGroup": {
 
-                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller Proxy'))]"
 
                           }
 
@@ -851,6 +609,16 @@
 
             "location": "[variables('location')]",
 
+            "plan": {
+
+                "name": "keysight-cyperf-agent",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
             "copy": {
 
                 "name": "agentscopy",
@@ -863,9 +631,7 @@
 
                 "[variables('vmname_controllerproxy')]",
 
-                "[variables('proximity_pg_name')]",
-
-                "[variables('agent_image_name')]"
+                "[variables('proximity_pg_name')]"
 
             ],
 
@@ -912,13 +678,18 @@
                 },
 
                 "storageProfile": {
-
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
                     "imageReference": {
-
-                        "id": "[resourceId('Microsoft.Compute/images',variables('agent_image_name'))]"
-
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-agent",
+                    "version": "[parameters('Cyperf Version')]"
                     }
-
                 },
 
                 "networkProfile": {
