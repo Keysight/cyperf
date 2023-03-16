@@ -33,7 +33,7 @@ The following table lists the parameters for this deployment in **Existing VNET*
 | **Parameter label (name)**                   | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
 | Subscription                  | Requires input            | Specify the Azure subscription from dropdown list.  |
-| Resource group                  | Requires input            | Either select an existing Resource group from dropdown or create a new resource group with **Create new** option.  |
+| Resource group                  | Requires input            | Select an existing Resource group from dropdown that belongs to the existing Virtual Network.  |
 | Location                   | (US) Central US            | Preferred deployment location from dropdown list.  |
 | Deployment Name                   | Requires input            | Preferred prefix for naming resources.  |
 | Proximity Placement Group                   | No            | Preferred choice of proximity.  |
