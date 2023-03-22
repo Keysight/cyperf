@@ -5,7 +5,7 @@ variable "azure_project_name" {
 
 variable "azure_owner_tag" {
   type    = string
-  description = "Deployment name"
+  description = "Owner tag name"
 }
 
 variable "subscription_id" {
@@ -54,36 +54,36 @@ variable "azure_allowed_cidr" {
   description = "List of allowed IP ranges on the machines"
 }
 
-variable "azure_mdw_machine_type" {
-  type    = string
-  default = "Standard_F8s_v2"
-}
-
 variable "azure_agent_machine_type" {
   type    = string
   default = "Standard_F4s_v2"
 }
 
-variable "agents" {
-  type = number
-  default = 2
-  description = "Number of agents to be deployed"
+variable "controller_proxy_image" {
+  type = string
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-proxy-2-1.vhd"
+  description = "Controller proxy image path"
 }
 
-variable "cyperf_version" {
-  type        = string
-  default     = "0.2.1"
-  description = "CyPerf release version"
+variable "agent_image" {
+  type = string
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-agent-2-1.vhd"
+  description = "Agent image path"
 }
-
-variable "mdw_name" {
-  type        = string
-  default     = "keysight-cyperf-controller-2-1"
-  description = "Name for the cyperf controller machine"
-}
-
 variable "agent_name" {
   type        = string
   default     = "keysight-cyperf-agent-2-1"
   description = "Name for the cyperf agent machines"
+}
+
+variable "broker_name" {
+  type        = string
+  default     = "keysight-cyperf-controller-proxy-2-1"
+  description = "Name for the cyperf broker machines"
+}
+
+variable "azure_broker_machine_type" {
+  type        = string
+  default     = "Standard_F2s_v2"
+  description = "controller-proxy image"
 }

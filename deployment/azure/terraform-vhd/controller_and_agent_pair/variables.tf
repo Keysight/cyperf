@@ -5,7 +5,7 @@ variable "azure_project_name" {
 
 variable "azure_owner_tag" {
   type    = string
-  description = "Deployment name"
+  description = "Owner tag name"
 }
 
 variable "subscription_id" {
@@ -56,24 +56,24 @@ variable "azure_allowed_cidr" {
 
 variable "azure_mdw_machine_type" {
   type    = string
-  default = "Standard_F8s_v2"
+  default = "Standard_F16s_v2"
 }
 
 variable "azure_agent_machine_type" {
   type    = string
-  default = "Standard_F4s_v2"
+  default = "Standard_F16s_v2"
 }
 
-variable "agents" {
-  type = number
-  default = 2
-  description = "Number of agents to be deployed"
+variable "controller_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-2-1.vhd"
+  type = string
+  description = "Controller image path"
 }
 
-variable "cyperf_version" {
-  type        = string
-  default     = "0.2.1"
-  description = "CyPerf release version"
+variable "agent_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-agent-2-1.vhd"
+  type = string
+  description = "Agent image path"
 }
 
 variable "mdw_name" {
