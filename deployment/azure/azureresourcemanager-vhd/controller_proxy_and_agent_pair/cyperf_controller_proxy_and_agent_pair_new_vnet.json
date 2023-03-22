@@ -21,26 +21,8 @@
             }
 
         },
-
-        "Cyperf Version": {
-
-            "type": "string",
-
-            "defaultValue": "0.2.1",
-
-            "allowedValues": [
-              "0.2.1",
-              "0.2.0"
-            ],
-
-            "metadata": {
-
-              "description": "The CyPerf release version."
-
-            }
-        },
-
-	    "Proximity Placement Group": {
+        
+        "Proximity Placement Group": {
             
             "type": "string",
             
@@ -48,9 +30,9 @@
             
             "allowedValues": [
                 
-                 "Yes",
+                "Yes",
                 
-                 "No"
+                "No"
                 
                 ],
                 
@@ -58,10 +40,9 @@
                 
                 "description": "Preferred choice of proximity"
 
-             }
+            }
 
          },
-
 
         "Virtual Network": {
 
@@ -77,7 +58,7 @@
 
         },
 
-        "Management Subnet for Cyperf Controller and Agent": {
+        "Management Subnet for Cyperf Controller Proxy and Agent": {
 
             "type": "string",
 
@@ -85,7 +66,7 @@
 
             "metadata":{
 
-                "description": "This subnet is attached to CyPerf controller and would be used to access the CyPerf controller's UI & CyPerf agents will use this subnet for control plane communication with controller"
+                "description": "This subnet is attached to CyPerf controller proxy & CyPerf agents will use this subnet for control plane communication with controller proxy"
 
             }
 
@@ -100,6 +81,30 @@
             "metadata": {
 
                 "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "VHD URL Cyperf Agents": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "VHD URL of CyPerf Agents"
+
+            }
+
+        },
+
+        "VHD URL Cyperf Controller Proxy": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "VHD URL of CyPerf Controller Proxy"
 
             }
 
@@ -177,6 +182,10 @@
 
         "location"  :     "[resourceGroup().location]",
 
+        "agent_image_name": "[concat(variables('stackname'),'-agentimage')]",
+
+        "controllerproxy_image_name": "[concat(variables('stackname'),'-controllerproxyimage')]",
+
         "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
 
         "vnet"  :     "[concat(variables('stackname'),'-virtualnetwork')]",
@@ -189,19 +198,19 @@
             
             },
 
-        "controller_publicIP"  :     "[concat(variables('stackname'),'-controllerpublicIP')]",
+        "controllerproxy_publicIP"  :     "[concat(variables('stackname'),'-controllerproxypublicIP')]",
 
         "mgmtsubnet"  :     "[concat(variables('stackname'),'-mgmtsubnet')]",
 
-        "agenttestsubnet"  :     "[concat(variables('stackname'),'-testsubnet')]",
+        "agenttestsubnet"  :     "[concat(variables('stackname'),'-agenttestsubnet')]",
 
-        "controller_interface"  :     "[concat(variables('stackname'),'-controllerinterface')]",
+        "controllerproxy_interface"  :     "[concat(variables('stackname'),'-controllerproxyinterface')]",
 
         "agentmgmtinterface"  :     "[concat(variables('stackname'),'-agentmanagementinterface')]",
 
         "agenttestinterface"  :     "[concat(variables('stackname'),'-agenttestinterface')]",
 
-        "vmname_controller"  :     "[concat(variables('stackname'),'-controller')]",
+        "vmname_controllerproxy"  :     "[concat(variables('stackname'),'-controllerproxyvm')]",
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
@@ -210,10 +219,91 @@
     },
 
     "resources": [
-    
+
+       {
+
+         "comments": "creation of agent image from vhd which will be later used as a reference for the virtual machine creation",
+         
+         "type": "Microsoft.Compute/images",
+         
+         "name": "[variables('agent_image_name')]",
+         
+         "apiVersion": "2019-07-01",
+         
+         "location": "[variables('location')]",
+         
+         "properties": {
+             
+             "hyperVGeneration": "V1",
+             
+             "storageProfile": {
+                 
+                 "dataDisks": [],
+                 
+                 "osDisk": {
+                     
+                     "osType": "Linux",
+                     
+                     "osState": "Generalized",
+                     
+                     "blobUri": "[parameters('VHD URL Cyperf Agents')]",
+                     
+                     "caching": "None",
+                     
+                     "storageAccountType": "Premium_LRS"
+                     
+                     }
+                     
+                }
+                
+            }
+
+        },
+
         {
 
-            "comments": "creates security group which is used by controller & allows ssh,https traffic from external(public) subnet ",
+         "comments": "creation of controllerproxy image from vhd which will be later used as a reference for the virtual machine creation",
+         
+         "type": "Microsoft.Compute/images",
+         
+         "name": "[variables('controllerproxy_image_name')]",
+         
+         "apiVersion": "2019-07-01",
+         
+         "location": "[variables('location')]",
+         
+         "properties": {
+             
+             "hyperVGeneration": "V1",
+             
+             "storageProfile": {
+                 
+                 "dataDisks": [],
+                 
+                 "osDisk": {
+                     
+                     "osType": "Linux",
+                     
+                     "osState": "Generalized",
+                     
+                     "blobUri": "[parameters('VHD URL Cyperf Controller Proxy')]",
+                     
+                     "caching": "None",
+                     
+                     "storageAccountType": "Premium_LRS"
+                     
+                     }
+                     
+                }
+                
+            }
+
+        },
+
+
+        {
+
+            "comments": "creates security group which is used by controllerproxy & allows ssh,https traffic from external(public) subnet ",
 
             "type": "Microsoft.Network/networkSecurityGroups",
 
@@ -257,7 +347,6 @@
 
                     },
                     {
-
                         "name": "https-allowed",
 
                         "properties": {
@@ -284,6 +373,7 @@
                         }
 
                     }
+                    
 
                 ]
 
@@ -293,11 +383,11 @@
 
         {
 
-            "comments": "creates a publicIP Address which will be linked later to contoller interface",
+            "comments": "creates a publicIP Address which will be linked later to controllerproxy interface",
 
             "type": "Microsoft.Network/publicIPAddresses",
 
-            "name": "[variables('controller_publicIP')]",
+            "name": "[variables('controllerproxy_publicIP')]",
 
             "apiVersion": "2020-05-01",
 
@@ -323,17 +413,16 @@
             "type": "Microsoft.Compute/proximityPlacementGroups",
             
             "name": "[variables('proximity_pg_name')]",
-            
+
             "apiVersion": "2019-07-01",
-            
+
             "location": "[variables('location')]",
-            
+
             "properties": {
-                
+
                 "proximityPlacementGroupType": "Standard"
-                
-                }
-                
+
+            }
         },
 
         {
@@ -348,9 +437,7 @@
             "location": "[variables('location')]",
 
             "dependsOn": [
-
                 "[variables('securitygroup')]"
-
             ],
 
             "properties": {
@@ -372,7 +459,7 @@
 
                         "properties": {
 
-                            "addressPrefix": "[parameters('Management Subnet for Cyperf Controller and Agent')]"
+                            "addressPrefix": "[parameters('Management Subnet for Cyperf Controller Proxy and Agent')]"
 
                         }
 
@@ -397,11 +484,11 @@
 
         {
 
-            "comments": "creates a interface for controller & associates a public IP(created earlier) to it along with private IP",
+            "comments": "creates a interface for controllerproxy & associates a public IP(created earlier) to it along with private IP",
 
             "type": "Microsoft.Network/networkInterfaces",
 
-            "name": "[variables('controller_interface')]",
+            "name": "[variables('controllerproxy_interface')]",
 
             "location": "[variables('location')]",
 
@@ -411,7 +498,7 @@
 
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
 
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('controller_publicIP'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('controllerproxy_publicIP'))]"
 
             ],
 
@@ -435,7 +522,7 @@
 
                             "publicIPAddress": {
 
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controllerproxy_publicIP'))]"
 
                             }
 
@@ -568,25 +655,15 @@
 
         {
 
-            "comments": "creates the controller vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
+            "comments": "creates the controllerproxy vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
 
             "type": "Microsoft.Compute/virtualMachines",
 
-            "name": "[variables('vmname_controller')]",
+            "name": "[variables('vmname_controllerproxy')]",
 
             "apiVersion": "2019-07-01",
 
             "location": "[variables('location')]",
-
-            "plan": {
-                
-                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
-
-                "product": "keysight-cyperf",
-
-                "publisher": "keysighttechnologies_cyperf"
-                
-            },
 
             "dependsOn": [
 
@@ -598,13 +675,13 @@
 
                 "hardwareProfile": {
 
-                    "vmSize": "Standard_F8s_v2"
+                    "vmSize": "Standard_D2s_v3"
 
                 },
 
                 "osProfile": {
 
-                    "computerName":"[variables('vmname_controller')]",
+                    "computerName":"[variables('vmname_controllerproxy')]",
 
                     "adminUsername": "cyperf",
 
@@ -633,18 +710,13 @@
                 },
 
                 "storageProfile": {
-                    "osDisk": {
-                            "createOption": "FromImage",
-                            "managedDisk": {
-                                "storageAccountType": "Premium_LRS"
-                            }
-                    },
+
                     "imageReference": {
-                    "publisher": "keysighttechnologies_cyperf",
-                    "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
-                    "version": "[parameters('Cyperf Version')]"
+
+                        "id": "[resourceId('Microsoft.Compute/images',variables('controllerproxy_image_name'))]"
+
                     }
+
                 },
 
                 "networkProfile": {
@@ -653,7 +725,7 @@
 
                         {
 
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controller_interface'))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controllerproxy_interface'))]",
 
                             "properties": {
 
@@ -673,7 +745,7 @@
 
         {
 
-            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of controller",
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of controllerproxy which will be used for pairing between agents & controllerproxy",
 
             "type": "Microsoft.Resources/deployments",
 
@@ -683,7 +755,7 @@
 
             "dependsOn": [
 
-                "[variables('controller_interface')]"
+                "[variables('controllerproxy_interface')]"
 
             ],
 
@@ -713,7 +785,7 @@
 
                         "apiVersion": "2020-05-01",
 
-                        "name": "[variables('controller_interface')]",
+                        "name": "[variables('controllerproxy_interface')]",
 
                         "location": "[variables('location')]",
 
@@ -729,7 +801,7 @@
 
                                  "privateIPAllocationMethod": "Static",
 
-                                 "privateIPAddress": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]",
+                                 "privateIPAddress": "[reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress]",
 
                                  "subnet": {
 
@@ -739,7 +811,7 @@
 
                                  "publicIPAddress": {
 
-                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controllerproxy_publicIP'))]"
 
                                   }
 
@@ -779,16 +851,6 @@
 
             "location": "[variables('location')]",
 
-            "plan": {
-
-                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
-
-                "product": "keysight-cyperf",
-
-                "publisher": "keysighttechnologies_cyperf"
-                
-            },
-
             "copy": {
 
                 "name": "agentscopy",
@@ -799,9 +861,11 @@
 
             "dependsOn": [
 
-                "[variables('vmname_controller')]",
+                "[variables('vmname_controllerproxy')]",
 
-                "[variables('proximity_pg_name')]"
+                "[variables('proximity_pg_name')]",
+
+                "[variables('agent_image_name')]"
 
             ],
 
@@ -821,7 +885,7 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
 
                     "linuxConfiguration": {
 
@@ -848,18 +912,13 @@
                 },
 
                 "storageProfile": {
-                    "osDisk": {
-                            "createOption": "FromImage",
-                            "managedDisk": {
-                                "storageAccountType": "Premium_LRS"
-                            }
-                    },
+
                     "imageReference": {
-                    "publisher": "keysighttechnologies_cyperf",
-                    "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
-                    "version": "[parameters('Cyperf Version')]"
+
+                        "id": "[resourceId('Microsoft.Compute/images',variables('agent_image_name'))]"
+
                     }
+
                 },
 
                 "networkProfile": {
@@ -902,11 +961,11 @@
 
     "outputs": {
 
-        "privateIp_controller": {
+        "privateIp_controllerproxy": {
 
             "type": "String",
 
-            "value": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]"
+            "value": "[reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress]"
 
         }
 
