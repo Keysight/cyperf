@@ -29,7 +29,8 @@
             "defaultValue": "0.2.1",
 
             "allowedValues": [
-              "0.2.1"
+              "0.2.1",
+              "0.2.0"
             ],
 
             "metadata": {
