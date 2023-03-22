@@ -56,6 +56,7 @@ variable_2= "value\_2"
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
+
 ## Template Parameters
 
 The following table lists the parameters for this deployment.
@@ -69,14 +70,15 @@ The following table lists the parameters for this deployment.
 | client_secret     | Requires input     | Specify the Azure client secret.   |
 | tenant_id       | Requires input    | Specify the Azure tenant id.   |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
+| controller_proxy_image       | Requires input    | Specify the Azure controller proxy  VHD image|
+| agent_image | Requires input    | Specify the Azure agent VHD image |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | centralus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| cyperf_version   | 0.2.1            | CyPerf release version. |
-| mdw_name   | keysight-cyperf-controller-2-1            | Name for the cyperf controller machine. |
+| azure_broker_machine_type | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
+| azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
+| broker_name   | keysight-cyperf-controller-proxy-2-1      | Name for the cyperf broker machines. |
 | agent_name   | keysight-cyperf-agent-2-1            | Name for the cyperf agent machines. |
 
 ## Destruction
@@ -87,3 +89,4 @@ If the deployment was done using -var options, you will also need to provide the
 terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
+terraform destroy -var input\_variable=&quot;value&quot;
