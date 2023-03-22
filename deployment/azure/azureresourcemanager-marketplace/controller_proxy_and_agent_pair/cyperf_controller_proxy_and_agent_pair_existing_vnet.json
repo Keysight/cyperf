@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.0",
+            "defaultValue": "0.2.1",
 
             "allowedValues": [
+              "0.2.1",
               "0.2.0"
             ],
 
@@ -410,7 +411,7 @@
 
             "plan": {
 
-                "name": "keysight-cyperf-controller-proxy",
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controllerproxy-21', 'keysight-cyperf-controller-proxy')]",
 
                 "product": "keysight-cyperf",
 
@@ -472,7 +473,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "keysight-cyperf-controller-proxy",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controllerproxy-21', 'keysight-cyperf-controller-proxy')]",
                     "version": "latest"
                     }
                 },
@@ -611,7 +612,7 @@
 
             "plan": {
 
-                "name": "keysight-cyperf-agent",
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
 
                 "product": "keysight-cyperf",
 
@@ -687,7 +688,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "keysight-cyperf-agent",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },
