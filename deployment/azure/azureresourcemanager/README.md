@@ -8,14 +8,12 @@ To start using CyPerf's ARM templates, please refer the **README** files in each
 The prerequisites are:
 - SSH Key pair for management access to CyPerf instances.
 - For existing VNET deployment, an existing VNET, two existing subnets in that VNET (one for test and one for Management) and existing security groups for CyPerf Controller and CyPerf Agent.
-- Copy CyPerf VHD images to users own storage account. 
 
 ### Specialized knowledge
 Before you deploy this Custom ARM template, we recommend that you become familiar with the following Azure services:
 - [Deploy resources from custom template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-portal#deploy-resources-from-custom-template)
 - [ARM Template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
 - [Azure Resource Groups](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
-- [Azure Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
 - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
 - [Azure Virtual Machines](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal)
 - [ssh-keygen](https://www.ssh.com/academy/ssh/keygen)

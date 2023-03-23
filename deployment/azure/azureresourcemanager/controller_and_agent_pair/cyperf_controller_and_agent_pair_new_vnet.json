@@ -35,7 +35,7 @@
 
             "metadata": {
 
-              "description": "The CyPerf release version."
+              "description": "CyPerf Controller and Agent release version."
 
             }
         },
