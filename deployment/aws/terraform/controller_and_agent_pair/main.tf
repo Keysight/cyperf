@@ -17,6 +17,12 @@ locals{
                 sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_mdw.private_ip} >> /var/log/Appsec_init.log
     EOF
     firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr],[local.test_cidr])
+	AppSleepDelay = "8m"
+	ProjectTag = var.aws_stack_name
+	Region = data.aws_region.current.name
+	RegionTag = upper(replace(local.Region, "-", "_"))
+	UserLoginTag = var.aws_stack_name
+	uuid = substr(uuid(), 1, 6)
 }
 
 resource "aws_vpc" "aws_main_vpc" {
@@ -203,6 +209,8 @@ resource "aws_network_interface" "aws_server_test_interface" {
     security_groups = [ aws_security_group.aws_agent_security_group.id ]
 }
 
+data "aws_region" "current" {}
+
 data "aws_ami" "mdw_ami" {
     owners = ["aws-marketplace"]
     most_recent = true
@@ -281,6 +289,7 @@ resource "aws_instance" "aws_client_agent" {
     }
     ami           = data.aws_ami.agent_ami.image_id 
     instance_type = var.aws_agent_machine_type
+	iam_instance_profile = aws_iam_instance_profile.IamInstanceProfile.id
 
     ebs_block_device {
         device_name = "/dev/sda1"
@@ -313,6 +322,7 @@ resource "aws_instance" "aws_server_agent" {
 
     ami           = data.aws_ami.agent_ami.image_id 
     instance_type = var.aws_agent_machine_type
+	iam_instance_profile = aws_iam_instance_profile.IamInstanceProfile.id
 
     ebs_block_device {
         device_name = "/dev/sda1"
@@ -337,6 +347,13 @@ resource "aws_instance" "aws_server_agent" {
 
     key_name = var.aws_auth_key
 
+}
+
+resource "time_sleep" "AppSleepDelay" {
+	create_duration = local.AppSleepDelay
+	depends_on = [
+		aws_instance.aws_mdw
+	]
 }
 
 output "mdw_detail" {
