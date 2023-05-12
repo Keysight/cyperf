@@ -1,0 +1,446 @@
+{
+
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    "contentVersion": "1.0.0.0",
+
+    "parameters": {
+
+        "Deployment Name": {
+
+            "type": "string",
+
+            "minLength": 3,
+
+            "maxLength": 25,
+
+            "metadata": {
+
+                "description": "Preferred prefix for naming resources"
+
+            }
+
+        },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.2.1",
+
+            "allowedValues": [
+              "0.2.1",
+              "0.2.0"
+            ],
+
+            "metadata": {
+
+              "description": "CyPerf Controller and Agent release version."
+
+            }
+        },
+
+	 "Proximity Placement Group": {
+            
+            "type": "string",
+            
+            "defaultValue": "No",
+            
+            "allowedValues": [
+                
+                 "Yes",
+                
+                 "No"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of proximity"
+
+             }
+
+         },
+
+
+        "Virtual Network": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Name of an existing Virtual Network"
+
+            }
+
+        },
+
+        "Management Subnet for Cyperf Agent": {
+
+            "type": "string",
+
+            "metadata":{
+
+                "description": "Name of an existing Management subnet. CyPerf agents will use this subnet for control plane communication with controller"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Agents": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Name of an existing Test subnet for CyPerf agents.This subnet will be used for test traffic"
+
+            }
+
+        },
+
+        "Cyperf Controller IP": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "CyPerf Controller/ Controller Proxy IP for Agent peering"
+            }
+        },
+
+        "VM Size Type for Cyperf Agents": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_F4s_v2",
+
+            "allowedValues": [
+
+               "Standard_F4s_v2",
+
+               "Standard_F16s_v2"
+
+            ],
+
+            "metadata": {
+
+                "description": "CyPerf VM Size"
+
+            }
+
+        },
+
+        "SSH Public Key": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Public key to enable SSH access to the CyPerf instances"
+
+            }
+
+        },
+
+        "Number of Cyperf Agents": {
+
+            "type": "int",
+
+            "defaultValue": 1,
+
+            "minValue": 1,
+
+            "metadata": {
+
+                "description": "Number of CyPerf agents that will be deployed from this template"
+
+            }
+
+        }
+
+    },
+
+    "functions": [],
+
+    "variables": {
+
+        "stackname"  :     "[parameters('Deployment Name')]",
+
+        "location"  :     "[resourceGroup().location]",
+
+        "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
+        
+        "proximity_id": {
+            
+            "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',variables('proximity_pg_name'))]"
+            
+            },
+
+        "agentmgmtinterface"  :     "[concat(variables('stackname'),'-agentmanagementinterface')]",
+
+        "agenttestinterface"  :     "[concat(variables('stackname'),'-agenttestinterface')]",
+
+        "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
+
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+
+    },
+
+    "resources": [
+
+        {
+            "comments": "Creates a proximity group",
+            
+            "condition": "[equals(parameters('Proximity Placement Group'),'Yes')]",
+            
+            "type": "Microsoft.Compute/proximityPlacementGroups",
+            
+            "name": "[variables('proximity_pg_name')]",
+            
+            "apiVersion": "2019-07-01",
+            
+            "location": "[variables('location')]",
+            
+            "properties": {
+                
+                "proximityPlacementGroupType": "Standard"
+                
+                }
+                
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Management Subnet for Cyperf Agent'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n no of Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'), parameters('Cyperf Controller IP'),' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        }
+
+    ],
+
+    "outputs": {
+
+    }
+
+}
