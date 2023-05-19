@@ -1,0 +1,1740 @@
+{
+
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    "contentVersion": "1.0.0.0",
+
+    "parameters": {
+
+        "Deployment Name": {
+
+            "type": "string",
+
+            "minLength": 3,
+
+            "maxLength": 25,
+
+            "metadata": {
+
+                "description": "Preferred prefix for naming resources"
+
+            }
+
+        },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.2.1",
+
+            "allowedValues": [
+              "0.2.1",
+              "0.2.0"
+            ],
+
+            "metadata": {
+
+              "description": "CyPerf Controller and Agent release version."
+
+            }
+        },
+
+        "F5 License": {
+
+            "type": "string",
+
+            "defaultValue": "BYOL",
+
+            "allowedValues": [
+              "BYOL",
+              "PAYG"
+            ],
+
+            "metadata": {
+
+              "description": "f5 License Type."
+
+            }
+        },
+
+	    "Proximity Placement Group": {
+            
+            "type": "string",
+            
+            "defaultValue": "No",
+            
+            "allowedValues": [
+                
+                 "Yes",
+                
+                 "No"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of proximity"
+
+             }
+
+         },
+
+
+        "Virtual Network": {
+
+            "type": "string",
+
+            "defaultValue": "172.16.0.0/16",
+
+            "metadata": {
+
+                "description": "CIDR range for the Virtual Network"
+
+            }
+
+        },
+
+        "Management Subnet for Cyperf Controller and Agent": {
+
+            "type": "string",
+
+            "defaultValue": "172.16.2.0/24",
+
+            "metadata":{
+
+                "description": "This subnet is attached to CyPerf controller and would be used to access the CyPerf controller's UI & CyPerf agents will use this subnet for control plane communication with controller"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Client Agents": {
+
+            "type": "string",
+
+            "defaultValue":"172.16.3.0/24",
+
+            "metadata": {
+
+                "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Server Agents": {
+
+            "type": "string",
+
+            "defaultValue":"172.16.4.0/24",
+
+            "metadata": {
+
+                "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "VM Size Type for Cyperf Agents": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_F4s_v2",
+
+            "allowedValues": [
+
+               "Standard_F4s_v2",
+
+               "Standard_F16s_v2"
+
+            ],
+
+            "metadata": {
+
+                "description": "CyPerf VM Size"
+
+            }
+
+        },
+
+        "VM Size Type for F5": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_D16s_v3",
+
+            "allowedValues": [
+
+               "Standard_D16s_v3"
+
+            ],
+
+            "metadata": {
+
+                "description": "F5 VM Size"
+
+            }
+
+        },
+
+        "SSH Public Key": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Public key to enable SSH access to the CyPerf instances"
+
+            }
+
+        },
+
+        "Allowed Subnet for Security Group": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Subnet range allowed to access deployed Azure resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”"
+
+            }
+
+        },
+
+        "Number of Cyperf Client Agents": {
+
+            "type": "int",
+
+            "defaultValue": 1,
+
+            "minValue": 1,
+
+            "metadata": {
+
+                "description": "Number of CyPerf Client agents that will be deployed from this template"
+
+            }
+
+        },
+
+        "Number of Cyperf Server Agents": {
+
+            "type": "int",
+
+            "defaultValue": 1,
+
+            "minValue": 1,
+
+            "metadata": {
+
+                "description": "Number of CyPerf Server agents that will be deployed from this template"
+
+            }
+
+        }
+
+    },
+
+    "functions": [],
+
+    "variables": {
+
+        "stackname"  :     "[parameters('Deployment Name')]",
+
+        "location"  :     "[resourceGroup().location]",
+
+        "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
+
+        "vnet"  :     "[concat(variables('stackname'),'-virtualnetwork')]",
+
+        "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
+        
+        "proximity_id": {
+            
+            "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',variables('proximity_pg_name'))]"
+            
+            },
+
+        "controller_publicIP"  :     "[concat(variables('stackname'),'-controllerpublicIP')]",
+
+        "f5_publicIP"  :     "[concat(variables('stackname'),'-f5publicIP')]",
+
+        "mgmtsubnet"  :     "[concat(variables('stackname'),'-mgmtsubnet')]",
+
+        "clientagenttestsubnet"  :     "[concat(variables('stackname'),'-clienttestsubnet')]",
+
+        "serveragenttestsubnet"  :     "[concat(variables('stackname'),'-servertestsubnet')]",
+
+        "controller_interface"  :     "[concat(variables('stackname'),'-controllerinterface')]",
+
+        "clientagentmgmtinterface"  :     "[concat(variables('stackname'),'-clientagentmanagementinterface')]",
+
+        "serveragentmgmtinterface"  :     "[concat(variables('stackname'),'-serveragentmanagementinterface')]",
+
+        "clientagenttestinterface"  :     "[concat(variables('stackname'),'-clientagenttestinterface')]",
+
+        "serveragenttestinterface"  :     "[concat(variables('stackname'),'-serveragenttestinterface')]",
+
+        "f5mgmtinterface"  :     "[concat(variables('stackname'),'-f5managementinterface')]",
+
+        "f5clientagenttestinterface"  :     "[concat(variables('stackname'),'-f5clientagenttestinterface')]",
+
+        "f5serveragenttestinterface"  :     "[concat(variables('stackname'),'-f5serveragenttestinterface')]",
+
+        "vmname_controller"  :     "[concat(variables('stackname'),'-controller')]",
+
+        "vmname_f5"  :     "[concat(variables('stackname'),'-f5')]",
+
+        "vmname_client_agent"  :     "[concat(variables('stackname'),'-client-agent')]",
+
+        "vmname_server_agent"  :     "[concat(variables('stackname'),'-server-agent')]",
+
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+
+    },
+
+    "resources": [
+    
+        {
+
+            "comments": "creates security group which is used by controller & allows ssh,https traffic from external(public) subnet ",
+
+            "type": "Microsoft.Network/networkSecurityGroups",
+
+            "name": "[variables('securitygroup')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "securityRules": [
+
+                    {
+
+                        "name":"ssh-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 100,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "22",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+
+                        }
+
+                    },
+                    {
+
+                        "name": "https-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 101,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "443",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a publicIP Address which will be linked later to contoller interface",
+
+            "type": "Microsoft.Network/publicIPAddresses",
+
+            "name": "[variables('controller_publicIP')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "publicIPAddressVersion": "IPv4",
+
+                "publicIPAllocationMethod": "Dynamic",
+
+                "idleTimeoutInMinutes": 4
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a publicIP Address which will be linked later to f5 management interface",
+
+            "type": "Microsoft.Network/publicIPAddresses",
+
+            "name": "[variables('f5_publicIP')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "publicIPAddressVersion": "IPv4",
+
+                "publicIPAllocationMethod": "Dynamic",
+
+                "idleTimeoutInMinutes": 4
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+            "comments": "Creates a proximity group",
+            
+            "condition": "[equals(parameters('Proximity Placement Group'),'Yes')]",
+            
+            "type": "Microsoft.Compute/proximityPlacementGroups",
+            
+            "name": "[variables('proximity_pg_name')]",
+            
+            "apiVersion": "2019-07-01",
+            
+            "location": "[variables('location')]",
+            
+            "properties": {
+                
+                "proximityPlacementGroupType": "Standard"
+                
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+                
+        },
+
+        {
+            "comments": "create Vnet having three subnets",
+
+            "type": "Microsoft.Network/virtualNetworks",
+
+            "name": "[variables('vnet')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[variables('securitygroup')]"
+
+            ],
+
+            "properties": {
+
+                "addressSpace": {
+
+                    "addressPrefixes": [
+
+                        "[parameters('Virtual Network')]"
+
+                    ]
+
+                },
+
+                "subnets": [
+
+                    {
+                        "name": "[variables('mgmtsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Management Subnet for Cyperf Controller and Agent')]"
+
+                        }
+
+                    },
+
+                    {
+                        "name": "[variables('clientagenttestsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Test Subnet for Cyperf Client Agents')]"
+
+                        }
+
+                    },
+
+                    {
+                        "name": "[variables('serveragenttestsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Test Subnet for Cyperf Server Agents')]"
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a interface for controller & associates a public IP(created earlier) to it along with private IP",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('controller_interface')]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
+
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('controller_publicIP'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ipconfig1",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            },
+
+                            "publicIPAddress": {
+
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "enableIPForwarding": false,
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                  }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a interface for f5 & associates a public IP(created earlier) to it along with private IP",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('f5mgmtinterface')]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
+
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('f5_publicIP'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ipconfig2",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            },
+
+                            "publicIPAddress": {
+
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('f5_publicIP'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "enableIPForwarding": false,
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                  }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Client Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('clientagentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Server Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('serveragentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Client Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('clientagenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "clienttestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('clientagenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Server Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('serveragenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "servertestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('serveragenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates f5 test interface for the Client side",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('f5clientagenttestinterface')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "f5clienttestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('clientagenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates f5 test interface for the Server side",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('f5serveragenttestinterface')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "f5servertestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('serveragenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates the controller vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_controller')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+                
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "dependsOn": [
+
+                "updateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "Standard_F8s_v2"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_controller')]",
+
+                    "adminUsername": "cyperf",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controller_interface'))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates the f5 vm from image specified by the user but before this step we fetch the private IP of the instance using f5updateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_f5')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+                
+                "name": "[if(equals(parameters('F5 License'), 'BYOL'), 'f5-big-all-2slot-byol', 'f5-bigip-virtual-edition-25m-good-hourly')]",
+
+                "product": "[if(equals(parameters('F5 License'), 'BYOL'), 'f5-big-ip-byol', 'f5-big-ip-good')]",
+
+                "publisher": "f5-networks"
+                
+            },
+
+            "dependsOn": [
+
+                "f5updateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for F5')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_f5')]",
+
+                    "adminUsername": "azureuser",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "diskSizeGB": 84,
+                        "managedDisk": {
+                          "storageAccountType": "Premium_LRS"
+                        },
+                        "osType": "Linux"
+                    },
+                    "imageReference": {
+                    "publisher": "f5-networks",
+                    "offer": "[if(equals(parameters('F5 License'), 'BYOL'), 'f5-big-ip-byol', 'f5-big-ip-good')]",
+                    "sku": "[if(equals(parameters('F5 License'), 'BYOL'), 'f5-big-all-2slot-byol', 'f5-bigip-virtual-edition-25m-good-hourly')]",
+                    "version": "latest"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('f5mgmtinterface'))]",
+
+                            "properties": {
+
+                                "deleteOption": "Detach",
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('f5clientagenttestinterface'))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('f5serveragenttestinterface'))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of controller",
+
+            "type": "Microsoft.Resources/deployments",
+
+            "apiVersion": "2020-06-01",
+
+            "name": "updateIp",
+
+            "dependsOn": [
+
+                "[variables('controller_interface')]"
+
+            ],
+
+            "properties": {
+
+                "mode": "Incremental",
+
+                "expressionEvaluationOptions": {
+
+                    "scope": "Outer"
+
+                },
+
+                "template": {
+
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/nestedTemplate.json#",
+
+                    "contentVersion": "1.0.0.0",
+
+                    "resources": [
+
+                     {
+
+
+
+                        "type": "Microsoft.Network/networkInterfaces",
+
+                        "apiVersion": "2020-05-01",
+
+                        "name": "[variables('controller_interface')]",
+
+                        "location": "[variables('location')]",
+
+                        "properties": {
+
+                        "ipConfigurations": [
+
+                          {
+
+                            "name": "ipconfig1",
+
+                            "properties": {
+
+                                 "privateIPAllocationMethod": "Static",
+
+                                 "privateIPAddress": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]",
+
+                                 "subnet": {
+
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('mgmtsubnet'))]"
+
+                                    },
+
+                                 "publicIPAddress": {
+
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+
+                                  }
+
+                                }
+
+                            }
+
+                        ],
+
+                    "networkSecurityGroup": {
+
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+
+                          }
+
+                    }
+
+                 }
+
+               ]
+
+             }
+
+          },
+
+          "tags": {
+            "fastpathenabled": "true"
+          }
+
+        },
+
+        {
+
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of F5",
+
+            "type": "Microsoft.Resources/deployments",
+
+            "apiVersion": "2020-06-01",
+
+            "name": "f5updateIp",
+
+            "dependsOn": [
+
+                "[variables('f5mgmtinterface')]"
+
+            ],
+
+            "properties": {
+
+                "mode": "Incremental",
+
+                "expressionEvaluationOptions": {
+
+                    "scope": "Outer"
+
+                },
+
+                "template": {
+
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/nestedTemplate.json#",
+
+                    "contentVersion": "1.0.0.0",
+
+                    "resources": [
+
+                     {
+
+
+
+                        "type": "Microsoft.Network/networkInterfaces",
+
+                        "apiVersion": "2020-05-01",
+
+                        "name": "[variables('f5mgmtinterface')]",
+
+                        "location": "[variables('location')]",
+
+                        "properties": {
+
+                        "ipConfigurations": [
+
+                          {
+
+                            "name": "ipconfig2",
+
+                            "properties": {
+
+                                 "privateIPAllocationMethod": "Static",
+
+                                 "privateIPAddress": "[reference(variables('f5mgmtinterface')).ipConfigurations[0].properties.privateIPAddress]",
+
+                                 "subnet": {
+
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('mgmtsubnet'))]"
+
+                                    },
+
+                                 "publicIPAddress": {
+
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('f5_publicIP'))]"
+
+                                  }
+
+                                }
+
+                            }
+
+                        ],
+
+                    "networkSecurityGroup": {
+
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+
+                          }
+
+                    }
+
+                 }
+
+               ]
+
+             }
+
+          },
+
+          "tags": {
+            "fastpathenabled": "true"
+          }
+
+        },
+
+        {
+
+            "comments": "creates n no of Client Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_client_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('vmname_controller')]",
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_client_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('clientagentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('clientagenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n no of Server Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_server_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('vmname_controller')]",
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_server_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('serveragentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('serveragenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "fastpathenabled": "true"
+            }
+
+        }
+
+    ],
+
+    "outputs": {
+
+        "privateIp_controller": {
+
+            "type": "String",
+
+            "value": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]"
+
+        }
+
+    }
+
+}
