@@ -1,0 +1,2190 @@
+{
+
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    "contentVersion": "1.0.0.0",
+
+    "parameters": {
+
+        "Deployment Name": {
+
+            "type": "string",
+
+            "minLength": 3,
+
+            "maxLength": 25,
+
+            "metadata": {
+
+                "description": "Preferred prefix for naming resources"
+
+            }
+
+        },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.2.1",
+
+            "allowedValues": [
+              "0.2.1",
+              "0.2.0"
+            ],
+
+            "metadata": {
+
+              "description": "CyPerf Controller and Agent release version."
+
+            }
+        },
+
+  	"Proximity Placement Group": {
+            
+            "type": "string",
+            
+            "defaultValue": "Yes",
+            
+            "allowedValues": [
+                
+                 "Yes",
+                
+                 "No"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of proximity"
+
+             }
+
+         },
+
+
+        "Virtual Network": {
+
+            "type": "string",
+
+            "defaultValue": "192.168.0.0/16",
+
+            "metadata": {
+
+                "description": "CIDR range for the Virtual Network"
+
+            }
+
+        },
+
+        "Management Subnet for Cyperf Controller and Agent": {
+
+            "type": "string",
+
+            "defaultValue": "192.168.2.0/24",
+
+            "metadata":{
+
+                "description": "This subnet is attached to CyPerf controller and would be used to access the CyPerf controller's UI & CyPerf agents will use this subnet for control plane communication with controller"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Client Agents": {
+
+            "type": "string",
+
+            "defaultValue":"192.168.3.0/24",
+
+            "metadata": {
+
+                "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Server Agents": {
+
+            "type": "string",
+
+            "defaultValue":"192.168.4.0/24",
+
+            "metadata": {
+
+                "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "Test Subnet for Cisco third interface": {
+
+            "type": "string",
+
+            "defaultValue":"192.168.5.0/24",
+
+            "metadata": {
+
+                "description": "CyPerf agents will use this subnet for test traffic"
+
+            }
+
+        },
+
+        "VM Size Type for Cyperf Agents": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_F4s_v2",
+
+            "allowedValues": [
+
+               "Standard_F4s_v2",
+
+               "Standard_F16s_v2"
+
+            ],
+
+            "metadata": {
+
+                "description": "CyPerf VM Size"
+
+            }
+
+        },
+
+        "VM Size Type for CISCO": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_D5_v2",
+
+            "metadata": {
+
+                "description": "CISCO VM Size"
+
+            }
+
+        },
+
+       "Sku of CISCO image": {
+
+            "type": "string",
+
+            "defaultValue": "asav-azure-byol",
+
+            "metadata": {
+
+                "description": "Execute Azure CLI command to get Sku list-  'az vm image list --offer cisco --all --output table'"
+
+            }
+
+        },
+
+        "Offer of CISCO image": {
+
+            "type": "string",
+
+            "defaultValue": "cisco-asav",
+
+            "metadata": {
+
+                "description": "Offer of CISCO image. Execute Azure CLI command to get offer list-  'az vm image list --offer cisco --all --output table'"
+
+            }
+
+        },
+
+        "Version of CISCO image": {
+
+            "type": "string",
+
+            "defaultValue": "9181.0.0",
+
+            "metadata": {
+
+                "description": " version of CISCO image. Execute Azure CLI command to get Version list-  'az vm image list --offer cisco --all --output table'"
+
+            }
+
+        },
+       
+        "tagname for the deployment": {
+
+            "type": "string",
+
+            "defaultValue": "fastpathenabled",
+
+            "metadata": {
+
+                "description": "tag name required for the deployment"
+
+            }
+
+        },
+
+       "tagvalue for the deployment": {
+
+            "type": "string",
+
+            "defaultValue": "true",
+
+            "metadata": {
+
+                "description": "tag value required for the deployment"
+        
+            }
+            
+        },
+
+        "SSH Public Key": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Public key to enable SSH access to the CyPerf instances"
+
+            }
+
+        },
+
+        "Allowed Subnet for Security Group": {
+
+            "type": "string",
+
+            "defaultValue": "<Specify MyIP>/<subnet>",
+
+            "metadata": {
+
+                "description": "Subnet range allowed to access deployed Azure resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”"
+
+            }
+
+        },
+
+        "Number of Cyperf Client Agents": {
+
+            "type": "int",
+
+            "defaultValue": 1,
+
+            "minValue": 1,
+
+            "metadata": {
+
+                "description": "Number of CyPerf Client agents that will be deployed from this template"
+
+            }
+
+        },
+
+        "Number of Cyperf Server Agents": {
+
+            "type": "int",
+
+            "defaultValue": 1,
+
+            "minValue": 1,
+
+            "metadata": {
+
+                "description": "Number of CyPerf Server agents that will be deployed from this template"
+
+            }
+
+        }
+
+    },
+
+    "functions": [],
+
+    "variables": {
+
+        "stackname"  :     "[parameters('Deployment Name')]",
+
+        "location"  :     "[resourceGroup().location]",
+
+        "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
+        
+        "vnet"  :     "[concat(variables('stackname'),'-virtualnetwork')]",
+
+        "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
+        
+        "proximity_id": {
+            
+            "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',variables('proximity_pg_name'))]"
+            
+            },
+
+        "controller_publicIP"  :     "[concat(variables('stackname'),'-controllerpublicIP')]",
+
+        "cisco_publicIP"  :     "[concat(variables('stackname'),'-ciscopublicIP')]",
+
+        "mgmtsubnet"  :     "[concat(variables('stackname'),'-mgmtsubnet')]",
+
+        "clientagenttestsubnet"  :     "[concat(variables('stackname'),'-clienttestsubnet')]",
+
+        "serveragenttestsubnet"  :     "[concat(variables('stackname'),'-servertestsubnet')]",
+
+        "ciscothirdtestsubnet"  :     "[concat(variables('stackname'),'-ciscothirdtestsubnet')]",
+
+        "controller_interface"  :     "[concat(variables('stackname'),'-controllerinterface')]",
+
+        "clientagentmgmtinterface"  :     "[concat(variables('stackname'),'-clientagentmanagementinterface')]",
+
+        "serveragentmgmtinterface"  :     "[concat(variables('stackname'),'-serveragentmanagementinterface')]",
+
+        "clientagenttestinterface"  :     "[concat(variables('stackname'),'-clientagenttestinterface')]",
+
+        "serveragenttestinterface"  :     "[concat(variables('stackname'),'-serveragenttestinterface')]",
+
+        "ciscomgmtinterface"  :     "[concat(variables('stackname'),'-ciscomanagementinterface')]",
+
+        "ciscoclientagenttestinterface"  :     "[concat(variables('stackname'),'-ciscoclientagenttestinterface')]",
+
+        "ciscoserveragenttestinterface"  :     "[concat(variables('stackname'),'-ciscoserveragenttestinterface')]",
+
+        "ciscothirdtestinterface"  :     "[concat(variables('stackname'),'-ciscothirdtestinterface')]",
+
+        "vmname_controller"  :     "[concat(variables('stackname'),'-controller')]",
+
+        "vmname_cisco"  :     "[concat(variables('stackname'),'-cisco')]",
+
+        "vmname_client_agent"  :     "[concat(variables('stackname'),'-client-agent')]",
+
+        "vmname_server_agent"  :     "[concat(variables('stackname'),'-server-agent')]",
+
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+
+    },
+
+    "resources": [
+
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('securitygroup')]",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+
+                        "name":"ssh-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 108,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "22",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+
+                        }
+
+                    },
+                    {
+
+                        "name": "https-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 109,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "443",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+                        }
+
+                    },
+                    {
+                        "name": "Allow-Outside-From-IP",
+                        "properties": {
+                            "description": "Rule",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "0.0.0.0/0",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Allow-Intra",
+                        "properties": {
+                            "description": "Allow intra network traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1002,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Default-Deny",
+                        "properties": {
+                            "description": "Default-Deny if we don't match Allow rule",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 1004,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-100",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "167.220.148.0/23",
+                                "131.107.147.0/24",
+                                "131.107.159.0/24",
+                                "131.107.160.0/24",
+                                "131.107.174.0/24",
+                                "167.220.24.0/24",
+                                "167.220.26.0/24",
+                                "167.220.238.0/27",
+                                "167.220.238.128/27",
+                                "167.220.238.192/27",
+                                "167.220.238.64/27",
+                                "167.220.232.0/23",
+                                "167.220.255.0/25",
+                                "167.220.242.0/27",
+                                "167.220.242.128/27",
+                                "167.220.242.192/27",
+                                "167.220.242.64/27",
+                                "94.245.87.0/24",
+                                "167.220.196.0/23",
+                                "194.69.104.0/25",
+                                "191.234.97.0/26",
+                                "167.220.0.0/23",
+                                "167.220.2.0/24",
+                                "167.220.226.0/23",
+                                "131.107.132.16/28",
+                                "131.107.132.32/28",
+                                "157.58.212.64/26",
+                                "157.58.212.128/26",
+                                "157.58.213.64/26",
+                                "157.58.213.192/26",
+                                "157.58.214.128/26",
+                                "157.58.214.192/26",
+                                "167.220.70.64/26",
+                                "167.220.76.192/26",
+                                "167.220.77.64/26",
+                                "167.220.80.192/26",
+                                "167.220.81.128/26",
+                                "167.220.81.192/26",
+                                "131.107.1.128/25",
+                                "131.107.8.0/25",
+                                "167.220.204.128/26",
+                                "167.220.204.192/26",
+                                "167.220.205.0/26",
+                                "167.220.205.64/26",
+                                "157.58.216.64/26",
+                                "194.69.119.64/26",
+                                "167.220.249.128/26",
+                                "207.68.190.32/27",
+                                "13.106.174.32/27",
+                                "13.106.4.96/27"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-101",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-102",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 102,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Deny-103",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 103,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-104",
+                        "properties": {
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 104,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "167.220.148.0/23",
+                                "131.107.147.0/24",
+                                "131.107.159.0/24",
+                                "131.107.160.0/24",
+                                "131.107.174.0/24",
+                                "167.220.24.0/24",
+                                "167.220.26.0/24",
+                                "167.220.238.0/27",
+                                "167.220.238.128/27",
+                                "167.220.238.192/27",
+                                "167.220.238.64/27",
+                                "167.220.232.0/23",
+                                "167.220.255.0/25",
+                                "167.220.242.0/27",
+                                "167.220.242.128/27",
+                                "167.220.242.192/27",
+                                "167.220.242.64/27",
+                                "94.245.87.0/24",
+                                "167.220.196.0/23",
+                                "194.69.104.0/25",
+                                "191.234.97.0/26",
+                                "167.220.0.0/23",
+                                "167.220.2.0/24",
+                                "167.220.226.0/23",
+                                "131.107.132.16/28",
+                                "131.107.132.32/28",
+                                "157.58.212.64/26",
+                                "157.58.212.128/26",
+                                "157.58.213.64/26",
+                                "157.58.213.192/26",
+                                "157.58.214.128/26",
+                                "157.58.214.192/26",
+                                "167.220.70.64/26",
+                                "167.220.76.192/26",
+                                "167.220.77.64/26",
+                                "167.220.80.192/26",
+                                "167.220.81.128/26",
+                                "167.220.81.192/26",
+                                "131.107.1.128/25",
+                                "131.107.8.0/25",
+                                "167.220.204.128/26",
+                                "167.220.204.192/26",
+                                "167.220.205.0/26",
+                                "167.220.205.64/26",
+                                "157.58.216.64/26",
+                                "194.69.119.64/26",
+                                "167.220.249.128/26",
+                                "207.68.190.32/27",
+                                "13.106.174.32/27",
+                                "13.106.4.96/27"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-105",
+                        "properties": {
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 105,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Allow-106",
+                        "properties": {
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 106,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Cleanuptool-Deny-107",
+                        "properties": {
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 107,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "1-65535"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+
+        {
+
+            "comments": "creates a publicIP Address which will be linked later to contoller interface",
+
+            "type": "Microsoft.Network/publicIPAddresses",
+
+            "name": "[variables('controller_publicIP')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "publicIPAddressVersion": "IPv4",
+
+                "publicIPAllocationMethod": "Dynamic",
+
+                "idleTimeoutInMinutes": 4
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a publicIP Address which will be linked later to cisco management interface",
+
+            "type": "Microsoft.Network/publicIPAddresses",
+
+            "name": "[variables('cisco_publicIP')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "publicIPAddressVersion": "IPv4",
+
+                "publicIPAllocationMethod": "Dynamic",
+
+                "idleTimeoutInMinutes": 4
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+            "comments": "Creates a proximity group",
+            
+            "condition": "[equals(parameters('Proximity Placement Group'),'Yes')]",
+            
+            "type": "Microsoft.Compute/proximityPlacementGroups",
+            
+            "name": "[variables('proximity_pg_name')]",
+            
+            "apiVersion": "2019-07-01",
+            
+            "location": "[variables('location')]",
+            
+            "properties": {
+                
+                "proximityPlacementGroupType": "Standard"
+                
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+                
+        },
+
+        {
+            "comments": "create Vnet having three subnets",
+
+            "type": "Microsoft.Network/virtualNetworks",
+
+            "name": "[variables('vnet')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[variables('securitygroup')]"
+
+            ],
+
+            "properties": {
+
+                "addressSpace": {
+
+                    "addressPrefixes": [
+
+                        "[parameters('Virtual Network')]"
+
+                    ]
+
+                },
+
+                "subnets": [
+
+                    {
+                        "name": "[variables('mgmtsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Management Subnet for Cyperf Controller and Agent')]"
+
+                        }
+
+                    },
+
+                    {
+                        "name": "[variables('clientagenttestsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Test Subnet for Cyperf Client Agents')]"
+
+                        }
+
+                    },
+
+                    {
+                        "name": "[variables('serveragenttestsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Test Subnet for Cyperf Server Agents')]"
+
+                        }
+
+                    },
+
+                    {
+                        "name": "[variables('ciscothirdtestsubnet')]",
+
+                        "properties": {
+
+                            "addressPrefix": "[parameters('Test Subnet for Cisco third interface')]"
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a interface for controller & associates a public IP(created earlier) to it along with private IP",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('controller_interface')]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
+
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('controller_publicIP'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ipconfig1",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            },
+
+                            "publicIPAddress": {
+
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "enableIPForwarding": false,
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                  }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates a interface for cisco & associates a public IP(created earlier) to it along with private IP",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('ciscomgmtinterface')]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]",
+
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('cisco_publicIP'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ipconfig2",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            },
+
+                            "publicIPAddress": {
+
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('cisco_publicIP'))]"
+
+
+
+
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "enableIPForwarding": false,
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                  }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Client Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('clientagentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Server Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('serveragentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('mgmtsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Client Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('clientagenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2021-08-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false,
+                "AuxiliaryMode": "MaxConnections",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "clienttestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('clientagenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Server Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('serveragenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2021-08-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false,
+                "AuxiliaryMode": "MaxConnections",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "servertestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('serveragenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates cisco test interface for the Client side",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('ciscoclientagenttestinterface')]",
+
+            "apiVersion": "2021-08-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false,
+                "AuxiliaryMode": "MaxConnections",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ciscoclienttestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('clientagenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates cisco test interface for the Server side",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('ciscoserveragenttestinterface')]",
+
+            "apiVersion": "2021-08-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false,
+                "AuxiliaryMode": "MaxConnections",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ciscoservertestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('serveragenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates cisco third test interface for cisco",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('ciscothirdtestinterface')]",
+
+            "apiVersion": "2021-08-01",
+
+            "location": "[variables('location')]",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false,
+                "AuxiliaryMode": "MaxConnections",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ciscothirdtestnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('ciscothirdtestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+
+        {
+
+            "comments": "creates the controller vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_controller')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+                
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "dependsOn": [
+
+                "updateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "Standard_F8s_v2"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_controller')]",
+
+                    "adminUsername": "cyperf",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controller-21', 'keysight-cyperf-controller')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controller_interface'))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates the cisco vm from image specified by the user but before this step we fetch the private IP of the instance using ciscoupdateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_cisco')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+                
+                "name": "[parameters('Sku of CISCO image')]",
+
+                "product": "[parameters('Offer of CISCO image')]",
+
+                "publisher": "cisco"
+                
+            },
+
+            "dependsOn": [
+
+                "ciscoupdateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for CISCO')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_cisco')]",
+
+                    "adminUsername": "azureuser",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        },
+
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+
+                    },
+
+                    "secrets": [],
+                    "allowExtensionOperations": true
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "diskSizeGB": 84,
+                        "managedDisk": {
+                          "storageAccountType": "Premium_LRS"
+                        },
+                        "osType": "Linux"
+                    },
+                    "imageReference": {
+                    "publisher": "cisco",
+                    "offer": "[parameters('Offer of CISCO image')]",
+                    "sku": "[parameters('Sku of CISCO image')]",
+                    "version": "[parameters('Version of CISCO image')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('ciscomgmtinterface'))]",
+
+                            "properties": {
+
+                                "deleteOption": "Detach",
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('ciscoclientagenttestinterface'))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('ciscoserveragenttestinterface'))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('ciscothirdtestinterface'))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of controller",
+
+            "type": "Microsoft.Resources/deployments",
+
+            "apiVersion": "2020-06-01",
+
+            "name": "updateIp",
+
+            "dependsOn": [
+
+                "[variables('controller_interface')]"
+
+            ],
+
+            "properties": {
+
+                "mode": "Incremental",
+
+                "expressionEvaluationOptions": {
+
+                    "scope": "Outer"
+
+                },
+
+                "template": {
+
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/nestedTemplate.json#",
+
+                    "contentVersion": "1.0.0.0",
+
+                    "resources": [
+
+                     {
+
+
+
+                        "type": "Microsoft.Network/networkInterfaces",
+
+                        "apiVersion": "2020-05-01",
+
+                        "name": "[variables('controller_interface')]",
+
+                        "location": "[variables('location')]",
+
+                        "properties": {
+
+                        "ipConfigurations": [
+
+                          {
+
+                            "name": "ipconfig1",
+
+                            "properties": {
+
+                                 "privateIPAllocationMethod": "Static",
+
+                                 "privateIPAddress": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]",
+
+                                 "subnet": {
+
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('mgmtsubnet'))]"
+
+                                    },
+
+                                 "publicIPAddress": {
+
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controller_publicIP'))]"
+
+                                  }
+
+                                }
+
+                            }
+
+                        ],
+
+                    "networkSecurityGroup": {
+
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+
+                          }
+
+                    }
+
+                 }
+
+               ]
+
+             }
+
+          },
+
+          "tags": {
+            "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+          }
+
+        },
+
+        {
+
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of CISCO",
+
+            "type": "Microsoft.Resources/deployments",
+
+            "apiVersion": "2020-06-01",
+
+            "name": "ciscoupdateIp",
+
+            "dependsOn": [
+
+                "[variables('ciscomgmtinterface')]"
+
+            ],
+
+            "properties": {
+
+                "mode": "Incremental",
+
+                "expressionEvaluationOptions": {
+
+                    "scope": "Outer"
+
+                },
+
+                "template": {
+
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/nestedTemplate.json#",
+
+                    "contentVersion": "1.0.0.0",
+
+                    "resources": [
+
+                     {
+
+
+
+                        "type": "Microsoft.Network/networkInterfaces",
+
+                        "apiVersion": "2020-05-01",
+
+                        "name": "[variables('ciscomgmtinterface')]",
+
+                        "location": "[variables('location')]",
+
+                        "properties": {
+
+                        "ipConfigurations": [
+
+                          {
+
+                            "name": "ipconfig2",
+
+                            "properties": {
+
+                                 "privateIPAllocationMethod": "Static",
+
+                                 "privateIPAddress": "[reference(variables('ciscomgmtinterface')).ipConfigurations[0].properties.privateIPAddress]",
+
+                                 "subnet": {
+
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('mgmtsubnet'))]"
+
+                                    },
+
+                                 "publicIPAddress": {
+
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('cisco_publicIP'))]"
+
+                                  }
+
+                                }
+
+                            }
+
+                        ],
+
+                    "networkSecurityGroup": {
+
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+
+                          }
+
+                    }
+
+                 }
+
+               ]
+
+             }
+
+          },
+
+          "tags": {
+            "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+          }
+
+        },
+
+        {
+
+            "comments": "creates n no of Client Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_client_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Client Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('vmname_controller')]",
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_client_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('clientagentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('clientagenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        },
+
+        {
+
+            "comments": "creates n no of Server Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_server_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Server Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('vmname_controller')]",
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_server_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('serveragentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('serveragenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            },
+
+            "tags": {
+                "[parameters('tagname for the deployment')]" : "[parameters('tagvalue for the deployment')]"
+            }
+
+        }
+
+    ],
+
+    "outputs": {
+
+        "privateIp_controller": {
+
+            "type": "String",
+
+            "value": "[reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress]"
+
+        }
+
+    }
+
+}
