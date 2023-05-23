@@ -1178,7 +1178,6 @@
 
                 "enableAcceleratedNetworking": true,
                 "enableIPForwarding": false,
-                "AuxiliaryMode": "MaxConnections",
 
                 "ipConfigurations": [
 
@@ -1240,7 +1239,6 @@
 
                 "enableAcceleratedNetworking": true,
                 "enableIPForwarding": false,
-                "AuxiliaryMode": "MaxConnections",
 
                 "ipConfigurations": [
 
@@ -1294,7 +1292,6 @@
 
                 "enableAcceleratedNetworking": true,
                 "enableIPForwarding": false,
-                "AuxiliaryMode": "MaxConnections",
 
                 "ipConfigurations": [
 
@@ -1348,7 +1345,6 @@
 
                 "enableAcceleratedNetworking": true,
                 "enableIPForwarding": false,
-                "AuxiliaryMode": "MaxConnections",
 
                 "ipConfigurations": [
 
@@ -1402,7 +1398,6 @@
 
                 "enableAcceleratedNetworking": true,
                 "enableIPForwarding": false,
-                "AuxiliaryMode": "MaxConnections",
 
                 "ipConfigurations": [
 
@@ -1606,12 +1601,7 @@
 
                         },
 
-                        "provisionVMAgent": true,
-                        "patchSettings": {
-                            "patchMode": "ImageDefault",
-                            "assessmentMode": "ImageDefault"
-                        }
-
+                        "provisionVMAgent": true
                     },
 
                     "secrets": [],
@@ -1625,7 +1615,7 @@
                         "createOption": "FromImage",
                         "diskSizeGB": 84,
                         "managedDisk": {
-                          "storageAccountType": "Premium_LRS"
+                          "storageAccountType": "Standard_LRS"
                         },
                         "osType": "Linux"
                     },
