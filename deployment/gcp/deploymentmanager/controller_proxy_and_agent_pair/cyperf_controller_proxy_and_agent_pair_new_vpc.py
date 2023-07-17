@@ -234,7 +234,7 @@ def GenerateConfig(context):
                         "initializeParams": {
                             "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/'+context.properties['brokerSourceImage'],
                             "diskType": 'zones/'+zone+'/diskTypes/pd-standard',
-                            "diskSizeGb": "30",
+                            "diskSizeGb": "100",
                             "labels": {},
                         },
                         "diskEncryptionKey": {},
