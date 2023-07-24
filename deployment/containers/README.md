@@ -85,7 +85,7 @@ To deploy a Keysight CyPerf agent container at Docker, you need to install Docke
 Execute this script from your ubuntu host. This will install Docker Engine in your host.
 
 ```
-$bash continers/agent_examples/install_docker_ubuntu.sh
+$bash containers/agent_examples/install_docker_ubuntu.sh
 ```
 
 - Docker Uninstalltion: [uninstall_docker_ubuntu.sh](agent_examples/uninstall_docker_ubuntu.sh)
@@ -93,7 +93,7 @@ $bash continers/agent_examples/install_docker_ubuntu.sh
 Execute this script from your ubuntu host. This will uninstall Docker Engine from your host.
 
 ```
-$bash continers/agent_examples/uninstall_docker_ubuntu.sh
+$bash containers/agent_examples/uninstall_docker_ubuntu.sh
 ```
 
 - CyPerf Container Agent Pair Deployment: [cyperf_agent_container_pair_deployment.sh](agent_examples/cyperf_agent_container_pair_deployment.sh)
@@ -101,7 +101,7 @@ $bash continers/agent_examples/uninstall_docker_ubuntu.sh
 Execute this script from your ubuntu host. This will deploy a pair of CyPerf Agent containers in the same host.
 
 ```
-$bash continers/agent_examples/cyperf_agent_container_pair_deployment.sh -c <CYPERF CONTROLLER IP>
+$bash containers/agent_examples/cyperf_agent_container_pair_deployment.sh -c <CYPERF CONTROLLER IP>
 ```
 ## Test Configuration Checklist
 Ensure that the following configurations are appropriate, when configuring the CyPerf Controller for a test where CyPerf Agents container are running in the docker host. 
