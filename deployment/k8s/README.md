@@ -138,7 +138,7 @@ You can deploy in AWS EKS or in AZURE AKS in the following two ways:
     - Collect the FQDN or the public IP address for the DUT, which needs to be configured in the CyPerf Controller's DUT Network.
     - If FQDN is used for the DUT, this needs to be resolved by the CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver page for clients' Network Segments_.
 
-### Deployment on CyPerf
+### Deployment of CyPerf
 You can deploy in On-Premise K8s Cluster in the following two ways:
 
 #### 1. _Traffic between the pods and the services within the on-premise kubernetes cluster._
