@@ -604,7 +604,7 @@
                         "AMIxAPPLICATION"
                     ]
                 },
-                "InstanceType": "c4.2xlarge",
+                "InstanceType": "c5.2xlarge",
                 "KeyName": {
                     "Ref": "KeyNameForCyPerfController"
                 },
