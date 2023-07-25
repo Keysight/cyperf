@@ -279,10 +279,10 @@
     "Parameters": {
         "InstanceTypeForCyPerfAgent": {
             "AllowedValues": [
-                "c4.2xlarge",
+                "c5.2xlarge",
                 "c5n.9xlarge"
             ],
-            "Default": "c4.2xlarge",
+            "Default": "c5.2xlarge",
             "Description": "CyPerf instance type",
             "Type": "String"
         },

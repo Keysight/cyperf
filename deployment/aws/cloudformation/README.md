@@ -47,8 +47,8 @@ If you are new to AWS, see [Getting Started with AWS](https://aws.amazon.com/get
 
 ## Supported instance types 
 The supported instance types are:
-- For the CyPerf Controller, the supported instance type is c4.2xlarge.
-- For CyPerf Agents, the supported instance types are c4.2xlarge and c5n.9xlarge.
+- For the CyPerf Controller, the supported instance type is c5.2xlarge.
+- For CyPerf Agents, the supported instance types are c5.2xlarge and c5n.9xlarge.
 
 ## List of Supported CyPerf CloudFormation templates for AWS deployments
 The following is a list of the current supported CyPerf CloudFormation templates. Click the links to view the README files which include the topology diagrams. 
