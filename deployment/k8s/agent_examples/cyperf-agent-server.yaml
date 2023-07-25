@@ -34,7 +34,7 @@ spec:
                     #   httpGet:
                     #        path: /CyPerfHTTPHealthCheck
                     #        port: 80
-                    #    periodSeconds: 5
+                    #   periodSeconds: 5
                     resources:
                         limits:
                             memory: "4Gi"
