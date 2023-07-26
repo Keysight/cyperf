@@ -1,0 +1,414 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
+    "Mappings": {
+        "VariableMap": {
+            "global": {
+                "OPTIONSxTAG": "MANUAL",
+                "PROJECTxTAG": "CyPerf"
+            }
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "NETWORK CONFIGURATION"
+                    }
+                },
+                {
+                    "Label": {
+                        "default": "VPC Configuration"
+                    },
+                    "Parameters": [
+                        "Username",
+                        "Project",
+                        "CyPerfRelease",
+                        "VPC"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "CyPerf Controller Configuration"
+                    },
+                    "Parameters": [
+                        "ControllerDeploymentType",
+                        "ControllerManagementSubnet",
+                        "KeyNameForCyPerfController",
+                        "CyPerfControllerSecurityGroup"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "ControllerManagementSubnet": {
+                    "default": "Management Subnet for CyPerf Controller"
+                },
+                "KeyNameForCyPerfController": {
+                    "default": "SSH Key"
+                },
+                "ControllerDeploymentType": {
+                    "default": "CyPerf Controller/UI, Controller-proxy"
+                },
+                "VPC": {
+                    "default": "VPC"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "CyPerfUIINstanceDNS": {
+            "Description": "DNS name of CyPerf Controller instance",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        {
+                            "Fn::GetAtt": [
+                                "CyPerfUI",
+                                "PublicDnsName"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        }
+    },
+    "Parameters": {
+        "CyPerfControllerSecurityGroup": {
+            "Default": "<Select CyPerf Contoller security group from drop down list>",
+            "Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 30422 and 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
+            "Type": "AWS::EC2::SecurityGroup::Id"
+        },
+        "ControllerManagementSubnet": {
+            "Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
+            "Description": "Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "ControllerDeploymentType": {
+            "Description": "If Contoller deployment type is 'controller', CyPerf controller will be dployed and Agents will registered to controller. If type is 'controller-proxy', CyPerf controller-proxy will be dployed and Agents will registered to controller-proxy.",
+            "Default": "controller",
+            "Type": "String",
+            "AllowedValues": [
+                "controller",
+                "controller-proxy"
+            ],
+            "ConstraintDescription": "must specify controller , controller-proxy"
+        },
+        "KeyNameForCyPerfController": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+            "Default": "CyPerf-keypair",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "Project": {
+            "Default": "CyPerf-AWS",
+            "Description": "Project Name",
+            "Type": "String"
+        },
+        "Username": {
+            "Default": "<UserName>@<domainname>",
+            "Description": "Team or Individual email id responsible for the Stack",
+            "Type": "String"
+        },
+        "VPC": {
+            "Default": "<Select VPC from drop down list>",
+            "Description": "Preferred Existing VPC",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "CyPerfRelease": {
+            "AllowedValues": [
+                "2.5",
+                "2.1",
+                "2.0"
+            ],
+            "Default": "2.5",
+            "Description": "CyPerf release",
+            "Type": "String"
+        }
+    },
+    "Conditions": {
+        "CreateController": {
+            "Fn::Equals": [
+                {
+                    "Ref": "ControllerDeploymentType"
+                },
+                "controller"
+            ]
+        },
+        "CreateControllerProxy": {
+            "Fn::Equals": [
+                {
+                    "Ref": "ControllerDeploymentType"
+                },
+                "controller-proxy"
+            ]
+        }
+    },
+    "Resources": {
+        "CyPerfUI": {
+            "Condition": "CreateController",
+            "DependsOn": [
+                "mdweth0"
+            ],
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "100",
+                            "DeleteOnTermination": true
+                        }
+                    }
+                ],
+                "ImageId": {
+                    "Fn::Sub": [
+                        "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${cyperf_release}",
+                        {   
+                            "cyperf_release": {
+                                "Ref": "CyPerfRelease"
+                            }
+                        }
+                    ]
+                },
+                "InstanceType": "c5.2xlarge",
+                "KeyName": {
+                    "Ref": "KeyNameForCyPerfController"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": "0",
+                        "NetworkInterfaceId": {
+                            "Ref": "mdweth0"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "Controller"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "mdweth0": {
+            "Condition": "CreateController",
+            "Properties": {
+                "Description": "MDW eth0",
+                "GroupSet": [
+                    {
+                        "Ref": "CyPerfControllerSecurityGroup"
+                    }
+                ],
+                "SourceDestCheck": "true",
+                "SubnetId": {
+                    "Ref": "ControllerManagementSubnet"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "MB-Interface"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::NetworkInterface"
+        },
+        "CyPerfControllerProxy": {
+            "DependsOn": [
+                "proxyeth0"
+            ],
+            "Condition": "CreateControllerProxy",
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "8",
+                            "DeleteOnTermination": true
+                        }
+                    }
+                ],
+                "ImageId": {
+                    "Fn::Sub": [
+                        "resolve:ssm:/aws/service/marketplace/prod-xopwud6rtquaw/${cyperf_release}",
+                        {   
+                            "cyperf_release": {
+                                "Ref": "CyPerfRelease"
+                            }
+                        }
+                    ]
+                },
+                "InstanceType": "t2.medium",
+                "KeyName": {
+                    "Ref": "KeyNameForCyPerfController"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": "0",
+                        "NetworkInterfaceId": {
+                            "Ref": "proxyeth0"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "ControllerProxy"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "proxyeth0": {
+            "Condition": "CreateControllerProxy",
+            "Properties": {
+                "Description": "Controller Proxy eth0",
+                "GroupSet": [
+                    {
+                        "Ref": "CyPerfControllerSecurityGroup"
+                    }
+                ],
+                "SourceDestCheck": "true",
+                "SubnetId": {
+                    "Ref": "ControllerManagementSubnet"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "ControllerProxy-Interface"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::NetworkInterface"
+        }
+    }
+}

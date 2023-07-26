@@ -1,0 +1,461 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "\n    Stack creating a VPC and launch EC2 instances within it.\n    **WARNING** This template creates Amazon EC2 instances.\n    You will be billed for the AWS resources used if you create\n    a stack from this template. **WARNING** This template creates\n    role for the launching/deleting instances/subnets/interfaces.\n    This role will invoke AWSLambdaBasicExecutionRole, please see\n    AWS Documentation for details on AWSLambdaBasicExecutionRole.",
+    "Mappings": {
+        "VariableMap": {
+            "global": {
+                "OPTIONSxTAG": "MANUAL",
+                "PROJECTxTAG": "CyPerf"
+            }
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "NETWORK CONFIGURATION"
+                    }
+                },
+                {
+                    "Label": {
+                        "default": "VPC Configuration"
+                    },
+                    "Parameters": [
+                        "Username",
+                        "Project",
+                        "VPC"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "CyPerf Agent Configuration"
+                    },
+                    "Parameters": [
+                        "EC2RoleForTags",
+                        "InstanceTypeForCyPerfAgent",
+                        "CyPerfRelease",
+                        "KeyNameForCyPerfAgent",
+                        "AgentControlSubnet",
+                        "AgentTestSubnet",
+                        "AgentSecurityGroup",
+                        "Controller"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "AvailabilityZone": {
+                    "default": "Availability Zone"
+                },
+                "InstanceTypeForCyPerfAgent": {
+                    "default": "Instance Type for CyPerf Agents"
+                },
+                "KeyNameForCyPerfAgent": {
+                    "default": "SSH Key"
+                },
+                "AgentControlSubnet": {
+                    "default": "Control Subnet for CyPerf Agents"
+                },
+                "AgentTestSubnet": {
+                    "default": "Test Subnet for CyPerf Agents"
+                },
+                "AllowedSubnet": {
+                    "default": "Allowed Subnet for Security Group"
+                },
+                "AgentSecurityGroup": {
+                    "default": "Security Group of CyPerf Agent"
+                },
+                "VPC": {
+                    "default": "VPC"
+                },
+                "Controller": {
+                    "Default": "Controller IP"
+                }
+            }
+        }
+    },
+    "Outputs": {},
+    "Parameters": {
+        "InstanceTypeForCyPerfAgent": {
+            "AllowedValues": [
+                "c5.2xlarge",
+                "c5n.9xlarge"
+            ],
+            "Default": "c5.2xlarge",
+            "Description": "CyPerf instance type",
+            "Type": "String"
+        },
+        "CyPerfRelease": {
+            "AllowedValues": [
+                "2.5",
+                "2.1",
+                "2.0"
+            ],
+            "Default": "2.5",
+            "Description": "CyPerf release",
+            "Type": "String"
+        },
+        "KeyNameForCyPerfAgent": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
+            "Default": "CyPerf-keypair",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "AgentControlSubnet": {
+            "Default": "<Select Control Subnet for CyPerf Agents from drop down list>",
+            "Description": "Preferred Existing Control subnet for CyPerf Agent",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "AgentTestSubnet": {
+            "Default": "<Select Test Subnet for CyPerf Agents from drop down list>",
+            "Description": "Preferred Existing Test subnet for CyPerf Agent",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "AgentSecurityGroup": {
+            "Default": "<Select CyPerf Agent security group from drop down list>",
+            "Description": "Preferred Existing Security Group for CyPerf Agent",
+            "Type": "AWS::EC2::SecurityGroup::Id"
+        },
+        "Project": {
+            "Default": "CyPerf-AWS",
+            "Description": "Project Name",
+            "Type": "String"
+        },
+        "Username": {
+            "Default": "<UserName>@<domainname>",
+            "Description": "Team or Individual email id responsible for the Stack",
+            "Type": "String"
+        },
+        "VPC": {
+            "Default": "<Select VPC from drop down list>",
+            "Description": "Preferred Existing VPC",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "Controller": {
+            "Default": "<Specify CyPerf Controller/ Controller Proxy's IP>",
+            "Description": "CyPerf Controller/ Contoller Proxy for Agent peering",
+            "Type": "String"
+        },
+        "EC2RoleForTags": {
+            "Description": "Want to fetch tags for Agent?",
+            "Default": "yes",
+            "Type": "String",
+            "AllowedValues": [
+                "yes",
+                "no"
+            ],
+            "ConstraintDescription": "must specify yes or no."
+        }
+    },
+    "Conditions": {
+        "FetchTagsForAgent": {
+            "Fn::Equals": [
+                {
+                    "Ref": "EC2RoleForTags"
+                },
+                "yes"
+            ]
+        }
+    },
+    "Resources": {
+        "EC2IfaceRole": {
+            "Condition": "FetchTagsForAgent",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "sts:AssumeRole",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            }
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "ec2:CreateNetworkInterface",
+                                        "ec2:DescribeInstances",
+                                        "ec2:ModifyNetworkInterfaceAttribute",
+                                        "ec2:AttachNetworkInterface",
+                                        "ec2:DescribeSubnets",
+                                        "ec2:DescribeSecurityGroups",
+                                        "ec2:DescribeTags"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": "*"
+                                }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "EC2IfacePolicy"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "RoleName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "EC2IfaceRole"
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::IAM::Role"
+        },
+        "EC2InstanceProfile": {
+            "Condition": "FetchTagsForAgent",
+            "DependsOn": "EC2IfaceRole",
+            "Properties": {
+                "Roles": [
+                    {
+                        "Ref": "EC2IfaceRole"
+                    }
+                ]
+            },
+            "Type": "AWS::IAM::InstanceProfile"
+        },
+        "Agent": {
+            "DependsOn": [
+                "agenteth0",
+                "agenteth1"
+            ],
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "8",
+                            "DeleteOnTermination": true
+                        }
+                    }
+                ],
+                "IamInstanceProfile": {
+                    "Fn::If": [
+                        "FetchTagsForAgent",
+                        {
+                            "Ref": "EC2InstanceProfile"
+                        },
+                        ""
+                    ]
+                },
+                "ImageId": {
+                    "Fn::Sub": [
+                        "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${cyperf_release}",
+                        {   
+                            "cyperf_release": {
+                                "Ref": "CyPerfRelease"
+                            }
+                        }
+                    ]
+                },
+                "InstanceType": {
+                    "Ref": "InstanceTypeForCyPerfAgent"
+                },
+                "KeyName": {
+                    "Ref": "KeyNameForCyPerfAgent"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": "0",
+                        "NetworkInterfaceId": {
+                            "Ref": "agenteth0"
+                        }
+                    },
+                    {
+                        "DeviceIndex": "1",
+                        "NetworkInterfaceId": {
+                            "Ref": "agenteth1"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "cd /opt/keysight/tiger/active/bin/\n",
+                                "sh /opt/keysight/tiger/active/bin/Appsec_init ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "Controller"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " >> /var/log/Appsec_init.log\n"
+                            ]
+                        ]
+                    }
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "Agent"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "agenteth0": {
+            "Properties": {
+                "Description": "Client Agent eth0/ens4",
+                "GroupSet": [
+                    {
+                        "Ref": "AgentSecurityGroup"
+                    }
+                ],
+                "SourceDestCheck": "true",
+                "SubnetId": {
+                    "Ref": "AgentControlSubnet"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "CA-Interface"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::NetworkInterface"
+        },
+        "agenteth1": {
+            "Properties": {
+                "Description": "Client Agent eth1/ens5",
+                "GroupSet": [
+                    {
+                        "Ref": "AgentSecurityGroup"
+                    }
+                ],
+                "SourceDestCheck": "true",
+                "SubnetId": {
+                    "Ref": "AgentTestSubnet"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "CA-Interface"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Project",
+                        "Value": {
+                            "Ref": "Project"
+                        }
+                    },
+                    {
+                        "Key": "Options",
+                        "Value": {
+                            "Fn::FindInMap": [
+                                "VariableMap",
+                                "global",
+                                "OPTIONSxTAG"
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": {
+                            "Ref": "Username"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::NetworkInterface"
+        }
+    }
+}
