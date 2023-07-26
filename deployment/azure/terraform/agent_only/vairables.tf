@@ -58,10 +58,10 @@ variable "public_key" {
   description = "Path to the public key. This will be uesd to authenticate into the vm"
 }
 
-variable "cyperf_version" {
-  type        = string
-  default     = "0.2.1"
-  description = "CyPerf release version"
+variable "agent_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd"
+  type = string
+  description = "Agent image path"
 }
 
 variable "azure_agent_machine_type" {

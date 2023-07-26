@@ -50,12 +50,12 @@ variable "gcp_agent_machine_type" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-2-1"
+  default     = "keysight-cyperf-agent-2-5"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-2-1"
+  default     = "keysight-cyperf-controller-proxy-2-5"
   description = "Image id for the cyperf controller proxy machines"
 }

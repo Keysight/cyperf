@@ -70,20 +70,26 @@ variable "agents" {
   description = "Number of agents to be deployed"
 }
 
-variable "cyperf_version" {
-  type        = string
-  default     = "0.2.1"
-  description = "CyPerf release version"
+variable "controller_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-2-5.vhd"
+  type = string
+  description = "Controller image path"
+}
+
+variable "agent_image" {
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd"
+  type = string
+  description = "Agent image path"
 }
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-2-1"
+  default     = "keysight-cyperf-controller-2-5"
   description = "Name for the cyperf controller machine"
 }
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-2-1"
+  default     = "keysight-cyperf-agent-2-5"
   description = "Name for the cyperf agent machines"
 }
