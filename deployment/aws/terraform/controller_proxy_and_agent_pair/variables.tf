@@ -42,7 +42,7 @@ variable "aws_broker_machine_type"{
 
 variable "aws_agent_machine_type" {
   type = string
-  default = "c4.2xlarge"
+  default = "c5.2xlarge"
   description = "Agent machines instance type"
 }
 

@@ -70,7 +70,7 @@ The following table lists the parameters for this deployment.
 | aws_region            | us-east-2   | The AWS region for deployment. |
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
 | aws_broker_machine_type   | t2.medium   | The machine type used for deploying the CyPerf controller proxy. |
-| aws_agent_machine_type    | c4.2xlarge   |The machine type used for deploying the CyPerf agent.  |
+| aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
 | agent_number   | 5           | Number of agents deployed per vpc |
 | ip_number   | 11           | Number of test IPs per agent |
 | mdw_version   | keysight-cyperf-controller-2-1           | The CyPerf controller image version. |

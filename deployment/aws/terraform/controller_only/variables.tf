@@ -36,7 +36,7 @@ variable "availability_zone" {
 
 variable "aws_mdw_machine_type"{
   type = string
-  default = "c4.2xlarge"
+  default = "c5.2xlarge"
   description = "Controller instance type"
 }
 

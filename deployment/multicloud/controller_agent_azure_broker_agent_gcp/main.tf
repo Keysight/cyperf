@@ -19,7 +19,7 @@ locals {
   client_name = "${var.deployment_name}-client-${var.agent_version}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      sh /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   gcp_project_name                 = var.gcp_project_name
   gcp_region_name                  = var.gcp_region_name

@@ -36,13 +36,13 @@ variable "aws_allowed_cidr"{
 
 variable "aws_mdw_machine_type"{
   type = string
-  default = "c4.2xlarge"
+  default = "c5.2xlarge"
   description = "MDW instance type"
 }
 
 variable "aws_agent_machine_type" {
   type = string
-  default = "c4.2xlarge"
+  default = "c5.2xlarge"
   description = "Agent machines instance type"
 }
 

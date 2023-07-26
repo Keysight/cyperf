@@ -10,7 +10,7 @@ provider "azurerm" {
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      sh /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
 }
 
