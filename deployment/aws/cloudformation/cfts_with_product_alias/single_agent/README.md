@@ -19,7 +19,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | Project | Requires input | The name of the project where this stack will be used. |
 | Availability Zones | Requires input | Availability Zone to use for the subnets in the VPC. Select Availability Zone from the drop-down list. |
 | VPC | 172.16.0.0/16 |The CIDR block for the VPC. |
-| Instance Type for CyPerf Agents | c4.2xlarge | The EC2 instance type to use for the Keysight CyPerf Agent instances. For a compute-based instance, it is recommended to use at least c4.2xlarge instance type. |
+| Instance Type for CyPerf Agents | c5.2xlarge | The EC2 instance type to use for the Keysight CyPerf Agent instances. For a compute-based instance, it is recommended to use at least c5.2xlarge instance type. |
 | SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances.  |
 | Control Subnet for CyPerf Agents                   | 172.16.1.0/24            | CyPerf agents will use this subnet for control plane communication with Controller.  |
 | Test Subnet for CyPerf Agents                   | 172.16.2.0/24            | CyPerf agents will use this subnet for test traffic.  |
@@ -35,7 +35,7 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | Project | Requires input | The name of the project where this stack will be used. |
 | VPC | Requires input | Select preferred existing VPC from dropdown. |
 | EC2RoleForTags | yes | If set yes, tags are fetched from agent and send to Controller. |
-| Instance Type for CyPerf Agents | c4.2xlarge | The EC2 instance type to use for the Keysight CyPerf Agent instances. For a compute-based instance, it is recommended to use at least c4.2xlarge instance type. |
+| Instance Type for CyPerf Agents | c5.2xlarge | The EC2 instance type to use for the Keysight CyPerf Agent instances. For a compute-based instance, it is recommended to use at least c5.2xlarge instance type. |
 | SSH Key                   | Requires input            | Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances.  |
 | Control Subnet for CyPerf Agents                   | Select subnet from drop down            | Preferred Existing Control subnet for CyPerf Agent.  |
 | Test Subnet for CyPerf Agents                   | Select subnet from drop down            | Preferred Existing Test subnet for CyPerf Agent.  |

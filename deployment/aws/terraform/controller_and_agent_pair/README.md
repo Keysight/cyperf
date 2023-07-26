@@ -68,10 +68,10 @@ The following table lists the parameters for this deployment.
 | aws_allowed_cidr | ["0.0.0.0/0"] |List of ip allowed to access the deployed machines. |
 | aws_region            | us-east-2   | The AWS region for deployment. |
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
-| aws_mdw_machine_type   | c4.2xlarge   | The machine type used for deploying the CyPerf controller. |
-| aws_agent_machine_type    | c4.2xlarge   |The machine type used for deploying the CyPerf agent.  |
-| mdw_version   | keysight-cyperf-controller-2-1           | The CyPerf controller image version. |
-| agent_version       | keysight-cyperf-agent-2-1     | The CyPerf agent image version.   |
+| aws_mdw_machine_type   | c5.2xlarge   | The machine type used for deploying the CyPerf controller. |
+| aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
+| mdw_version   | keysight-cyperf-controller-2-5           | The CyPerf controller image version. |
+| agent_version       | keysight-cyperf-agent-2-5     | The CyPerf agent image version.   |
 | mdw_product_code   | 8nmwoluc06w5z6vbutcwyueje           | The CyPerf controller marketplace product code. |
 | agent_product_code       | zskzjts7t5crpmiic5drkq0j     | The CyPerf agent marketplace product code.   
 

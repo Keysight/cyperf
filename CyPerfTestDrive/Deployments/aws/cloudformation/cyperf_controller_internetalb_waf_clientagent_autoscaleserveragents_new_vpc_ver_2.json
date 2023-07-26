@@ -367,12 +367,12 @@
         },
         "InstanceTypeForCyPerfAgent": {
             "AllowedValues": [
-                "c4.2xlarge",
+                "c5.2xlarge",
                 "c5n.9xlarge",
 				"c5.large",
 				"c5.4xlarge"
             ],
-            "Default": "c4.2xlarge",
+            "Default": "c5.2xlarge",
             "Description": "CyPerf instance type",
             "Type": "String"
         },
@@ -1062,7 +1062,7 @@
                     "Ref": "EC2InstanceProfile"
                 },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMIxAPPLICATION"] },
-                "InstanceType": "c4.2xlarge",
+                "InstanceType": "c5.2xlarge",
                 "KeyName": {
                     "Ref": "KeyNameForCyPerfAgent"
                 },

@@ -36,13 +36,13 @@ variable "availability_zone" {
 
 variable "aws_mdw_machine_type"{
   type = string
-  default = "c4.2xlarge"
+  default = "c5.2xlarge"
   description = "Controller instance type"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-2-1"
+  default     = "keysight-cyperf-controller-2-5"
   description = "Version for the cyperf controller machine"
 }
 

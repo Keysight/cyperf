@@ -20,12 +20,12 @@ Before deployment, we recommend that you become familiar with the following Azur
 **Note:** If you are new to Azure, see [Getting Started with Azure](https://azure.microsoft.com/en-in/get-started/).
 
 ## Copy VHD images 
-Azure images will be available at Keysight Azure Blob container **keysight-cyperf-2-1**.
+Azure images will be available at Keysight Azure Blob container **keysight-cyperf-2-5**.
 For accessing VHD file refer to the URL link:
 
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-2-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-2-1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-agent-2-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-agent-2-1.vhd)
- - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-proxy-2-1.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/keysight-cyperf-controller-proxy-2-1.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-2-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-2-5.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd)
+ - [https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-proxy-2-5.vhd](https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-proxy-2-5.vhd)
 
 User may download VHD images and upload those in their own container before using the terraform templates.
 Alternatively, user may use following PowerShell command from Azure cloud shell to copy VHD images from Keysight Azure container to User’s Azure container.
@@ -46,8 +46,8 @@ Alternatively, user may use following PowerShell command from Azure cloud shell 
 
 ```
 # azcopy copy
-"https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
-"https://cyperf.blob.core.windows.net/keysight-cyperf-2-1/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
+"https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
+"https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/<Keysight SAS-token>"  "https://<User’s storage name where file need to be copied>.blob.core.windows.net/< User’s container name>/<SAS-token>" 
 --recursive=true
 
 ```
