@@ -205,7 +205,7 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh "
 
     },
 
