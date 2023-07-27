@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.1",
+            "defaultValue": "0.2.5",
 
             "allowedValues": [
+              "0.2.5",
               "0.2.1",
               "0.2.0"
             ],
@@ -204,7 +205,7 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh "
 
     },
 
@@ -576,7 +577,7 @@
 
             "plan": {
                 
-                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controllerproxy-21', 'keysight-cyperf-controller-proxy')]",
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controllerproxy-25', 'keysight-cyperf-controller-proxy')]",
 
                 "product": "keysight-cyperf",
 
@@ -638,7 +639,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-controllerproxy-21', 'keysight-cyperf-controller-proxy')]",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controllerproxy-25', 'keysight-cyperf-controller-proxy')]",
                     "version": "latest"
                     }
                 },
@@ -777,7 +778,7 @@
 
             "plan": {
 
-                "name": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                "name": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-agent-25', 'keysight-cyperf-agent')]",
 
                 "product": "keysight-cyperf",
 
@@ -853,7 +854,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.1'), 'keysight-cyperf-agent-21', 'keysight-cyperf-agent')]",
+                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-agent-25', 'keysight-cyperf-agent')]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },
