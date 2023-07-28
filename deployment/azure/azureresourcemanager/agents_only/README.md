@@ -1,4 +1,4 @@
-# Deploying the CyPerf in Azure for ogent only     
+# Deploying the CyPerf in Azure for agent only     
 ## Introduction
 This solution uses an ARM Template to deploy CyPerf Agent only at Azure Cloud.
 There is a new VNET template, meaning the entire necessary resources will be created from scratch, including VNET, subnets, Security group etc. 
