@@ -1,6 +1,6 @@
-# Deploying the CyPerf in Azure for controller and agent pair       
+# Deploying the CyPerf in Azure for ogent only     
 ## Introduction
-This solution uses an ARM Template to deploy CyPerf Controller and two CyPerf Agents in an Azure Cloud.
+This solution uses an ARM Template to deploy CyPerf Agent only at Azure Cloud.
 There is a new VNET template, meaning the entire necessary resources will be created from scratch, including VNET, subnets, Security group etc. 
 Existing VNET template, meaning entire network resources like Resource group, VNET, subnets, Security group are pre-existing. User will be able to select existing VNET, subnet and security group during deployment.
 See the Template Parameters Section for more details. Each agent has two interfaces. One is Management interface and other is Test interface. Agent communicate with Controller using Management interface. CyPerf test traffic flows through Test interface.  In this deployment first or default interface of Agent is set as management interface and second interface is set as test interface. 
