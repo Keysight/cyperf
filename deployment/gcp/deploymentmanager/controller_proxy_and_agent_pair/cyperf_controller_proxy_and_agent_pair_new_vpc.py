@@ -29,7 +29,7 @@ def GenerateConfig(context):
    
     agent_base_name = context.env['deployment']+ '-cyperf-agent-'
 
-    sslkey = 'cyperf:' + '<Replace with ssh public key.>'
+    sslkey = 'cyperf:' + '<Replace with ssh public key>'
 
 
     resources = []
