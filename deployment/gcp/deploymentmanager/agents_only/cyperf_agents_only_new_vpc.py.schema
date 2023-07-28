@@ -1,0 +1,59 @@
+
+
+info: 
+  title: CyPerf single or multiple Agents Template
+  author: keysight-cyperf
+  description: Creates a single or multiple Agents Test Topology in GCP 
+
+
+imports:
+  - path: cyperf_single_agent_new_vpc.py
+    name: helper.py
+
+
+properties:
+
+  region:
+    type: string
+    default: us-east1
+    description: Region to deploy
+
+  zone:
+    type: string
+    default: us-east1-c
+    description: Zone to deploy 
+
+  controllerip:
+    type: string
+    default: 1.1.1.1
+    description: set controller ip
+
+  serviceAccountEmail:
+    type: string
+    default: 290801949079-compute@developer.gserviceaccount.com
+    description: Service account with compute admin and compute network admin role.
+
+  agentMachineType:
+    type: string
+    default: c2-standard-4
+    description: agent machine type
+
+  agentSourceImage:
+    type: string
+    default: keysight-cyperf-agent-2-0
+    description: source image for agents
+
+  managementNetworkCIDR:
+    type: string
+    default: 172.16.5.0/24
+    description: CIDR for  for mngt network
+
+  testNetworkCIDR:
+    type: string
+    default: 10.0.0.0/8
+    description: CIDR for  for test network
+    
+  agentCount:
+    type: integer
+    default: 1
+    description: number of agents
