@@ -50,8 +50,7 @@ locals {
   gcp_agent_custom_image_project_name          = var.gcp_project_name
   gcp_ssh_key								   = var.gcp_ssh_key
   startup_script = <<SCRIPT
-                            /bin/bash
-                            /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_nats_instance.network_interface.0.network_ip} >> image_init_behind_alb_log
+                            /bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_nats_instance.network_interface.0.network_ip} >> image_init_behind_alb_log
                             sudo cyperfagent configuration reload"
                     SCRIPT
 }

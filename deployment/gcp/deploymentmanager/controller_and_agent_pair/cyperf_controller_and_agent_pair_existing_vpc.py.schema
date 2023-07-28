@@ -19,7 +19,7 @@ properties:
  
   controllerSourceImage:
     type: string
-    default: keysight-cyperf-controller-2-1
+    default: keysight-cyperf-controller-2-5
     description: sample source image of controller 
 
   region:
@@ -44,7 +44,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-2-1
+    default: keysight-cyperf-agent-2-5
     description: source image for agents
 
   management_subnetwork:

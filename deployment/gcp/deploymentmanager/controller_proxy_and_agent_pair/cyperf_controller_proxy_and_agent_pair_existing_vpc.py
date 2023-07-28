@@ -7,203 +7,34 @@
 def GenerateConfig(context):
   
   #varaible definations
-  management_network = context.env['deployment'] + '-cyperf-management-network'
   
-  management_subnetwork = context.env['deployment'] + '-cyperf-management-subnetwork'
+  management_subnetwork = context.properties['management_subnetwork']
   
-  management_network_cidr = context.properties['managementNetworkCIDR']
-  
-  test_network = context.env['deployment'] + '-cyperf-test-network'
-  
-  test_subnetwork = context.env['deployment'] + '-cyperf-test-subnetwork'
-  
-  test_network_cidr = context.properties['testNetworkCIDR']
+  test_subnetwork = context.properties['test_subnetwork']
   
   region = context.properties['region']
   
   zone = context.properties['zone']
-
+ 
   service_account_email  = context.properties['serviceAccountEmail']
-  
+
   agent_base_name = context.env['deployment'] + '-cyperf-agent-'
   
-  controller = context.env['deployment'] + '-cyperf-controller'
+  controller_proxy = context.env['deployment'] + '-cyperf-controller-proxy'
 
   sslkey = 'cyperf:' + '<Replace with ssh public key>'
 
 
-
-
   resources = []
-  
-  ## cyperf Management network
-  resources.append({
-      "name": management_network,
-      "type": "compute.v1.network",
-      "properties": {
-          "autoCreateSubnetworks": False,
-          "routingConfig": {
-              "routingMode": "REGIONAL"
-          },
-          "description": "managemnet network ",
-          "mtu": 1460
-  
-      },
-  })# cyperf Management subnetwork
-  resources.append({
-      "name": management_subnetwork,
-      "type": "compute.v1.subnetwork",
-      "properties": {
-          "enableFlowLogs": False,
-          "ipCidrRange": management_network_cidr,
-          "network": 'global/networks/' + management_network,
-          #'$ref(' + context.env['deployment'] + 'cyperf-management-network' + '.SelfLink)
-          "privateIpGoogleAccess": True,
-          "region": region,
-          "secondaryIpRanges": []
-      },
-      "metadata": {
-          "dependsOn": [
-              management_network,
-              test_network
-          ]
-      },
-  })# cyperf Test Network
-  resources.append({
-      "name": test_network,
-      "type": "compute.v1.network",
-      "properties": {
-          "autoCreateSubnetworks": False,
-          "routingConfig": {
-              "routingMode": "REGIONAL"
-          },
-          "description": "test network ",
-          "mtu": 1460
-  
-      },
-  })# cyperf Test Subnetwork
-  resources.append({
-          "name": test_subnetwork,
-          "type": "compute.v1.subnetwork",
-          "properties": {
-              "enableFlowLogs": False,
-              "ipCidrRange": test_network_cidr,
-              "network": 'global/networks/' + test_network,
-              #'$ref(' + context.env['deployment'] + 'cyperf-test-network' + '.SelfLink)
-              "privateIpGoogleAccess": True,
-              "region": region,
-              "secondaryIpRanges": []
-          },
-          "metadata": {
-              "dependsOn": [
-                  management_network,
-                  test_network
-              ]
-          },
-  
-      },
-  
-  )# cyperf Firewall
-  resources.append({
-      "name": context.env['deployment'] + 'vpc-mngt-firewall',
-      "type": "compute.v1.firewall",
-      "properties": {
-          "network": 'global/networks/' + management_network,
-          #'$ref(' + context.env['deployment'] + 'cyperf-management-network' + '.SelfLink)
-          "priority": 100,
-          "sourceRanges": ["0.0.0.0/0"],
-          "destinationRanges": [],
-  
-          "allowed": [{
-              "IPProtocol": "all"
-          }, ],
-          "direction": "INGRESS",
-          "disabled": False,
-          "enableLogging": False
-      },
-      "metadata": {
-          "dependsOn": [
-              management_network
-  
-  
-          ]
-      },
-  })
-  resources.append({
-      "name": context.env['deployment'] + 'vpc-test-firewall',
-      "type": "compute.v1.firewall",
-      "properties": {
-          "network": 'global/networks/' + test_network,
-          #'$ref(' + context.env['deployment'] + 'test-network' + '.SelfLink)
-          "priority": 100,
-          "sourceRanges": ["0.0.0.0/0"],
-          "destinationRanges": [],
-  
-          "allowed": [{
-                  "IPProtocol": "all"
-              }
-  
-          ],
-          "direction": "INGRESS",
-          "disabled": False,
-          "enableLogging": False
-      },
-      "metadata": {
-          "dependsOn": [
-  
-              test_network
-          ]
-      }
-  })# cyperf Routes
-  resources.append(
-  
-      {
-          "name": context.env['deployment'] + 'default-internet-route-for-mngt',
-          "type": "compute.v1.route",
-          "properties": {
-              "network": 'global/networks/' + management_network,
-              #'$ref(' + context.env['deployment'] + 'cyperf-management-network' + '.SelfLink)
-              "destRange": "0.0.0.0/0",
-              "nextHopGateway": "global/gateways/default-internet-gateway",
-              "priority": 100,
-              "tags": []
-          },
-          "metadata": {
-              "dependsOn": [
-                  management_network
-  
-              ]
-          },
-      }
-  )
-  resources.append({
-      "name": context.env['deployment'] + 'default-internet-route-for-test',
-      "type": "compute.v1.route",
-      "properties": {
-          "network": 'global/networks/' + test_network,
-          #'$ref(' + context.env['deployment'] + 'test-network' + '.SelfLink)
-          "destRange": "0.0.0.0/0",
-          "nextHopGateway": "global/gateways/default-internet-gateway",
-          "priority": 100,
-          "tags": []
-      },
-      "metadata": {
-          "dependsOn": [
-  
-              test_network
-  
-          ]
-      },
-  })
         
-  # cyperf Controller
+  # cyperf Controller-proxy
   resources.append({
-      "name": controller,
+      "name": controller_proxy,
       "type": "compute.v1.instance",
       "properties": {
           "zone": zone,
           #"machineType": 'zones/' + zone + '/machineTypes/c2-standard-8',
-          "machineType": 'zones/' + zone + '/machineTypes/' + context.properties['controllerMachineType'],
+          "machineType": 'zones/' + zone + '/machineTypes/' + context.properties['controllerProxyMachineType'],
           "metadata": {
               "kind": "compute#metadata",
               "items": [{
@@ -212,7 +43,7 @@ def GenerateConfig(context):
               }],
           },
           "tags": {
-              "items": ["http-server", "https-server"]
+              "items": ["cyperf-controller-proxy"]
           },
           "disks": [{
               "kind": "compute#attachedDisk",
@@ -222,7 +53,7 @@ def GenerateConfig(context):
               "autoDelete": True,
               "deviceName": "boot",
               "initializeParams": {
-                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['controllerSourceImage'],
+                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['controllerProxySourceImage'],
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "100",
                   "labels": {},
@@ -249,17 +80,17 @@ def GenerateConfig(context):
           "reservationAffinity": {
               "consumeReservationType": "ANY_RESERVATION"
           },
-          "serviceAccounts": [{
-              "email": service_account_email,
-              "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
-          }],
+          "serviceAccounts": [
+                    {
+                        "email": service_account_email,
+                        "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+                    }
+          ],
           "shieldedInstanceConfig": {},
           "confidentialInstanceConfig": {},
       },
       "metadata": {
           "dependsOn": [
-              management_subnetwork,
-              test_subnetwork
           ]
       }
   })
@@ -268,7 +99,7 @@ def GenerateConfig(context):
   
   for val in range(1, int(context.properties['agentCount']) + 1):
  
-    CONTROLLER_NAME = controller
+    CONTROLLER_NAME = controller_proxy
     print('debug\n')
     print('$(ref.%s.networkInterfaces[0].networkIP)' % CONTROLLER_NAME)
     COMPUTE_AGENT_NAME = agent_base_name + str(val)
@@ -345,19 +176,19 @@ def GenerateConfig(context):
           "reservationAffinity": {
               "consumeReservationType": "ANY_RESERVATION"
           },
-          "serviceAccounts": [{
-              "email": service_account_email,
-              "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
-          }],
+          "serviceAccounts": [
+              {
+                   "email": service_account_email,
+                   "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+              }
+          ],
           "shieldedInstanceConfig": {},
           "confidentialInstanceConfig": {},
   
       },
       "metadata": {
           "dependsOn": [
-              test_subnetwork,
-              management_subnetwork,
-              controller
+              controller_proxy
           ],
   
       }

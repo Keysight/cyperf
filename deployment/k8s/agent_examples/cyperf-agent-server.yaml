@@ -16,7 +16,7 @@ spec:
         spec:
             containers:
                 -   name: cyperf-agent-server
-                    image: public.ecr.aws/keysight/cyperf-agent:latest
+                    image: public.ecr.aws/keysight/cyperf-agent:release2.5
                     env:
                     -   name: AGENT_CONTROLLER
                         value: "10.36.66.111"
@@ -34,7 +34,7 @@ spec:
                     #   httpGet:
                     #        path: /CyPerfHTTPHealthCheck
                     #        port: 80
-                    #    periodSeconds: 5
+                    #   periodSeconds: 5
                     resources:
                         limits:
                             memory: "4Gi"

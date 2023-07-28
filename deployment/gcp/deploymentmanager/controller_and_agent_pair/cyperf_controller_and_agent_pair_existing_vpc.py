@@ -22,7 +22,7 @@ def GenerateConfig(context):
   
   controller = context.env['deployment'] + '-cyperf-controller'
 
-  sslkey = 'cyperf:' + '<Replace with ssh public key.>'
+  sslkey = 'cyperf:' + '<Replace with ssh public key>'
 
 
   resources = []

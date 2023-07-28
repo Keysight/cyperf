@@ -5,7 +5,7 @@ This document describes how you can deploy the Keysight CyPerf agents inside Kub
 - [General Prerequisites](#general-prerequisites)
 - [Workflow](#workflow)
     - [Example Manifests](#example-manifests)
-- [Deployment in **AWS EKS OR AZURE AKS**](#deployment-in-aws-eks-or-azure-aks)
+- [Deployment in **AWS EKS or AZURE AKS**](#deployment-in-aws-eks-or-azure-aks)
 - [Deployment in **On-Premise K8s Cluster**](#deployment-in-on-premise-k8s-cluster)
 - [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents)
 - [Supported CNIs](#supported-cnis)
@@ -90,7 +90,7 @@ To test a device or a service that is running inside a K8s cluster, do the follo
             periodSeconds: 5
     ```
 
-## Deployment in **AWS EKS OR AZURE AKS**
+## Deployment in **AWS EKS or AZURE AKS**
 ### Prerequisites
 1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section. 
 2. For AWS EKS, select a K8s cluster in EKS which can be deployed by using 'eksctl' or any other methods that are described in the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html).
@@ -103,9 +103,9 @@ To test a device or a service that is running inside a K8s cluster, do the follo
     - If FQDN is used for the DUT, that needs to be resolved by the CyPerf client Agents. Configure a _Name Server_ IP address in the CyPerf Contoller's _Configure Network->DNS Resolver_ page for clients' _Network Segments_.
 
 
-### Deployment on CyPerf
-You can deploy in AWS EKS OR in AZURE AKS in the following two ways:
-#### 1. _**East-West** traffic between the pods and the internal container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) OR Azure Kubernetes Service (AKS)** environments._
+### Deployment of CyPerf
+You can deploy in AWS EKS or in AZURE AKS in the following two ways:
+#### 1. _**East-West** traffic between the pods and the internal container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) or Azure Kubernetes Service (AKS)** environments._
 
 - Deploy both client and server for CyPerf Agents.
 - Collect the values by checking the pod or service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service.
@@ -119,7 +119,7 @@ You can deploy in AWS EKS OR in AZURE AKS in the following two ways:
     kubectl get services kube-dns --namespace=kube-system
     ```        
 
-#### 2. _**North-South** traffic that is destined to the container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) OR Azure Kubernetes Service (AKS)** environments._
+#### 2. _**North-South** traffic that is destined to the container services and the workloads in **Amazon Elastic Kubernetes Service (EKS) or Azure Kubernetes Service (AKS)** environments._
 - Deploy CyPerf Agent as server(s) behind the DUT.
 - Collect the values by checking the pod or service properties respectively, if the CyPerf Agent servers are required to be configured in the DUT by using the `podIP` or the `ClusterIP` of the service. 
     ``` 
@@ -138,7 +138,7 @@ You can deploy in AWS EKS OR in AZURE AKS in the following two ways:
     - Collect the FQDN or the public IP address for the DUT, which needs to be configured in the CyPerf Controller's DUT Network.
     - If FQDN is used for the DUT, this needs to be resolved by the CyPerf client Agents. Configure a _Name Server_ IP address in CyPerf Contoller's _Configure Network->DNS Resolver page for clients' Network Segments_.
 
-### Deployment on CyPerf
+### Deployment of CyPerf
 You can deploy in On-Premise K8s Cluster in the following two ways:
 
 #### 1. _Traffic between the pods and the services within the on-premise kubernetes cluster._
@@ -212,11 +212,29 @@ You can deploy in On-Premise K8s Cluster in the following two ways:
 
     b. [cni_examples/eks-calico-vxlan.yaml](cni_examples/eks-calico-vxlan.yaml) - [ [source](https://docs.projectcalico.org/manifests/calico-vxlan.yaml) ]  
 
-    - For more information, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-calico-networking).
+    - For more information, see [Install EKS with Calico networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-calico-networking). 
 
-- **AWS VPC CNI:**  
-This is the default CNI in the AWS EKS and is now supported by CyPerf version 1.0-Update1 and higher.
+- **AWS VPC CNI:** 
+
+    This is the default CNI in the AWS EKS and is now supported by CyPerf version 1.0-Update1 and higher.
     - For more information, see [Install EKS with Amazon VPC networking](https://docs.projectcalico.org/getting-started/kubernetes/managed-public-cloud/eks#install-eks-with-amazon-vpc-networking).
+
+- **PAN-CNI:**
+
+    CyPerf agent pods with appropriate annotation can be deployed in a cluster with PAN CN-Series firewall. In this scenario,  test traffic is redirected by PAN-CNI to the firewall.
+
+    ```
+    annotations:                   paloaltonetworks.com/firewall: pan-fw
+    ```
+    Note that when CN-Series firewall is deployed as a K8s Service (as opposed to a Daemonset), traffic redirection between application pods and firewall happens via secure VXLAN encapsulation. In this case following modifications will also be required in the manifest file in addition to aforementioned annotation.
+
+
+    ```
+    -   name: AGENT_TEST_INTERFACE
+        value: "vxlan0"
+    -   name: AGENT_PROMISC_INTERFACE
+        value: "<all>"
+    ```
 
 ## Test Configuration Checklist
 Ensure that the following configurations are appropriate, when configuring the CyPerf Controller for a test where CyPerf Agents are running inside the K8s cluster. 
@@ -287,6 +305,13 @@ TO BE CONTINUED ...
 
 
 ## Releases
+
+- **CyPerf 2.5** - [July, 2023]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release2.5
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.575
+
+    - Change history:
 
 - **CyPerf 2.1** - [March, 2023]
     - Image URI: 

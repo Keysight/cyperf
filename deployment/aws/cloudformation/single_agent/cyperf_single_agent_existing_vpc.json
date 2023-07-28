@@ -193,76 +193,81 @@
                 },
                 {
                     "Label": {
-                        "default": "CyPerf Controller Configuration"
+                        "default": "CyPerf Agent Configuration"
                     },
                     "Parameters": [
-                        "ControllerDeploymentType",
-                        "ControllerManagementSubnet",
-                        "KeyNameForCyPerfController",
-                        "CyPerfControllerSecurityGroup"
+                        "EC2RoleForTags",
+                        "InstanceTypeForCyPerfAgent",
+                        "KeyNameForCyPerfAgent",
+                        "AgentControlSubnet",
+                        "AgentTestSubnet",
+                        "AgentSecurityGroup",
+                        "Controller"
                     ]
                 }
             ],
             "ParameterLabels": {
-                "ControllerManagementSubnet": {
-                    "default": "Management Subnet for CyPerf Controller"
+                "AvailabilityZone": {
+                    "default": "Availability Zone"
                 },
-                "KeyNameForCyPerfController": {
+                "InstanceTypeForCyPerfAgent": {
+                    "default": "Instance Type for CyPerf Agents"
+                },
+                "KeyNameForCyPerfAgent": {
                     "default": "SSH Key"
                 },
-                "ControllerDeploymentType": {
-                    "default": "CyPerf Controller/UI, Controller-proxy"
+                "AgentControlSubnet": {
+                    "default": "Control Subnet for CyPerf Agents"
+                },
+                "AgentTestSubnet": {
+                    "default": "Test Subnet for CyPerf Agents"
+                },
+                "AllowedSubnet": {
+                    "default": "Allowed Subnet for Security Group"
+                },
+                "AgentSecurityGroup": {
+                    "default": "Security Group of CyPerf Agent"
                 },
                 "VPC": {
                     "default": "VPC"
+                },
+                "Controller": {
+                    "Default": "Controller IP"
                 }
             }
         }
     },
-    "Outputs": {
-        "CyPerfUIINstanceDNS": {
-            "Description": "DNS name of CyPerf Controller instance",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        {
-                            "Fn::GetAtt": [
-                                "CyPerfUI",
-                                "PublicDnsName"
-                            ]
-                        }
-                    ]
-                ]
-            }
-        }
-    },
+    "Outputs": {},
     "Parameters": {
-        "CyPerfControllerSecurityGroup": {
-            "Default": "<Select CyPerf Contoller security group from drop down list>",
-            "Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 30422 and 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
-            "Type": "AWS::EC2::SecurityGroup::Id"
-        },
-        "ControllerManagementSubnet": {
-            "Default": "<Select Management Subnet for CyPerf Controller from drop down list>",
-            "Description": "Preferred Existing Management subnet for CyPerf Controller. This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "ControllerDeploymentType": {
-            "Description": "If Contoller deployment type is 'controller', CyPerf controller will be dployed and Agents will registered to controller. If type is 'controller-proxy', CyPerf controller-proxy will be dployed and Agents will registered to controller-proxy.",
-            "Default": "controller",
-            "Type": "String",
+        "InstanceTypeForCyPerfAgent": {
             "AllowedValues": [
-                "controller",
-                "controller-proxy"
+                "c5.2xlarge",
+                "c5n.9xlarge"
             ],
-            "ConstraintDescription": "must specify controller , controller-proxy"
+            "Default": "c5.2xlarge",
+            "Description": "CyPerf instance type",
+            "Type": "String"
         },
-        "KeyNameForCyPerfController": {
+        "KeyNameForCyPerfAgent": {
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair",
             "Default": "CyPerf-keypair",
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf Controller",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances",
             "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "AgentControlSubnet": {
+            "Default": "<Select Control Subnet for CyPerf Agents from drop down list>",
+            "Description": "Preferred Existing Control subnet for CyPerf Agent",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "AgentTestSubnet": {
+            "Default": "<Select Test Subnet for CyPerf Agents from drop down list>",
+            "Description": "Preferred Existing Test subnet for CyPerf Agent",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "AgentSecurityGroup": {
+            "Default": "<Select CyPerf Agent security group from drop down list>",
+            "Description": "Preferred Existing Security Group for CyPerf Agent",
+            "Type": "AWS::EC2::SecurityGroup::Id"
         },
         "Project": {
             "Default": "CyPerf-AWS",
@@ -278,63 +283,185 @@
             "Default": "<Select VPC from drop down list>",
             "Description": "Preferred Existing VPC",
             "Type": "AWS::EC2::VPC::Id"
+        },
+        "Controller": {
+            "Default": "<Specify CyPerf Controller/ Controller Proxy's IP>",
+            "Description": "CyPerf Controller/ Contoller Proxy for Agent peering",
+            "Type": "String"
+        },
+        "EC2RoleForTags": {
+            "Description": "Want to fetch tags for Agent?",
+            "Default": "yes",
+            "Type": "String",
+            "AllowedValues": [
+                "yes",
+                "no"
+            ],
+            "ConstraintDescription": "must specify yes or no."
         }
     },
     "Conditions": {
-        "CreateController": {
+        "FetchTagsForAgent": {
             "Fn::Equals": [
                 {
-                    "Ref": "ControllerDeploymentType"
+                    "Ref": "EC2RoleForTags"
                 },
-                "controller"
-            ]
-        },
-        "CreateControllerProxy": {
-            "Fn::Equals": [
-                {
-                    "Ref": "ControllerDeploymentType"
-                },
-                "controller-proxy"
+                "yes"
             ]
         }
     },
     "Resources": {
-        "CyPerfUI": {
-            "Condition": "CreateController",
+        "EC2IfaceRole": {
+            "Condition": "FetchTagsForAgent",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "sts:AssumeRole",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            }
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "ec2:CreateNetworkInterface",
+                                        "ec2:DescribeInstances",
+                                        "ec2:ModifyNetworkInterfaceAttribute",
+                                        "ec2:AttachNetworkInterface",
+                                        "ec2:DescribeSubnets",
+                                        "ec2:DescribeSecurityGroups",
+                                        "ec2:DescribeTags"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": "*"
+                                }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "EC2IfacePolicy"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "RoleName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "EC2IfaceRole"
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::IAM::Role"
+        },
+        "EC2InstanceProfile": {
+            "Condition": "FetchTagsForAgent",
+            "DependsOn": "EC2IfaceRole",
+            "Properties": {
+                "Roles": [
+                    {
+                        "Ref": "EC2IfaceRole"
+                    }
+                ]
+            },
+            "Type": "AWS::IAM::InstanceProfile"
+        },
+        "Agent": {
             "DependsOn": [
-                "mdweth0"
+                "agenteth0",
+                "agenteth1"
             ],
             "Properties": {
                 "BlockDeviceMappings": [
                     {
                         "DeviceName": "/dev/sda1",
                         "Ebs": {
-                            "VolumeSize": "100",
+                            "VolumeSize": "8",
                             "DeleteOnTermination": true
                         }
                     }
                 ],
+                "IamInstanceProfile": {
+                    "Fn::If": [
+                        "FetchTagsForAgent",
+                        {
+                            "Ref": "EC2InstanceProfile"
+                        },
+                        ""
+                    ]
+                },
                 "ImageId": {
                     "Fn::FindInMap": [
                         "RegionMap",
                         {
                             "Ref": "AWS::Region"
                         },
-                        "AMIxAPPLICATION"
+                        "AMIxAGENT"
                     ]
                 },
-                "InstanceType": "c5.2xlarge",
+                "InstanceType": {
+                    "Ref": "InstanceTypeForCyPerfAgent"
+                },
                 "KeyName": {
-                    "Ref": "KeyNameForCyPerfController"
+                    "Ref": "KeyNameForCyPerfAgent"
                 },
                 "NetworkInterfaces": [
                     {
                         "DeviceIndex": "0",
                         "NetworkInterfaceId": {
-                            "Ref": "mdweth0"
+                            "Ref": "agenteth0"
+                        }
+                    },
+                    {
+                        "DeviceIndex": "1",
+                        "NetworkInterfaceId": {
+                            "Ref": "agenteth1"
                         }
                     }
                 ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "cd /opt/keysight/tiger/active/bin/\n",
+                                "sh /opt/keysight/tiger/active/bin/Appsec_init ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "Controller"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " >> /var/log/Appsec_init.log\n"
+                            ]
+                        ]
+                    }
+                },
                 "Tags": [
                     {
                         "Key": "Name",
@@ -345,7 +472,7 @@
                                     {
                                         "Ref": "AWS::StackName"
                                     },
-                                    "Controller"
+                                    "Agent"
                                 ]
                             ]
                         }
@@ -376,18 +503,17 @@
             },
             "Type": "AWS::EC2::Instance"
         },
-        "mdweth0": {
-            "Condition": "CreateController",
+        "agenteth0": {
             "Properties": {
-                "Description": "MDW eth0",
+                "Description": "Client Agent eth0/ens4",
                 "GroupSet": [
                     {
-                        "Ref": "CyPerfControllerSecurityGroup"
+                        "Ref": "AgentSecurityGroup"
                     }
                 ],
                 "SourceDestCheck": "true",
                 "SubnetId": {
-                    "Ref": "ControllerManagementSubnet"
+                    "Ref": "AgentControlSubnet"
                 },
                 "Tags": [
                     {
@@ -399,7 +525,7 @@
                                     {
                                         "Ref": "AWS::StackName"
                                     },
-                                    "MB-Interface"
+                                    "CA-Interface"
                                 ]
                             ]
                         }
@@ -430,95 +556,17 @@
             },
             "Type": "AWS::EC2::NetworkInterface"
         },
-        "CyPerfControllerProxy": {
-            "DependsOn": [
-                "proxyeth0"
-            ],
-            "Condition": "CreateControllerProxy",
+        "agenteth1": {
             "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "8",
-                            "DeleteOnTermination": true
-                        }
-                    }
-                ],
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "RegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "AMIxBROKER"
-                    ]
-                },
-                "InstanceType": "t2.medium",
-                "KeyName": {
-                    "Ref": "KeyNameForCyPerfController"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "DeviceIndex": "0",
-                        "NetworkInterfaceId": {
-                            "Ref": "proxyeth0"
-                        }
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "-",
-                                [
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    "ControllerProxy"
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Project",
-                        "Value": {
-                            "Ref": "Project"
-                        }
-                    },
-                    {
-                        "Key": "Options",
-                        "Value": {
-                            "Fn::FindInMap": [
-                                "VariableMap",
-                                "global",
-                                "OPTIONSxTAG"
-                            ]
-                        }
-                    },
-                    {
-                        "Key": "Owner",
-                        "Value": {
-                            "Ref": "Username"
-                        }
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
-        "proxyeth0": {
-            "Condition": "CreateControllerProxy",
-            "Properties": {
-                "Description": "Controller Proxy eth0",
+                "Description": "Client Agent eth1/ens5",
                 "GroupSet": [
                     {
-                        "Ref": "CyPerfControllerSecurityGroup"
+                        "Ref": "AgentSecurityGroup"
                     }
                 ],
                 "SourceDestCheck": "true",
                 "SubnetId": {
-                    "Ref": "ControllerManagementSubnet"
+                    "Ref": "AgentTestSubnet"
                 },
                 "Tags": [
                     {
@@ -530,7 +578,7 @@
                                     {
                                         "Ref": "AWS::StackName"
                                     },
-                                    "ControllerProxy-Interface"
+                                    "CA-Interface"
                                 ]
                             ]
                         }

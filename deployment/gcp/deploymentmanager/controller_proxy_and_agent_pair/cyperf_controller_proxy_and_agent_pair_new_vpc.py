@@ -29,7 +29,7 @@ def GenerateConfig(context):
    
     agent_base_name = context.env['deployment']+ '-cyperf-agent-'
 
-    sslkey = 'cyperf:' + '<Replace with ssh public key.>'
+    sslkey = 'cyperf:' + '<Replace with ssh public key>'
 
 
     resources = []
@@ -234,7 +234,7 @@ def GenerateConfig(context):
                         "initializeParams": {
                             "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/'+context.properties['brokerSourceImage'],
                             "diskType": 'zones/'+zone+'/diskTypes/pd-standard',
-                            "diskSizeGb": "10",
+                            "diskSizeGb": "100",
                             "labels": {},
                         },
                         "diskEncryptionKey": {},

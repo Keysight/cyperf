@@ -1,6 +1,6 @@
 
 variable "AgentAmiName" {
-	default = "keysight-cyperf-agent-2-1"
+	default = "keysight-cyperf-agent-2-5"
 	description = "AMI name used for deploying Agent instances"
 	type = string
 }
@@ -106,7 +106,7 @@ variable "ApplicationLBHTTPSListenerPort" {
 }
 
 variable "ControllerAmiName" {
-	default = "keysight-cyperf-controller-2-1"
+	default = "keysight-cyperf-controller-2-5"
 	description = "AMI name used for deploying Controller instances"
 	type = string
 }
@@ -151,7 +151,7 @@ variable "FlowLogTrafficType" {
 
 variable "InstanceTypeForCyPerfAgent" {
 	validation {
-		condition = can(regex("c4.2xlarge", var.InstanceTypeForCyPerfAgent)) || can(regex("c5n.9xlarge", var.InstanceTypeForCyPerfAgent)) || can(regex("c5.large", var.InstanceTypeForCyPerfAgent)) || can(regex("c5.4xlarge", var.InstanceTypeForCyPerfAgent))
+		condition = can(regex("c5.2xlarge", var.InstanceTypeForCyPerfAgent)) || can(regex("c5n.9xlarge", var.InstanceTypeForCyPerfAgent)) || can(regex("c5.large", var.InstanceTypeForCyPerfAgent)) || can(regex("c5.4xlarge", var.InstanceTypeForCyPerfAgent))
 		error_message = "InstanceTypeForCyPerfAgent must be one of (t3.xlarge | m5.xlarge) types."
 	}
 	default = "c5.4xlarge"
@@ -161,8 +161,8 @@ variable "InstanceTypeForCyPerfAgent" {
 
 variable "InstanceTypeForCyPerfApp" {
 	validation {
-		condition = can(regex("c4.2xlarge", var.InstanceTypeForCyPerfApp)) || can(regex("c5.2xlarge", var.InstanceTypeForCyPerfApp))
-		error_message = "InstanceTypeForCyPerfApp must be one of (c4.2xlarge | c5.2xlarge) types."
+		condition = can(regex("c5.2xlarge", var.InstanceTypeForCyPerfApp)) || can(regex("c5.2xlarge", var.InstanceTypeForCyPerfApp))
+		error_message = "InstanceTypeForCyPerfApp must be one of (c5.2xlarge | c5.2xlarge) types."
 	}
 	default = "c5.2xlarge"
 	description = "CyPerf instance type"
