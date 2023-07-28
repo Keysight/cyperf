@@ -19,7 +19,8 @@ locals {
   mgmt_iprange = ["10.0.1.0/24"]
   test_iprange = ["10.0.2.0/24"]
   firewall_ip_range = concat(var.azure_allowed_cidr,local.mgmt_iprange,local.test_iprange)
-  sku_name_controller = var.cyperf_version == "0.2.1" ? "keysight-cyperf-controller-21" : "keysight-cyperf-controller"
+  split_version = split(".", var.cyperf_version)
+  sku_name_controller = var.cyperf_version != "0.2.0" ? "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}": "keysight-cyperf-controller"
 }
 
 resource "azurerm_resource_group" "azr_automation" {

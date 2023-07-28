@@ -94,16 +94,10 @@ variable "gcp_agent_machine_type" {
   default = "c2-standard-4"
 }
 
-variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-2-5.vhd"
-  type = string
-  description = "Controller image path"
-}
-
-variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd"
-  type = string
-  description = "Agent image path"
+variable "cyperf_version" {
+  type        = string
+  default     = "0.2.5"
+  description = "CyPerf release version to get the images from Azure Marketplace"
 }
 
 variable "mdw_version" {
