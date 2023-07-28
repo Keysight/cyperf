@@ -5,7 +5,7 @@ There is a new VPC template, meaning the entire necessary resources will be crea
 See the Template Parameters Section for more details. Each agent has two interfaces. One is Management interface and other is Test interface. Agent communicate with Controller using Management interface. CyPerf test traffic flows through Test interface.
 
 ## Topology Diagram
-![cyperf_controller_and_agent_pair](cyperf_controller_and_agent_pair.jpg)
+![cyperf_agents_only](cyperf_agents_only.jpg)
 
 ## How to Deploy:
 A configuration File [YAML] and Templates [Python] are used for this Deployment. However, users can also use standalone Python Templates from the gcloud console for this Deployment.
