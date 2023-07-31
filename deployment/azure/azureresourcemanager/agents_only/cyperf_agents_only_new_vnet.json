@@ -31,6 +31,7 @@
             "allowedValues": [
               "0.2.5",
               "0.2.1"
+              "0.2.0"
             ],
 
             "metadata": {
@@ -424,7 +425,12 @@
 
                     }
 
-                ]
+                ],
+            
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                }
 
             }
 
@@ -480,7 +486,12 @@
 
                     }
 
-                ]
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                }
 
             }
 
