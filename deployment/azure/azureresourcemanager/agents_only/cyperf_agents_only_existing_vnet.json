@@ -30,7 +30,8 @@
 
             "allowedValues": [
               "0.2.5",
-              "0.2.1"
+              "0.2.1",
+              "0.2.0"
             ],
 
             "metadata": {
@@ -169,6 +170,8 @@
 
         "location"  :     "[resourceGroup().location]",
 
+        "securitygroup"  :     "[concat(variables('stackname'),'-securitygroup')]",
+
         "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
         
         "proximity_id": {
@@ -183,11 +186,103 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
+
+        "skunames" : {
+            "0.2.5": {
+                "skuname": "keysight-cyperf-agent-25"
+            },
+            "0.2.1": {
+                "skuname": "keysight-cyperf-agent-21"
+            },
+            "0.2.0": {
+                "skuname": "keysight-cyperf-agent"
+            }
+        }
 
     },
 
     "resources": [
+
+        {
+
+            "comments": "creates security group which is used by agent & allows ssh,https traffic from external(public) subnet ",
+
+            "type": "Microsoft.Network/networkSecurityGroups",
+
+            "name": "[variables('securitygroup')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "securityRules": [
+
+                    {
+
+                        "name":"ssh-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 100,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "22",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+
+                        }
+
+                    },
+                    {
+
+                        "name": "https-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 101,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "443",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
 
         {
             "comments": "Creates a proximity group",
@@ -252,7 +347,12 @@
 
                     }
 
-                ]
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                }
 
             }
 
@@ -302,7 +402,12 @@
 
                     }
 
-                ]
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                }
 
             }
 
@@ -321,9 +426,9 @@
             "location": "[variables('location')]",
 
             "plan": {
-               
-                "name": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controller-25', 'keysight-cyperf-controller-21')]", 
 
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skuname]",
+               
                 "product": "keysight-cyperf",
 
                 "publisher": "keysighttechnologies_cyperf"
@@ -396,7 +501,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controller-25', 'keysight-cyperf-controller-21')]",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skuname]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },
