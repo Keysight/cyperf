@@ -211,7 +211,19 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
+
+        "skunames" : {
+            "0.2.5": {
+                "skuname": "keysight-cyperf-agent-25"
+            },
+            "0.2.1": {
+                "skuname": "keysight-cyperf-agent-21"
+            },
+            "0.2.0": {
+                "skuname": "keysight-cyperf-agent"
+            }
+        }
 
     },
 
