@@ -143,6 +143,18 @@
             }
 
         },
+        
+        "Allowed Subnet for Security Group": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Subnet range allowed to access deployed Azure resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”"
+
+            }
+
+        },
 
         "Number of Cyperf Agents": {
 

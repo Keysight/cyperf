@@ -30,7 +30,7 @@
 
             "allowedValues": [
               "0.2.5",
-              "0.2.1"
+              "0.2.1",
               "0.2.0"
             ],
 
@@ -511,7 +511,7 @@
 
             "plan": {
                 
-               "name": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controller-25', 'keysight-cyperf-controller-21')]",
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skuname]", 
               
                 "product": "keysight-cyperf",
 
@@ -587,7 +587,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "[if(equals(parameters('Cyperf Version'), '0.2.5'), 'keysight-cyperf-controller-25', 'keysight-cyperf-controller-21')]",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skuname]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },
