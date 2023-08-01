@@ -155,6 +155,8 @@
 
             "type": "string",
 
+            "defaultValue": "0.0.0.0/0",
+
             "metadata": {
 
                 "description": "Subnet range allowed to access deployed Azure resources. Execute 'curl ifconfig.co' to know MyIP or google for “what is my IP”"

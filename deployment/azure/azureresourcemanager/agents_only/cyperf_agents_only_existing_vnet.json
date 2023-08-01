@@ -143,10 +143,12 @@
             }
 
         },
-        
+
         "Allowed Subnet for Security Group": {
 
             "type": "string",
+
+            "defaultValue": "0.0.0.0/0",
 
             "metadata": {
 
