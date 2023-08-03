@@ -215,6 +215,9 @@
 
         "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
 
+        "customdataVar":  "parameters('Cyperf Controller IP')" ,
+    
+
         "skunames" : {
             "0.2.5": {
                 "skuname": "keysight-cyperf-agent-25"
@@ -564,7 +567,7 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),parameters('Cyperf Controller IP'),' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(concat(variables('userdata'),variables('customdataVar'),' >> /var/log/image_init.log'))]",
 
                     "linuxConfiguration": {
 
