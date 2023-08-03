@@ -38,10 +38,10 @@ properties:
     default: c2-standard-4
     description: agent machine type
 
-  agentSourceImage:
+  cyperfVersion:
     type: string
-    default: keysight-cyperf-agent-2-0
-    description: source image for agents
+    default: 2-5
+    description: cyperf release version. options are 2-5, 2-1, 2-0
 
   managementNetworkCIDR:
     type: string

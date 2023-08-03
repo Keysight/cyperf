@@ -65,7 +65,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | zone                   | Requires input            | Preferred Zone name for the deployment.  |
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| agentSourceImage                   | keysight-cyperf-agent-2-5            | Preferred CyPerf Agent image.  |
+| cyperfVersion                   | 2-5            | Preferred CyPerf Release version. Options are 2-5, 2-1, 2-0 |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 1            | Number of CyPerf agents will be deployed from this template.  |
@@ -79,7 +79,7 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | zone                   | Requires input            | Preferred Zone name for the deployment.  |
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| agentSourceImage                   | keysight-cyperf-agent-2-5            | Preferred CyPerf Agent image.  |
+| cyperfVersion                   | 2-5            | Preferred CyPerf Rlease version. Options are 2-5, 2-1, 2-0  |
 | management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | test_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"    | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 1            | Number of CyPerf agents will be deployed from this template.  |
