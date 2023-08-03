@@ -212,11 +212,8 @@
         "agenttestinterface"  :     "[concat(variables('stackname'),'-agenttestinterface')]",
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
-
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
-
-        "customdataVar":  "parameters('Cyperf Controller IP')" ,
     
+        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'), ' >> /var/log/image_init.log')]",
 
         "skunames" : {
             "0.2.5": {
@@ -567,7 +564,7 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),variables('customdataVar'),' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(variables('customData'))]", 
 
                     "linuxConfiguration": {
 
