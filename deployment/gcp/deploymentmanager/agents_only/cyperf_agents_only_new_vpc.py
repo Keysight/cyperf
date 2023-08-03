@@ -235,7 +235,7 @@ def GenerateConfig(context):
               "boot": True,
               "autoDelete": True,
               "initializeParams": {
-                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['agentSourceImage'],
+                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + 'keysight-cyperf-agent-' + context.properties['cyperfVersion'],
                   "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
                   "diskSizeGb": "10",
               },
