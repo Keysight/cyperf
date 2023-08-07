@@ -7,7 +7,7 @@ info:
 
 
 imports:
-  - path: cyperf_single_agent_new_vpc.py
+  - path: cyperf_agents_only_new_vpc.py
     name: helper.py
 
 

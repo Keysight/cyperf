@@ -28,7 +28,7 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,cyperfVersion:2-5,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:1
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_agents_only_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,cyperfVersion:2-5,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:1
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
