@@ -1,8 +1,8 @@
 imports:
-- path: cyperf_single_agent_existing_vpc.py
+- path: cyperf_agents_only_existing_vpc.py
 
 resources:
 - name: myresources
-  type: cyperf_single_agent_existing_vpc.py
+  type: cyperf_agents_only_existing_vpc.py
   properties: 
       region: us-east1
