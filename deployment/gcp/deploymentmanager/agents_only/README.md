@@ -10,7 +10,7 @@ See the Template Parameters Section for more details. Each agent has two interfa
 ## How to Deploy:
 A configuration File [YAML] and Templates [Python] are used for this Deployment. However, users can also use standalone Python Templates from the gcloud console for this Deployment.
 ### Deployment pre-requisites:
-1.	Download following files from OpenIxia.
+1.	Download following files from github.com/keysight.
 2.	From gcp console, open cloud shell window and upload bellow files. 
 - [cyperf_agents_only_new_vpc.py](cyperf_agents_only_new_vpc.py)
 - [cyperf_agents_only_new_vpc.py.schema](cyperf_agents_only_new_vpc.py.schema)
@@ -18,6 +18,16 @@ A configuration File [YAML] and Templates [Python] are used for this Deployment.
 - [cyperf_agents_only_existing_vpc.py](cyperf_agents_only_existing_vpc.py)
 - [cyperf_agents_only_existing_vpc.py.schema](cyperf_agents_only_existing_vpc.py.schema)
 - [cyperf_agents_only_existing_vpc.yaml](cyperf_agents_only_existing_vpc.yaml) 
+3. Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allows port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+
+### SSH Key:
+To generate the public key and enable SSH access to the CyPerf instances, perform the following steps:
+
+1. Create private key and public key, see [Creating a new SSH key](https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys#createsshkeys).
+2. For New VPC Edit [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py), and specify 
+`sslkey ='<Replace with ssh public key>'`.
+3. For Existing VPC Edit [cyperf_controller_and_agent_pair_existing_vpc.py](cyperf_controller_and_agent_pair_existing_vpc.py), and specify 
+`sslkey ='<Replace with ssh public key>'`.
 
 ### Deployment using Python Template:
 The Deployment Manager requires a Python template and certain parameters to be supplied at command line in the cloud shell.
@@ -48,14 +58,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --templa
 ```
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --config cyperf_agents_only_existing_vpc.yaml
 ```
-### SSH Key:
-To generate the public key and enable SSH access to the CyPerf instances, perform the following steps:
 
-1. Create private key and public key, see [Creating a new SSH key](https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys#createsshkeys).
-2. For New VPC Edit [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py), and specify 
-`sslkey ='<Replace with ssh public key.>'`.
-3. For Existing VPC Edit [cyperf_controller_and_agent_pair_existing_vpc.py](cyperf_controller_and_agent_pair_existing_vpc.py), and specify 
-`sslkey ='<Replace with ssh public key.>'`.
 
 ## Template Parameters:
 The following table lists the parameters for this deployment in **New VPC**.
@@ -94,3 +97,14 @@ After successful deployment of stack, flow bellow instructions
 -	Open your browser and access CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: `admin`/`CyPerf&Keysight#1`)
 -   Registered CyPerf agents should appear in Controller UI automatically.
 -   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
+
+## Delete deployment
+
+Use below Deployment Manager command line in the cloud shell to delete deployment.
+
+```
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments delete <deployment name>
+Example:
+
+$ gcloud deployment-manager deployments delete keysight-cyperf-gcp
+```
