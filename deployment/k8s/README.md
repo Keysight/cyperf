@@ -25,8 +25,9 @@ To deploy a Keysight CyPerf agent inside Kubernetes, you need the following:
 
 3.  A CyPerf Controller that is already deployed and accessible from the nodes inside the kubernetes cluster.  
     - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
-3.  A CyPerf Controller Proxy in hybrid deployment scenario, where each of the distributed agent cannot directly access the CyPerf Controller. 
-For example: If a CyPerf controller is deployed on premise and the other is deployed in the cloud, they can still communicate through a CyPerf Controller Proxy. In that case, agents that are registered to the Controller Proxy and the public IP address of the Controller Proxy are configured in the CyPerf Controller.
+
+3. A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
+
 4.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allows port numbers **443** and **30422** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 5.  Place holder container image URL for the CyPerf Agent container. The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. For specific versions, use the CyPerf Agent's container image URL. This ECR Public image URL needs to be accessible from the test environment, for example: _the cluster nodes_.
 6.  Assign `agenttype=client` label to the nodes if you want to deploy CyPerf Agents as test traffic to initiate the clients and assign `agenttype=server` label to the nodes if you want the CyPerf Agents to simulate the test servers.    
