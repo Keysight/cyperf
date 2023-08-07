@@ -24,8 +24,7 @@ sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
 3.  A CyPerf Controller that is already deployed and accessible from the Agent docker containers.  
     - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
 
-4.  A CyPerf Controller Proxy in a hybrid deployment scenario, where each of the distributed agents cannot directly access the CyPerf Controller. 
-For example, if a CyPerf controller is deployed on-premise and the other is deployed in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents register to the Controller through the Controller Proxy.
+4.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
 5.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers **443** and **30422** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 
