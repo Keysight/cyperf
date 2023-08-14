@@ -75,6 +75,82 @@ sudo docker network create --subnet=172.18.0.1/24 test-server-network
 sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
+### **Docker compose**
+
+- Compose manifest: [agent_examples/docker-compose.yml](agent_examples/docker-compose.yml) 
+
+- Modifications that are required to delpoy a CyPerf Agents, are as follows:
+    1. Replace the place holder container `image` URL with the specific version, that you want to use for the CyPerf Agent container. You can get this URL from [Keysight software download portal](https://support.ixiacom.com/keysight-cyperf-software-downloads-documentation).
+    2. Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then this variable must be ommitted from the yaml. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
+    3. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also. If you need to select a management or test interface explicitly, use the following `env` variables. You can find these variables in the example yaml scripts as comments.
+
+        ```
+            #   name: AGENT_MANAGEMENT_INTERFACE
+            #   value: "eth0"
+            #   name: AGENT_TEST_INTERFACE
+            #   value: "eth1"
+        ```
+    
+    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interface.
+    ```
+            networks:
+            #  cyperf-client-test-net:
+            #    name: client-test-net
+            #    driver: macvlan
+            #    driver_opts:
+            #      parent: ens192
+            #    ipam:
+            #      config:
+            #        - subnet: "172.32.12.0/22"
+            #  cyperf-server-test-net:
+            #    name: server-test-net
+            #    driver: macvlan
+            #    driver_opts:
+            #      parent: ens224
+            #    ipam:
+            #      config:
+            #        - subnet: "10.10.10.0/24"
+    ```
+    4. Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
+    5. When Client and Server containers are running in two different host, them Server container must do port mirroring with host for port 80 and 443.
+    ```
+            #     ports:
+            #       - "80:80"
+            #       - "443:443"
+    ```
+    6. Decide the number of replicas that are required to start with the CyPerf Agent client and server pods and modify the count accordingly.
+    7. Reserve and limit the memory and cpu resources for CyPerf Agent containers, depending on your requirement. 
+        
+        **_NOTE:_** For more information, see [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents).
+- Apply the conpose file.
+  Download the docker compose file and place in the docker host. Change to the directory where docker compose file present.
+    ```
+    # For creating containers
+    sudo docker compose up -d
+
+    # For removing containers
+    sudo docker compose down
+    ```
+
+## Managing Resources for the CyPerf Agents
+- It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achive this by using the `client` section in one host nad `server` section in other host.
+
+- If you need to share the resources among multiple CyPerf Agents, (for example: when multiple Agent containers are runing in the same node) then use the following:
+
+    ```
+    client:
+        mem_limit: "4g"
+        mem_reservation: "2g"
+        cpus: "2"
+        cpuset: "0-1"
+
+     server:
+        mem_limit: "4g"
+        mem_reservation: "2g"
+        cpus: "2"
+        cpuset: "2-3"
+    ```
+
 ###  **Automated Deployment**
 
 To deploy a Keysight CyPerf agent container at Docker, you need to install Docker engine on the docker host if not done already. Below is a sample bash script to install the docker engine on the Ubuntu host.
