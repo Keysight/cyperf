@@ -6,7 +6,7 @@ locals {
 	Agent2InstanceId = "agent2"
 	AppInstanceType = var.AppInstanceType
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	PlacementGroupName = "${local.Preamble}-placement-group-${local.Region}"
 	PlacementGroupStrategy = "cluster"
 	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}-${local.AppVersion}"

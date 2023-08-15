@@ -1,5 +1,6 @@
 module "App" {
 	source = "armdupre/module-cyperf-app/aws"
+	version = "2.5.11322"
 	Eth0SecurityGroupId = local.PublicSecurityGroupId
 	Eth0SubnetId = local.PublicSubnetId
 	InstanceType = local.AppInstanceType
@@ -10,6 +11,7 @@ module "App" {
 
 module "Agent1" {
 	source = "armdupre/module-cyperf-agent/aws"
+	version = "2.5.11322"
 	AppEth0IpAddress = module.App.Instance.private_ip
 	Eth0SecurityGroupId = local.PublicSecurityGroupId
 	Eth0SubnetId = local.PublicSubnetId
@@ -29,6 +31,7 @@ module "Agent1" {
 
 module "Agent2" {
 	source = "armdupre/module-cyperf-agent/aws"
+	version = "2.5.11322"
 	AppEth0IpAddress = module.App.Instance.private_ip
 	Eth0PrivateIpAddress = local.Agent2Eth0PrivateIpAddress
 	Eth0SecurityGroupId = local.PublicSecurityGroupId

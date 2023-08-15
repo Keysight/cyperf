@@ -3,7 +3,7 @@ locals {
 	Agent1InstanceId = "agent1"
 	AppInstanceType = var.AppInstanceType
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	InboundIPv4CidrBlock = var.InboundIPv4CidrBlock
 	PlacementGroupName = "${local.Preamble}-placement-group-${local.Region}"
 	PlacementGroupStrategy = "cluster"

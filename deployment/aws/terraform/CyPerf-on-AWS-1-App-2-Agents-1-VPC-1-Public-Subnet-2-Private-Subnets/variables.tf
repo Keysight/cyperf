@@ -1,13 +1,29 @@
 variable "AgentInstanceType" {
-	default = "c5n.4xlarge"
+	default = "c5n.9xlarge"
 	description = "Instance type of Agent VM"
 	type = string
 	validation {
-		condition = contains([	"c5n.4xlarge", "c5n.9xlarge", "c5n.18xlarge"
+		condition = contains([	"m3.xlarge", "m3.2xlarge",
+								"m4.xlarge", "m4.2xlarge", "m4.4xlarge",
+								"m5.large", "m5.xlarge", "m5.2xlarge", "m5.4xlarge", "m5.12xlarge",
+								"m5n.large", "m5n.xlarge", "m5n.2xlarge", "m5n.4xlarge", "m5n.8xlarge",
+								"c3.2xlarge", "c3.4xlarge", "c3.8xlarge",
+								"c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge",
+								"c5.xlarge", "c5.2xlarge", "c5.4xlarge", "c5.9xlarge", "c5.12xlarge",
+								"c5n.xlarge", "c5n.2xlarge", "c5n.4xlarge", "c5n.9xlarge", "c5n.18xlarge",
+								"c6in.2xlarge", "c6in.24xlarge"
 							], var.AgentInstanceType)
 		error_message = <<EOF
 AgentInstanceType must be one of the following types:
-	c5n.4xlarge, c5n.9xlarge, c5n.18xlarge
+	m3.xlarge, m3.2xlarge,
+	m4.xlarge, m4.2xlarge, m4.4xlarge,
+	m5.large, m5.xlarge, m5.2xlarge, m5.4xlarge, m5.12xlarge,
+	m5n.large, m5n.xlarge, m5n.2xlarge, m5n.4xlarge, m5n.8xlarge,
+	c3.2xlarge, c3.4xlarge, c3.8xlarge,
+	c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge,
+	c5.xlarge, c5.2xlarge, c5.4xlarge, c5.9xlarge, c5.12xlarge,
+	c5n.xlarge, c5n.2xlarge, c5n.4xlarge, c5n.9xlarge, c5n.18xlarge,
+	c6in.2xlarge, c6in.24xlarge
 		EOF
 	}
 }
@@ -18,17 +34,26 @@ variable "ApiMaxRetries" {
 }
 
 variable "AppInstanceType" {
-	default = "m5.xlarge"
+	default = "c5.2xlarge"
 	description = "Instance type of App VM"
 	type = string
 	validation {
-		condition = contains([	"t3.xlarge",
-								"m5.xlarge"
+		condition = contains([	"m3.2xlarge",
+								"m4.2xlarge", "m4.4xlarge",
+								"m5.2xlarge", "m5.4xlarge", "m5.12xlarge",
+								"c3.2xlarge", "c3.4xlarge", "c3.8xlarge",
+								"c4.2xlarge", "c4.4xlarge", "c4.8xlarge",
+								"c5.2xlarge", "c5.4xlarge", "c5.9xlarge", "c5.12xlarge",
+								"c5n.2xlarge", "c5n.4xlarge", "c5n.9xlarge"
 							], var.AppInstanceType)
 		error_message = <<EOF
 AppInstanceType must be one of the following types:
-	t3.xlarge
-	m5.xlarge
+	m4.2xlarge, m4.4xlarge,
+	m5.2xlarge, m5.4xlarge, m5.12xlarge,
+	c3.2xlarge, c3.4xlarge, c3.8xlarge,
+	c4.2xlarge, c4.4xlarge, c4.8xlarge,
+	c5.2xlarge, c5.4xlarge, c5.9xlarge, c5.12xlarge,
+	c5n.2xlarge, c5n.4xlarge, c5n.9xlarge
 		EOF
 	}
 }
