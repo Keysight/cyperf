@@ -5,7 +5,7 @@ locals {
 	Agent2Eth1IpAddresses = ["192.168.2.12"]
 	Agent2InstanceId = "agent2"
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	AppVmSize = var.AppVmSize
 	Preamble = "${local.UserLoginTag}-${local.AppTag}-${local.AppVersion}"
 	PublicSecurityRuleSourceIpPrefix = var.PublicSecurityRuleSourceIpPrefix

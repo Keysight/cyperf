@@ -2,7 +2,7 @@ locals {
 	AgentVmSize = var.AgentVmSize
 	Agent1InstanceId = "agent1"
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	AppVmSize = var.AppVmSize
 	Preamble = "${local.UserLoginTag}-${local.AppTag}-${local.AppVersion}"
 	PublicSecurityRuleSourceIpPrefix = var.PublicSecurityRuleSourceIpPrefix
