@@ -1,5 +1,6 @@
 module "App" {
 	source = "armdupre/module-cyperf-app/google"
+	version = "0.2.5"
 	Eth0SubnetName = module.Vpc.PublicSubnet.name
 	Eth0VpcNetworkName = module.Vpc.PublicVpcNetwork.name
 	MachineType = local.AppMachineType
@@ -16,6 +17,7 @@ module "App" {
 
 module "Agent1" {
 	source = "armdupre/module-cyperf-agent/google"
+	version = "0.2.5"
 	AppEth0IpAddress = module.App.Instance.network_ip
 	Eth0SubnetName = module.Vpc.PublicSubnet.name
 	Eth0VpcNetworkName = module.Vpc.PublicVpcNetwork.name
@@ -37,6 +39,7 @@ module "Agent1" {
 
 module "Agent2" {
 	source = "armdupre/module-cyperf-agent/google"
+	version = "0.2.5"
 	AppEth0IpAddress = module.App.Instance.network_ip
 	Eth0PrivateIpAddress = local.Agent2Eth0PrivateIpAddress
 	Eth0SubnetName = module.Vpc.PublicSubnet.name

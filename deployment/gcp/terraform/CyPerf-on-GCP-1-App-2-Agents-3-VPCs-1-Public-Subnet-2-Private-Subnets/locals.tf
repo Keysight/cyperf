@@ -9,10 +9,10 @@ locals {
 	Agent2InstanceName = "${local.Preamble}-instance"
 	AppMachineType = var.AppMachineType
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}-${local.AppVersion}-${local.Agent2InstanceId}"
-	Private1VpcNetworkPeerName = "${local.Preamble}-test-01-vpc-network-peer"
-	Private2VpcNetworkPeerName = "${local.Preamble}-test-02-vpc-network-peer"
+	Private1VpcNetworkPeerName = "${local.Preamble}-test1-vpc-peer"
+	Private2VpcNetworkPeerName = "${local.Preamble}-test2-vpc-peer"
 	ProjectId = var.ProjectId
 	PublicFirewallRuleSourceIpRanges = var.PublicFirewallRuleSourceIpRanges
 	RegionName = var.RegionName

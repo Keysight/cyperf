@@ -9,7 +9,7 @@ locals {
 	Agent2InstanceName = "${local.Preamble}-instance"
 	AppMachineType = var.AppMachineType
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}-${local.AppVersion}-${local.Agent2InstanceId}"
 	ProjectId = var.ProjectId
 	PublicFirewallRuleSourceIpRanges = var.PublicFirewallRuleSourceIpRanges

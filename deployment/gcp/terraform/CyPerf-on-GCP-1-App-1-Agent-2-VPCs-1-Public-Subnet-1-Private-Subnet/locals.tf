@@ -3,7 +3,7 @@ locals {
 	Agent1InstanceId = "agent1"
 	AppMachineType = var.AppMachineType
 	AppTag = "cyperf"
-	AppVersion = "2-1"
+	AppVersion = "2-5"
 	ProjectId = var.ProjectId
 	PublicFirewallRuleSourceIpRanges = var.PublicFirewallRuleSourceIpRanges
 	RegionName = var.RegionName
