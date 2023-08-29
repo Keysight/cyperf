@@ -1,0 +1,16 @@
+---
+- name: Reboot Node(s)
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Rebooting Node(s)
+      shell: 'sudo shutdown -r now'
+      async: 1
+      poll: 0
+      ignore_errors: yes
+
+    - name: Waiting for Node(s) to come back with SSH accessiblity
+      become: false
+      local_action: wait_for host={{ inventory_hostname }} port=22
+                search_regex=OpenSSH state=started delay=5

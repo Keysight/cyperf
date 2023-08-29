@@ -1,0 +1,28 @@
+{
+    "portmanager": {
+        "broker": {
+            "url": "{{ VarNatsBrokerUrl }}",
+            "clusterID": "nats-streaming"
+        },
+        "management_interface":"{{ VarManagementInterface }}",
+        "test_interface" : ["{{ VarTestInterface }}"],
+        "tags":[{"name": "AgentGroup", "value": "Server"}, {"name": "TestTag", "value": "TestVAlue"}],
+        "heartbeatInterval":"10s",
+        "traffic_agent" : {
+            "path" : "/opt/keysight/tiger/active/bin/AppsecAgent",
+            "wait_time":"1h",
+            "TopicPairs": [
+                {
+                    "TopicType": "TRAFFIC_AGENT",
+                    "Subscriber": "configuration",
+                    "Publisher": "configuration_response"
+                },
+                {
+                    "TopicType": "STAT",
+                    "Subscriber": "",
+                    "Publisher": "statistics"
+                }
+             ]
+        }
+    }
+}

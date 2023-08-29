@@ -1,0 +1,22 @@
+---
+- name: Configures CyPerf in Commercial Off-The-Shelf (COTS) Hardware
+  hosts: all
+
+  vars_files:
+    - variables.yml
+
+  tasks:
+    - name: Installing the Appsec Agent installer in Node(s)
+      become: yes
+      shell: 'cd /tmp && sudo apt install ./{{ VarAppsecInstaller }}'
+    
+    - name: Configuring Node(s)
+      become: yes
+      shell: |
+         'cyperfagent interface test set {{ VarTestInterface }}'
+         'cyperfagent interface management set {{ VarManagementInterface }}'
+         'cyperfagent controller set {{ VarController }}'
+
+    - name: Restarting portmanager service in Node(s)
+      become: yes
+      shell: 'cyperfagent configuration reload'

@@ -1,0 +1,5 @@
+---
+VarController: "CYPERF_CONTROLLER"
+VarManagementInterface: "MGMT_IFACE"
+VarTestInterface: "TEST_IFACE"
+VarAppsecInstaller: "CYPERFAGENTBINARY"

@@ -1,0 +1,5 @@
+---
+VarNatsBrokerUrl: "nats://CYPERFUI:30422"
+VarManagementInterface: "MGMT_IFACE"
+VarTestInterface: "TEST_IFACE"
+VarAppsecInstaller: "CYPERFAGENTBINARY"

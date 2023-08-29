@@ -1,0 +1,10 @@
+---
+- name: Restarting portmanager service in Node(s)
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Restarting portmanager service
+      service:
+        name: portmanager
+        state: restarted
