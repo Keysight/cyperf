@@ -13,13 +13,10 @@ locals {
 	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}-${local.AppVersion}-${local.Agent2InstanceId}"
 	PrivateSubnetName = var.PrivateSubnetName
 	PrivateVpcNetworkName = var.PrivateVpcNetworkName
-	ProjectId = var.ProjectId
 	PublicFirewallRuleSourceIpRanges = var.PublicFirewallRuleSourceIpRanges
 	PublicSubnetName = var.PublicSubnetName
 	PublicVpcNetworkName = var.PublicVpcNetworkName
-	RegionName = var.RegionName
 	UserEmailTag = var.UserEmailTag
 	UserLoginTag = var.UserLoginTag
 	UserProjectTag = var.UserProjectTag
-	ZoneName = var.ZoneName
 }

@@ -1,6 +1,7 @@
 module "Vpc" {
 	source = "armdupre/module-3-vpcs-1-public-subnet-2-private-subnets/google"
 	PublicFirewallRuleSourceIpRanges = local.PublicFirewallRuleSourceIpRanges
+	RegionName = data.google_client_config.current.region
 	Tag = local.AppTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag
