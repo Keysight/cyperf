@@ -2,6 +2,7 @@ module "Vnet1" {
 	source = "armdupre/module-1-vnet-1-public-subnet-1-private-subnet/azurerm"
 	InstanceId = local.Vnet1InstanceId
 	PublicSecurityRuleSourceIpPrefix = local.PublicSecurityRuleSourceIpPrefix
+	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
 	Tag = local.AppTag
 	UserEmailTag = local.UserEmailTag
@@ -16,6 +17,7 @@ module "Vnet2" {
 	PrivateSubnetPrefix = local.Vnet2PrivateSubnetPrefix
 	PublicSecurityRuleSourceIpPrefix = local.PublicSecurityRuleSourceIpPrefix
 	PublicSubnetPrefix = local.Vnet2PublicSubnetPrefix
+	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
 	Tag = local.AppTag
 	UserEmailTag = local.UserEmailTag
