@@ -215,11 +215,7 @@
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
 <<<<<<< HEAD
-<<<<<<< HEAD
         "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
-=======
-        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh "
->>>>>>> fa4d367... azure vhd deployment for 2.5 release
 =======
         "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh "
 >>>>>>> fa4d367... azure vhd deployment for 2.5 release
@@ -980,11 +976,7 @@
     }
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> fa4d367... azure vhd deployment for 2.5 release
 =======
 }
 >>>>>>> fa4d367... azure vhd deployment for 2.5 release
