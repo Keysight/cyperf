@@ -41,8 +41,7 @@ Alternatively, user may use following PowerShell command from Azure cloud shell 
 
 ### Keysight SAS token for Keysight storage account CyPerf
 ```
-?sv=2020-02-10&ss=b&srt=co&sp=rl&se=2031-04-26T20:08:16Z&st=2021-04-26T12:08:16Z&spr=https&sig=%2Fr0ENUs2QXp3g0%2BdcGwAwcpNAf06aeI4W7WuEmQ6xP8%3D
-
+?sv=2022-11-02&ss=bf&srt=sco&sp=rtfx&se=2027-03-03T00:15:52Z&st=2023-09-01T15:15:52Z&spr=https,http&sig=Arrk0YOcgswuUyE4jteX7I%2FU5Q7NPz%2FaY7922KMAsWA%3D
 ```
 
 ### Pre-requisite for PowerShell command execution:
