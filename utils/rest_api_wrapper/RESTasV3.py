@@ -1060,7 +1060,6 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/test-run/operations/start'.format(self.sessionID)
         response = self.__sendPost(apiPath, payload={}).json()
         self.startTime = self.__getEpochTime()
-        startID = response['id']
         print('Waiting for the test to start...')
         response = self.get_test_status()
         actual_duration = 0
