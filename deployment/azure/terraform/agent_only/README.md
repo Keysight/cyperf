@@ -82,8 +82,8 @@ The following table lists the parameters for this deployment.
 | test_subnet | Requires input    | Test subnet id |
 | controller_ip | Requires input    | Test subnet id |
 | public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
-| cyperf_version   | 0.2.1            | CyPerf release version. |
-| agent_version   | keysight-cyperf-agent-2-1            | The  CyPerf agent image version. |
+| cyperf_version   | 0.2.5            | CyPerf release version. |
+| agent_version   | keysight-cyperf-agent-2-5            | The  CyPerf agent image version. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | agent_role | azure-agent | This will act as a tag in controller UI and will enable assignment by tag|
 

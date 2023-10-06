@@ -3,7 +3,8 @@ locals {
       #!/bin/bash
       bash /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
-  sku_name_agent = var.agent_version == "0.2.1" ? "keysight-cyperf-agent-21" : "keysight-cyperf-agent"
+  split_version = split(".", var.cyperf_version)
+  sku_name_agent = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
 }
 
 resource "azurerm_public_ip" "agent_mgmt_public_ip" {

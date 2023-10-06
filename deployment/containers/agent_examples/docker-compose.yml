@@ -1,0 +1,81 @@
+version: "3.7"
+
+services:
+ client:
+     image: "public.ecr.aws/keysight/cyperf-agent:latest"
+     container_name: ClientAgent
+#     mem_limit: "4g"
+#     mem_reservation: "2g"
+#     cpus: "2"
+#     cpuset: "0-1"
+#     command:
+#         - /bin/bash
+#         - -c
+#         - |
+#           cyperfagent feature allow_mgmt_iface_for_test disable
+     environment:
+         - AGENT_CONTROLLER=44.224.242.39
+         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Client,node-owner=KB"
+#         - AGENT_MANAGEMENT_INTERFACE=eth0
+#         - AGENT_TEST_INTERFACE=eth1
+     cap_add:
+         - NET_ADMIN
+         - IPC_LOCK
+         - NET_RAW
+     networks:
+       cyperf-mgmt-net:
+         ipv4_address: 192.168.0.10
+#       cyperf-client-test-net:
+#         ipv4_address: 172.32.12.10
+ server:
+     image: "public.ecr.aws/keysight/cyperf-agent:latest"
+     container_name: ServerAgent
+#     mem_limit: "4g"
+#     mem_reservation: "2g"
+#     cpus: "2"
+#     cpuset: "2-3"
+#     command:
+#         - /bin/bash
+#         - -c
+#         - |
+#           cyperfagent feature allow_mgmt_iface_for_test disable
+     environment:
+         - AGENT_CONTROLLER=44.224.242.39
+         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Server,node-owner=KB"
+#         - AGENT_MANAGEMENT_INTERFACE=eth0
+#         - AGENT_TEST_INTERFACE=eth1
+     cap_add:
+         - NET_ADMIN
+         - IPC_LOCK
+         - NET_RAW
+#     ports:
+#         - "80:80"
+#         - "443:443"
+     networks:
+       cyperf-mgmt-net:
+         ipv4_address: 192.168.0.11
+#       cyperf-server-test-net:
+#         ipv4_address: 10.10.10.10
+networks:
+#  cyperf-client-test-net:
+#    name: client-test-net
+#    driver: macvlan
+#    driver_opts:
+#      parent: ens192
+#    ipam:
+#      config:
+#        - subnet: "172.32.12.0/22"
+#  cyperf-server-test-net:
+#    name: server-test-net
+#    driver: macvlan
+#    driver_opts:
+#      parent: ens224
+#    ipam:
+#      config:
+#        - subnet: "10.10.10.0/24"
+  cyperf-mgmt-net:
+    name: mgmt-net
+    ipam:
+      config:
+        - subnet: "192.168.0.0/24"
+
