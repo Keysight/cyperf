@@ -3,11 +3,13 @@ import io
 import sys
 import glob
 import time
+import urllib
 import urllib3
 import requests
 import simplejson as json
 from zipfile import ZipFile
 from datetime import datetime
+from requests_toolbelt import MultipartEncoder
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 from resources.configuration import WAP_USERNAME, WAP_PASSWORD, WAP_CLIENT_ID
@@ -15,16 +17,15 @@ from resources.configuration import WAP_USERNAME, WAP_PASSWORD, WAP_CLIENT_ID
 
 class RESTasV3:
 
-    def __init__(self, ipAddress, verify=True):
+    def __init__(self, ipAddress, username=WAP_USERNAME, password=WAP_PASSWORD, verify=True):
         self.ipAddress = ipAddress
+        self.username = username
+        self.password = password
         self.verify = verify
-        self.session = requests.Session()
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        self.session.verify = False
-        self.host = 'https://{}'.format(ipAddress)
-        self.cookie = self.get_automation_token()
-        self.headers = {'authorization': self.cookie}
+        self.connect_to_mdw()
         self.startTime = None
+        self.startingStartTime = None
+        self.configuringStartTime = None
         self.startTrafficTime = None
         self.stopTrafficTime = None
         self.stopTime = None
@@ -36,51 +37,71 @@ class RESTasV3:
         self.attack_list = None
         self.testDuration = 60
 
+    def connect_to_mdw(self):
+        self.session = requests.Session()
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        self.session.verify = False
+        self.host = 'https://{}'.format(self.ipAddress)
+        self.cookie = self.get_automation_token()
+        self.headers = {'authorization': self.cookie}
+
     def __sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202]
+        expectedResponse = [200, 201, 202, 204]
         print("POST at URL: {} with payload: {}".format(url, payload))
         payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers, data=payload, files=files, verify=False)
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
         if debug:
             print("POST response message: {}, response code: {}".format(response.content, response.status_code))
         if response.status_code == 401:
             print('Token has expired, resending request')
             self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers, data=payload, files=files, verify=False)
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
             print("POST response message: {}, response code: {}".format(response.content, response.status_code))
         if self.verify and response.status_code not in expectedResponse:
-            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
 
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers)
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
         if debug:
             print("GET response message: {}, response code: {}".format(response.content, response.status_code))
         if response.status_code == 401:
             print('Token has expired, resending request')
             self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers)
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
             print("GET response message: {}, response code: {}".format(response.content, response.status_code))
         if self.verify and response.status_code != expectedResponse:
-            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
 
-    def __sendPut(self, url, payload, debug=True):
+    def __sendPut(self, url, payload, customHeaders=None, debug=True):
         print("PUT at URL: {} with payload: {}".format(url, payload))
         expectedResponse = [200, 204]
-        response = self.session.put('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
+        response = self.session.put('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers, data=json.dumps(payload))
         if debug:
             print("PUT response message: {}, response code: {}".format(response.content, response.status_code))
         if response.status_code == 401:
             print('Token has expired, resending request')
             self.refresh_access_token()
-            response = self.session.put('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
+            response = self.session.put('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers,
+                                        data=json.dumps(payload))
             print("PUT response message: {}, response code: {}".format(response.content, response.status_code))
         if self.verify and response.status_code not in expectedResponse:
-            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
 
@@ -96,7 +117,8 @@ class RESTasV3:
             response = self.session.patch('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
             print("PATCH response message: {}, response code: {}".format(response.content, response.status_code))
         if self.verify and response.status_code not in expectedResponse:
-            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
 
@@ -112,16 +134,16 @@ class RESTasV3:
             response = self.session.delete('%s%s' % (self.host, url), headers=headers)
             print("DELETE response message: {}, response code: {}".format(response.content, response.status_code))
         if self.verify and response.status_code not in expectedResponse:
-            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
 
     def get_automation_token(self):
         apiPath = '/auth/realms/keysight/protocol/openid-connect/token'
         headers = {"content-type": "application/x-www-form-urlencoded"}
-
-        payload = {"username": WAP_USERNAME,
-                   "password": WAP_PASSWORD,
+        payload = {"username": self.username,
+                   "password": self.password,
                    "grant_type": "password",
                    "client_id": WAP_CLIENT_ID}
 
@@ -133,7 +155,88 @@ class RESTasV3:
                 return response['access_token']
             else:
                 raise Exception('Fail to obtain authentication token')
+        return response
 
+    def add_new_user(self, **kwargs):
+        '''
+        A method to add new users to keycloak
+        '''
+        apiPath = '/auth/admin/realms/keysight/users'
+
+        user_credentials = {"enabled": True,
+                            "attributes": {},
+                            "groups": [],
+                            "emailVerified": "",
+                            "username": "luke_cywalker",
+                            "email": "perfsaber@lightmail.com",
+                            "firstName": "Luke",
+                            "lastName": "CyWalker"}
+        customHeaders = {"Authorization": f"Bearer {self.cookie}",
+                         "Content-Type": "application/json",
+                         'Accept': 'application/json'}
+        bad_keys = [k for k in kwargs.keys() if k not in user_credentials]
+        if not bad_keys:
+            user_credentials.update(kwargs)
+        new_user = json.dumps(user_credentials)
+        response = self.__sendPost(apiPath, payload=new_user, customHeaders=customHeaders)
+        print(response.text)
+        return response
+
+    def __get_configured_users(self, start_point=0, max_no_of_users_in_resp=20):
+        apiPath = f'/auth/admin/realms/keysight/users?briefRepresentation=true&first={start_point}&max={max_no_of_users_in_resp}'
+        customHeaders = {"Authorization": f"Bearer {self.cookie}",
+                         "Content-Type": "application/json"}
+        response = self.__sendGet(apiPath, 200, customHeaders=customHeaders).json()
+        return response
+
+    def get_user_id_from_username(self, username):
+        configured_users = self.__get_configured_users()
+        for user in configured_users:
+            if user['username'] == username:
+                return user['id']
+            else:
+                continue
+        raise f"{username} is not a configured user on this MDW"
+
+    def change_user_role(self, username, user_role):
+        user_id = self.get_user_id_from_username(username)
+        apiPath = f"/auth/admin/realms/keysight/users/{user_id}/role-mappings/realm/available"
+        customHeaders = {"Authorization": f"Bearer {self.cookie}",
+                         "Content-Type": "application/json",
+                         'Accept': 'application/json'}
+        user_roles = ["cyperf-admin", "cyperf-user", "uma_authorization", "offline_access"]
+        if user_role not in user_roles:
+            raise f"The role {user_role} you are trying to assign does not exist"
+        available_user_roles = self.__sendGet(apiPath, 200, customHeaders=customHeaders).json()
+        user_role_payload = []
+        for index in range(0, len(available_user_roles)):
+            if available_user_roles[index]["name"] == user_role:
+                user_role_payload.append(available_user_roles[index])
+        apiPath = f"/auth/admin/realms/keysight/users/{user_id}/role-mappings/realm"
+        new_role = json.dumps(user_role_payload)
+        response = self.__sendPost(apiPath, payload=new_role, customHeaders=customHeaders)
+        return response
+
+    def change_user_password(self, username, password):
+        user_id = self.get_user_id_from_username(username)
+        customHeaders = {"Authorization": f"Bearer {self.cookie}",
+                         "Content-Type": "application/json"
+                         }
+        apiPath = f"/auth/admin/realms/keysight/users/{user_id}/reset-password"
+        payload = {"type": "password", "value": password, "temporary": False}
+        self.__sendPut(apiPath, payload=payload, customHeaders=customHeaders)
+
+    def delete_user_by_username(self, username):
+        apiPath = '/auth/admin/realms/keysight/users'
+        configured_users = self.__get_configured_users()
+        user_id = ""
+        for user in configured_users:
+            if user['username'] == username:
+                user_id = user['id']
+        customHeaders = {"Authorization": f"Bearer {self.cookie}",
+                         "Content-Type": "application/json",
+                         'Accept': 'application/json'}
+        response = self.__sendDelete(apiPath + "/" + user_id, headers=customHeaders)
         return response
 
     def get_cluster_info(self):
@@ -210,7 +313,7 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def set_license_server(self, licenseServerIP, retries=3, wait=30):
+    def set_license_server(self, licenseServerIP):
         apiPath = '/api/v2/license-servers'
         self.__sendPost(apiPath, payload={"hostName": licenseServerIP})
 
@@ -239,7 +342,8 @@ class RESTasV3:
         apiPath = '/api/v2/licensing/operations/deactivate'
         response = self.__sendPost(apiPath, payload=[{"activationCode": activation_code, "quantity": quantity}]).json()
         apiPath = '/api/v2/licensing/operations/deactivate/{}'.format(response["id"])
-        if "The Activation Code : \'{}\' is not installed.".format(activation_code) == self.__sendGet(apiPath, 200).json()['message']:
+        if "The Activation Code : \'{}\' is not installed.".format(activation_code) == \
+                self.__sendGet(apiPath, 200).json()['message']:
             print('License code {} is not installed'.format(activation_code))
         elif not self.wait_event_success(apiPath, timeout):
             raise TimeoutError("Failed to deactivate license. Timeout reached = {} seconds".format(timeout))
@@ -254,7 +358,7 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def nats_update_route(self, nats_address, retries=3, wait=120):
+    def nats_update_route(self, nats_address):
         apiPath = '/api/v2/brokers'
         self.__sendPost(apiPath, payload={"host": nats_address})
 
@@ -349,12 +453,13 @@ class RESTasV3:
                 time.sleep(10)
                 timeout -= 10
         else:
-            raise Exception("Expected {} agents connected after {}s. Got only {}.".format(agents_nr, init_timeout, len(response)))
+            raise Exception(
+                "Expected {} agents connected after {}s. Got only {}.".format(agents_nr, init_timeout, len(response)))
 
     def get_agents(self):
         apiPath = '/api/v2/agents'
         return self.__sendGet(apiPath, 200).json()
-    
+
     def check_agents_status(self, timeout=60):
         waiting_time = 0
         print('Waiting for agents to be available')
@@ -365,7 +470,9 @@ class RESTasV3:
                     print('Agents are available')
                     return True
                 else:
-                    raise Exception("The agents were not available for the next test in {}s, but after {}s".format(timeout, waiting_time))
+                    raise Exception(
+                        "The agents were not available for the next test in {}s, but after {}s".format(timeout,
+                                                                                                       waiting_time))
             time.sleep(10)
             waiting_time += 10
 
@@ -379,7 +486,7 @@ class RESTasV3:
             agentIPs = [agentIPs]
         for agentIP in agentIPs:
             for agent in response:
-                if agent['IP'] in agentIP:
+                if agent['IP'] == agentIP:
                     print("agent_IP: {}, agent_ID: {}".format(agent['IP'], agent['id']))
                     agentsIDs.append(agent['id'])
                     break
@@ -403,7 +510,8 @@ class RESTasV3:
         self.assign_agents_by_ip(agents_ips=agents_ips[1], network_segment=2)
 
     def assign_agents_by_ip(self, agents_ips, network_segment):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
+            self.sessionID, network_segment)
         payload = {"ByID": [], "ByTag": []}
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
@@ -411,18 +519,23 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload)
 
     def test_warmup_value(self, value):
-        apiPath = 'api/v2/sessions/{}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/AdvancedSettings'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/AdvancedSettings'.format(
+            self.sessionID)
         payload = {"WarmUpPeriod": int(value)}
         self.__sendPatch(apiPath, payload)
 
     def assign_agents_by_tag(self, agents_tags, network_segment):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"ByID": [], "ByTag": [agents_tags]})
 
-    def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
+    def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False,
+                            max_capture_size=104857600):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
+            self.sessionID, network_segment)
         payload = {"ByID": []}
-        capture_settings = {"captureEnabled": is_enabled, "captureLatestPackets": capture_latest_packets, "maxCaptureSize": max_capture_size}
+        capture_settings = {"captureEnabled": is_enabled, "captureLatestPackets": capture_latest_packets,
+                            "maxCaptureSize": max_capture_size}
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
             payload["ByID"].append({"agentId": agent_id, "captureSettings": capture_settings})
@@ -453,24 +566,34 @@ class RESTasV3:
         return response
 
     def delete_dut(self, network_segment):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
         self.__sendDelete(apiPath, self.headers)
 
     def set_dut(self, active=True, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
         self.__sendPatch(apiPath, payload={"active": active})
 
     def check_if_dut_is_active(self, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
         response = self.__sendGet(apiPath, 200).json()
         return response["active"]
 
     def set_dut_host(self, host, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
         self.__sendPatch(apiPath, payload={"host": host})
 
+    def set_active_dut_configure_host(self, hostname, active=True, network_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
+        self.__sendPatch(apiPath, payload={"active": active, "ServerDUTHost": hostname})
+
     def set_client_http_proxy(self, host, client_port, connect_mode, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID,
+                                                                                                    network_segment)
         self.__sendPatch(apiPath, payload={"active": True})
         self.__sendPatch(apiPath, payload={"ConfigSettings": "ADVANCED_MODE"})
         self.__sendPatch(apiPath, payload={"ClientDUTActive": True})
@@ -480,218 +603,269 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"ServerDUTActive": False})
 
     def set_http_health_check(self, enabled=True, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Enabled": enabled})
 
     def set_http_health_check_port(self, port, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Port": port})
 
     def set_http_health_check_url(self, target_url, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath + '/Params/1', payload={"Value": target_url})
 
     def set_http_health_check_payload(self, payload_file, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         if isinstance(payload_file, float):
             self.__sendPatch(apiPath + '/Params/2', payload={"Value": payload_file})
         else:
             self.set_custom_payload(apiPath + '/Params/2', payload_file)
 
     def set_http_health_check_version(self, http_version, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath + '/Params/3', payload={"Value": http_version})
 
     def set_https_health_check(self, enabled=True, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Enabled": enabled})
 
     def set_https_health_check_port(self, port, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Port": port})
 
     def set_https_health_check_url(self, target_url, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath + '/Params/1', payload={"Value": target_url})
 
     def set_https_health_check_payload(self, payload_file, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPSHealthCheck'.format(
+            self.sessionID, network_segment)
         if isinstance(payload_file, float):
             self.__sendPatch(apiPath + '/Params/2', payload={"Value": payload_file})
         else:
             self.set_custom_payload(apiPath + '/Params/2', payload_file)
 
     def set_https_health_check_version(self, https_version, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/HTTPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath + '/Params/3', payload={"Value": https_version})
 
     def set_tcp_health_check(self, enabled=True, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/TCPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/TCPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Enabled": enabled})
 
     def set_tcp_health_check_port(self, port, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/TCPHealthCheck'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/TCPHealthCheck'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Port": port})
 
     def set_client_recieve_buffer_size_attack_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
 
     def set_client_transmit_buffer_size_attack_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"TxBuffer": value})
 
     def set_client_recieve_buffer_size_traffic_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
 
     def set_client_transmit_buffer_size_traffic_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"TxBuffer": value})
 
     def set_server_recieve_buffer_size_attack_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
 
     def set_server_transmit_buffer_size_attack_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"TxBuffer": value})
 
     def set_server_recieve_buffer_size_traffic_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
 
     def set_server_transmit_buffer_size_traffic_profile(self, value):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(self.sessionID)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile'.format(
+            self.sessionID)
         self.__sendPatch(apiPath, payload={"TxBuffer": value})
 
     def set_ip_network_segment(self, active=True, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID,
+                                                                                                   network_segment)
         self.__sendPatch(apiPath, payload={"active": active})
 
     def set_network_tags(self, tags="Client", network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID,
+                                                                                                   network_segment)
         self.__sendPatch(apiPath, payload={"networkTags": [tags]})
 
     def set_application_client_network_tags(self, tags, app_nr):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/operations/modify-tags-recursively'.format(self.sessionID, app_nr)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/operations/modify-tags-recursively'.format(
+            self.sessionID, app_nr)
         self.__sendPost(apiPath, payload={"SelectTags": True, "ClientNetworkTags": [tags]})
 
     def remove_application_client_network_tags(self, tags, app_nr):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/operations/modify-tags-recursively'.format(self.sessionID, app_nr)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/operations/modify-tags-recursively'.format(
+            self.sessionID, app_nr)
         self.__sendPost(apiPath, payload={"SelectTags": False, "ClientNetworkTags": [tags]})
 
     def set_network_min_agents(self, min_agents=1, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID,
+                                                                                                   network_segment)
         self.__sendPatch(apiPath, payload={"minAgents": min_agents})
 
     def add_ip_range(self, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges'.format(
+            self.sessionID, network_segment)
         response = self.__sendPost(apiPath, payload={}).json()
         return response[-1]['id']
 
-    def delete_ip_range(self, ip_range=1, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+    def delete_ip_range(self, network_segment=1, ip_range=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendDelete(apiPath, self.headers)
 
-    def set_ip_range_automatic_ip(self, ip_auto=True, network_segment=1, ip_range=1,):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+    def set_ip_range_automatic_ip(self, ip_auto=True, network_segment=1, ip_range=1, ):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"IpAuto": ip_auto})
 
-    def set_ip_range_ip_start(self, ip_start, network_segment=1, ip_range=1,):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+    def set_ip_range_ip_start(self, ip_start, network_segment=1, ip_range=1, ):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"IpStart": ip_start})
         self.__sendPatch(apiPath, payload={"IpAuto": False})
-    
-    def set_ip_range_ip_start_if_enabled(self, ip_start, network_segment=1, ip_range=1,):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+
+    def set_ip_range_ip_start_if_enabled(self, ip_start, network_segment=1, ip_range=1, ):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"IpStart": ip_start})
 
     def set_ip_range_ip_increment(self, ip_increment="0.0.0.1", network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"IpIncr": ip_increment})
 
     def set_ip_range_ip_count(self, count=1, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"Count": count})
 
     def set_ip_range_max_count_per_agent(self, max_count_per_agent=1, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"maxCountPerAgent": max_count_per_agent})
 
     def set_ip_range_automatic_netmask(self, netmask_auto=True, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"NetMaskAuto": netmask_auto})
 
     def set_ip_range_netmask(self, netmask=16, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"NetMask": netmask})
 
     def set_ip_range_automatic_gateway(self, gateway_auto=True, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"GwAuto": gateway_auto})
 
     def set_ip_range_gateway(self, gateway="10.0.0.1", network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"GwStart": gateway})
         self.__sendPatch(apiPath, payload={"GwAuto": False})
-    
+
     def set_ip_range_gateway_if_enabled(self, gateway="10.0.0.1", network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"GwStart": gateway})
 
     def set_ip_range_network_tags(self, tags, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"networkTags": [tags]})
 
     def set_ip_range_mss(self, mss=1460, network_segment=1, ip_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"Mss": mss})
 
     def set_eth_range_mac_auto_false(self, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"MacAuto": False})
 
     def set_eth_range_mac_start(self, mac_start, network_segment=1):
         self.set_eth_range_mac_auto_false(network_segment)
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"MacStart": mac_start})
 
     def set_eth_range_mac_increment(self, mac_increment, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"MacIncr": mac_increment})
 
     def set_eth_range_one_mac_per_ip_false(self, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"OneMacPerIP": False})
 
     def set_eth_range_max_mac_count(self, count, network_segment=1):
         self.set_eth_range_one_mac_per_ip_false(network_segment)
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Count": count})
 
     def set_eth_range_max_mac_count_per_agent(self, max_count_per_agent, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"maxCountPerAgent": max_count_per_agent})
 
     def set_dns_resolver(self, name_server, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/DNSResolver'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/DNSResolver'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"nameServers": [{"name": name_server}]})
 
     def set_dns_resolver_cache_timeout(self, timeout=0, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/DNSResolver'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/DNSResolver'.format(
+            self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"cacheTimeout": timeout})
 
     def set_dut_connections(self, connections, network_segment=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID,
+                                                                                                   network_segment)
         self.__sendPatch(apiPath, payload={"DUTConnections": connections})
 
     def set_profile_duration(self, profile_type, value):
-        apiPath = '/api/v2/sessions/{}/config/config/{}/1/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, profile_type)
+        apiPath = '/api/v2/sessions/{}/config/config/{}/1/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, profile_type)
         self.__sendPatch(apiPath, payload={"Duration": value})
 
     def get_iteration_count_info(self, ap_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, ap_id)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, ap_id)
         config_type = self.get_config_type()
         if config_type["traffic"]:
             print('Parameter not available in traffic profile')
@@ -700,7 +874,8 @@ class RESTasV3:
             return response["IterationCount"]
 
     def get_profile_duration(self, profile_type):
-        apiPath = '/api/v2/sessions/{}/config/config/{}/1/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, profile_type)
+        apiPath = '/api/v2/sessions/{}/config/config/{}/1/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, profile_type)
         response = self.__sendGet(apiPath, 200).json()
         return response["Duration"]
 
@@ -726,6 +901,34 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config'.format(self.sessionID)
         self.__sendPut(apiPath, self.config)
 
+    def get_CPUCoresNR(self):
+        agent_info = self.get_agents()
+        l = [i["cpuInfo"] for i in agent_info]
+        count = list(map(len, l))
+        return count[0]
+
+    def get_CC_min_value(self, configured_cc_value, agent_cpu_cores):
+        favoured_sessions_no = 1  # static value
+        global_cc_min_value = 0
+        app_info = {}
+        config = self.get_session_config()
+        traffic_profiles = config['Config']['TrafficProfiles'][0]['Applications']
+        total_weight = sum(app['ObjectiveWeight'] for app in traffic_profiles)
+        for i in range(len(config['Config']['TrafficProfiles'][0]['Applications'])):
+            app_info[i] = {"weight": config['Config']['TrafficProfiles'][0]['Applications'][i]['ObjectiveWeight'],
+                           "connections_no": len(
+                               config['Config']['TrafficProfiles'][0]['Applications'][i]['Connections'])}
+        for app_no, app_details in app_info.items():
+            individual_app_cc_value = configured_cc_value * (app_details['weight'] / total_weight)
+            individual_app_cc_min_value = min(
+                individual_app_cc_value - 2 * app_details['connections_no'] * agent_cpu_cores,
+                individual_app_cc_value - min(max(0.1 * individual_app_cc_value, agent_cpu_cores)
+                                              , 40 * agent_cpu_cores))
+            min_alowed_cc_value = (app_details['connections_no'] * favoured_sessions_no + app_details[
+                'connections_no']) * agent_cpu_cores
+            global_cc_min_value += int(max(individual_app_cc_min_value, min_alowed_cc_value))
+        return global_cc_min_value
+
     def get_config_type(self):
         self.config = self.get_session_config()
         config_type = {"traffic": False,
@@ -744,6 +947,8 @@ class RESTasV3:
                        "tunnel_count_per_outer_ip": None,
                        "redirect_info": {},
                        "ipsec": None,
+                       "CPUCoresNr": self.get_CPUCoresNR(),
+                       "test_duration": self.testDuration,
                        }
         if len(self.config['Config']['TrafficProfiles']) > 0:
             config_type['traffic'] = True if self.config['Config']['TrafficProfiles'][0]['Active'] else False
@@ -756,8 +961,8 @@ class RESTasV3:
                         if application['Active'] == True:
                             config_type['traffic_profiles'].append(application['ProtocolID'])
                             if application['ClientTLSProfile']['tls12Enabled'] \
-                                or application['ClientTLSProfile']['tls13Enabled']:
-                                    config_type['tls_applications'].append(application['ProtocolID'])
+                                    or application['ClientTLSProfile']['tls13Enabled']:
+                                config_type['tls_applications'].append(application['ProtocolID'])
                     except KeyError:
                         config_type['traffic_profiles'].append(application['ProtocolID'])
                         if application['ClientTLSProfile']['tls12Enabled'] \
@@ -775,6 +980,10 @@ class RESTasV3:
                 "value": objectives['TimelineSegments'][0]['PrimaryObjectiveValue'],
                 "steady_step_duration": objectives['TimelineSegments'][0]['Duration']
             }
+            if objectives['PrimaryObjective']['Type'] == "Concurrent connections":
+                objective_dm["concurrent_connections_min"] = self.get_CC_min_value(
+                    objectives['TimelineSegments'][0]['PrimaryObjectiveValue']
+                    , config_type["CPUCoresNr"])
             config_type['tp_primary_obj'] = objective_dm
             advance_timeline_params = [None, None]
             if objectives['PrimaryObjective']['Timeline'][0]['Enabled']:
@@ -790,12 +999,17 @@ class RESTasV3:
                 }
                 advance_timeline_params[1] = step_ramp_down
             config_type['primary_objective_adv_time_params'] = advance_timeline_params
-            if len(objectives['TimelineSegments'][0]['SecondaryObjectiveValues']) > 0 and len(objectives['SecondaryObjectives']) > 0:
+            if len(objectives['TimelineSegments'][0]['SecondaryObjectiveValues']) > 0 and len(
+                    objectives['SecondaryObjectives']) > 0:
                 objective_dm = {
                     "type": objectives['SecondaryObjectives'][0]['Type'],
                     "unit": objectives['TimelineSegments'][0]['SecondaryObjectiveValues'][0]['Unit'],
                     "value": objectives['TimelineSegments'][0]['SecondaryObjectiveValues'][0]['Value']
                 }
+                if objectives['SecondaryObjectives'][0]['Type'] == "Concurrent connections":
+                    objective_dm["concurrent_connections_min"] = self.get_CC_min_value(
+                        objectives['TimelineSegments'][0]['SecondaryObjectiveValues'][0]['Value']
+                        , config_type["CPUCoresNr"])
                 config_type['tp_secondary_obj'] = objective_dm
             if tp_profiles['TrafficSettings']['DefaultTransportProfile']['ClientTLSProfile']['version']:
                 config_type['tp_ssl'] = True
@@ -810,8 +1024,8 @@ class RESTasV3:
                         if attack['Active'] == True:
                             config_type['attack_profiles'].append(attack['ProtocolID'])
                             if attack['ClientTLSProfile']['tls12Enabled'] \
-                                or attack['ClientTLSProfile']['tls13Enabled']:
-                                    config_type['tls_attacks'].append(attack['ProtocolID'])
+                                    or attack['ClientTLSProfile']['tls13Enabled']:
+                                config_type['tls_attacks'].append(attack['ProtocolID'])
                     except KeyError:
                         config_type['attack_profiles'].append(attack['ProtocolID'])
                         if attack['ClientTLSProfile']['tls12Enabled'] \
@@ -819,7 +1033,8 @@ class RESTasV3:
                             config_type['tls_attacks'].append(attack['ProtocolID'])
             objective_dm = {
                 "attack_rate": at_profiles['ObjectivesAndTimeline']['TimelineSegments'][0]['AttackRate'],
-                "max_concurrent_attack": at_profiles['ObjectivesAndTimeline']['TimelineSegments'][0]['MaxConcurrentAttack']
+                "max_concurrent_attack": at_profiles['ObjectivesAndTimeline']['TimelineSegments'][0][
+                    'MaxConcurrentAttack']
             }
             config_type['att_obj'] = objective_dm
             if at_profiles['TrafficSettings']['DefaultTransportProfile']['ClientTLSProfile']['version']:
@@ -831,11 +1046,14 @@ class RESTasV3:
         tunnel_stacks = self.config['Config']['NetworkProfiles'][0]['IPNetworkSegment'][0]['TunnelStacks']
         if len(tunnel_stacks) > 0:
             config_type['tunnel_count_per_outer_ip'] = tunnel_stacks[0]['TunnelRange']['TunnelCountPerOuterIP']
-        
+
         ipsec_stacks = self.config['Config']['NetworkProfiles'][0]['IPNetworkSegment'][0]['IPSecStacks']
         if len(ipsec_stacks) > 0:
             config_type['ipsec'] = {"host_count_per_tunnel": ipsec_stacks[0]['EmulatedSubConfig']['HostCountPerTunnel'],
-                                    "outer_ip_count": ipsec_stacks[0]['OuterIPRange']['Count']}
+                                    "outer_ip_count": ipsec_stacks[0]['OuterIPRange']['Count'],
+                                    "rekey_margin": ipsec_stacks[0]["RekeyMargin"],
+                                    "lifetime_phase_1": ipsec_stacks[0]["IPSecRange"]["IKEPhase1Config"]["Lifetime"],
+                                    "lifetime_phase_2": ipsec_stacks[0]["IPSecRange"]["IKEPhase2Config"]["Lifetime"]}
         return config_type
 
     def start_test(self, initializationTimeout=60):
@@ -843,23 +1061,27 @@ class RESTasV3:
         response = self.__sendPost(apiPath, payload={}).json()
         self.startTime = self.__getEpochTime()
         startID = response['id']
-        print('Start ID : {}'.format(startID))
-        progressPath = '/api/v2/sessions/{}/test-run/operations/start/{}'.format(self.sessionID, startID)
-        self.__sendGet(progressPath, 200).json()
+        print('Waiting for the test to start...')
+        response = self.get_test_status()
+        actual_duration = 0
         counter = 1
-        iteration = 0
-        while iteration < initializationTimeout:
-            response = self.__sendGet(progressPath, 200).json()
-            print('Test Progress: {}'.format(response['progress']))
-            if response['state'] == 'SUCCESS':
-                self.startTrafficTime = self.__getEpochTime()
+        while actual_duration < initializationTimeout:
+            response = self.get_test_status()
+            if response['status'] == 'STARTING' and not self.startingStartTime:
+                self.startingStartTime = self.__getEpochTime()
+            if response['status'] == 'CONFIGURING' and not self.configuringStartTime:
+                self.configuringStartTime = self.__getEpochTime()
+            if response['status'] == 'STARTED':
+                if not self.startTrafficTime:
+                    self.startTrafficTime = self.__getEpochTime()
                 return self.startTrafficTime
-            if response['state'] == 'ERROR':
+            if response['status'] == 'ERROR':
                 raise Exception('Error when starting the test! {}'.format(self.get_test_details(self.sessionID)))
-            iteration += counter
+            actual_duration += counter
             time.sleep(counter)
         else:
-            raise Exception('ERROR! Test could not start in {} seconds, test state: {}'.format(initializationTimeout, response['state']))
+            raise Exception(
+                'ERROR! Test could not start in {} seconds, test state: {}'.format(initializationTimeout, response))
 
     def stop_test(self, stopTimeout=60):
         apiPath = '/api/v2/sessions/{}/test-run/operations/stop'.format(self.sessionID)
@@ -900,11 +1122,13 @@ class RESTasV3:
             time.sleep(counter)
 
     def get_error_notifications_for_session(self, notif_type="error"):
-        apiPath = '/api/v2/notifications?exclude=links&includeSeen=true&severity={}&sessionId={}'.format(notif_type, self.sessionID)
+        apiPath = '/api/v2/notifications?exclude=links&includeSeen=true&severity={}&sessionId={}'.format(notif_type,
+                                                                                                         self.sessionID)
         return self.__sendGet(apiPath, 200).json()
-    
+
     def get_error_notifications_for_test(self, notif_type="error"):
-        apiPath = '/api/v2/notifications?exclude=links&includeSeen=true&severity={}&sessionId={}'.format(notif_type, self.sessionID)
+        apiPath = '/api/v2/notifications?exclude=links&includeSeen=true&severity={}&sessionId={}'.format(notif_type,
+                                                                                                         self.sessionID)
         error_notifs = self.__sendGet(apiPath, 200).json()
         test_id = self.get_test_id()
         return [notif for notif in error_notifs if "TestId" in notif["tags"] and notif["tags"]["TestId"] == test_id]
@@ -935,7 +1159,9 @@ class RESTasV3:
             actual_duration += counter
             time.sleep(counter)
         else:
-            print("Test did not stop after timeout {}s. Test status= {}. Force stopping the test!".format(timeout, response['status']))
+            print("Test did not stop after timeout {}s. Test status= {}. Force stopping the test!".format(timeout,
+                                                                                                          response[
+                                                                                                              'status']))
             self.stop_test()
             raise Exception("Error! Test failed to stop after timeout {}s.".format(timeout))
 
@@ -999,6 +1225,11 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200, debug=False).json()
         return response
 
+    def get_applications_by_pages(self, take=50, skip=0):
+        apiPath = '/api/v2/resources/apps?take={}&skip={}&exclude=links'.format(take, skip)
+        response = self.__sendGet(apiPath, 200, debug=False).json()
+        return response
+
     def get_configured_applications(self):
         """
         return:  returns a list of tuples containing application name(index 0) / configured app position in UI(index 1)
@@ -1009,7 +1240,7 @@ class RESTasV3:
         apps_in_test = []
         for item in configured_applications:
             application_position = item.split()[-1]
-            application_name = "".join([word for word in item.split() if not word.isdigit()])
+            application_name = " ".join([word for word in item.split() if not word.isdigit()])
             apps_in_test.append((application_name, application_position))
         return apps_in_test
 
@@ -1026,23 +1257,24 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1'.format(self.sessionID)
         self.__sendPatch(apiPath, payload={"Applications": reordered_applications})
 
-
-    def get_applications_with_filter_applied(self, *args, filter_mode="and"):
+    def get_applications_with_filter_applied(self, *args, filter_mode="and", take=50, skip=0):
         filter_by = ",".join(args)
-        apiPath = f"/api/v2/resources/apps?take=50&skip=0&exclude=links&searchCol=Name,Description&searchVal={filter_by}&filterMode={filter_mode}"
+        apiPath = f"/api/v2/resources/apps?take={take}&skip={skip}&exclude=links&searchCol=Name,Description&searchVal={filter_by}&filterMode={filter_mode}"
         result = self.__sendGet(apiPath, 200).json()
-        filtered_applications =  [(item["Name"], item["Description"]) for item in result["data"]]
+        filtered_applications = [(item["Name"], item["Description"]) for item in result["data"]]
         return filtered_applications
 
-    def get_attacks_with_filter_applied(self, *args, filter_mode="and"):
+    def get_attacks_with_filter_applied(self, *args, filter_mode="and", take=50, skip=0):
         filter_by = ",".join(args)
-        apiPath = f"/api/v2/resources/attacks?take=50&skip=0&exclude=links&include=Metadata&searchCol=Name,Description,Direction,Severity,Keywords,References&searchVal={filter_by}&filterMode={filter_mode}"
+        apiPath = f"/api/v2/resources/attacks?take={take}&skip={skip}&exclude=links&include=Metadata&searchCol=Name,Description,Direction,Severity,Keywords,References&searchVal={filter_by}&filterMode={filter_mode}"
         result = self.__sendGet(apiPath, 200).json()
-        filtered_applications = [(item["Name"], item["Description"], item["Metadata"]["Direction"], item["Metadata"]["Severity"]) for item in result["data"]]
+        filtered_applications = [
+            (item["Name"], item["Description"], item["Metadata"]["Direction"], item["Metadata"]["Severity"]) for item in
+            result["data"]]
         return filtered_applications
 
-    def get_attacks(self, filter_by):
-        apiPath = f'/api/v2/resources/attacks?take=50&skip=0&exclude=links&include=Metadata&searchCol=Name&searchVal={filter_by}&filterMode=and'
+    def get_attacks(self, filter_by, take=50, skip=0):
+        apiPath = f'/api/v2/resources/attacks?take={take}&skip={skip}&exclude=links&include=Metadata&searchCol=Name&searchVal={urllib.parse.quote(filter_by)}&filterMode=and'
         response = self.__sendGet(apiPath, 200, debug=False).json()
         return response
 
@@ -1070,10 +1302,9 @@ class RESTasV3:
 
     def get_attack_id(self, attack_name):
         self.attack_list = self.get_attacks(attack_name)
-        if attack_name == self.attack_list['data'][0]['Name']:
-            return self.attack_list['data'][0]['id']
-        else:
-            raise "There is no attack with that name"
+        for attack in self.attack_list["data"]:
+            if attack_name == attack['Name']:
+                return attack['id']
 
     def set_agent_optimization_mode(self, mode: str, tp_id=1):
         """
@@ -1082,7 +1313,8 @@ class RESTasV3:
         RATE_MODE, BALANCED_MODE
         """
         if mode in ["RATE_MODE", "BALANCED_MODE"]:
-            apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/AdvancedSettings'.format(self.sessionID, tp_id)
+            apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/AdvancedSettings'.format(
+                self.sessionID, tp_id)
             self.__sendPatch(apiPath, payload={"AgentOptimizationMode": mode})
         else:
             raise ValueError("{} is not supported".format(mode))
@@ -1091,14 +1323,16 @@ class RESTasV3:
         """
         Sets the warmup period for the Attack profile
         """
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, ap_id)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, ap_id)
         self.__sendPatch(apiPath, payload={"WarmUpPeriod": int(warmup_period)})
 
     def set_traffic_warmup_period(self, warmup_period, tp_id=1):
         """
         Sets the warmup period for the Traffic profile
         """
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/AdvancedSettings'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/AdvancedSettings'.format(
+            self.sessionID, tp_id)
         self.__sendPatch(apiPath, payload={"WarmUpPeriod": int(warmup_period)})
 
     def add_attack(self, attack_name, ap_id=1):
@@ -1115,12 +1349,13 @@ class RESTasV3:
 
     def create_customized_attack(self, application_name, strike_name, insert_at_position):
         app_id = self.get_application_id(app_name=application_name)
-        api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/operations/create'
+        api_path = '/api/v2/sessions/{}/config/config/AttackProfiles/1/Attacks/operations/create'.format(self.sessionID)
         payload = {"Actions": [{"ProtocolID": strike_name, "InsertAtIndex": insert_at_position}],
                    "ResourceURL": f'api/v2/resources/apps/{app_id}'}
         response = self.__sendPost(api_path, payload=payload).json()
         status_url = response["url"].split("/")[-1]
-        api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/operations/create/{status_url}'
+        api_path = '/api/v2/sessions/{}/config/config/AttackProfiles/1/Attacks/operations/create/{}'.format(
+            self.sessionID, status_url)
         for index in range(10):
             response = self.__sendGet(api_path, 200).json()
             time.sleep(1)
@@ -1152,7 +1387,8 @@ class RESTasV3:
 
     def insert_application_at_action_exact_position(self, app_id, action_id, position):
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/Applications/{app_id}/Tracks/1/operations/add-actions'
-        response = self.__sendPost(api_path, payload={"Actions": [{"ActionID": action_id, "InsertAtIndex": position}]}).json()
+        response = self.__sendPost(api_path,
+                                   payload={"Actions": [{"ActionID": action_id, "InsertAtIndex": position}]}).json()
         status_url = response["url"].split("/")[-1]
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/Applications/{app_id}/Tracks/1/operations/add-actions/{status_url}'
         for index in range(10):
@@ -1165,11 +1401,13 @@ class RESTasV3:
         raise Exception("Application action was not added after 10 seconds")
 
     def add_application_action(self, app_id, action_name, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions'.format(self.sessionID, tp_id, app_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions'.format(
+            self.sessionID, tp_id, app_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()
 
     def set_application_action_value(self, app_id, action_id, param_id, value, file_value=None, source=None, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(
+            self.sessionID, tp_id, app_id, action_id, param_id)
         payload = {"Value": value, "FileValue": file_value, "Source": source}
         self.__sendPatch(apiPath, payload)
 
@@ -1179,11 +1417,13 @@ class RESTasV3:
         return response
 
     def delete_application_action(self, app_id, action_id, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}'.format(self.sessionID, tp_id, app_id, action_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}'.format(
+            self.sessionID, tp_id, app_id, action_id)
         self.__sendDelete(apiPath, self.headers)
 
     def add_attack_action(self, att_id, action_name, ap_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions'.format(self.sessionID, ap_id, att_id)
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions'.format(
+            self.sessionID, ap_id, att_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()
 
     def add_attack_profile(self):
@@ -1197,32 +1437,46 @@ class RESTasV3:
         return response[-1]['id']
 
     def set_traffic_profile_timeline(self, duration, objective_value, objective_unit=None, pr_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, pr_id)
-        payload = {"Duration": duration, "PrimaryObjectiveValue": objective_value, "PrimaryObjectiveUnit": objective_unit}
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, pr_id)
+        payload = {"Duration": duration, "PrimaryObjectiveValue": objective_value,
+                   "PrimaryObjectiveUnit": objective_unit}
+        self.__sendPatch(apiPath, payload)
+
+    def set_application_simulated_users_timeline(self, max_su_per_second, max_pending_su, objective_unit=None, pr_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/PrimaryObjective'.format(
+            self.sessionID)
+        payload = {"MaxSimulatedUsersPerInterval": max_su_per_second, "MaxPendingSimulatedUsers": max_pending_su}
         self.__sendPatch(apiPath, payload)
 
     def set_primary_objective(self, objective, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(
+            self.sessionID, tp_id)
         self.__sendPut(apiPath, payload={"Type": objective, "Unit": ""})
 
     def add_primary_objective(self, objective, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(
+            self.sessionID, tp_id)
         self.__sendPatch(apiPath, payload={"Type": objective, "Unit": ""})
 
     def add_secondary_objective(self, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjectives'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjectives'.format(
+            self.sessionID, tp_id)
         self.__sendPost(apiPath, payload={}).json()
 
     def add_secondary_objective_value(self, objective, objective_value, objective_unit=None, tp_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjectives/1'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjectives/1'.format(
+            self.sessionID, tp_id)
         self.__sendPatch(apiPath, payload={"Type": objective})
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1/SecondaryObjectiveValues/1'.format(self.sessionID, tp_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1/SecondaryObjectiveValues/1'.format(
+            self.sessionID, tp_id)
         self.__sendPatch(apiPath, payload={"Value": objective_value})
         if objective_unit:
             self.__sendPatch(apiPath, payload={"Unit": objective_unit})
 
     def set_traffic_profile_client_tls(self, version, status, pr_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/TrafficSettings/DefaultTransportProfile/ClientTLSProfile'.format(self.sessionID, pr_id)
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/TrafficSettings/DefaultTransportProfile/ClientTLSProfile'.format(
+            self.sessionID, pr_id)
         self.__sendPatch(apiPath, payload={version: status})
 
     def set_traffic_profile_server_tls(self, version, status, pr_id=1):
@@ -1230,9 +1484,12 @@ class RESTasV3:
             self.sessionID, pr_id)
         self.__sendPatch(apiPath, payload={version: status})
 
-    def set_attack_profile_timeline(self, duration, objective_value, max_concurrent_attacks=None, iteration_count=0, ap_id=1):
-        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, ap_id)
-        payload = {"Duration": duration, "AttackRate": objective_value, "MaxConcurrentAttack": max_concurrent_attacks, "IterationCount": iteration_count}
+    def set_attack_profile_timeline(self, duration, objective_value, max_concurrent_attacks=None, iteration_count=0,
+                                    ap_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(
+            self.sessionID, ap_id)
+        payload = {"Duration": duration, "AttackRate": objective_value, "MaxConcurrentAttack": max_concurrent_attacks,
+                   "IterationCount": iteration_count}
         self.__sendPatch(apiPath, payload)
 
     def set_attack_profile_client_tls(self, version, status, pr_id=1):
@@ -1253,7 +1510,8 @@ class RESTasV3:
         payload = self.get_resource(uploadUrl, name=os.path.basename(fileName))
         if not payload:
             payloadFile = open(fileName, 'rb')
-            resp = self.__sendPost(uploadUrl, payload=None, customHeaders=self.headers, files={'file': payloadFile}).json()
+            resp = self.__sendPost(uploadUrl, payload=None, customHeaders=self.headers,
+                                   files={'file': payloadFile}).json()
             payload = {"FileValue": {"fileName": resp["fileName"], "resourceURL": resp["resourceURL"]}}
         else:
             payload = {"FileValue": {"fileName": payload["name"], "resourceURL": payload["links"][0]["href"]}}
@@ -1280,10 +1538,12 @@ class RESTasV3:
         playlist = self.get_resource(uploadUrl, name=os.path.basename(fileName))
         if not playlist:
             playlistFile = open(fileName, 'rb')
-            resp = self.__sendPost(uploadUrl, payload=None, customHeaders=self.headers, files={'file': playlistFile}).json()
+            resp = self.__sendPost(uploadUrl, payload=None, customHeaders=self.headers,
+                                   files={'file': playlistFile}).json()
             payload = {"FileValue": {"fileName": resp["fileName"], "resourceURL": resp["resourceURL"], "Value": value}}
         else:
-            payload = {"FileValue": {"fileName": playlist["name"], "resourceURL": playlist["links"][0]["href"], "Value": value}}
+            payload = {"FileValue": {"fileName": playlist["name"], "resourceURL": playlist["links"][0]["href"],
+                                     "Value": value}}
         self.__sendPatch(apiPath, payload=payload)
 
     def set_attack_custom_playlist(self, attackName, actionName, paramName, fileName, value="Query"):
@@ -1322,7 +1582,8 @@ class RESTasV3:
         response = self.__sendPost(apiPath, payload={"Name": test_name}).json()
         apiPath = '/api/v2/sessions/{}/config/operations/save/{}'.format(self.sessionID, response['id'])
         if not self.wait_event_success(apiPath, timeout):
-            raise TimeoutError("Could not save copy for test= {}. Timeout reached = {} seconds".format(test_name, timeout))
+            raise TimeoutError(
+                "Could not save copy for test= {}. Timeout reached = {} seconds".format(test_name, timeout))
 
     def load_config(self, test_name):
         configID = self.get_config_id(test_name=test_name)
@@ -1343,6 +1604,12 @@ class RESTasV3:
 
         return response['id']
 
+    def set_diagnostics_level(self, log_level):
+        apiPath = '/api/v2/log-config'
+        response = self.__sendPut(apiPath, payload={"level": log_level})
+
+        return response
+
     def add_tunnel_stack(self, network_segment_number=1):
         """
         Add a tunnel stack
@@ -1355,6 +1622,13 @@ class RESTasV3:
         Obtain information about tunnel stack configuration on client.
         """
         apiPath = f'/api/v2/sessions/{self.sessionID}/config/config/NetworkProfiles/1/IPNetworkSegment/1/TunnelStacks'
+        return self.__sendGet(apiPath, 200).json()
+
+    def get_tunnel_outer_ip(self):
+        """
+        Obtain information about tunnel stack configuration on client.
+        """
+        apiPath = f'/api/v2/sessions/{self.sessionID}/config/config/NetworkProfiles/1/IPNetworkSegment/1/TunnelStacks/1/OuterIPRange'
         return self.__sendGet(apiPath, 200).json()
 
     def set_tunnel_stack_gateway_vpn_ip(self, tunnel_type, gw_vpn_ip, network_segment_number=1):
@@ -1372,53 +1646,64 @@ class RESTasV3:
             self.__sendPatch(apiPath, payload={"VPNGateway": gw_vpn_ip})
 
     def set_tunnel_stack_type(self, tunnel_type, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"VendorType": tunnel_type})
 
     def set_tunnel_count(self, number_of_tunnels, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(
+            self.sessionID, network_segment_number)
         resp = self.__sendPatch(apiPath, payload={"TunnelCountPerOuterIP": int(number_of_tunnels)})
         if resp.status_code != 204:
             print("Error setting VPN tunnel count per outer IP: {}".format(resp.json()))
 
     def set_tunnel_establisment_timeout(self, tunnel_timeout, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"TunnelEstablishmentTimeout": tunnel_timeout})
 
     def set_pan_tunnel_portal_hostname(self, portal_hostname, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/PANGPSettings'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/PANGPSettings'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"PortalHostname": portal_hostname})
 
     def set_tunnel_pan_vpn_gateways(self, tunnel_type, vpn_gateways, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}'.format(self.sessionID, network_segment_number, tunnel_type)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}'.format(
+            self.sessionID, network_segment_number, tunnel_type)
         self.__sendPatch(apiPath, payload={"VPNGateways": list(vpn_gateways.split(" "))})
-    
+
     def set_tunnel_cisco_vpn_gateway(self, tunnel_type, vpn_gateways, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}'.format(self.sessionID, network_segment_number, tunnel_type)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}'.format(
+            self.sessionID, network_segment_number, tunnel_type)
         self.__sendPatch(apiPath, payload={"VPNGateway": vpn_gateways})
 
-    def set_tunnel_cisco_connection_profiles(self, connection_profiles ,network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/CiscoAnyConnectSettings'.format(self.sessionID, network_segment_number)
+    def set_tunnel_cisco_connection_profiles(self, connection_profiles, network_segment_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/CiscoAnyConnectSettings'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"ConnectionProfiles": list(connection_profiles.split(" "))})
 
     def set_tunnel_auth_settings(self, tunnel_type, field, value, source, network_segment_number=1):
         # Field can be UsernamesParam or PasswordsParam
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}/AuthSettings/{}'.format(self.sessionID, network_segment_number, tunnel_type, field)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}/AuthSettings/{}'.format(
+            self.sessionID, network_segment_number, tunnel_type, field)
         self.__sendPatch(apiPath, payload={"Value": value, "Source": source})
-    
+
     def set_tunnel_outer_ip_gateway(self, gateway_ip, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"GwAuto": False})
         resp = self.__sendPatch(apiPath, payload={"GwStart": gateway_ip})
         if resp.status_code != 204:
             print("Error network tags in Inncer IP range: {}".format(resp.json()))
 
     def set_tunnel_automatic_gateway(self, gateway_auto=True, network_segment=1, tunnel_stack=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/{}/OuterIPRange'.format(self.sessionID, network_segment, tunnel_stack)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment, tunnel_stack)
         self.__sendPatch(apiPath, payload={"GwAuto": gateway_auto})
-    
+
     def set_tunnel_outer_ip_range(self, ip_start, count, max_count, network_segment_number=1, ip_incr="0.0.0.1"):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"IpAuto": False})
         self.__sendPatch(apiPath, payload={"IpStart": ip_start})
         self.__sendPatch(apiPath, payload={"IpIncr": ip_incr})
@@ -1426,24 +1711,29 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"maxCountPerAgent": max_count})
 
     def set_tunnel_outer_ip_start(self, ip_start, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/OuterIPRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"IpStart": ip_start})
-    
+
     def set_tunnel_stack_dns_servers(self, servers, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/DNSResolver'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/DNSResolver'.format(
+            self.sessionID, network_segment_number)
         serverList = list(map(lambda x: {"name": x}, list(servers.split(","))))
         self.__sendPatch(apiPath, payload={"nameServers": serverList})
-    
+
     def delete_ip_stack(self, network_segment_number=1, ip_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment_number, ip_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment_number, ip_stack_number)
         self.__sendDelete(apiPath, self.headers)
 
     def set_tunnel_inner_ip_network_tags(self, network_tags, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/InnerIPRange'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/InnerIPRange'.format(
+            self.sessionID, network_segment_number)
         self.__sendPatch(apiPath, payload={"networkTags": network_tags})
 
     def set_tunnel_udp_port(self, tunnel_type, encapsulation_type, udp_port, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}/{}'.format(self.sessionID, network_segment_number, tunnel_type, encapsulation_type)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/1/TunnelRange/{}/{}'.format(
+            self.sessionID, network_segment_number, tunnel_type, encapsulation_type)
         self.__sendPatch(apiPath, payload={"UdpPort": udp_port})
 
     def __get_status_for_advance_timeline(self):
@@ -1452,7 +1742,8 @@ class RESTasV3:
         return result.json()
 
     def get_specific_value_from_given_ramp_segment(self, segment_type, given_key):
-        acceptable_keys = ["Duration", "SegmentType", "Enabled", "AutomaticObjectiveValue", "NumberOfSteps", "PrimaryObjectiveValue", "SecondaryObjectiveValues", "ObjectiveValue", "ObjectiveUnit"]
+        acceptable_keys = ["Duration", "SegmentType", "Enabled", "AutomaticObjectiveValue", "NumberOfSteps",
+                           "PrimaryObjectiveValue", "SecondaryObjectiveValues", "ObjectiveValue", "ObjectiveUnit"]
         if given_key not in acceptable_keys:
             raise Exception(f"Cannot find key {given_key}, make sure the key exists in this list {acceptable_keys}")
         response = self.__get_status_for_advance_timeline()
@@ -1643,7 +1934,6 @@ class RESTasV3:
             raise ("The endpoint you are trying to configure doesn't exist!")
         self.__sendPatch(apiPath, payload={config_endpoint: config_change})
 
-
     def enable_configured_application(self, app_id):
         self.__set_configured_applications(True, app_id)
 
@@ -1665,38 +1955,217 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"Active": option})
 
     def set_sack(self, profile, tcp_profile, value=True):
-        apiPath = '/api/v2/sessions/{}/config/config/{}/1/TrafficSettings/DefaultTransportProfile/{}'.format(self.sessionID, profile, tcp_profile)
+        apiPath = '/api/v2/sessions/{}/config/config/{}/1/TrafficSettings/DefaultTransportProfile/{}'.format(
+            self.sessionID, profile, tcp_profile)
         self.__sendPatch(apiPath, payload={"SackEnabled": value})
 
-    def set_ph1_ipsec_algorithms(self, ph1_algorithms, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/IKEPhase1Config'.format(self.sessionID, network_segment_number, ipsec_stack_number)
-        algorithms = list(ph1_algorithms.split(" "))
-        payload={"EncAlgorithm": algorithms[0],
-                "HashAlgorithm": algorithms[1],
-                "DHGroup": algorithms[2],
-                "PrfAlgorithm": algorithms[3]}
+    def add_ipsec_stack(self, network_segment_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks'.format(
+            self.sessionID, network_segment_number)
+        self.__sendPost(apiPath, {})
+
+    def set_ipsec_stack_role(self, network_segment_number, ipstack_role):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/1'.format(
+            self.sessionID, network_segment_number)
+        self.__sendPatch(apiPath, payload={"StackRole": ipstack_role})
+
+    def set_ipsec_tunnel_reattempt_count(self, tunnel_reattempt_count, network_segment_number):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/1'.format(
+            self.sessionID, network_segment_number)
+        self.__sendPatch(apiPath, payload={"RetryCount": tunnel_reattempt_count})
+
+    def set_ipsec_emulated_subnet_settings(self, startIP, increment, prefix=24, host_count_per_tunnel=1,
+                                           network_segment_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/1/EmulatedSubConfig'.format(
+            self.sessionID, network_segment_number)
+        payload = {"Start": startIP,
+                   "Increment": increment,
+                   "Prefix": prefix,
+                   "HostCountPerTunnel": host_count_per_tunnel}
         self.__sendPatch(apiPath, payload)
-        
+
+    def set_ph1_ipsec_algorithms(self, ph1_algorithms, network_segment_number=1, ipsec_stack_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/IKEPhase1Config'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
+        algorithms = list(ph1_algorithms.split(" "))
+        payload = {"EncAlgorithm": algorithms[0],
+                   "HashAlgorithm": algorithms[1],
+                   "DHGroup": algorithms[2],
+                   "PrfAlgorithm": algorithms[3]}
+        self.__sendPatch(apiPath, payload)
+
     def set_ph2_ipsec_algorithms(self, ph2_algorithms, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/IKEPhase2Config'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/IKEPhase2Config'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
         algorithms = list(ph2_algorithms.split(" "))
-        payload={"EncAlgorithm": algorithms[0],
-                "HashAlgorithm": algorithms[1],
-                "PfsGroup": algorithms[2]}
+        payload = {"EncAlgorithm": algorithms[0],
+                   "HashAlgorithm": algorithms[1],
+                   "PfsGroup": algorithms[2]}
         self.__sendPatch(apiPath, payload)
 
     def set_ipsec_public_peer(self, public_peer_ip, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"PublicPeer": public_peer_ip})
-    
+
+    def set_ipsec_public_peer_increment(self, public_peer_increment, network_segment_number=1, ipsec_stack_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
+        self.__sendPatch(apiPath, {"PublicPeerIncrement": public_peer_increment})
+
     def set_ipsec_protected_subnet_start(self, protected_subnet_start, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/ProtectedSubConfig'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/ProtectedSubConfig'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"Start": protected_subnet_start})
-    
+
+    def set_ipsec_protected_subnet_increment(self, increment, network_segment_number=1, ipsec_stack_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/ProtectedSubConfig'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
+        self.__sendPatch(apiPath, {"Increment": increment})
+
+    def set_ipsec_preshared_key(self, sharedkey, network_segment_number, ipsec_stack_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/AuthSettings'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
+        self.__sendPatch(apiPath, {"SharedKey": sharedkey})
+
     def set_ipsec_outer_ip_range_start(self, outer_ip_range_start, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"IpStart": outer_ip_range_start})
-    
+
     def set_ipsec_outer_ip_range_gateway(self, outer_ip_range_gateway, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"GwStart": outer_ip_range_gateway})
+
+    def set_ipsec_outer_ip_range_params(self, startIP, increment, count, maxcountperagent, netmask, gateway,
+                                        network_segment_number, ipsec_stack_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment_number, ipsec_stack_number)
+        payload = {"IpAuto": False,
+                   "IpStart": startIP,
+                   "IpIncr": increment,
+                   "Count": count,
+                   "maxCountPerAgent": maxcountperagent,
+                   "NetMask": netmask,
+                   "GwStart": gateway}
+        self.__sendPatch(apiPath, payload)
+
+    def check_ER_status(self, network_segment_number=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EmulatedRouter'.format(
+            self.sessionID, network_segment_number)
+        response = self.__sendGet(apiPath, 200).json()
+        return response['Enabled']
+
+    def get_IP_stack_IP_start(self, network_segment_number=1, IP_range=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(
+            self.sessionID, network_segment_number, IP_range)
+        response = self.__sendGet(apiPath, 200).json()
+        return response['IpStart']
+
+    def get_TLS_VPN_IP_start(self, network_segment_number=1, tunnel_stack=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/TunnelStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment_number, tunnel_stack)
+        response = self.__sendGet(apiPath, 200).json()
+        return response['IpStart']
+
+    def get_IPsec_IP_start(self, network_segment_number=1, IPsec_stack=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/OuterIPRange'.format(
+            self.sessionID, network_segment_number, IPsec_stack)
+        response = self.__sendGet(apiPath, 200).json()
+        return response['IpStart']
+
+    def create_session_precanned_config(self, config_name):
+        config_lookup = {config["displayName"]: config["id"] for config in self.get_all_configs()}
+        config_id = config_lookup.get(config_name)
+        if config_id is None:
+            raise ValueError(f"Pre-canned config with name '{config_name}' was not found")
+        self.configID = config_id
+        self.sessionID = self.open_config()
+
+    def set_base_path_url(self, server_test_ip):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/PepDUT/AuthProfileParams/3'.format(
+            self.sessionID)
+        concated_ip = "/http/" + server_test_ip
+        self.__sendPatch(apiPath, payload={"Value": concated_ip})
+
+    def set_okta_credentials_ep(self, okta_username, okta_password):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/PepDUT/AuthProfileParams/4'.format(
+            self.sessionID)
+        self.__sendPatch(apiPath, payload={"Value": okta_username})
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/PepDUT/AuthProfileParams/5'.format(
+            self.sessionID)
+        self.__sendPatch(apiPath, payload={"Value": okta_password})
+
+    def set_okta_credentials_gp(self, okta_username, okta_password):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/PepDUT/AuthProfileParams/1'.format(
+            self.sessionID)
+        self.__sendPatch(apiPath, payload={"Value": okta_username})
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/PepDUT/AuthProfileParams/2'.format(
+            self.sessionID)
+        self.__sendPatch(apiPath, payload={"Value": okta_password})
+
+    def export_controller(self, export_path=None, file_name="mycontroller.zip"):
+        apiPath = '/api/v2/controller-migration/operations/export'
+        payload = {
+            "keycloak": True,
+            "config": True,
+            "licenseServers": True,
+            "externalNatsBrokers": True,
+            "results": True
+        }
+        result = self.__sendPost(apiPath, payload=payload).json()
+        apiPath = apiPath + "/" + str(result["id"])
+        for index in range(36):
+            time.sleep(10)
+            result = self.__sendGet(apiPath, 200).json()
+            if result["state"] == "SUCCESS":
+                download_url = result["resultUrl"]
+                break
+            elif result["state"] == "FAILURE":
+                raise "Export controller operation did not succeeded after 5 minutes"
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/zip'
+        response = self.session.get('{}{}'.format(self.host, "/" + download_url), headers=customHeaders, stream=True)
+        if export_path:
+            file_name = os.path.join(export_path, file_name)
+        with open(file_name, 'wb') as fd:
+            for chunk in response.iter_content(chunk_size=256):
+                fd.write(chunk)
+
+    def import_controller(self, import_path=None, file_name="fakenews.zip"):
+        apiPath = '/api/v2/controller-migration/operations/import'
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/json'
+        if import_path:
+            file_to_open = import_path + file_name
+        else:
+            file_to_open = file_name
+        mp_encoder = MultipartEncoder(
+            fields={
+                "request": json.dumps(
+                    {
+                        "keycloak": True,
+                        "config": True,
+                        "licenseServers": True,
+                        "externalNatsBrokers": True,
+                        "results": True
+                    }
+                ),
+                "file": (file_name, open(file_to_open, "rb"), 'application/zip')
+            }
+        )
+
+        customHeaders['content-type'] = mp_encoder.content_type
+        result = self.__sendPost(apiPath, payload=mp_encoder, customHeaders=self.headers).json()
+        print(f"This is post {result}")
+
+        apiPath = apiPath + "/" + str(result["id"])
+        for index in range(360):
+            time.sleep(3)
+            result = self.__sendGet(apiPath, 200).json()
+            if result["state"] == "SUCCESS":
+                self.session.close()
+            elif result["state"] == "ERROR":
+                self.session.close()
+                raise "Import was not succesful"
