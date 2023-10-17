@@ -26,9 +26,12 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.0",
+            "defaultValue": "0.2.6",
 
             "allowedValues": [
+              "0.2.6",
+              "0.2.5",
+              "0.2.1",
               "0.2.0"
             ],
 
@@ -132,13 +135,13 @@
 
         },
 
-        "Security Group of Cyperf Controller": {
+        "Security Group of Cyperf Controller and Agents": {
 
             "type": "string",
 
             "metadata": {
 
-                "description": "Name of an existing Security group of CyPerf Controller"
+                "description": "Name of an existing Security Group of Cyperf Controller and Agents"
 
             }
 
@@ -190,7 +193,26 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
+
+        "skunames" : {
+            "0.2.6": {
+                "skunameagent": "keysight-cyperf-agent-26",
+                "skunamecontroller": "keysight-cyperf-controller-26"
+            },
+            "0.2.5": {
+                "skunameagent": "keysight-cyperf-agent-25",
+                "skunamecontroller": "keysight-cyperf-controller-25"
+            },
+            "0.2.1": {
+                "skunameagent": "keysight-cyperf-agent-21",
+                "skunamecontroller": "keysight-cyperf-controller-21"
+            },
+            "0.2.0": {
+                "skunameagent": "keysight-cyperf-agent",
+                "skunamecontroller": "keysight-cyperf-controller"
+            }
+        }
 
     },
 
@@ -293,8 +315,8 @@
 
                 "networkSecurityGroup": {
 
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller'))]"
-                  }
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller and Agents'))]"
+                }
 
                 }
 
@@ -342,7 +364,12 @@
 
                     }
 
-                ]
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller and Agents'))]"
+                }
 
             }
 
@@ -392,7 +419,13 @@
 
                     }
 
-                ]
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller and Agents'))]"
+                }
+
 
             }
 
@@ -412,7 +445,7 @@
 
             "plan": {
 
-                "name": "keysight-cyperf-controller",
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skunamecontroller]",
 
                 "product": "keysight-cyperf",
 
@@ -474,7 +507,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "keysight-cyperf-controller",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skunamecontroller]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },
@@ -539,8 +572,6 @@
 
                      {
 
-
-
                         "type": "Microsoft.Network/networkInterfaces",
 
                         "apiVersion": "2020-05-01",
@@ -581,11 +612,11 @@
 
                         ],
 
-                    "networkSecurityGroup": {
+                        "networkSecurityGroup": {
 
-                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller'))]"
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller and Agents'))]"
 
-                          }
+                        }
 
                     }
 
@@ -613,7 +644,7 @@
 
             "plan": {
 
-                "name": "keysight-cyperf-agent",
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skunameagent]", 
 
                 "product": "keysight-cyperf",
 
@@ -689,7 +720,7 @@
                     "imageReference": {
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
-                    "sku": "keysight-cyperf-agent",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skunameagent]",
                     "version": "[parameters('Cyperf Version')]"
                     }
                 },

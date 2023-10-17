@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.5",
+            "defaultValue": "0.2.6",
 
             "allowedValues": [
+              "0.2.6",  
               "0.2.5",
               "0.2.1",
               "0.2.0"
@@ -203,6 +204,9 @@
         "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'), ' >> /var/log/image_init.log')]",
 
         "skunames" : {
+            "0.2.6": {
+                "skuname": "keysight-cyperf-agent-26"
+            },
             "0.2.5": {
                 "skuname": "keysight-cyperf-agent-25"
             },
@@ -278,6 +282,34 @@
                             "access": "Allow",
 
                             "destinationPortRange": "443",
+
+                            "destinationAddressPrefix": "VirtualNetwork",
+
+                            "sourcePortRange": "*",
+
+                            "sourceAddressPrefixes": [
+
+                                "[parameters('Allowed Subnet for Security Group')]"
+
+                            ]
+                        }
+
+                    },
+                    {
+
+                        "name": "http-allowed",
+
+                        "properties": {
+
+                            "protocol": "Tcp",
+
+                            "priority": 102,
+
+                            "direction": "Inbound",
+
+                            "access": "Allow",
+
+                            "destinationPortRange": "80",
 
                             "destinationAddressPrefix": "VirtualNetwork",
 
@@ -391,6 +423,12 @@
                 "count": "[parameters('Number of Cyperf Agents')]"
 
             },
+
+            "dependsOn": [
+                
+                "[variables('securitygroup')]"
+
+            ],
 
             "properties": {
 
