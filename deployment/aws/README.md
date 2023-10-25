@@ -18,11 +18,11 @@ Control subnet should reside behind NAT gateway, if Agents need to reach outside
 This manual deployment uses publicly available Keysight CyPerf Controller, Agent, and Controller Proxy AMIs. 
 The following AMIs are available for CyPerf 2.5 release.
 
--	keysight-cyperf-controller-2-5
+-	keysight-cyperf-controller-2-6
 
--	keysight-cyperf-controller-proxy-2-5
+-	keysight-cyperf-controller-proxy-2-6
 
--	keysight-cyperf-agent-2-5
+-	keysight-cyperf-agent-2-6
 
 ## Step 3: Launch the Keysight CyPerf Controller
 
@@ -31,16 +31,16 @@ You are responsible for the cost of the AWS services used while running this man
 Keysight CyPerf license needs to be procured for further usage. These licenses need to be configured at **“Administration” -> “License Manager”** on CyPerf controller gear menu. For further details, see the pricing pages for each AWS service you will be using in this manual deployment guide. Prices are subject to change.
 
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and select **“keysight-cyperf-controller-2-5”**. 
+2.	Go to **Community AMIs** and select **“keysight-cyperf-controller-2-6”**. 
 3.	Select Instance Type **“c5.2xlarge”** and move next. 
 4.	Select your preferred **VPC**, preferred public subnet in that **VPC** and move next. 
 5.	Keep default storage size **100 GiB** and move next. 
 6.	Select or create a Security group with the following ingress custom TCP port.
  
     a. If Agents directly peers with Controller, then 
-    allow **30422** from your desired source IP range, where the Agents belong.
+    allow **443** from your desired source IP range, where the Agents belong.
 
-        Note: If Agents are in AWS private subnet, allow NAT gateways IP for 30422 port in the ingress rule.
+        Note: If Agents are in AWS private subnet, allow NAT gateways IP for 443 port in the ingress rule.
         Assuming all IPs and ports are allowed for egress rule.
                 
     b. Allow **443** from your desired source IP range to access CyPerf Controller from your browser.
@@ -61,19 +61,19 @@ Keysight CyPerf license needs to be procured for further usage. These licenses n
 **Note:**
 You are responsible for the cost of the AWS services used while running this manual deployment. There is no additional cost for using this manual deployment. For further details, see the pricing pages for each AWS service you will be using in this manual deployment guide. Prices are subject to change.
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and then select **“keysight-cyperf-controller-proxy-2-5”**. 
+2.	Go to **Community AMIs** and then select **“keysight-cyperf-controller-proxy-2-6”**. 
 3.	Select Instance Type **“t2.medium”** and move next. 
 4.	Select your preferred **VPC**, preferred public subnet in that **VPC** and move next. 
 5.	Keep default storage size **8 GiB** and move next. 
 6.	Select or create a Security group with bellow ingress custom TCP port.
  
-    a.	Allow **30422** from your desired source IP range where Agents belongs.
+    a.	Allow **443** from your desired source IP range where Agents belongs.
 
         Note:
 
-        I. If Control subnet of Agents and Controller Proxy are in same VPC, then allow 30442 from VPC CIDR source IP range.
+        I. If Control subnet of Agents and Controller Proxy are in same VPC, then allow 443 from VPC CIDR source IP range.
 
-        II. If Control subnet of Agents and Controller Proxy are not in same VPC, then allow 30422 from NAT gateways public IP (behind this Agent control subnet belongs).
+        II. If Control subnet of Agents and Controller Proxy are not in same VPC, then allow 443 from NAT gateways public IP (behind this Agent control subnet belongs).
                 
     b.	**Allow 443** from CyPerf Controller public IP.
     
@@ -94,7 +94,7 @@ You are responsible for the cost of the AWS services used while running this man
 Private subnets require NAT gateways or NAT instances in their route tables to allow the instances to download packages and software without exposing them to the internet. You will also need the domain name option configured in the DHCP options as explained in the [Amazon VPC documentation](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html).
 
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
-2.	Go to **Community AMIs** and search and select **“keysight-cyperf-agent-2-5”**. 
+2.	Go to **Community AMIs** and search and select **“keysight-cyperf-agent-2-6”**. 
 3.	Specify Number of instances minimum **2**.
 4.	Select Instance Type **“c5.2xlarge”** or **“c5n.9xlarge”** and move next. 
 5.	Select your preferred **VPC** and then select,
