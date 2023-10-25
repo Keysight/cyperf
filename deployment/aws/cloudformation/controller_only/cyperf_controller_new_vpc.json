@@ -433,13 +433,6 @@
                     {
                         "CidrIp": "0.0.0.0/0",
                         "Description": "Custom TCP",
-                        "FromPort": "30422",
-                        "IpProtocol": "tcp",
-                        "ToPort": "30422"
-                    },
-                    {
-                        "CidrIp": "0.0.0.0/0",
-                        "Description": "Custom TCP",
                         "FromPort": "443",
                         "IpProtocol": "tcp",
                         "ToPort": "443"
@@ -512,13 +505,6 @@
                     }
                 ],
                 "SecurityGroupIngress": [
-                    {
-                        "CidrIp": "0.0.0.0/0",
-                        "Description": "Custom TCP",
-                        "FromPort": "30422",
-                        "IpProtocol": "tcp",
-                        "ToPort": "30422"
-                    },
                     {
                         "CidrIp": "0.0.0.0/0",
                         "Description": "Custom TCP",

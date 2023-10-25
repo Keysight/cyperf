@@ -240,7 +240,7 @@
     "Parameters": {
         "CyPerfControllerSecurityGroup": {
             "Default": "<Select CyPerf Contoller security group from drop down list>",
-            "Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 30422 and 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
+            "Description": "Preffered Existing Security group of CyPerf Controller. Ensure ingress port 443 allowed for all agent's control subnet. Allowed ingress port 22 from desired IP if ssh access is needed",
             "Type": "AWS::EC2::SecurityGroup::Id"
         },
         "ControllerManagementSubnet": {

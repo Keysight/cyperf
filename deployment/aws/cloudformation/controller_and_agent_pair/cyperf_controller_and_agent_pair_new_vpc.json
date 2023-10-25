@@ -585,15 +585,6 @@
                             "Ref": "AllowedSubnet"
                         },
                         "Description": "Custom TCP",
-                        "FromPort": "30422",
-                        "IpProtocol": "tcp",
-                        "ToPort": "30422"
-                    },
-                    {
-                        "CidrIp": {
-                            "Ref": "AllowedSubnet"
-                        },
-                        "Description": "Custom TCP",
                         "FromPort": "443",
                         "IpProtocol": "tcp",
                         "ToPort": "443"
@@ -606,15 +597,6 @@
                         "FromPort": "22",
                         "IpProtocol": "tcp",
                         "ToPort": "22"
-                    },
-                    {
-                        "CidrIp": {
-                            "Ref": "VPCCIDR"
-                        },
-                        "Description": "Custom TCP",
-                        "FromPort": "30422",
-                        "IpProtocol": "tcp",
-                        "ToPort": "30422"
                     },
                     {
                         "CidrIp": {
