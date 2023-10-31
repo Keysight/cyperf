@@ -60,7 +60,7 @@ variable "public_key" {
 
 variable "cyperf_version" {
   type        = string
-  default     = "0.2.5"
+  default     = "0.2.6"
   description = "CyPerf release version"
 }
 
