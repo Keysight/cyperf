@@ -13,7 +13,7 @@ This document describes how you can deploy the Keysight CyPerf agents inside Doc
 
 ## General Prerequisites
 To deploy a Keysight CyPerf agent container at Docker, you need the following:
-1. Install Docker Engine in your desired host platform if not already. Refer [Install Docker Engine](https://docs.docker.com/engine/install/) for more details.
+1. Install Docker Engine in your desired host platform if not already. Refer [Install Docker Engine Server](https://docs.docker.com/engine/install/#server) for more details.
 2. Understand docker compose. Refer [Docker Compose](https://docs.docker.com/compose/gettingstarted/)
 3. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent:latest` . Refer [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
 
@@ -26,7 +26,7 @@ sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
 
 5.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
-6.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers **443** and **30422** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+6.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 
 ## Workflow
 To test a device which is running inside a Docker, do the following:
@@ -53,6 +53,10 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --
 # Deploy Server agent
 
 sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+
+# If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
 - Deploy both server and client agent containers on different host
@@ -69,10 +73,15 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --
 
 sudo docker network create --subnet=172.18.0.1/24 test-server-network
 
+Please note, that client and server network CIDR should be different. This step has been added to separate Client and Server IP on the Controller side as CyPerf agents are identified by IP at CyPerf Controller.
+
 # Deploy Server agent
 
 sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
+By default, when you create or run a container using docker create or docker run, the container doesn't expose any of its ports to the outside world. Use the --publish or -p flag to make a port available to services outside of Docker. This creates a firewall rule in the host, mapping a container port to a port on the Docker host to the outside world. In the above  example:
+
+-p 80:80 Map port 80 on the Docker host to TCP port 80 in the container.
 
 ### **Docker Compose**
 
@@ -176,14 +185,6 @@ Execute this script from your ubuntu host. This will uninstall Docker Engine fro
 ```
 $bash containers/agent_examples/uninstall_docker_ubuntu.sh
 ```
-
-- CyPerf Container Agent Pair Deployment: [cyperf_agent_container_pair_deployment.sh](agent_examples/cyperf_agent_container_pair_deployment.sh)
-
-Execute this script from your ubuntu host. This will deploy a pair of CyPerf Agent containers in the same host.
-
-```
-$bash containers/agent_examples/cyperf_agent_container_pair_deployment.sh -c <CYPERF CONTROLLER IP>
-```
 ## Test Configuration Checklist
 Ensure that the following configurations are appropriate, when configuring the CyPerf Controller for a test where CyPerf Agents container are running in the docker host. 
 
@@ -205,7 +206,7 @@ Ensure that the following configurations are appropriate, when configuring the C
     sudo docker logs [cyperf-agent-container-id]  > [cyperf-agent-container-id].log 
     ```
 2. Agents not visible in CyPerf Controller
-- Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
+- Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
 - Also check that the Agent containers are in ready state after deployment.
     ```
     sudo docker container ls
@@ -222,7 +223,16 @@ sudo modprobe ip6table_filter
 ```
 3. Controller time and docker hosts time might be out of sync. This may result in an empty stat view in UI. To resolve setup NTP in docker host. A Controller can also be used as an NTP server. Refer to the host OS specific configuration to setup NTP. Example: [Setting NTP in Ubunutu 22.04](https://linuxconfig.org/ubuntu-22-04-ntp-server)
 
+4. CyPerf Container deployment workflow does not recomend using cyperagent cli commands within the containers. container spawing command should supply all the environment variables for initializing the container.
+
+
 ## Releases
+
+- **CyPerf 2.6** - [Oct, 2023]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release2.6
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.614
+    
 
 - **CyPerf 2.5** - [July, 2023]
     - Image URI: 
