@@ -66,18 +66,18 @@ variable "azure_agent_machine_type" {
 
 variable "cyperf_version" {
   type        = string
-  default     = "0.2.5"
+  default     = "0.2.6"
   description = "CyPerf release version"
 }
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-2-5"
+  default     = "keysight-cyperf-controller-2-6"
   description = "Name for the cyperf controller machine"
 }
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-2-5"
+  default     = "keysight-cyperf-agent-2-6"
   description = "Name for the cyperf agent machines"
 }
