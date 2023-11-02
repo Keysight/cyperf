@@ -15,35 +15,14 @@ locals {
   server_name = "${var.azure_owner_tag}-server-${var.agent_name}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      sh /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_nats_broker.private_ip_address} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_nats_broker.private_ip_address} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   mgmt_iprange = ["10.0.1.0/24"]
   test_iprange = ["10.0.2.0/24"]
   firewall_ip_range = var.azure_allowed_cidr
-}
-
-resource "azurerm_image" "controller_proxy" {
-  name                = "cyperf-controller-proxy"
-  location = var.azure_region_name
-  resource_group_name = azurerm_resource_group.azr_automation.name
-  hyper_v_generation  = "V1"
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = var.controller_proxy_image
-  }
-}
-
-resource "azurerm_image" "agent" {
-  name                = "cyperf-agent"
-  location = var.azure_region_name
-  resource_group_name = azurerm_resource_group.azr_automation.name
-  hyper_v_generation  = "V1"
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = var.agent_image
-  }
+  split_version = split(".", var.cyperf_version)
+  sku_name_controller_proxy = var.broker_version != "0.2.0" ? "keysight-cyperf-controllerproxy-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-controller-proxy"
+  sku_name_agent = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
 }
 
 resource "azurerm_resource_group" "azr_automation" {
@@ -160,7 +139,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_client_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_client_agent_test_nic.id
@@ -176,6 +154,17 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
+  }
+  plan {
+    name = local.sku_name_agent
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = local.sku_name_agent
+    version   = var.cyperf_version
   }
 }
 
@@ -228,7 +217,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_agent_machine_type
   admin_username      = var.azure_admin_username
-  source_image_id     = azurerm_image.agent.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_server_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_server_test_nic.id
@@ -244,6 +232,17 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
+  }
+  plan {
+    name = local.sku_name_agent
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = local.sku_name_agent
+    version   = var.cyperf_version
   }
 }
 
@@ -273,7 +272,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_nats_broker" {
   location            = azurerm_resource_group.azr_automation.location
   size                = var.azure_broker_machine_type
   admin_username      = var.azure_admin_username
-  source_image_id     = azurerm_image.controller_proxy.id
   network_interface_ids = [
     azurerm_network_interface.azr_automation_nats_broker_nic.id
   ]
@@ -288,6 +286,17 @@ resource "azurerm_linux_virtual_machine" "azr_automation_nats_broker" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
+  }
+  plan {
+    name = local.sku_name_controller_proxy
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = local.sku_name_controller_proxy
+    version   = var.broker_version
   }
 }
 
