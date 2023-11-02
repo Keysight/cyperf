@@ -75,7 +75,7 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| mdw_name   | keysight-cyperf-controller-2-5            | Name for the cyperf controller machine. |
+| mdw_name   | keysight-cyperf-controller-2-6            | Name for the cyperf controller machine. |
 
 ## Destruction
 

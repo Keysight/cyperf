@@ -35,13 +35,18 @@ If no -var option is applied, upon running terraform apply, you will be asked fo
 #### Example
 
 terraform apply --auto-approve \  
--var azure_owner_tag="test" \  
--var azure_project_name="kt-nas-cyperf-dev" \  
--var subscription_id="" \  
--var client_id="" \  
--var client_secret="" \  
--var tenant_id="" \  
--var public_key="/Users/genitroi/Desktop/workspace/master/appsec-automation/appsec/resources/ssh_keys/id_rsa_ghost.pub"
+-var gcp_project_name= "project_name” \  
+-var gcp_credential_file=”path/to/credential/file/” \  
+-var azure_project_name="project_name \  
+-var subscription_id="id" \  
+-var client_id="id " \  
+-var client_secret="secret" \  
+-var tenant_id="id" \  
+-var public_key="path/to/public/key" \  
+-var controller_image="path/to/azure/image/” \  
+-var agent_image="path/to/azure/image/” \  
+-var deployment_name=multicloud
+
 
 ### 2. Writing all the input variables in the terraform.tfvars before running terraform apply
 
@@ -56,29 +61,7 @@ variable_2= "value\_2"
 Using this method you can ensure that all further deployments will be done with the same combination of parameters.
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf
-## Template Parameters
 
-The following table lists the parameters for this deployment.
-
-| **Parameter label (name)**                  | **Default**            | **Description**  |
-| ----------------------- | ----------------- | ----- |
-| azure_project_name     | Requires input   | Specify Azure project name. |
-| azure_owner_tag | Requires input | The Azure owner tag name. |
-| subscription_id     | Requires input   | Specify the Azure subscription id.    |
-| client_id       | Requires input   | Specify the Azure client id.   |
-| client_secret     | Requires input     | Specify the Azure client secret.   |
-| tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_image       | Requires input    | Specify the Azure controller VHD image |
-| agent_image | Requires input    | Specify the Azure agent VHD image |
-| azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
-| azure_region_name      | centralus       | The Azure region where the deployment will take place. |
-| azure_admin_username  | cyperf | The Azure administrator username. |
-| azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
-| azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_name   | keysight-cyperf-controller-2-6            | Name for the cyperf controller machine. |
-| agent_name   | keysight-cyperf-agent-2-6            | Name for the cyperf agent machines. |
 
 ## Destruction
 

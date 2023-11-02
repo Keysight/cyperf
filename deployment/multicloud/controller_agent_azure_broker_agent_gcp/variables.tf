@@ -3,9 +3,14 @@ variable "azure_project_name" {
   description = "Project name"
 }
 
-variable "azure_owner_tag" {
+variable "gcp_project_name" {
   type    = string
-  description = "Deployment name"
+  description ="Project name"
+}
+
+variable "deployment_name" {
+  type  = string
+  description = "Prefix for all clouds"
 }
 
 variable "subscription_id" {
@@ -28,6 +33,11 @@ variable "tenant_id" {
   description = "Tenant id"
 }
 
+variable "gcp_credential_file" {
+  type = string
+  description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
+}
+
 variable "public_key" {
   type = string
   description = "Path to the public key used to ssh into machine"
@@ -43,15 +53,25 @@ variable "azure_admin_username" {
   default = "cyperf"
 }
 
+variable "gcp_region_name" {
+  type    = string
+  default = "us-east1"
+}
+
+variable "gcp_zone_name" {
+  type    = string
+  default = "us-east1-b"
+}
+
+
 variable "azure_project_tag" {
   type    = string
   default = "keysight-azure-cyperf"
 }
 
-variable "azure_allowed_cidr" {
-  type = list(string)
-  default = ["0.0.0.0/0"]
-  description = "List of allowed IP ranges on the machines"
+variable "gcp_project_tag" {
+  type    = string
+  default = "keysight-gcp-cyperf"
 }
 
 variable "azure_mdw_machine_type" {
@@ -64,26 +84,36 @@ variable "azure_agent_machine_type" {
   default = "Standard_F4s_v2"
 }
 
-variable "agents" {
-  type = number
-  default = 2
-  description = "Number of agents to be deployed"
+variable "gcp_broker_machine_type" {
+  type    = string
+  default = "n1-standard-2"
+}
+
+variable "gcp_agent_machine_type" {
+  type    = string
+  default = "c2-standard-4"
 }
 
 variable "cyperf_version" {
   type        = string
   default     = "0.2.6"
-  description = "CyPerf release version"
+  description = "CyPerf release version to get the images from Azure Marketplace"
 }
 
-variable "mdw_name" {
+variable "mdw_version" {
   type        = string
   default     = "keysight-cyperf-controller-2-6"
-  description = "Name for the cyperf controller machine"
+  description = "Image id for the cyperf controller machine"
 }
 
-variable "agent_name" {
+variable "agent_version" {
   type        = string
   default     = "keysight-cyperf-agent-2-6"
-  description = "Name for the cyperf agent machines"
+  description = "Image id for the cyperf agent machines"
+}
+
+variable "broker_image" {
+  type        = string
+  default     = "keysight-cyperf-controller-proxy-2-6"
+  description = "Image id for the cyperf controller proxy machines"
 }

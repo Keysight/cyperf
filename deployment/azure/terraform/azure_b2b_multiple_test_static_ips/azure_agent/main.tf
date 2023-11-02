@@ -1,8 +1,10 @@
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      sh /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
+  split_version = split(".", var.cyperf_version)
+  sku_name_agent = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
 }
 
 resource "azurerm_public_ip" "agent_mgmt_public_ip" {
@@ -68,7 +70,6 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   location            = var.resource_group.location
   size                = var.azure_agent_machine_type
   admin_username      = "cyperf"
-  source_image_id     = var.agent_version
   network_interface_ids = [
     azurerm_network_interface.azr_automation_agent_mng_nic.id,
     azurerm_network_interface.azr_automation_agent_test_nic.id
@@ -82,6 +83,19 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
+  }
+
+  plan {
+    name = local.sku_name_agent
+    product = "keysight-cyperf"
+    publisher = "keysighttechnologies_cyperf"
+  }
+
+  source_image_reference {
+    publisher = "keysighttechnologies_cyperf"
+    offer     = "keysight-cyperf"
+    sku       = local.sku_name_agent
+    version   = var.agent_version
   }
 
   custom_data = base64encode(local.custom_data)
