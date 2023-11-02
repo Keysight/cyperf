@@ -1,0 +1,745 @@
+{
+
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    "contentVersion": "1.0.0.0",
+
+    "parameters": {
+
+        "Deployment Name": {
+
+            "type": "string",
+
+            "minLength": 3,
+
+            "maxLength": 25,
+
+            "metadata": {
+
+                "description": "Preferred prefix for naming resources"
+
+            }
+
+        },
+
+        "Cyperf Version": {
+
+            "type": "string",
+
+            "defaultValue": "0.2.0",
+
+            "allowedValues": [
+              "0.2.0"
+            ],
+
+            "metadata": {
+
+              "description": "The CyPerf release version."
+
+            }
+        },
+        
+        "Proximity Placement Group": {
+            
+            "type": "string",
+            
+            "defaultValue": "No",
+            
+            "allowedValues": [
+                
+                "Yes",
+                
+                "No"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of proximity"
+
+            }
+
+         },
+
+        "Virtual Network": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Name of an existing Virtual Network"
+
+            }
+
+        },
+
+        "Management Subnet for Cyperf Controller Proxy and Agent": {
+
+            "type": "string",
+
+            "metadata":{
+
+                "description": "Name of an existing Management subnet.This subnet is attached to CyPerf controller proxy & CyPerf agents will use this subnet for control plane communication with controller proxy"
+
+            }
+
+        },
+
+        "Test Subnet for Cyperf Agents": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Name of an existing Test subnet for CyPerf agents.This subnet will be used for test traffic"
+
+            }
+
+        },
+
+        "VM Size Type for Cyperf Agents": {
+
+            "type": "string",
+
+            "defaultValue": "Standard_F4s_v2",
+
+            "allowedValues": [
+
+               "Standard_F4s_v2",
+
+               "Standard_F16s_v2"
+
+            ],
+
+            "metadata": {
+
+                "description": "CyPerf VM Size"
+
+            }
+
+        },
+
+        "SSH Public Key": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Public key to enable SSH access to the CyPerf instances"
+
+            }
+
+        },
+
+        "Security Group of Cyperf Controller Proxy": {
+
+            "type": "string",
+
+            "metadata": {
+
+                "description": "Name of an existing Security group of CyPerf Controller Proxy"
+
+            }
+
+        },
+
+        "Number of Cyperf Agents": {
+
+            "type": "int",
+
+            "defaultValue": 2,
+
+            "minValue": 2,
+
+            "metadata": {
+
+                "description": "Number of CyPerf agents that will be deployed from this template"
+
+            }
+
+        }
+
+    },
+
+    "functions": [],
+
+    "variables": {
+
+        "stackname"  :     "[parameters('Deployment Name')]",
+
+        "location"  :     "[resourceGroup().location]",
+
+        "proximity_pg_name": "[concat(variables('stackname'),'-proximitygroup')]",
+        
+        "proximity_id": {
+            
+            "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',variables('proximity_pg_name'))]"
+            
+            },
+
+        "controllerproxy_publicIP"  :     "[concat(variables('stackname'),'-controllerproxypublicIP')]",
+
+        "controllerproxy_interface"  :     "[concat(variables('stackname'),'-controllerproxyinterface')]",
+
+        "agentmgmtinterface"  :     "[concat(variables('stackname'),'-agentmanagementinterface')]",
+
+        "agenttestinterface"  :     "[concat(variables('stackname'),'-agenttestinterface')]",
+
+        "vmname_controllerproxy"  :     "[concat(variables('stackname'),'-controllerproxyvm')]",
+
+        "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
+
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh "
+
+    },
+
+    "resources": [
+
+        {
+
+            "comments": "creates a publicIP Address which will be linked later to controllerproxy interface",
+
+            "type": "Microsoft.Network/publicIPAddresses",
+
+            "name": "[variables('controllerproxy_publicIP')]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "publicIPAddressVersion": "IPv4",
+
+                "publicIPAllocationMethod": "Dynamic",
+
+                "idleTimeoutInMinutes": 4
+
+            }
+
+        },
+
+        {
+            "comments": "Creates a proximity group",
+            
+            "condition": "[equals(parameters('Proximity Placement Group'),'Yes')]",
+            
+            "type": "Microsoft.Compute/proximityPlacementGroups",
+            
+            "name": "[variables('proximity_pg_name')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "properties": {
+
+                "proximityPlacementGroupType": "Standard"
+
+            }
+        },
+
+        {
+
+            "comments": "creates a interface for controllerproxy & associates a public IP(created earlier) to it along with private IP",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[variables('controllerproxy_interface')]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('controllerproxy_publicIP'))]"
+
+            ],
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "ipconfig1",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
+
+                            },
+
+                            "publicIPAddress": {
+
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controllerproxy_publicIP'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "enableIPForwarding": false,
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller Proxy'))]"
+                  }
+
+                }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of management interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agentmgmtinterface'),copyIndex(1))]",
+
+            "location": "[variables('location')]",
+
+            "apiVersion": "2020-05-01",
+
+            "copy": {
+
+                "name": "ManagmentInterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "properties": {
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "managementnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2020-05-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates the controllerproxy vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_controllerproxy')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "keysight-cyperf-controller-proxy",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "dependsOn": [
+
+                "updateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "Standard_D2s_v3"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_controllerproxy')]",
+
+                    "adminUsername": "cyperf",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-controller-proxy",
+                    "version": "latest"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controllerproxy_interface'))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        },
+
+        {
+
+            "comments": "In the nested template we convert dynamic IP to static to fetch the private IP address of controllerproxy which will be used for pairing between agents & controllerproxy",
+
+            "type": "Microsoft.Resources/deployments",
+
+            "apiVersion": "2020-06-01",
+
+            "name": "updateIp",
+
+            "dependsOn": [
+
+                "[variables('controllerproxy_interface')]"
+
+            ],
+
+            "properties": {
+
+                "mode": "Incremental",
+
+                "expressionEvaluationOptions": {
+
+                    "scope": "Outer"
+
+                },
+
+                "template": {
+
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/nestedTemplate.json#",
+
+                    "contentVersion": "1.0.0.0",
+
+                    "resources": [
+
+                     {
+
+
+
+                        "type": "Microsoft.Network/networkInterfaces",
+
+                        "apiVersion": "2020-05-01",
+
+                        "name": "[variables('controllerproxy_interface')]",
+
+                        "location": "[variables('location')]",
+
+                        "properties": {
+
+                        "ipConfigurations": [
+
+                          {
+
+                            "name": "ipconfig1",
+
+                            "properties": {
+
+                                 "privateIPAllocationMethod": "Static",
+
+                                 "privateIPAddress": "[reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress]",
+
+                                 "subnet": {
+
+                                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('Virtual Network'), parameters('Management Subnet for Cyperf Controller Proxy and Agent'))]"
+
+                                    },
+
+                                 "publicIPAddress": {
+
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('controllerproxy_publicIP'))]"
+
+                                  }
+
+                                }
+
+                            }
+
+                        ],
+
+                    "networkSecurityGroup": {
+
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('Security Group of Cyperf Controller Proxy'))]"
+
+                          }
+
+                    }
+
+                 }
+
+               ]
+
+             }
+
+          }
+
+        },
+
+        {
+
+            "comments": "creates n no of Agents from the image & sends the private IP from the custom data section",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[concat(variables('vmname_agent'),copyIndex(1))]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+
+                "name": "keysight-cyperf-agent",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "copy": {
+
+                "name": "agentscopy",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[variables('vmname_controllerproxy')]",
+
+                "[variables('proximity_pg_name')]"
+
+            ],
+
+            "properties": {
+
+                "proximityPlacementGroup": "[if(equals(parameters('Proximity Placement Group'),'Yes'), variables('proximity_id'), null())]",
+
+                "hardwareProfile": {
+
+                    "vmSize": "[parameters('VM Size Type for Cyperf Agents')]"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[concat(variables('vmname_agent'),copyIndex(1))]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "keysight-cyperf-agent",
+                    "version": "[parameters('Cyperf Version')]"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agentmgmtinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        },
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agenttestinterface'),copyIndex(1)))]",
+
+                            "properties": {
+
+                                "primary": false
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        }
+
+    ],
+
+    "outputs": {
+
+        "privateIp_controllerproxy": {
+
+            "type": "String",
+
+            "value": "[reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress]"
+
+        }
+
+    }
+
+}
