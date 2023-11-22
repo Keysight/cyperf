@@ -1451,7 +1451,7 @@ class RESTasV3:
     def set_primary_objective(self, objective, tp_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(
             self.sessionID, tp_id)
-        self.__sendPut(apiPath, payload={"Type": objective, "Unit": ""})
+        self.__sendPatch(apiPath, payload={"Type": objective, "Unit": ""})
 
     def add_primary_objective(self, objective, tp_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective'.format(
