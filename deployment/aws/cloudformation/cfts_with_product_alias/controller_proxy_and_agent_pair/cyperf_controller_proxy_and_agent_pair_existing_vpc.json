@@ -329,7 +329,7 @@
                 "ImageId": {
                     "Fn::Sub": [
                         "resolve:ssm:/aws/service/marketplace/prod-xopwud6rtquaw/${cyperf_release}",
-                        {   
+                        {
                             "cyperf_release": {
                                 "Ref": "CyPerfRelease"
                             }
@@ -418,7 +418,7 @@
                 "ImageId": {
                     "Fn::Sub": [
                         "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${cyperf_release}",
-                        {   
+                        {
                             "cyperf_release": {
                                 "Ref": "CyPerfRelease"
                             }
@@ -541,7 +541,7 @@
                 "ImageId": {
                     "Fn::Sub": [
                         "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${cyperf_release}",
-                        {   
+                        {
                             "cyperf_release": {
                                 "Ref": "CyPerfRelease"
                             }

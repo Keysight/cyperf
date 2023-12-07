@@ -445,7 +445,7 @@
                 "ImageId": {
                     "Fn::Sub": [
                         "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${cyperf_release}",
-                        {   
+                        {
                             "cyperf_release": {
                                 "Ref": "CyPerfRelease"
                             }
@@ -523,7 +523,7 @@
                 "ImageId": {
                     "Fn::Sub": [
                         "resolve:ssm:/aws/service/marketplace/prod-xopwud6rtquaw/${cyperf_release}",
-                        {   
+                        {
                             "cyperf_release": {
                                 "Ref": "CyPerfRelease"
                             }
