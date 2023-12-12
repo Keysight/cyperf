@@ -186,7 +186,7 @@ resource "aws_placement_group" "aws_placement_group" {
 ####### Controller #######
 module "mdw" {
     depends_on = [aws_internet_gateway.aws_internet_gateway, time_sleep.wait_5_seconds]
-    source = "/Users/kabiswas/aws_n_agents/modules/aws_mdw"
+    source = "../modules/aws_mdw"
     resource_group = {
         security_group = aws_security_group.aws_cyperf_security_group.id,
         management_subnet = aws_subnet.aws_management_subnet.id
@@ -201,7 +201,7 @@ module "mdw" {
 module "agents" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
     count = var.agents
-    source = "/Users/kabiswas/aws_n_agents/modules/aws_agent"
+    source = "../modules/aws_agent"
     resource_group = {
         aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
         aws_ControllerManagementSubnet = aws_subnet.aws_management_subnet.id,
