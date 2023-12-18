@@ -15,6 +15,7 @@ locals{
                  sudo rm -rf /etc/portmanager/node_id.txt
                  cyperfagent feature allow_mgmt_iface_for_test enable
                  sudo cyperfagent controller set ${module.mdw.mdw_detail.private_ip} --skip-restart
+                 sudo cyperfagent tag set ${var.agents_tag_name}=${var.agents_tag_value} --skip-restart
                  sudo cyperfagent configuration reload
     EOF
 }

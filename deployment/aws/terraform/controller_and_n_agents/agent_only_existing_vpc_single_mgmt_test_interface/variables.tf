@@ -73,3 +73,15 @@ variable "agents_sg_name" {
   default = "existing-vpc-agent-security-group"
   description = "Agents security group name"
 }
+
+variable "agents_tag_name" {
+  type = string
+  default = "cyperf-agent"
+  description = "tag name of deployed agent"
+}
+
+variable "agents_tag_value" {
+  type = string
+  default = "cyperf-agent-tag"
+  description = "tag value of deployed agent"
+}

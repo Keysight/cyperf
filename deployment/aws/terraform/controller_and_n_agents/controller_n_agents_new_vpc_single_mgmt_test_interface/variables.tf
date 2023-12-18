@@ -61,3 +61,15 @@ variable "agents" {
   default = 2
   description = "Number of clients to be deployed"
 }
+
+variable "agents_tag_name" {
+  type = string
+  default = "cyperf-agent"
+  description = "tag name of deployed agent"
+}
+
+variable "agents_tag_value" {
+  type = string
+  default = "cyperf-agent-tag"
+  description = "tag value of deployed agent"
+}
