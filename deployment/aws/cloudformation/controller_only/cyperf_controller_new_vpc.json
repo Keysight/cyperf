@@ -354,7 +354,7 @@
                     ]
                 },
                 "IpProtocol": "-1",
-                "SourceSecurityGroupId": {
+                "DestinationSecurityGroupId": {
                     "Fn::GetAtt": [
                         "VPC",
                         "DefaultSecurityGroup"
