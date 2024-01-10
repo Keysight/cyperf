@@ -79,6 +79,16 @@ Select **New VPC** to deploy a new VPC or **Existing VPC** to deploy in an alrea
 ### Template information
 Descriptions for each template are contained at the top of each template in the Description key. For additional information and assistance in deploying a template, see the README file on the individual template directories.
 
+### IV. [Single Agent](single_agent):
+
+This template deploys:
+- A CyPerf Agent in a public subnet.
+
+Select **New VPC** to deploy a new VPC or **Existing VPC** to deploy in an already existing VPC.
+
+### Template information
+Descriptions for each template are contained at the top of each template in the Description key. For additional information and assistance in deploying a template, see the README file on the individual template directories.
+
 ### AWS RIGHTS
 
 AmazonEC2FullAccess need to be given to the user that will create the deployments using terraform templates.
