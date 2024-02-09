@@ -18,6 +18,8 @@ def GenerateConfig(context):
   test_subnetwork = context.env['deployment'] + '-cyperf-test-subnetwork'
   
   test_network_cidr = context.properties['testNetworkCIDR']
+
+  custom_ip_range = context.properties['FirewallRuleSrcIPs']
   
   region = context.properties['region']
   
@@ -111,12 +113,14 @@ def GenerateConfig(context):
           "network": 'global/networks/' + management_network,
           #'$ref(' + context.env['deployment'] + 'cyperf-management-network' + '.SelfLink)
           "priority": 100,
-          "sourceRanges": ["0.0.0.0/0"],
+          "sourceRanges": [custom_ip_range],
           "destinationRanges": [],
-  
-          "allowed": [{
-              "IPProtocol": "all"
-          }, ],
+          "allowed": [
+              {
+                "IPProtocol": "tcp",
+                "ports": ["22","80", "443"]
+              }
+          ],
           "direction": "INGRESS",
           "disabled": False,
           "enableLogging": False
@@ -136,13 +140,13 @@ def GenerateConfig(context):
           "network": 'global/networks/' + test_network,
           #'$ref(' + context.env['deployment'] + 'test-network' + '.SelfLink)
           "priority": 100,
-          "sourceRanges": ["0.0.0.0/0"],
+          "sourceRanges": [custom_ip_range],
           "destinationRanges": [],
-  
-          "allowed": [{
-                  "IPProtocol": "all"
+          "allowed": [
+              {
+                "IPProtocol": "tcp",
+                "ports": ["80", "443"]
               }
-  
           ],
           "direction": "INGRESS",
           "disabled": False,

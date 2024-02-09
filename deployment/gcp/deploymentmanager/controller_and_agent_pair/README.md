@@ -24,11 +24,11 @@ The Deployment Manager requires a Python template and certain parameters to be s
 The list of exposed parameters is defined in the Template parameter section.
 ### Examples of Deployment using Python Template **New VPC**:
 ```
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,FirewallRuleSrcIPs:<Source IP ranges for Firewall rules>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-5,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-2-5,controllerMachineType:c2-standard-8
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-5,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,FirewallRuleSrcIPs:1.1.1.1/1,agentCount:2,controllerSourceImage:keysight-cyperf-controller-2-5,controllerMachineType:c2-standard-8
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
@@ -70,6 +70,7 @@ The following table lists the parameters for this deployment in **New VPC**.
 | agentSourceImage                   | keysight-cyperf-agent-2-5            | Preferred CyPerf Agent image.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
+| FirewallRuleSrcIPs                | Requires input. Example: 1.1.1.1/1             | Source IP ranges for Fireware rules.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
 

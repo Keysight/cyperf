@@ -50,11 +50,18 @@ properties:
   managementNetworkCIDR:
     type: string
     default: 172.16.5.0/24
-    description: CIDR for  for mngt network
+    description: CIDR for mngt network
+
   testNetworkCIDR:
     type: string
     default: 10.0.0.0/8
-    description: CIDR for  for test network
+    description: CIDR for test network
+
+  FirewallRuleSrcIPs:
+    type: string
+    default: 1.1.1.1/1
+    description: Source IP ranges for Firewall rules
+
   agentCount:
     type: integer
     default: 2
