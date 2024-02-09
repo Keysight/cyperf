@@ -57,6 +57,15 @@
                 "EC2xREGION": "Asia Pacific (Mumbai)",
                 "REGIONxTAG": "AP_SOUTH_1"
             },
+            "ap-south-2": {
+                "AMIxAPPLICATION": "ami-0baaad241c21ada91",
+                "AMIxBROKER": "ami-01a75bad3ec18d6bf",
+                "AMIxAGENT": "ami-03e1e2975d9ce7602",
+                "AMIxLICENSE": "ami-00000000000000000",
+                "EC2xCONNECTxCIDR": "13.233.177.0/29",
+                "EC2xREGION": "Asia Pacific (Hyderabad)",
+                "REGIONxTAG": "AP_SOUTH_2"
+            },
             "ap-northeast-2": {
                 "AMIxAPPLICATION": "ami-0adc193eb0852dd85",
                 "AMIxBROKER": "ami-0a7180318243b57f5",
