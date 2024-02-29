@@ -4,36 +4,36 @@
     "Mappings": {
         "RegionMap": {
             "us-east-1": {
-                "AMIxAPPLICATION": "ami-006fefad6ca46c17f",
-                "AMIxBROKER": "ami-0c2d8ca092e675e23",
-                "AMIxAGENT": "ami-0fc70dcab8552e9e9",
+                "AMIxAPPLICATION": "ami-0abf36b6b5a938738",
+                "AMIxBROKER": "ami-0aab29fc0b99b839c",
+                "AMIxAGENT": "ami-041bc660e8f5e2265",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "18.206.107.24/29",
                 "EC2xREGION": "US East (N. Virginia)",
                 "REGIONxTAG": "US_EAST_1"
             },
             "us-east-2": {
-                "AMIxAPPLICATION": "ami-0d6ae7259b2df6d5f",
-                "AMIxBROKER": "ami-0ebbea56aae9b50f7",
-                "AMIxAGENT": "ami-01916d100d0c3b7a9",
+                "AMIxAPPLICATION": "ami-0c6a3e0cc3c64c924",
+                "AMIxBROKER": "ami-0211261821ecf3f56",
+                "AMIxAGENT": "ami-0d4a8fc10462d399a",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "3.16.146.0/29",
                 "EC2xREGION": "US East (Ohio)",
                 "REGIONxTAG": "US_EAST_2"
             },
             "us-west-1": {
-                "AMIxAPPLICATION": "ami-0344c52d00c23cb91",
-                "AMIxBROKER": "ami-0691d05dbb9e3cc06",
-                "AMIxAGENT": "ami-02be9a9362cdd0e6e",
+                "AMIxAPPLICATION": "ami-0b7f1efcc95b0cb72",
+                "AMIxBROKER": "ami-0040d1d0ab54c5e88",
+                "AMIxAGENT": "ami-0d5d85f6439e6faa9",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.52.6.112/29",
                 "EC2xREGION": "US West (N. California)",
                 "REGIONxTAG": "US_WEST_1"
             },
             "us-west-2": {
-                "AMIxAPPLICATION": "ami-06681bf5feb39bfe5",
-                "AMIxBROKER": "ami-0777af8a3c42e3b32",
-                "AMIxAGENT": "ami-09ac65c1d3b2b6a0a",
+                "AMIxAPPLICATION": "ami-058d9a90286d2bcea",
+                "AMIxBROKER": "ami-0c05900d2a73b5343",
+                "AMIxAGENT": "ami-0969e51965bc6f33c",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "18.237.140.160/29",
                 "EC2xREGION": "US West (Oregon)",
@@ -49,108 +49,108 @@
                 "REGIONxTAG": "AP_EAST_1"
             },
             "ap-south-1": {
-                "AMIxAPPLICATION": "ami-020064036d9628eb5",
-                "AMIxBROKER": "ami-09d09065c43682b21",
-                "AMIxAGENT": "ami-0d8caca3dcc99ccba",
+                "AMIxAPPLICATION": "ami-098d7f0f5f31519bb",
+                "AMIxBROKER": "ami-06724517e0afffbd7",
+                "AMIxAGENT": "ami-01a596b3ca9e205a0",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.233.177.0/29",
                 "EC2xREGION": "Asia Pacific (Mumbai)",
                 "REGIONxTAG": "AP_SOUTH_1"
             },
             "ap-south-2": {
-                "AMIxAPPLICATION": "ami-0baaad241c21ada91",
-                "AMIxBROKER": "ami-01a75bad3ec18d6bf",
-                "AMIxAGENT": "ami-03e1e2975d9ce7602",
+                "AMIxAPPLICATION": "ami-06368dba989761d64",
+                "AMIxBROKER": "ami-07aecf642109dba38",
+                "AMIxAGENT": "ami-0564d51a83bf53e9b",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.233.177.0/29",
                 "EC2xREGION": "Asia Pacific (Hyderabad)",
                 "REGIONxTAG": "AP_SOUTH_2"
             },
             "ap-northeast-2": {
-                "AMIxAPPLICATION": "ami-0adc193eb0852dd85",
-                "AMIxBROKER": "ami-0a7180318243b57f5",
-                "AMIxAGENT": "ami-0ba05d99da2a148b6",
+                "AMIxAPPLICATION": "ami-05efa64285c4af48f",
+                "AMIxBROKER": "ami-0cda49049b05fa1de",
+                "AMIxAGENT": "ami-011b47e4fa37ae4f9",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.209.1.56/29",
                 "EC2xREGION": "Asia Pacific (Seoul)",
                 "REGIONxTAG": "AP_NORTHEAST_2"
             },
             "ap-southeast-1": {
-                "AMIxAPPLICATION": "ami-020aa9601dcd6daf5",
-                "AMIxBROKER": "ami-0d8f8d8a3940b9e14",
-                "AMIxAGENT": "ami-043cd91476735fe1b",
+                "AMIxAPPLICATION": "ami-06172745e9bda9187",
+                "AMIxBROKER": "ami-071894a7ae602a823",
+                "AMIxAGENT": "ami-0a3491a8f2d8d70ad",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "3.0.5.32/29",
                 "EC2xREGION": "Asia Pacific (Singapore)",
                 "REGIONxTAG": "AP_SOUTHEAST_1"
             },
             "ap-southeast-2": {
-                "AMIxAPPLICATION": "ami-0c018f704ba3af2e7",
-                "AMIxBROKER": "ami-0fa0c158fda32cac6",
-                "AMIxAGENT": "ami-08ceda590a41fe325",
+                "AMIxAPPLICATION": "ami-0ec86b9a391e9ee8b",
+                "AMIxBROKER": "ami-0859b2508f2564f3d",
+                "AMIxAGENT": "ami-00c92e9c1d4fb4bfc",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.239.158.0/29",
                 "EC2xREGION": "Asia Pacific (Sydney)",
                 "REGIONxTAG": "AP_SOUTHEAST_2"
             },
             "ap-northeast-1": {
-                "AMIxAPPLICATION": "ami-0f8c7f6e958a7a6f5",
-                "AMIxBROKER": "ami-0eb0e3aaae6ac79c9",
-                "AMIxAGENT": "ami-0b9f114292f0614e5",
+                "AMIxAPPLICATION": "ami-0a624428e87be7429",
+                "AMIxBROKER": "ami-07dc0cb326bb4fc74",
+                "AMIxAGENT": "ami-0d96264b432a44de9",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "3.112.23.0/29",
                 "EC2xREGION": "Asia Pacific (Tokyo)",
                 "REGIONxTAG": "AP_NORTHEAST_1"
             },
             "ca-central-1": {
-                "AMIxAPPLICATION": "ami-05a098898082aaf5c",
-                "AMIxBROKER": "ami-0213c94da17f77c83",
-                "AMIxAGENT": "ami-0de46d1d609fb5cec",
+                "AMIxAPPLICATION": "ami-0e2eb4cc58e65498b",
+                "AMIxBROKER": "ami-058d5f023f6e01dee",
+                "AMIxAGENT": "ami-03fbf1ebb6d415d0e",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "35.183.92.176/29",
                 "EC2xREGION": "Canada (Central)",
                 "REGIONxTAG": "CA_CENTRAL_1"
             },
             "eu-central-1": {
-                "AMIxAPPLICATION": "ami-002e3d04c300b78bb",
-                "AMIxBROKER": "ami-04088fabf0af38485",
-                "AMIxAGENT": "ami-0cb9410d1a8c011a2",
+                "AMIxAPPLICATION": "ami-028c1efc974dd8278",
+                "AMIxBROKER": "ami-0db68e0829199d48e",
+                "AMIxAGENT": "ami-0d639f4bcf825276e",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "3.120.181.40/29",
                 "EC2xREGION": "EU (Frankfurt)",
                 "REGIONxTAG": "EU_CENTRAL_1"
             },
             "eu-west-1": {
-                "AMIxAPPLICATION": "ami-00e6e95348a221127",
-                "AMIxBROKER": "ami-0e3d4c5e4e23d6c9e",
-                "AMIxAGENT": "ami-0d84640bbda75fbd1",
+                "AMIxAPPLICATION": "ami-0dfb86ada26e861f2",
+                "AMIxBROKER": "ami-005d857c88d470b2e",
+                "AMIxAGENT": "ami-07b40ad2f486cb696",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "18.202.216.48/29",
                 "EC2xREGION": "EU (Ireland)",
                 "REGIONxTAG": "EU_WEST_1"
             },
             "eu-west-2": {
-                "AMIxAPPLICATION": "ami-05759de5505f2f8de",
-                "AMIxBROKER": "ami-02a1edff95efa7f75",
-                "AMIxAGENT": "ami-01358c3fa43689c90",
+                "AMIxAPPLICATION": "ami-069ca181bf8f5e5e6",
+                "AMIxBROKER": "ami-093092ad224595e9d",
+                "AMIxAGENT": "ami-06cd80ac6b9c9deda",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "3.8.37.24/29",
                 "EC2xREGION": "EU (London)",
                 "REGIONxTAG": "EU_WEST_2"
             },
             "eu-west-3": {
-                "AMIxAPPLICATION": "ami-0aaa6876737b1e106",
-                "AMIxBROKER": "ami-0e198851a6e25f5e5",
-                "AMIxAGENT": "ami-02aa9c094d8232308",
+                "AMIxAPPLICATION": "ami-0726bc70983bb5f96",
+                "AMIxBROKER": "ami-0628ee149b14d5186",
+                "AMIxAGENT": "ami-08391426dbc10f548",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "35.180.112.80/29",
                 "EC2xREGION": "EU (Paris)",
                 "REGIONxTAG": "EU_WEST_3"
             },
             "eu-north-1": {
-                "AMIxAPPLICATION": "ami-01765e508336db301",
-                "AMIxBROKER": "ami-0fe9ef2290de6825b",
-                "AMIxAGENT": "ami-0207695a61244a530",
+                "AMIxAPPLICATION": "ami-0b41723bf35f1f17a",
+                "AMIxBROKER": "ami-0f234d3a7db510436",
+                "AMIxAGENT": "ami-034e1695e991473d0",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.48.4.200/30",
                 "EC2xREGION": "EU (Stockholm)",
@@ -198,7 +198,10 @@
                         "Username",
                         "Project",
                         "VPCCIDR",
-                        "AvailabilityZone"
+                        "AvailabilityZone",
+                        "AuthUsername",
+                        "AuthPassword",
+                        "AuthFingerprint"
                     ]
                 },
                 {
@@ -262,6 +265,15 @@
                 },
                 "VPCCIDR": {
                     "default": "VPC"
+                },
+                "AuthUsername": {
+                    "default": "Authentication Username"
+                },
+                "AuthPassword": {
+                    "default": "Authentication Password"
+                },
+                "AuthFingerprint": {
+                    "default": "Authentication Fingerprint"
                 }
             }
         }
@@ -389,6 +401,21 @@
                 "no"
             ],
             "ConstraintDescription": "must specify yes or no."
+        },
+        "AuthUsername": {
+            "Default": "cyperf",
+            "Description": "Username for agent to controller-proxy authentication",
+            "Type": "String"
+        },
+        "AuthPassword": {
+            "Default": "CyPerf&Keysight#1",
+            "Description": "Password for agent to controller-proxy authentication",
+            "Type": "String"
+        },
+        "AuthFingerprint": {
+            "Default": "",
+            "Description": "Fingerprint for agent to controller-proxy authentication - OPTIONAL",
+            "Type": "String"
         }
     },
     "Conditions": {
@@ -696,6 +723,29 @@
                         }
                     }
                 ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "sudo echo -ne \"",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthPassword"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                "\" > /.cyperf/local_secret\n",
+                                "sudo systemctl restart wap-tunnel-server.service\n"
+                            ]
+                        ]
+                    }
+                },
                 "Tags": [
                     {
                         "Key": "Name",
@@ -932,6 +982,39 @@
                                         ]
                                     ]
                                 },
+                                " --username ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthUsername"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " --password ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthPassword"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " --fingerprint ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthFingerprint"
+                                            }
+                                        ]
+                                    ]
+                                },
                                 " >> /var/log/Appsec_init.log\n"
                             ]
                         ]
@@ -1050,6 +1133,39 @@
                                                     "CyPerfControllerProxy",
                                                     "PrivateIp"
                                                 ]
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " --username ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthUsername"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " --password ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthPassword"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                " --fingerprint ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "AuthFingerprint"
                                             }
                                         ]
                                     ]
