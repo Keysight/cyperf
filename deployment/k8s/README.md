@@ -16,8 +16,8 @@ This document describes how you can deploy the Keysight CyPerf agents inside Kub
 ## General Prerequisites
 To deploy a Keysight CyPerf agent inside Kubernetes, you need the following:
 1. You can use the *CyPerf Agents in both* **_on-premise_** *K8s cluster (For example: **nodes in VMs on ESXi host**) and in* **_cloud_** *(For example: nodes in **_AWS EKS_***).
-    - K8s version 1.20 or 1.21 is recommended for On-Premise K8s Cluster.
-    - K8s version 1.24 is recommended for EKS and AKS Clusters.
+    
+    - K8s version 1.27 is recommended for On-Premises K8s, EKS and AKS Clusters
     
 2. A kubernetes cluster along with a containerzied device under test (DUT) that is already deployed in the same cluster. 
   
@@ -28,7 +28,7 @@ To deploy a Keysight CyPerf agent inside Kubernetes, you need the following:
 
 3. A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
-4.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allows port numbers **443** and **30422** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+4.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allows port numbers **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
 5.  Place holder container image URL for the CyPerf Agent container. The example manifests use the latest image URL from Keysight CyPerf's public container repository in ECR. For specific versions, use the CyPerf Agent's container image URL. This ECR Public image URL needs to be accessible from the test environment, for example: _the cluster nodes_.
 6.  Assign `agenttype=client` label to the nodes if you want to deploy CyPerf Agents as test traffic to initiate the clients and assign `agenttype=server` label to the nodes if you want the CyPerf Agents to simulate the test servers.    
     ```
@@ -259,7 +259,7 @@ Ensure that the following configurations are appropriate, when configuring the C
     kubectl logs [cyperf-agent-pod-id]  > [cyperf-agent-pod-id].log 
     ```
 2. Agents not visible in CyPerf Controller
-- Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 and 30422 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
+- Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
 - Also check that the Agent pods are in ready state after deployment.
     ```
     kubectl get pods -l app=cyperf-agent -o wide
