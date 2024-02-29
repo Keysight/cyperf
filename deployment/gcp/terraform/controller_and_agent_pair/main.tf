@@ -46,7 +46,9 @@ locals {
   gcp_agent_can_ip_forward                     = "false"
   gcp_agent_custom_image_project_name          = var.gcp_project_name
   gcp_ssh_key								   = var.gcp_ssh_key
-  startup_script = "/bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_mdw_instance.network_interface.0.network_ip} >> /home/cyperf/gcp_image_init_log "
+   startup_script                      = <<-EOF
+                                        /bin/bash /usr/bin/image_init_gcp.sh ${google_compute_instance.gcp_mdw_instance.network_interface.0.network_ip} --username "${var.controller_username}" --password "${var.controller_password}" --fingerprint "">> /home/cyperf/gcp_image_init_log
+                                        EOF
 }
 
 resource "google_compute_resource_policy" "GCP_AGENT_PLACEMENT_GROUP" {

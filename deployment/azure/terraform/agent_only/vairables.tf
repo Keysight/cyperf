@@ -52,16 +52,26 @@ variable "controller_ip" {
   type = string
   description = "Controller or Controller-Proxy management IP"
 }
-
+variable "controller_username" {
+  type        = string
+  default     = "admin"
+  description = "Controller's authentication username"
+  }
+  
+variable "controller_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller's authentication password"
+}
 variable "public_key" {
   type = string
   description = "Path to the public key. This will be uesd to authenticate into the vm"
 }
 
-variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd"
-  type = string
-  description = "Agent image path"
+variable "cyperf_version" {
+  type        = string
+  default     = "0.2.6"
+  description = "CyPerf release version"
 }
 
 variable "azure_agent_machine_type" {

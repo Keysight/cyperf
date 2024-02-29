@@ -50,12 +50,24 @@ variable "gcp_agent_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-2-5"
+  default     = "keysight-cyperf-controller-2-6"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-2-5"
+  default     = "keysight-cyperf-agent-2-6"
   description = "Image id for the cyperf agent machines"
+}
+
+variable "controller_username" {
+  type        = string
+  default     = "admin"
+  description = "Controller's authentication username"
+  }
+  
+variable "controller_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller's authentication password"
 }
