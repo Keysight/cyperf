@@ -95,31 +95,31 @@ variable "gcp_agent_machine_type" {
 }
 
 variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-controller-2-5.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-3-0/keysight-cyperf-controller-3-0.vhd"
   type = string
   description = "Controller image path"
 }
 
 variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-5/keysight-cyperf-agent-2-5.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-3-0/keysight-cyperf-agent-3-0.vhd"
   type = string
   description = "Agent image path"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-2-5"
+  default     = "keysight-cyperf-controller-3-0"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-2-5"
+  default     = "keysight-cyperf-agent-3-0"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-2-5"
+  default     = "keysight-cyperf-controller-proxy-3-0"
   description = "Image id for the cyperf controller proxy machines"
 }
