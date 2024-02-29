@@ -1,6 +1,3 @@
-# Azure marketplace image scan is in progress....
-# DO NOT USE IT FOR 2.5 RELEASE YET
-
 # Terraform deployments
 
 ## Introduction
