@@ -730,7 +730,8 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' --username ',[parameters('Auth Username')], ' --password ',[parameters('Auth Password')],' --fingerprint ',[parameters('Auth Fingerprint')] ' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+
 
 
                     "linuxConfiguration": {
