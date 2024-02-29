@@ -53,13 +53,24 @@ variable "controller_ip" {
   description = "Controller or Controller-Proxy management IP"
 }
 
+variable "controller_username" {
+  type        = string
+  default     = "admin"
+  description = "Controller's authentication username"
+  }
+  
+variable "controller_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller's authentication password"
+}
 variable "public_key" {
   type = string
   description = "Path to the public key. This will be uesd to authenticate into the vm"
 }
 
 variable "agent_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-2-6/keysight-cyperf-agent-2-6.vhd"
+  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-3-0/keysight-cyperf-agent-3-0.vhd"
   type = string
   description = "Agent image path"
 }
