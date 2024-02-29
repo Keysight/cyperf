@@ -26,13 +26,14 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.6",
+            "defaultValue": "0.3.0",
 
             "allowedValues": [
-              "0.2.6",
-              "0.2.5",
-              "0.2.1",
-              "0.2.0"
+                "0.3.0",
+                "0.2.6",  
+                "0.2.5",
+                "0.2.1",
+                "0.2.0"
             ],
 
             "metadata": {
@@ -167,9 +168,51 @@
 
             }
 
+        },
+
+        "Auth Username": {
+
+            "type": "string",
+
+            "defaultValue": "admin",
+
+            "metadata": {
+
+              "description": "Username for agent to controller authentication."
+
+            }
+        },
+
+        "Auth Password": {
+
+            "type": "string",
+         
+            "defaultValue": "CyPerf&Keysight#1",
+
+            "metadata": {
+
+              "description": "Password for agent to controller authentication"
+
+            }
+
+        },
+
+      "Auth Fingerprint": {
+
+           "type": "string",
+         
+           "defaultValue": "",
+
+           "metadata": {
+
+              "description": "Fingerprint for agent to controller authentication - OPTIONAL"
+
+           }
+
         }
 
     },
+           
 
     "functions": [],
 
@@ -210,6 +253,10 @@
         "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
 
         "skunames" : {
+            "0.3.0": {
+                "skunameagent": "keysight-cyperf-agent-30",
+                "skunamecontroller": "keysight-cyperf-controller-30"
+            },
             "0.2.6": {
                 "skunameagent": "keysight-cyperf-agent-26",
                 "skunamecontroller": "keysight-cyperf-controller-26"
@@ -878,7 +925,7 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controller_interface')).ipConfigurations[0].properties.privateIPAddress,' --username ',[parameters('Auth Username')], ' --password ',[parameters('Auth Password')],' --fingerprint ',[parameters('Auth Fingerprint')] ' >> /var/log/image_init.log'))]",
 
                     "linuxConfiguration": {
 

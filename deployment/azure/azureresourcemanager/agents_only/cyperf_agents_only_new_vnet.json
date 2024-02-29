@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.2.6",
+            "defaultValue": "0.3.0",
 
             "allowedValues": [
+              "0.3.0",
               "0.2.6",
               "0.2.5",
               "0.2.1",
@@ -180,7 +181,49 @@
 
             }
 
+        },
+
+        "Auth Username": {
+
+            "type": "string",
+
+            "defaultValue": "admin",
+
+            "metadata": {
+
+              "description": "Username for agent to controller authentication."
+
+            }
+        },
+
+        "Auth Password": {
+
+            "type": "string",
+         
+            "defaultValue": "CyPerf&Keysight#1",
+
+            "metadata": {
+
+              "description": "Password for agent to controller authentication"
+
+            }
+
+        },
+
+        "Auth Fingerprint": {
+
+           "type": "string",
+         
+           "defaultValue": "",
+
+           "metadata": {
+
+              "description": "Fingerprint for agent to controller authentication - OPTIONAL"
+
+           }
+
         }
+
 
     },
 
@@ -213,10 +256,13 @@
         "agenttestinterface"  :     "[concat(variables('stackname'),'-agenttestinterface')]",
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
-    
-        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'), ' >> /var/log/image_init.log')]",
-
+     
+        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'), ' --username ',[parameters('Auth Username')], ' --password ',[parameters('Auth Password')],' --fingerprint ',[parameters('Auth Fingerprint')] ' >> /var/log/image_init.log')]",
+       
         "skunames" : {
+            "0.3.0": {
+                "skuname": "keysight-cyperf-agent-30"
+            },
             "0.2.6": {
                 "skuname": "keysight-cyperf-agent-26"
             },

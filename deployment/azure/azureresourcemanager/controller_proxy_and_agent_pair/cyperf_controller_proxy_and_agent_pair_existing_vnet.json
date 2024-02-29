@@ -21,17 +21,19 @@
             }
 
         },
+
         "Cyperf Version": {
 
             "type": "string",
 
-            "defaultValue": "0.2.6",
+            "defaultValue": "0.3.0",
 
             "allowedValues": [
-              "0.2.6",
-              "0.2.5",
-              "0.2.1",
-              "0.1.5"
+                "0.3.0",
+                "0.2.6",  
+                "0.2.5",
+                "0.2.1",
+                "0.2.0"
             ],
 
             "metadata": {
@@ -159,7 +161,49 @@
 
             }
 
+        },
+
+        "Auth Username": {
+
+            "type": "string",
+
+            "defaultValue": "cyperf",
+
+            "metadata": {
+
+              "description": "Username for agent to controller authentication."
+
+            }
+        },
+
+        "Auth Password": {
+
+            "type": "string",
+         
+            "defaultValue": "CyPerf&Keysight#1",
+
+            "metadata": {
+
+              "description": "Password for agent to controller authentication"
+
+            }
+
+        },
+
+        "Auth Fingerprint": {
+
+           "type": "string",
+         
+           "defaultValue": "",
+
+           "metadata": {
+
+              "description": "Fingerprint for agent to controller authentication - OPTIONAL"
+
+           }
+
         }
+
 
     },
 
@@ -167,7 +211,7 @@
 
     "variables": {
 
-        "stackname"  :     "[parameters('Deployment Name')]",
+        "stackname" :     "[parameters('Deployment Name')]",
 
         "location"  :     "[resourceGroup().location]",
 
@@ -191,9 +235,13 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
+        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
 
         "skunames" : {
+            "0.3.0": {
+                "skunameagent": "keysight-cyperf-agent-30",
+                "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-30"
+            },
             "0.2.6": {
                 "skunameagent": "keysight-cyperf-agent-26",
                 "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-26"
@@ -430,8 +478,8 @@
             "location": "[variables('location')]",
 
             "plan": {
-
-                "name": "[variables('skunames')[parameters('Cyperf Version')].skunamecontrollerproxy]", 
+                 
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skunamecontrollerproxy]",
 
                 "product": "keysight-cyperf",
 
@@ -458,6 +506,8 @@
                     "computerName":"[variables('vmname_controllerproxy')]",
 
                     "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat(('#!/bin/bash -xe\n','sudo echo -ne ',[parameters('Auth Password')],'> /.cyperf/local_secret\n','sudo systemctl restart wap-tunnel-server.service\n')]",
 
                     "linuxConfiguration": {
 
@@ -494,7 +544,7 @@
                     "publisher": "keysighttechnologies_cyperf",
                     "offer": "keysight-cyperf",
                     "sku": "[variables('skunames')[parameters('Cyperf Version')].skunamecontrollerproxy]",
-                    "version": "[parameters('Cyperf Version')]"
+                    "version": "latest"
                     }
                 },
 
@@ -672,7 +722,8 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' --username ',[parameters('Auth Username')], ' --password ',[parameters('Auth Password')],' --fingerprint ',[parameters('Auth Fingerprint')] ' >> /var/log/image_init.log'))]",
+
 
                     "linuxConfiguration": {
 
@@ -706,10 +757,10 @@
                             }
                     },
                     "imageReference": {
-                        "publisher": "keysighttechnologies_cyperf",
-                        "offer": "keysight-cyperf",
-                        "sku": "[variables('skunames')[parameters('Cyperf Version')].skunameagent]",
-                        "version": "[parameters('Cyperf Version')]"
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skunameagent]",
+                    "version": "[parameters('Cyperf Version')]"
                     }
                 },
 
