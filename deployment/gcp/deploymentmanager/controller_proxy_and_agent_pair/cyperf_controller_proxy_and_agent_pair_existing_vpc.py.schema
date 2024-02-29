@@ -59,3 +59,18 @@ properties:
     type: integer
     default: 2
     description: number of agents
+
+  authUsername:
+    type: string
+    default: cyperf
+    description: Username for agent to controller proxy authentication.
+
+  authPassword:
+    type: string
+    default: CyPerf&Keysight#1
+    description: Password for agent to controller proxy authentication
+  
+  authFingerprint:
+    type: string
+    default: ""
+    description: Fingerprint for agent to controller proxy authentication - OPTIONAL
