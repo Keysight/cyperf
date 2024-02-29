@@ -18,12 +18,12 @@ locals{
     main_agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
-                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.mdw.private_ip} >> /var/log/Appsec_init.log
+                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.mdw.private_ip} --username "${var.controller_username}" --password "${var.controller_password}">> /var/log/Appsec_init.log
     EOF
     secondary_agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
-                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.broker.private_ip} >> /var/log/Appsec_init.log
+                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.broker.private_ip} --username "${var.broker_username}" --password "${var.broker_password}">> /var/log/Appsec_init.log
     EOF
     firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr,local.secondary_cidr])
 }
