@@ -307,6 +307,11 @@ TO BE CONTINUED ...
 
 ## Releases
 
+- **CyPerf 3.0** - [February, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release3.0
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.656
+
 - **CyPerf 2.6** - [October, 2023]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release2.6
