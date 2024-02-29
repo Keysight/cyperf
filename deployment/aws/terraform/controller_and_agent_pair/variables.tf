@@ -50,7 +50,7 @@ variable "aws_agent_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-3-0"
+  default     = "keysight-cyperf-controller-2-6"
   description = "Version for the cyperf controller"
 }
 
@@ -72,7 +72,7 @@ variable "controller_password" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-3-0"
+  default     = "keysight-cyperf-agent-2-6"
   description = "Version for the cyperf agent"
 }
 

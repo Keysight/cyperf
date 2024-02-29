@@ -71,8 +71,8 @@ The following table lists the parameters for this deployment.
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
 | aws_broker_machine_type   | t2.medium   | The machine type used for deploying the CyPerf controller proxy. |
 | aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
-| broker_version   | keysight-cyperf-controller-proxy-3-0           | The CyPerf controller proxy image version. |
-| agent_version       | keysight-cyperf-agent-3-0     | The CyPerf agent image version.   |
+| broker_version   | keysight-cyperf-controller-proxy-2-6           | The CyPerf controller proxy image version. |
+| agent_version       | keysight-cyperf-agent-2-6     | The CyPerf agent image version.   |
 | broker_product_code   | 3fezxyt55evlaoi1pkcqtonsj         | The CyPerf controller proxy marketplace product code. |
 | agent_product_code       | zskzjts7t5crpmiic5drkq0j     | The CyPerf agent marketplace product code.   
 

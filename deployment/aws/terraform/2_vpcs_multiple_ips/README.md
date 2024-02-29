@@ -73,9 +73,9 @@ The following table lists the parameters for this deployment.
 | aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
 | agent_number   | 5           | Number of agents deployed per vpc |
 | ip_number   | 11           | Number of test IPs per agent |
-| mdw_version   | keysight-cyperf-controller-3-0           | The CyPerf controller image version. |
-| broker_version   | keysight-cyperf-controller-proxy-3-0         | The CyPerf controller proxy image version. |
-| agent_version       | keysight-cyperf-agent-3-0     | The CyPerf agent image version.   |
+| mdw_version   | keysight-cyperf-controller-2-5           | The CyPerf controller image version. |
+| broker_version   | keysight-cyperf-controller-proxy-2-5         | The CyPerf controller proxy image version. |
+| agent_version       | keysight-cyperf-agent-2-5     | The CyPerf agent image version.   |
 | mdw_product_code   | 8nmwoluc06w5z6vbutcwyueje           | The CyPerf controller marketplace product code. |
 | broker_product_code   | 3fezxyt55evlaoi1pkcqtonsj         | The CyPerf controller proxy marketplace product code. |
 | agent_product_code       | zskzjts7t5crpmiic5drkq0j     | The CyPerf agent marketplace product code.   |
