@@ -10,7 +10,7 @@ provider "azurerm" {
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} --username "${var.controller_username}" --password "${var.controller_password}" --fingerprint "">> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
 
   split_version = split(".", var.cyperf_version)

@@ -73,13 +73,13 @@ variable "broker_version" {
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-2-6"
+  default     = "keysight-cyperf-agent-3-0"
   description = "Name for the cyperf agent machines"
 }
 
 variable "broker_name" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-2-6"
+  default     = "keysight-cyperf-controller-proxy-3-0"
   description = "Name for the cyperf broker machines"
 }
 
@@ -87,4 +87,16 @@ variable "azure_broker_machine_type" {
   type        = string
   default     = "Standard_F2s_v2"
   description = "controller-proxy image"
+}
+
+variable "broker_username" {
+  type        = string
+  default     = "admin"
+  description = "Broker's authentication username"
+  }
+  
+variable "broker_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Broker's authentication password"
 }

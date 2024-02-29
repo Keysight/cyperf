@@ -13,7 +13,7 @@ locals {
   server_name = "${var.azure_owner_tag}-server-${var.agent_name}"
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      bash /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} --username "${var.controller_username}" --password "${var.controller_password}" --fingerprint "">> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   vpc_address_space = ["10.0.0.0/16"]
   mgmt_iprange = ["10.0.1.0/24"]

@@ -32,6 +32,18 @@ variable "controller_ip" {
   description = "Controller or Controller-Proxy management IP"
 }
 
+variable "username" {
+  type        = string
+  default     = "admin"
+  description = "Controller/Broker's authentication username"
+  }
+  
+variable "password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller/Broker's authentication password"
+}
+
 variable "agent_version" {
   type        = string
   description = "Image id for the agent machines"

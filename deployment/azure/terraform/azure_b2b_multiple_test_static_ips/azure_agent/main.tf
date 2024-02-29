@@ -1,7 +1,7 @@
 locals {
   custom_data = <<-CUSTOM_DATA
       #!/bin/bash
-      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} >> /home/cyperf/azure_image_init_log
+      bash /usr/bin/image_init_azure.sh  ${var.controller_ip} --username "${var.username}" --password "${var.password}" --fingerprint "">> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   split_version = split(".", var.agent_version)
   sku_name_agent = var.agent_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
