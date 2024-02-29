@@ -7,16 +7,10 @@
 def GenerateConfig(context):
   
   #varaible definations
-  
+
   management_subnetwork = context.properties['management_subnetwork']
   
   test_subnetwork = context.properties['test_subnetwork']
-
-  auth_username = context.properties['authUsername']
-
-  auth_password = context.properties['authPassword']
-
-  auth_fingerprint = context.properties['authFingerprint']
   
   region = context.properties['region']
   
@@ -26,96 +20,17 @@ def GenerateConfig(context):
 
   agent_base_name = context.env['deployment'] + '-cyperf-agent-'
   
-  controller_proxy = context.env['deployment'] + '-cyperf-controller-proxy'
+  controller = context.properties['controllerip']
 
-  sslkey = 'cyperf:' + '<Replace with ssh public key>'
+  sslkey = 'cyperf:' + '<Replace with ssh public key.>'
 
 
   resources = []
-        
-  # cyperf Controller-proxy
-  resources.append({
-      "name": controller_proxy,
-      "type": "compute.v1.instance",
-      "properties": {
-          "zone": zone,
-          #"machineType": 'zones/' + zone + '/machineTypes/c2-standard-8',
-          "machineType": 'zones/' + zone + '/machineTypes/' + context.properties['controllerProxyMachineType'],
-          "metadata": {
-              "kind": "compute#metadata",
-              "items": [{
-                  "key": "ssh-keys",
-                  "value": sslkey,
-              }, {
-                      'key': 'startup-script',
-                      'value': ''.join(['#!/bin/bash -xe\n',
-                          'sudo echo -ne %s' % auth_password,
-                          '> /.cyperf/local_secret\n',
-                          'sudo systemctl restart wap-tunnel-server.service\n'
-                      ])
-                  }
-              ],
-          },
-          "tags": {
-              "items": ["cyperf-controller-proxy"]
-          },
-          "disks": [{
-              "kind": "compute#attachedDisk",
-              "type": "PERSISTENT",
-              "boot": True,
-              "mode": "READ_WRITE",
-              "autoDelete": True,
-              "deviceName": "boot",
-              "initializeParams": {
-                  "sourceImage": 'projects/' + 'kt-nas-cyperf-dev' + '/global/images/' + context.properties['controllerProxySourceImage'],
-                  "diskType": 'zones/' + zone + '/diskTypes/pd-standard',
-                  "diskSizeGb": "100",
-                  "labels": {},
-				   },
-              "diskEncryptionKey": {},
-          }],
-          "networkInterfaces": [{
-              "kind": "compute#networkInterface",
-              "subnetwork": 'regions/' + region + '/subnetworks/' + management_subnetwork,
-              "accessConfigs": [{
-                  "kind": "compute#accessConfig",
-                  "name": "External NAT",
-                  "type": "ONE_TO_ONE_NAT",
-                  "networkTier": "PREMIUM",
-              }],
-              "aliasIpRanges": [],
-          }],
-          "description": "",
-          "labels": {},
-          "scheduling": {
-              "onHostMaintenance": "MIGRATE",
-              "nodeAffinities": [],
-          },
-          "reservationAffinity": {
-              "consumeReservationType": "ANY_RESERVATION"
-          },
-          "serviceAccounts": [
-                    {
-                        "email": service_account_email,
-                        "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
-                    }
-          ],
-          "shieldedInstanceConfig": {},
-          "confidentialInstanceConfig": {},
-      },
-      "metadata": {
-          "dependsOn": [
-          ]
-      }
-  })
   
   # cyperf agents
   
   for val in range(1, int(context.properties['agentCount']) + 1):
  
-    CONTROLLER_NAME = controller_proxy
-    print('debug\n')
-    print('$(ref.%s.networkInterfaces[0].networkIP)' % CONTROLLER_NAME)
     COMPUTE_AGENT_NAME = agent_base_name + str(val)
     resources.append({
       "name": COMPUTE_AGENT_NAME,
@@ -134,8 +49,7 @@ def GenerateConfig(context):
                       'value': ''.join(['#!/bin/bash\n',
                           'cd /home/cyperf/\n',
                           'cyperfagent configuration reload\n',
-                          '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username %s --password %s --fingerprint %s >> Appsec_init_gcp_log' % (CONTROLLER_NAME, auth_username, auth_password, auth_fingerprint)
-                          
+                          '/bin/bash image_init_gcp.sh %s >> Appsec_init_gcp_log' % controller
                       ])
                   }
   
@@ -191,19 +105,16 @@ def GenerateConfig(context):
           "reservationAffinity": {
               "consumeReservationType": "ANY_RESERVATION"
           },
-          "serviceAccounts": [
-              {
-                   "email": service_account_email,
-                   "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
-              }
-          ],
+          "serviceAccounts": [{
+              "email": service_account_email,
+              "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+          }],
           "shieldedInstanceConfig": {},
           "confidentialInstanceConfig": {},
   
       },
       "metadata": {
           "dependsOn": [
-              controller_proxy
           ],
   
       }

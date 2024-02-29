@@ -16,6 +16,12 @@ def GenerateConfig(context):
     test_network = context.env['deployment']+'-cyperf-test-network'
     
     test_subnetwork = context.env['deployment']+'-cyperf-test-subnetwork'
+
+    auth_username = context.properties['authUsername']
+
+    auth_password = context.properties['authPassword']
+
+    auth_fingerprint = context.properties['authFingerprint']
     
     test_network_cidr = context.properties['testNetworkCIDR']
     
@@ -219,6 +225,14 @@ def GenerateConfig(context):
                         {
                             "key": "ssh-keys",
                             "value": sslkey,
+                        },
+                        {
+                            'key': 'startup-script',
+                            'value': ''.join(['#!/bin/bash -xe\n',
+                                'sudo echo -ne %s' % auth_password,
+                                '> /.cyperf/local_secret\n',
+                                'sudo systemctl restart wap-tunnel-server.service\n'
+                            ])
                         }
                     ],
                 },
@@ -272,10 +286,10 @@ def GenerateConfig(context):
                 "confidentialInstanceConfig": {},
             },
             "metadata": {
-                         "dependsOn":[
-                                      management_subnetwork,
-                                      test_subnetwork
-                                     ]
+                "dependsOn":[
+                    management_subnetwork,
+                    test_subnetwork
+                ]
           }
         }
     )
@@ -304,9 +318,9 @@ def GenerateConfig(context):
                         {
                             'key': 'startup-script',
                             'value': ''.join(['#!/bin/bash\n',
-                                                        'cd /home/cyperf/\n',
-                                                        '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) >> Appsec_init_gcp_log' %CONTROLLER_PROXY_NAME
-                                                        ])
+                            'cd /home/cyperf/\n',
+                            '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username %s --password %s --fingerprint %s >> Appsec_init_gcp_log' % (CONTROLLER_PROXY_NAME, auth_username, auth_password, auth_fingerprint)
+                            ])
                         }
                         
                     ],

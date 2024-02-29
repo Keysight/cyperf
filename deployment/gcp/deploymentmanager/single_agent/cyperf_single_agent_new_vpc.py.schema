@@ -1,26 +1,17 @@
 
 
 info: 
-  title: CyPerf B2B Agents with Controller Template
+  title: CyPerf single or multiple Agents Template
   author: keysight-cyperf
-  description: Creates a B2B Test Topology with Controller in GCP 
+  description: Creates a single or multiple Agents Test Topology in GCP 
 
 
 imports:
-  - path: cyperf_controller_and_agent_pair_new_vpc.py
+  - path: cyperf_single_agent_new_vpc.py
     name: helper.py
 
 
-properties: 
-  controllerMachineType:
-    type: string
-    default: c2-standard-8
-    description: machine type for controller
- 
-  controllerSourceImage:
-    type: string
-    default: keysight-cyperf-controller-2-6
-    description: sample source image of controller 
+properties:
 
   region:
     type: string
@@ -31,6 +22,11 @@ properties:
     type: string
     default: us-east1-c
     description: Zone to deploy 
+
+  controllerip:
+    type: string
+    default: 1.1.1.1
+    description: set controller ip
 
   serviceAccountEmail:
     type: string
@@ -44,7 +40,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-2-6
+    default: keysight-cyperf-agent-2-0
     description: source image for agents
 
   managementNetworkCIDR:
@@ -56,25 +52,8 @@ properties:
     type: string
     default: 10.0.0.0/8
     description: CIDR for  for test network
-
+    
   agentCount:
     type: integer
-    default: 2
+    default: 1
     description: number of agents
-
-  authUsername:
-    type: string
-    default: admin
-    description: Username for agent to controller authentication
-
-  authPassword:
-    type: string
-    default: CyPerf&Keysight#1
-    description: Password for agent to controller authentication
-  
-  authFingerprint:
-    type: string
-    default: ""
-    description: Fingerprint for agent to controller authentication - OPTIONAL
-
-

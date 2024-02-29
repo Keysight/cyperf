@@ -46,15 +46,34 @@ properties:
     type: string
     default: keysight-cyperf-agent-2-6
     description: source image for agents
+
   managementNetworkCIDR:
     type: string
     default: 172.16.5.0/24
     description: CIDR for  for mngt net
+
   testNetworkCIDR:
     type: string
     default: 10.0.0.0/8
     description: CIDR for  for test net
+
   agentCount:
     type: integer
     default: 2
     description: number of agents
+
+  authUsername:
+    type: string
+    default: cyperf
+    description: Username for agent to controller proxy authentication.
+
+  authPassword:
+    type: string
+    default: CyPerf&Keysight#1
+    description: Password for agent to controller proxy authentication
+  
+  authFingerprint:
+    type: string
+    default: ""
+    description: Fingerprint for agent to controller proxy authentication - OPTIONAL
+
