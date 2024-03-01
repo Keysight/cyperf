@@ -49,7 +49,7 @@
 
             "metadata": {
 
-                "description": "CyPerf Controller/ Controller Proxy IP for Agent peering"
+                "description": "CyPerf (public IP) of Controller/ Controller Proxy for Agent peering"
             }
         },
 
@@ -95,7 +95,7 @@
 
             "type": "string",
 
-            "defaultValue": "172.16.2.0/24",
+            "defaultValue": "172.16.7.0/24",
 
             "metadata":{
 
@@ -109,7 +109,7 @@
 
             "type": "string",
 
-            "defaultValue":"172.16.3.0/24",
+            "defaultValue":"172.16.8.0/24",
 
             "metadata": {
 
@@ -257,7 +257,7 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'),' --username \"',parameters('Auth Username'),'\" --password \"', parameters('Auth Password'), '\" --fingerprint \"',parameters('Auth Fingerprint'),'\" >> /var/log/image_init.log'))]",
+        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'),' --username \"',parameters('Auth Username'),'\" --password \"', parameters('Auth Password'), '\" --fingerprint \"',parameters('Auth Fingerprint'),'\" >> /var/log/image_init.log')]",
        
         "skunames" : {
             "0.3.0": {
