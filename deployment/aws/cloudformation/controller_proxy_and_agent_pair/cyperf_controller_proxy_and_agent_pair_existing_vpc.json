@@ -384,7 +384,7 @@
             "ConstraintDescription": "must specify yes or no."
         },
         "AuthUsername": {
-            "Default": "cyperf",
+            "Default": "admin",
             "Description": "Username for agent to controller-proxy authentication",
             "Type": "String"
         },
