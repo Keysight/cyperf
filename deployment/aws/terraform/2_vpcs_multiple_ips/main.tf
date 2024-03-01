@@ -18,41 +18,14 @@ locals{
     main_agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
-                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.mdw.private_ip} >> /var/log/Appsec_init.log
+                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.mdw.private_ip} --username "${var.controller_username}" --password "${var.controller_password}">> /var/log/Appsec_init.log
     EOF
     secondary_agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
-                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.broker.private_ip} >> /var/log/Appsec_init.log
+                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.broker.private_ip} --username "${var.broker_username}" --password "${var.broker_password}">> /var/log/Appsec_init.log
     EOF
     firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr,local.secondary_cidr])
-}
-
-data "aws_ami" "mdw_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.mdw_product_code]
-    }
-}
-
-data "aws_ami" "agent_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.agent_product_code]
-    }
-}
-
-data "aws_ami" "broker_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.broker_product_code]
-    }
 }
 
 resource "aws_vpc" "main_vpc" {
@@ -262,7 +235,7 @@ resource "aws_instance" "mdw" {
     }
 
 
-    ami           = data.aws_ami.mdw_ami.image_id
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${var.cyperf_release}"
     instance_type = var.aws_mdw_machine_type
 
     ebs_block_device {
@@ -288,7 +261,7 @@ resource "aws_instance" "main_agent" {
     tags = {
         Name = "${local.main_agent_name}-${count.index}"
     }
-    ami           = data.aws_ami.agent_ami.image_id
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${var.cyperf_release}"
     instance_type = var.aws_agent_machine_type
 
     ebs_block_device {
@@ -522,7 +495,7 @@ resource "aws_instance" "broker" {
     }
 
 
-    ami           = data.aws_ami.broker_ami.image_id
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-xopwud6rtquaw/${var.cyperf_release}"
     instance_type = var.aws_broker_machine_type
 
     ebs_block_device {
@@ -548,7 +521,7 @@ resource "aws_instance" "secondary_agent" {
     tags = {
         Name = "${local.secondary_agent_name}-${count.index}"
     }
-    ami           = data.aws_ami.agent_ami.image_id
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${var.cyperf_release}"
     instance_type = var.aws_agent_machine_type
 
     ebs_block_device {

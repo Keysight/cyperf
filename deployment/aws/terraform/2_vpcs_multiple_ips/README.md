@@ -76,9 +76,7 @@ The following table lists the parameters for this deployment.
 | mdw_version   | keysight-cyperf-controller-3-0           | The CyPerf controller image version. |
 | broker_version   | keysight-cyperf-controller-proxy-3-0         | The CyPerf controller proxy image version. |
 | agent_version       | keysight-cyperf-agent-3-0     | The CyPerf agent image version.   |
-| mdw_product_code   | 8nmwoluc06w5z6vbutcwyueje           | The CyPerf controller marketplace product code. |
-| broker_product_code   | 3fezxyt55evlaoi1pkcqtonsj         | The CyPerf controller proxy marketplace product code. |
-| agent_product_code       | zskzjts7t5crpmiic5drkq0j     | The CyPerf agent marketplace product code.   |
+| cyperf_release   | 3.0           | The version of the cyperf release. |
 
 ## Destruction
 

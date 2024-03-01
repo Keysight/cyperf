@@ -11,16 +11,6 @@ locals{
     firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr])
 }
 
-data "aws_ami" "mdw_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.mdw_product_code]
-    }
-}
-
-
 resource "aws_vpc" "aws_main_vpc" {
     tags = {
         Name = "${var.aws_stack_name}-main-vpc"
@@ -120,7 +110,7 @@ resource "aws_instance" "aws_mdw" {
     }
 
 
-    ami           = data.aws_ami.mdw_ami.image_id 
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${var.cyperf_release}"
     instance_type = var.aws_mdw_machine_type
     ebs_block_device {
         device_name = "/dev/sda1"

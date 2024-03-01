@@ -46,8 +46,8 @@ variable "mdw_version" {
   description = "Version for the cyperf controller machine"
 }
 
-variable "mdw_product_code" {
+variable "cyperf_release" {
   type        = string
-  default     = "8nmwoluc06w5z6vbutcwyueje"
-  description = "Product code from the AWS Marketplace for the cyperf controller"
+  default     = "3.0"
+  description = "The version of the cyperf release"
 }
