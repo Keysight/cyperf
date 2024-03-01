@@ -57,3 +57,18 @@ properties:
     type: integer
     default: 1
     description: number of agents
+  
+  authUsername:
+    type: string
+    default: admin
+    description: Username for agent to controller authentication
+
+  authPassword:
+    type: string
+    default: CyPerf&Keysight#1
+    description: Password for agent to controller authentication
+  
+  authFingerprint:
+    type: string
+    default: ""
+    description: Fingerprint for agent to controller authentication - OPTIONAL

@@ -11,6 +11,12 @@ def GenerateConfig(context):
   management_subnetwork = context.properties['management_subnetwork']
   
   test_subnetwork = context.properties['test_subnetwork']
+
+  auth_username = context.properties['authUsername']
+
+  auth_password = context.properties['authPassword']
+
+  auth_fingerprint = context.properties['authFingerprint']
   
   region = context.properties['region']
   
@@ -49,7 +55,8 @@ def GenerateConfig(context):
                       'value': ''.join(['#!/bin/bash\n',
                           'cd /home/cyperf/\n',
                           'cyperfagent configuration reload\n',
-                          '/bin/bash image_init_gcp.sh %s >> Appsec_init_gcp_log' % controller
+                          '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username \"%s"\ --password \"%s"\ --fingerprint \"%s"\ >> Appsec_init_gcp_log' % (controller, auth_username, auth_password, auth_fingerprint)
+
                       ])
                   }
   
