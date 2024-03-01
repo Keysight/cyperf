@@ -67,6 +67,6 @@ variable "controller_image" {
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-2-1"
+  default     = "keysight-cyperf-controller-3-0"
   description = "Name for the cyperf controller machine"
 }
