@@ -173,7 +173,7 @@
 
             "type": "string",
 
-            "defaultValue": "cyperf",
+            "defaultValue": "admin",
 
             "metadata": {
 
@@ -248,7 +248,7 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "userdata"  :     "#!/bin/bash -xe\n sh /usr/bin/image_init_azure.sh ",
+        "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
 
         "skunames" : {
             "0.3.0": {
@@ -671,7 +671,7 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(('#!/bin/bash -xe\n','sudo echo -ne ',[parameters('Auth Password')],'> /.cyperf/local_secret\n','sudo systemctl restart wap-tunnel-server.service\n')]",
+                    "customData": "[base64(concat('#!/bin/bash -xe\n','sudo echo -ne \"', parameters('Auth Password'),'\" > /.cyperf/local_secret\n','sudo systemctl restart wap-tunnel-server.service\n'))]",
 
                     "linuxConfiguration": {
 
@@ -886,9 +886,8 @@
 
                     "adminUsername": "cyperf",
 
-                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' >> /var/log/image_init.log'))]",
-
-
+                    "customData": "[base64(concat(variables('userdata'),reference(variables('controllerproxy_interface')).ipConfigurations[0].properties.privateIPAddress,' --username \"',parameters('Auth Username'),'\" --password \"', parameters('Auth Password'), '\" --fingerprint \"',parameters('Auth Fingerprint'),'\" >> /var/log/image_init.log'))]",
+                    
                     "linuxConfiguration": {
 
                         "disablePasswordAuthentication": true,

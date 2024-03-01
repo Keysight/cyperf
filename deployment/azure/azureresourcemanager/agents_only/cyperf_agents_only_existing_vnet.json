@@ -244,7 +244,7 @@
 
         "vmname_agent"  :     "[concat(variables('stackname'),'-agent')]",
 
-        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'), ' >> /var/log/image_init.log')]",
+        "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'),' --username \"',parameters('Auth Username'),'\" --password \"', parameters('Auth Password'), '\" --fingerprint \"',parameters('Auth Fingerprint'),'\" >> /var/log/image_init.log'))]",
 
         "skunames" : {
             "0.3.0": {
