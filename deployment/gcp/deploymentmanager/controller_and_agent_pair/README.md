@@ -28,7 +28,7 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-6,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
@@ -36,7 +36,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cy
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-2-6,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUser
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUser
 name:admin,authPassword:CyPerf&Keysight#1,authFingerprint:""
 ```
 
