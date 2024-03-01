@@ -16,7 +16,7 @@ Control subnet should reside behind NAT gateway, if Agents need to reach outside
 
 ## Step 2: Subscribe to the AMIs Used by the Manual Deployment
 This manual deployment uses publicly available Keysight CyPerf Controller, Agent, and Controller Proxy AMIs. 
-The following AMIs are available for CyPerf 2.6 release.
+The following AMIs are available for CyPerf 3.0 release.
 
 -	keysight-cyperf-controller-3-0
 
@@ -38,9 +38,9 @@ Keysight CyPerf license needs to be procured for further usage. These licenses n
 6.	Select or create a Security group with the following ingress custom TCP port.
  
     a. If Agents directly peers with Controller, then 
-    allow **30422** from your desired source IP range, where the Agents belong.
+    allow **443** from your desired source IP range, where the Agents belong.
 
-        Note: If Agents are in AWS private subnet, allow NAT gateways IP for 30422 port in the ingress rule.
+        Note: If Agents are in AWS private subnet, allow NAT gateways IP for 443 port in the ingress rule.
         Assuming all IPs and ports are allowed for egress rule.
                 
     b. Allow **443** from your desired source IP range to access CyPerf Controller from your browser.
