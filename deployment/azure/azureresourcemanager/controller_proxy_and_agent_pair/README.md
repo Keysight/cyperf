@@ -30,8 +30,8 @@ The following table lists the parameters for this deployment in **New VNET**.
 | SSH Public Key                   | Requires input            | Public key to enable SSH access to the CyPerf instances. User may create private key & public key using ssh-keygen. Then specify ssh public key here.   |
 | Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”.  |
 | Number of CyPerf Agents                   | 2            | Number of CyPerf agents will be deployed from this template.  |
-| Auth Username                                        | cyperf                   | Username for agent to controller authentication.      |
-| Auth Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Auth Username                                        | `admin`                   | Username for agent to controller authentication.      |
+| Auth Password                                        | `CyPerf&Keysight#1`        | Password for agent to controller authentication.      |
 | Auth Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 
 The following table lists the parameters for this deployment in **Existing VNET**.
@@ -51,8 +51,8 @@ The following table lists the parameters for this deployment in **Existing VNET*
 | SSH Public Key                   | Requires input            | Public key to enable SSH access to the CyPerf instances. User may create private key & public key using ssh-keygen. Then specify ssh public key here.   |
 | Allowed Subnet for Security Group                   | Requires input            | Subnet range allowed to access deployed Azure resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”.  |
 | Number of CyPerf Agents                   | 2            | Number of CyPerf agents will be deployed from this template.  |
-| Auth Username                                        | cyperf                   | Username for agent to controller authentication.      |
-| Auth Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Auth Username                                        | `admin`                   | Username for agent to controller authentication.      |
+| Auth Password                                        | `CyPerf&Keysight#1`        | Password for agent to controller authentication.      |
 | Auth Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 
 **Note:** **CyPerf** and **Cyperf** represents same. ARM templates use **Cyperf** instead of **CyPerf** and it becomes an Azure limitation that introduces extra space.

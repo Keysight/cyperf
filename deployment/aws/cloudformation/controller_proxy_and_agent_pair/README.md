@@ -32,8 +32,8 @@ The following table lists the parameters for the deployment in a **New VPC**.
 |SSH Key                                      |Requires input|The name of an existing EC2 KeyPair to enable SSH access to the CyPerf instances.                                                                                                                                     |
 |Control Subnet for CyPerf Agents             |172.16.2.0/24 |CyPerf agents use this subnet for control plane communication with a  controller.                                                                                                                                     |
 |Test Subnet for CyPerf Agents                |172.16.3.0/24 |CyPerf agents use this subnet for test traffic.                                                                                                                                                                       |
-| Authentication Username                                        | admin                    | Username for agent to controller authentication.      |
-| Authentication Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Authentication Username                                        | `admin`                   | Username for agent to controller authentication.      |
+| Authentication Password                                        | `CyPerf&Keysight#1`        | Password for agent to controller authentication.      |
 | Authentication Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 |Allowed Subnet for Security Group            |1.1.1.1/1     |Subnet range allowed to access deployed Controller Proxy. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”. The default value is an example value. You must use a proper subnet range.                                           |
 
@@ -53,8 +53,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 |Control Subnet for CyPerf Agents             |Select subnet from drop down      |Preferred Existing Control subnet for CyPerf Agent.                                                                                                                                                                   |
 |Test Subnet for CyPerf Agents                |Select subnet from drop down        |Preferred Existing Test subnet for CyPerf Agent.                                                                                                                                                                      |
 |Security Group of CyPerf Agent               |Select security group from drop down|Preferred Existing Security group of CyPerf Agent.                                                                                                                                                                    |
-| Authentication Username                                        | admin                    | Username for agent to controller authentication.      |
-| Authentication Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Authentication Username                                        | `admin`                    | Username for agent to controller authentication.      |
+| Authentication Password                                        | `CyPerf&Keysight#1`        | Password for agent to controller authentication.      |
 | Authentication Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 
 ## Post deployment
