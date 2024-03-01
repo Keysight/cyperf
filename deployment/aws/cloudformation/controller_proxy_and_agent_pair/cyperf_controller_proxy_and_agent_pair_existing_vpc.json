@@ -676,7 +676,7 @@
                                         ]
                                     ]
                                 },
-                                " --username ",
+                                " --username \"",
                                 {
                                     "Fn::Join": [
                                         "",
@@ -687,7 +687,7 @@
                                         ]
                                     ]
                                 },
-                                " --password ",
+                                "\" --password \"", 
                                 {
                                     "Fn::Join": [
                                         "",
@@ -698,7 +698,7 @@
                                         ]
                                     ]
                                 },
-                                " --fingerprint ",
+                                "\" --fingerprint \"",
                                 {
                                     "Fn::Join": [
                                         "",
@@ -709,7 +709,7 @@
                                         ]
                                     ]
                                 },
-                                " >> /var/log/Appsec_init.log\n"
+                                "\" >> /var/log/Appsec_init.log\n"
                             ]
                         ]
                     }
@@ -831,7 +831,7 @@
                                         ]
                                     ]
                                 },
-                                " --username ",
+                                " --username \"",
                                 {
                                     "Fn::Join": [
                                         "",
@@ -842,7 +842,7 @@
                                         ]
                                     ]
                                 },
-                                " --password ",
+                                "\" --password \"", 
                                 {
                                     "Fn::Join": [
                                         "",
@@ -853,7 +853,7 @@
                                         ]
                                     ]
                                 },
-                                " --fingerprint ",
+                                "\" --fingerprint \"",
                                 {
                                     "Fn::Join": [
                                         "",
@@ -864,7 +864,7 @@
                                         ]
                                     ]
                                 },
-                                " >> /var/log/Appsec_init.log\n"
+                                "\" >> /var/log/Appsec_init.log\n"
                             ]
                         ]
                     }
