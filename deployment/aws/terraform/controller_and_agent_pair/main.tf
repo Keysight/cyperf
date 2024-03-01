@@ -14,7 +14,7 @@ locals{
     agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
-                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_mdw.private_ip} >> /var/log/Appsec_init.log
+                sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_mdw.private_ip} --username "${var.controller_username}" --password "${var.controller_password}">> /var/log/Appsec_init.log
     EOF
     firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr],[local.test_cidr])
 }
@@ -203,24 +203,6 @@ resource "aws_network_interface" "aws_server_test_interface" {
     security_groups = [ aws_security_group.aws_agent_security_group.id ]
 }
 
-data "aws_ami" "mdw_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.mdw_product_code]
-    }
-}
-
-data "aws_ami" "agent_ami" {
-    owners = ["aws-marketplace"]
-    most_recent = true
-    filter {
-      name   = "product-code"
-      values = [var.agent_product_code]
-    }
-}
-
 resource "aws_eip" "mdw_public_ip" {
   instance = aws_instance.aws_mdw.id
   vpc = true
@@ -254,7 +236,7 @@ resource "aws_instance" "aws_mdw" {
     }
 
 
-    ami           = data.aws_ami.mdw_ami.image_id 
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${var.cyperf_release}"
     instance_type = var.aws_mdw_machine_type
 
     ebs_block_device {
@@ -279,7 +261,7 @@ resource "aws_instance" "aws_client_agent" {
     tags = {
         Name = local.client_name
     }
-    ami           = data.aws_ami.agent_ami.image_id 
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${var.cyperf_release}"
     instance_type = var.aws_agent_machine_type
 
     ebs_block_device {
@@ -311,7 +293,7 @@ resource "aws_instance" "aws_server_agent" {
         Name = local.server_name
     }
 
-    ami           = data.aws_ami.agent_ami.image_id 
+    ami           = "resolve:ssm:/aws/service/marketplace/prod-tild73tpfkqko/${var.cyperf_release}"
     instance_type = var.aws_agent_machine_type
 
     ebs_block_device {

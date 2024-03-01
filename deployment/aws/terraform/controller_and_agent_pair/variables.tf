@@ -54,10 +54,16 @@ variable "mdw_version" {
   description = "Version for the cyperf controller"
 }
 
-variable "mdw_product_code" {
+variable "controller_username" {
   type        = string
-  default     = "8nmwoluc06w5z6vbutcwyueje"
-  description = "Product code from the AWS Marketplace for the cyperf controller"
+  default     = "admin"
+  description = "Controller's authentication username"
+}
+
+variable "controller_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller's authentication password"
 }
 
 variable "agent_version" {
@@ -66,8 +72,8 @@ variable "agent_version" {
   description = "Version for the cyperf agent"
 }
 
-variable "agent_product_code" {
+variable "cyperf_release" {
   type        = string
-  default     = "zskzjts7t5crpmiic5drkq0j"
-  description = "Product code from the AWS Marketplace the cyperf agent"
+  default     = "3.0"
+  description = "The version of the cyperf release"
 }
