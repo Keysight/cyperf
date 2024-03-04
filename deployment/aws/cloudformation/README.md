@@ -6,6 +6,7 @@ To start using CyPerf's CFT templates, please see the **README** files in each 
 
 ## Prerequisites
 The prerequisites are:
+- These cloudformation templates refer Keysight CyPerf Marketplace images. Please **Continue to Subscribe** [Controller](https://aws.amazon.com/marketplace/pp/prodview-ty2icqjtg2hmu?sr=0-1&ref_=beagle&applicationId=AWSMPContessa), [Agent]( https://aws.amazon.com/marketplace/pp/prodview-qb3p4dxetsx6a?sr=0-2&ref_=beagle&applicationId=AWSMPContessa) and [Controller Proxy](https://aws.amazon.com/marketplace/pp/prodview-zdxdvc2hkefyy?sr=0-9&ref_=beagle&applicationId=AWSMPContessa) manually before deploying these templates.
 - Key pair for management access to CyPerf instances.
 - For existing VPC deployment, an existing VPC, two existing subnets in that VPC (one for test and one for Management) and existing security groups for CyPerf Controller/ Controller Proxy and CyPerf Agent.
 - Permissions to create AWS Identity and Management (IAM) roles; these roles are required for Keysight CyPerf Agent to interact with the AWS environment.
