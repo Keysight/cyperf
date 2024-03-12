@@ -8,7 +8,6 @@ module "Agent1" {
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
 	SshKeyName = azurerm_ssh_public_key.SshKey.name
-	Tag = local.AppTag
 	UserEmailTag = local.UserEmailTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag
@@ -30,7 +29,6 @@ module "Agent2" {
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
 	SshKeyName = azurerm_ssh_public_key.SshKey.name
-	Tag = local.AppTag
 	UserEmailTag = local.UserEmailTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag

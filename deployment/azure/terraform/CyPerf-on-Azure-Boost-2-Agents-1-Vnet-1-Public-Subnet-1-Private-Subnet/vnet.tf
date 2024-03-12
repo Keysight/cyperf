@@ -8,4 +8,5 @@ module "Vnet" {
 	UserEmailTag = local.UserEmailTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag
+	Version = local.AppVersion
 }

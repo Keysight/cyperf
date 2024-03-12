@@ -21,6 +21,9 @@ You **MAY** uncomment one or more lines as needed in this file and replace value
 terraform init
 terraform apply -auto-approve
 terraform destroy -auto-approve
+terraform output SshKey | tail -n +3 | head -n-3 | sed "s/^[ \t]*//" > SshKey.pem
+Agent1DnsName=$(terraform output | grep agent1 | sed -n 's/.*=.//p' | tr -d '"')
+ssh -i SshKey.pem ubuntu@$Agent1DnsName
 ```
 
 ## Optional Usage
