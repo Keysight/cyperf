@@ -23,6 +23,7 @@ terraform apply -auto-approve
 terraform destroy -auto-approve
 terraform output SshKey | tail -n +3 | head -n-3 | sed "s/^[ \t]*//" > SshKey.pem
 Agent1DnsName=$(terraform output | grep agent1 | sed -n 's/.*=.//p' | tr -d '"')
+chmod 400 SshKey.pem
 ssh -i SshKey.pem ubuntu@$Agent1DnsName
 ```
 
