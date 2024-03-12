@@ -30,22 +30,18 @@ The list of exposed parameters is defined in Template parameter section.
 ### Examples of Deployment using Python Template **New VPC**:
 ```
 
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUser
-name:admin,authPassword:CyPerf&Keysight#1,authFingerprint:""
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 Example:
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-3-0,brokerMachineType:e2-medium,authUser
-name:admin,authPassword:CyPerf&Keysight#1,authFingerprint:""
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-3-0,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
 
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,management_subnetwork:<Existing subnet from prior mentioned region and zone>,test_subnetwork:<Existing subnet from prior mentioned region and zone>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUser
-name:cyperf,authPassword:CyPerf&Keysight#1,authFingerprint:""
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,management_subnetwork:<Existing subnet from prior mentioned region and zone>,test_subnetwork:<Existing subnet from prior mentioned region and zone>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 
 Example: 
 
-$gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-3-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",authUser
-name:cyperf,authPassword:CyPerf&Keysight#1,authFingerprint:""
+$gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-3-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
@@ -81,9 +77,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in the cyperf_controller_proxy_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter.  |
-| authUsername                  | cyperf           | Username for agent to controller authentication.  |
+| authUsername                  | admin           | Username for agent to controller authentication.  |
 | authPassword                  | CyPerf&Keysight#1            | Password for agent to controller authentication. |
-| authFingerprint                  | ""            | Fingerprint for agent to controller authentication. |
 
 The following table lists the parameters for this deployment in **Existing VPC**.
 
@@ -99,10 +94,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | test_subnetwork                  | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in the cyperf_controller_proxy_and_agent_pair_existing_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter.  |
-| authUsername                  | cyperf           | Username for agent to controller authentication.  |
+| authUsername                  | admin           | Username for agent to controller authentication.  |
 | authPassword                  | CyPerf&Keysight#1            | Password for agent to controller authentication. |
-| authFingerprint                  | ""            | Fingerprint for agent to controller authentication. |
-
 
 ## Post deployment
 
