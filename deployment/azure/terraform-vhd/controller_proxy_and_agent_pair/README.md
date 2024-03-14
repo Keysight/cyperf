@@ -12,6 +12,8 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 - Credentials for each specific cloud provider need to pe provided.
 
+- Copy VHD images from Keysight Azure Blob container into desired deployment region by following [Copy VHD images ](https://github.com/Keysight/cyperf/tree/main/deployment/azure/terraform-vhd#copy-vhd-images)
+
 # How to use:
 
 ## Initialization
