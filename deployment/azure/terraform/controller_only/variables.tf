@@ -59,10 +59,10 @@ variable "azure_mdw_machine_type" {
   default = "Standard_F8s_v2"
 }
 
-variable "controller_image" {
-  default = "https://cyperf.blob.core.windows.net/keysight-cyperf-3-0/keysight-cyperf-controller-3-0.vhd"
-  type = string
-  description = "Controller image path"
+variable "cyperf_version" {
+  type        = string
+  default     = "0.3.0"
+  description = "CyPerf release version"
 }
 
 variable "mdw_name" {
