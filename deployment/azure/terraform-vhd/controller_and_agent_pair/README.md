@@ -79,8 +79,8 @@ The following table lists the parameters for this deployment.
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
-| mdw_name   | keysight-cyperf-controller-2-1            | Name for the cyperf controller machine. |
-| agent_name   | keysight-cyperf-agent-2-1            | Name for the cyperf agent machines. |
+| mdw_name   | keysight-cyperf-controller-3-0            | Name for the cyperf controller machine. |
+| agent_name   | keysight-cyperf-agent-3-0            | Name for the cyperf agent machines. |
 
 ## Destruction
 
