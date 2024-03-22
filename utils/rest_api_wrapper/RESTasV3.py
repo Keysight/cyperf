@@ -811,6 +811,19 @@ class RESTasV3:
             self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"Mss": mss})
 
+    def set_ip_range_vlan(self, vlan_id, vlan_incr, count, count_per_agent, network_segment=1, ip_range = 1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}/InnerVlanRange'.format(
+            self.sessionID, network_segment, ip_range)
+        self.__sendPatch(apiPath, payload={"VlanEnabled": True})
+        self.__sendPatch(apiPath, payload={"VlanId": vlan_id})
+        self.__sendPatch(apiPath, payload={"VlanIncr": vlan_incr})
+        self.__sendPatch(apiPath, payload={"Count": count})
+        self.__sendPatch(apiPath, payload={"CountPerAgent": count_per_agent})
+    
+    def set_network_segment_name(self, name, network_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        self.__sendPatch(apiPath, payload={"Name":name})
+
     def set_eth_range_mac_auto_false(self, network_segment=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(
             self.sessionID, network_segment)
@@ -1203,6 +1216,22 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200, debug=False)
         zf = ZipFile(io.BytesIO(response.content), 'r')
         zf.extractall(csvLocation)
+        return response
+    
+    def get_pdf_report(self, pdfLocation, exportTimeout=180):
+        test_id = self.get_test_id()
+        apiPath = '/api/v2/results/{}/operations/generate-pdf'.format(test_id)
+        response = self.__sendPost(apiPath, None).json()
+        apiPath = response['url'][len(self.host):]
+        response = self.wait_event_success(apiPath, timeout=exportTimeout)
+        if not response: 
+            raise TimeoutError("Failed to download PDF report. Timeout reached = {} seconds".format(exportTimeout))
+        apiPath = response['resultUrl']
+        with open(pdfLocation, "wb") as f:
+            response = self.__sendGet(apiPath, 200, debug=False)
+            if response.status_code == 200:
+                pdf_response_content = response.content
+                f.write(pdf_response_content)
         return response
 
     def get_result_ended(self, timeout=5):
@@ -2105,6 +2134,10 @@ class RESTasV3:
             self.sessionID)
         self.__sendPatch(apiPath, payload={"Value": okta_password})
 
+    def set_dut_name(self, name, dut_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, dut_segment)
+        self.__sendPatch(apiPath, payload={"Name":name})
+    
     def export_controller(self, export_path=None, file_name="mycontroller.zip"):
         apiPath = '/api/v2/controller-migration/operations/export'
         payload = {
