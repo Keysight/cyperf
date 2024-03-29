@@ -1332,7 +1332,7 @@ class RESTasV3:
     def get_attack_id(self, attack_name):
         self.attack_list = self.get_attacks(attack_name)
         for attack in self.attack_list["data"]:
-            if attack_name == attack['Name']:
+            if attack_name in attack['Name']:
                 return attack['id']
 
     def set_agent_optimization_mode(self, mode: str, tp_id=1):
@@ -1365,9 +1365,22 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"WarmUpPeriod": int(warmup_period)})
 
     def add_attack(self, attack_name, ap_id=1):
-        app_id = self.get_attack_id(attack_name=attack_name)
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
-        response = self.__sendPost(apiPath, payload={"ExternalResourceURL": app_id}).json()
+        if isinstance(attack_name, list):
+            payload = []
+            for attack in attack_name:
+                app_id = self.get_attack_id(attack_name=attack)
+                payload.append({"ExternalResourceURL": app_id})
+        else:
+            app_id = self.get_attack_id(attack_name=attack_name)
+            payload = {"ExternalResourceURL": app_id}
+        response = self.__sendPost(apiPath, payload=payload).json()
+        return response[-1]['id']
+    
+    def add_add_multiple_attacks_by_id(self, attack_ids,  ap_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
+        payload = [{"ExternalResourceURL": attack_id} for attack_id in attack_ids] 
+        response = self.__sendPost(apiPath, payload=payload).json()
         return response[-1]['id']
 
     def add_strike_as_attack(self, strike_name, ap_id=1):
@@ -1393,6 +1406,23 @@ class RESTasV3:
             else:
                 continue
         raise Exception("Application action was not added after 10 seconds")
+
+    def add_customize_attack_by_id(self, id_list, timeout=60):
+        api_path = f"/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/operations/create"
+        payload = {"Actions": [{"ProtocolID": strike_id} for strike_id in id_list]}
+        response = self.__sendPost(api_path, payload=payload).json()
+        while timeout > 0:
+            if self.__sendGet(f"{api_path}/{response['id']}", 200).json()["state"] == 'SUCCESS':
+                return response
+            time.sleep(1)
+            timeout-=1
+        raise Exception(f"Couldn't add al the attacks within {timeout} seconds")
+
+    def rename_custom_attack(self, name, index=1):
+         api_path = f"/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{index}"
+         payload = {"Name": name}
+         response = self.__sendPatch(api_path, payload=payload)
+         return response
 
     def insert_attack_action_at_exact_position(self, attack_id, action_id, insert_at_position):
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{attack_id}/Tracks/1/operations/add-actions'
