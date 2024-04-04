@@ -1069,7 +1069,7 @@ class RESTasV3:
                                     "lifetime_phase_2": ipsec_stacks[0]["IPSecRange"]["IKEPhase2Config"]["Lifetime"]}
         return config_type
 
-    def start_test(self, initializationTimeout=60):
+    def start_test(self, initializationTimeout=600):
         apiPath = '/api/v2/sessions/{}/test-run/operations/start'.format(self.sessionID)
         response = self.__sendPost(apiPath, payload={}).json()
         self.startTime = self.__getEpochTime()
