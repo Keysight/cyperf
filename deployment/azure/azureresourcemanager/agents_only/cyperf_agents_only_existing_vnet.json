@@ -417,6 +417,12 @@
 
             },
 
+            "dependsOn": [
+                
+                "[variables('securitygroup')]"
+
+            ],
+
             "properties": {
 
                 "ipConfigurations": [
