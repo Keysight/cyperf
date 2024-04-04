@@ -1,9 +1,10 @@
 import sys
 sys.path.append("..")
+from lib.REST_WRAPPER import *
 from RESTasV3 import RESTasV3
 from lib.Statistics import Statistics
 
-# CyPerf API test suite  with 1 Attack Profile with multiple strikes and B2B agents
+# CyPerf API test suite iterating through all strikes, each test may have a variable number of strikes with B2B agents
 
 #Test details
 test_duration = 60
@@ -12,7 +13,7 @@ max_concurrent_attack = 10
 iteration_count = 0
 strikes_per_test = 300
 
-results_path = "/var/lib/jenkins/public_github/cyperf/utils/rest_api_wrapper/test_results"
+results_path = "/path/to/save/logs"
 
 rest = RESTasV3(sys.argv[1])
 all_strikes = rest.get_strikes()
@@ -39,7 +40,7 @@ print("-------------------------------C2S strikes tests-------------------------
 for i in range(0, len(c2s_exploits_sublist_ids)):
     test_name = f"C2S_Exploits_Test_{i+1}"
     print(f"-------------------------------{test_name}-------------------------------")
-    #Create session
+    #Create session with custom name
     rest.setup()
     rest.save_config(test_name)
     rest.add_attack_profile()
@@ -65,7 +66,7 @@ for i in range(0, len(c2s_exploits_sublist_ids)):
         print("Following stats failed validation: {}".format(stats_failure_list))
     else:
         print("All stats PASSED validation, going to delete the session...")
-
+        rest.delete_current_session()
 
 print("-------------------------------S2C strikes tests-------------------------------")
 for i in range(0, len(s2c_strikes_sublist_ids)):
