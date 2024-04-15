@@ -362,6 +362,26 @@ class RESTasV3:
         apiPath = '/api/v2/brokers'
         self.__sendPost(apiPath, payload={"host": nats_address})
 
+    def upload_package(self, file_path):
+        apiPath = '/api/v2/deployment/helm/cluster/staging/operations/add'
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/json'
+        mp_encoder = MultipartEncoder(
+            fields={
+                "packages": ('package', open(file_path, "rb"), 'application/x-tar')
+                    }
+                )
+        customHeaders['content-type'] = mp_encoder.content_type
+        response = self.__sendPost(apiPath, payload=mp_encoder, customHeaders=customHeaders).json()
+        return response
+
+    def deploy(self, timeout="60m"):
+        apiPath = '/api/v2/deployment/helm/cluster/staging/operations/deploy'
+        response = self.__sendPost(apiPath, payload={"chartDeployTimeout": timeout,
+                                                    "enableAutomatedSystemReboot": True,
+                                                    "errorNotResolved": True})
+        return response
+
     def import_config(self, config):
         apiPath = '/api/v2/configs'
         if config.endswith('.json'):
