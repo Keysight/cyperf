@@ -35,7 +35,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent --templ
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent-ext2 --template cyperf_single_agent_existing_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:1,mmanagement_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent-ext2 --template cyperf_single_agent_existing_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:1,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
