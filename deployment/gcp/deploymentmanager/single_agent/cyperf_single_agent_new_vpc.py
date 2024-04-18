@@ -224,7 +224,7 @@ def GenerateConfig(context):
                       'value': ''.join(['#!/bin/bash\n',
                           'cd /home/cyperf/\n',
                           'cyperfagent configuration reload\n',
-                          '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username \"%s\" --password \"%s\" --fingerprint \"\" >> Appsec_init_gcp_log' % (controller, auth_username, auth_password)
+                          '/bin/bash image_init_gcp.sh %s --username \"%s\" --password \"%s\" --fingerprint \"\" >> Appsec_init_gcp_log' % (controller, auth_username, auth_password)
                       ])
                   }
   
