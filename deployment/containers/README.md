@@ -44,7 +44,7 @@ To test a device which is running inside a Docker, do the following:
 ```
 # Create a local network
 
-sudo docker network create --subnet=192.168.0.1/24 test-network
+sudo docker network create --subnet=192.168.0.0/24 test-network
 
 # Deploy Client agent
 
