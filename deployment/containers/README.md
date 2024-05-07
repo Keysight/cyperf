@@ -63,7 +63,7 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --
 ```
 # Create a local network on a client host
 
-sudo docker network create --subnet=192.168.0.1/24 test-client-network
+sudo docker network create --subnet=192.168.0.0/24 test-client-network
 
 # Deploy Client agent
 
@@ -71,7 +71,7 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --
 
 # Create a local network on a server host
 
-sudo docker network create --subnet=172.18.0.1/24 test-server-network
+sudo docker network create --subnet=172.18.0.0/24 test-server-network
 
 Please note, that client and server network CIDR should be different. This step has been added to separate Client and Server IP on the Controller side as CyPerf agents are identified by IP at CyPerf Controller.
 
