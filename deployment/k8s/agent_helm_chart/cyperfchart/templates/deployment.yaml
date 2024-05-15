@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- if eq (.Values.serveragentflag | toString) "true" }}
+  name: cyperf-agent-server-deployment
+  {{- else }}
+  name: cyperf-agent-client-deployment
+  {{- end }}
+  labels:
+    {{- include "cyperfchart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: cyperf-agent
+      {{- if eq (.Values.serveragentflag | toString) "true" }}
+      run: cyperf-agent-server
+      {{- end }}
+
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: cyperf-agent
+        {{- if eq (.Values.serveragentflag | toString) "true" }}
+        run: cyperf-agent-server
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        {{- if eq (.Values.serveragentflag | toString) "true" }}
+        - name: cyperf-agent-server
+        {{- else }}
+        - name: cyperf-agent-client
+        {{- end }}
+          securityContext:
+            privileged: false
+            capabilities:
+              add: ["NET_ADMIN", "IPC_LOCK", "NET_RAW"]
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:          
+          - name: "AGENT_CONTROLLER"
+            value:  "{{ .Values.AGENT_CONTROLLER }}"
+          #- name: AGENT_MANAGEMENT_INTERFACE
+          #  value: "eth0"
+          #- name: AGENT_TEST_INTERFACE
+          #  value: "eth1"  
+          - name: "AGENT_TAGS"
+            value:  "{{ .Values.AGENT_TAGS }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if eq (.Values.serveragentflag | toString) "true" }}
+          #readinessProbe:
+          #   httpGet:
+          #        path: /CyPerfHTTPHealthCheck
+          #        port: 80
+          #   periodSeconds: 5
+          {{- end}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if eq (.Values.serveragentflag | toString) "true" }}
+      nodeSelector:
+          agenttype: server
+      {{- else }}
+      nodeSelector:
+          agenttype: client
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

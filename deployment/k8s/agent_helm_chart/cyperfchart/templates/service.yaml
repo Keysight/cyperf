@@ -1,0 +1,18 @@
+{{- if eq (.Values.serveragentflag | toString) "true" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cyperf-agent-service
+  labels:
+    {{- include "cyperfchart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    run: cyperf-agent-server
+{{- end }}
