@@ -529,9 +529,13 @@ class RESTasV3:
         self.assign_agents_by_ip(agents_ips=agents_ips[0], network_segment=1)
         self.assign_agents_by_ip(agents_ips=agents_ips[1], network_segment=2)
 
-    def assign_agents_by_ip(self, agents_ips, network_segment):
+    def assign_agents_by_ip(self, agents_ips, network_segment, ignore_deleted_network_segments=True):
+        if not ignore_deleted_network_segments:
+            network_segment_id = [network["id"] for network in self.get_session_config()["Config"]["NetworkProfiles"][0]["IPNetworkSegment"]][network_segment-1]
+        else:
+            network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
-            self.sessionID, network_segment)
+            self.sessionID, network_segment_id)
         payload = {"ByID": [], "ByTag": []}
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
@@ -544,9 +548,13 @@ class RESTasV3:
         payload = {"WarmUpPeriod": int(value)}
         self.__sendPatch(apiPath, payload)
 
-    def assign_agents_by_tag(self, agents_tags, network_segment):
+    def assign_agents_by_tag(self, agents_tags, network_segment, ignore_deleted_network_segments=True):
+        if not ignore_deleted_network_segments:
+            network_segment_id = [network["id"] for network in self.get_session_config()["Config"]["NetworkProfiles"][0]["IPNetworkSegment"]][network_segment-1]
+        else:
+            network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
-            self.sessionID, network_segment)
+            self.sessionID, network_segment_id)
         self.__sendPatch(apiPath, payload={"ByID": [], "ByTag": [agents_tags]})
 
     def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False,
