@@ -66,7 +66,46 @@ class RESTasV3:
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
+    
+    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
+        expectedResponse = [200, 201, 202, 204]
+        print("POST at URL: {} with payload: {}".format(url, payload))
+        payload = json.dumps(payload) if customHeaders is None else payload
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
+        if debug:
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
+        return response
+
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
         response = self.session.get('{}{}'.format(self.host, url),
@@ -2260,3 +2299,44 @@ class RESTasV3:
             elif result["state"] == "ERROR":
                 self.session.close()
                 raise "Import was not succesful"
+    def get_results_test_ids(self):
+        all_results = self.__sendGet('/api/v2/results', 200).json()
+        return [result["id"] for result in all_results]
+    
+    def get_test_display_name(self, test_id):
+        all_results = self.__sendGet('/api/v2/results', 200).json()
+        for result in all_results:
+            if result["id"] == test_id:
+                return result["displayName"]
+    
+    def delete_all_browse_results(self, delete_all_active_session=False, timeout=60):
+        apiPath = "/api/v2/results/operations/batch-delete"
+        if delete_all_active_session:
+            active_sessions = self.__sendGet('/api/v2/sessions', 200).json()
+            active_sessions_ids = [session["id"] for session in active_sessions]
+            for session in active_sessions_ids:
+                self.__sendDelete(f"/api/v2/sessions/{session}", self.headers)
+                
+        tests_ids = self.get_results_test_ids()
+        payload = [{"id": f"{test_id}"} for test_id in tests_ids]
+        operation_id = self.sendPost(apiPath, payload).json()["id"]
+
+        end_time = time.time() + timeout
+        while time.time() < end_time:
+            if self.sendGet(apiPath+f"/{operation_id}", 200).json()["state"] == "SUCCESS":
+                return True
+            time.sleep(1)
+        raise Exception("Failed to delete all results from Controller")
+
+    def save_csv_result(self, test_id, csvLocation, exportTimeout=180):
+        apiPath = f"/api/v2/results/{test_id}/operations/generate-csv"
+        response = self.__sendPost(apiPath, None).json()
+        apiPath = response['url'][len(self.host):]
+        response = self.wait_event_success(apiPath, timeout=exportTimeout)
+        if not response:
+            raise TimeoutError("Failed to download CSVs. Timeout reached = {} seconds".format(exportTimeout))
+        apiPath = response['resultUrl']
+        response = self.__sendGet(apiPath, 200, debug=False)
+        zf = ZipFile(io.BytesIO(response.content), 'r')
+        zf.extractall(csvLocation)
+        return response
