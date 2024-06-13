@@ -95,6 +95,7 @@ Private subnets require NAT gateways or NAT instances in their route tables to a
 
     b. Another pre-exists private subnet in that **VPC** for test traffic for network interface eth1 or ens5.
 
+**_NOTE_**, if Agent deployed with single interface only and test interface added explicitly after deployment, please jump to [**Set netplan**](#set-netplan) section, followwed by [**Set cyperfagent configuration**](#Set-cyperfagent-configuration)
 6.	 In the **Advanced Details** section, in the **User Data** field, add the following lines:
 
 ```
@@ -114,10 +115,84 @@ III. Replace "IP" with the Controller Proxy Public IP if Agents peer with CyPerf
 IV.	Replace "IP" with the Controller Proxy private IP if Agents peer with CyPerf Controller Proxy. Also, Agents and Controller Proxy are in same VPC.
 
 ```
-
 7.	Keep default storage size **8** GiB and move next. 
 8.	Select or create a Security group with ingress custom TCP port **22, 80, 443 or** any other custom ports used for test traffic from the VCP CIDR source IP range. 
 9.	Select **Launch** and select the pre-created key pair.
 10.	After successful Agent deployment, Agent should appear in CyPerf Controller.
 
 
+### Set netplan
+
+After the deployment is complete and the EC2 is in running state, the management interface must get
+an IP from the DHCP server.
+1. Establish a SSH connection to the CyPerf agent using the following credentials:
+  username: cyperf
+  password: cyperf
+2. Configure the netplan settings in the file **/etc/netplan/aws-vmimport-netplan.yaml** to set the IP address
+of the test interface. Choose either DHCP or static configuration based on your requirements.
+For more details, see the [netplan documentation](https://github.com/canonical/netplan/tree/main/examples).
+
+**_NOTE:_** If the Management and Test Network are in the same vpc, then the management interface must have a lower metric than the test interface.
+
+In the following example, the user selects the test and management subnet from same VPC. ens5 is the management interface, and ens6 is the test interface. That is why the user sets metric 100 for the management interface and metric 200 for the test interface in netplan. User must specify right interface name in netplan yaml.
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens5:
+      dhcp4: yes
+      dhcp-identifier: mac
+      dhcp4-overrides:
+        route-metric: 100
+    ens6:
+      dhcp4: yes
+      dhcp-identifier: mac
+      dhcp4-overrides:
+        route-metric: 200
+
+```
+After netplan configuration, apply netplan:
+```
+sudo netplan apply
+```
+### Set cyperfagent configuration ###
+
+Use the CLI cyperfagent to configure the required parameters.
+The following commands are available in CLI:
+```
+cyperfagent controller show
+```
+Shows the currently configured controller.
+```
+cyperfagent controller set <Controller-IPv4|Controller-Hostname> --username=<USERNAME> --password=<PASSWORD> --skipidentity-verification
+```
+Sets the controller. Default username "admin", password "CyPerf&Keysight#1"
+For more details, see Connecting [CyPerf Agents to a Controller](#https://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/3.0/CyPerf_Deployment_Guide.pdf).
+```
+cyperfagent interface management show
+```
+Shows the currently configured Management
+Interface.
+```
+cyperfagent interface management set ens5
+```
+Sets the Management Interface to ens5
+
+Or
+```
+cyperfagent interface management set auto
+```
+Sets the Management Interface to auto for dynamically detecting the Interface at runtime
+```
+cyperfagent interface test set ens6
+```
+Sets the Test Interface to ens6
+
+Or
+```
+cyperfagent interface test set auto
+```
+Sets the Test Interface to auto for dynamically
+detecting the Interface at runtime.
