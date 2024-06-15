@@ -12,6 +12,9 @@ All the necessary resources will be created from scratch, including VPC, subnets
 
 - Credentials for each specific cloud provider need to pe provided.
 
+- Copy VHD images from Keysight Azure Blob container into desired deployment region by following [Copy VHD images ](https://github.com/Keysight/cyperf/tree/main/deployment/azure/terraform-vhd#copy-vhd-images)
+
+
 # How to use:
 
 ## Initialization
@@ -75,7 +78,7 @@ The following table lists the parameters for this deployment.
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_mdw_machine_type | Standard_F8s_v2 | The machine type used for deploying the CyPerf controller. |
-| mdw_name   | keysight-cyperf-controller-2-1            | Name for the cyperf controller machine. |
+| mdw_name   | keysight-cyperf-controller-3-0            | Name for the cyperf controller machine. |
 
 ## Destruction
 

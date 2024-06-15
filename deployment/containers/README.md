@@ -44,7 +44,7 @@ To test a device which is running inside a Docker, do the following:
 ```
 # Create a local network
 
-sudo docker network create --subnet=192.168.0.1/24 test-network
+sudo docker network create --subnet=192.168.0.0/24 test-network
 
 # Deploy Client agent
 
@@ -63,7 +63,7 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --
 ```
 # Create a local network on a client host
 
-sudo docker network create --subnet=192.168.0.1/24 test-client-network
+sudo docker network create --subnet=192.168.0.0/24 test-client-network
 
 # Deploy Client agent
 
@@ -71,7 +71,7 @@ sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --
 
 # Create a local network on a server host
 
-sudo docker network create --subnet=172.18.0.1/24 test-server-network
+sudo docker network create --subnet=172.18.0.0/24 test-server-network
 
 Please note, that client and server network CIDR should be different. This step has been added to separate Client and Server IP on the Controller side as CyPerf agents are identified by IP at CyPerf Controller.
 
@@ -228,11 +228,17 @@ sudo modprobe ip6table_filter
 
 ## Releases
 
+- **CyPerf 3.0** - [February, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release3.0
+        - public.ecr.aws/keysight/cyperf-agent:1.0.3.656
+    
 - **CyPerf 2.6** - [Oct, 2023]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release2.6
         - public.ecr.aws/keysight/cyperf-agent:1.0.3.614
-    
+
+    - Change history:
 
 - **CyPerf 2.5** - [July, 2023]
     - Image URI: 

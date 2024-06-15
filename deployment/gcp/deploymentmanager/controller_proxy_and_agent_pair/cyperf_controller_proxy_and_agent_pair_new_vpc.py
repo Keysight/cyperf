@@ -21,7 +21,7 @@ def GenerateConfig(context):
 
     auth_password = context.properties['authPassword']
 
-    auth_fingerprint = context.properties['authFingerprint']
+    #auth_fingerprint = context.properties['authFingerprint']
     
     test_network_cidr = context.properties['testNetworkCIDR']
     
@@ -319,7 +319,7 @@ def GenerateConfig(context):
                             'key': 'startup-script',
                             'value': ''.join(['#!/bin/bash\n',
                             'cd /home/cyperf/\n',
-                            '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username \"%s\" --password \"%s"\ --fingerprint \"%s\" >> Appsec_init_gcp_log' % (CONTROLLER_PROXY_NAME, auth_username, auth_password, auth_fingerprint)
+                            '/bin/bash image_init_gcp.sh $(ref.%s.networkInterfaces[0].networkIP) --username \"%s\" --password \"%s\" --fingerprint \"\" >> Appsec_init_gcp_log' % (CONTROLLER_PROXY_NAME, auth_username, auth_password)
                             ])
                         }
                         
