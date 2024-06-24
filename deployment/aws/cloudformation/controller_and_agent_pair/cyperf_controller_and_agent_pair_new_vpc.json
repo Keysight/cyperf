@@ -384,8 +384,8 @@
             "ConstraintDescription": "must specify yes or no."
         },
         "EC2RoleForTags": {
-            "Description": "Want to fetch tags for Agent?",
-            "Default": "yes",
+            "Description": "Display Agents by tags in CyPerf UI",
+            "Default": "no",
             "Type": "String",
             "AllowedValues": [
                 "yes",

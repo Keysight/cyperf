@@ -311,8 +311,8 @@
             "Type": "String"
         },
         "EC2RoleForTags": {
-            "Description": "Want to fetch tags for Agent?",
-            "Default": "yes",
+            "Description": "Display Agents by custom tag in CyPerf UI",
+            "Default": "no",
             "Type": "String",
             "AllowedValues": [
                 "yes",
