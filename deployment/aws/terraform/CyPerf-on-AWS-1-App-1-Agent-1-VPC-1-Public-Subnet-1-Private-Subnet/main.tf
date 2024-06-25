@@ -1,6 +1,6 @@
 module "App" {
 	source = "armdupre/module-cyperf-app/aws"
-	version = "2.6.0"
+	version = "3.0.1"
 	Eth0SecurityGroupId = module.Vpc.PublicSecurityGroup.id
 	Eth0SubnetId = module.Vpc.PublicSubnet.id
 	InstanceType = local.AppInstanceType
@@ -14,7 +14,7 @@ module "App" {
 
 module "Agent1" {
 	source = "armdupre/module-cyperf-agent/aws"
-	version = "2.6.1"
+	version = "3.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip
 	Eth0SecurityGroupId = module.Vpc.PublicSecurityGroup.id
 	Eth0SubnetId = module.Vpc.PublicSubnet.id
@@ -36,4 +36,8 @@ module "Agent1" {
 resource "aws_placement_group" "PlacementGroup" {
 	name = local.PlacementGroupName
 	strategy = local.PlacementGroupStrategy
+}
+
+resource "random_id" "RandomId" {
+	byte_length = 4
 }

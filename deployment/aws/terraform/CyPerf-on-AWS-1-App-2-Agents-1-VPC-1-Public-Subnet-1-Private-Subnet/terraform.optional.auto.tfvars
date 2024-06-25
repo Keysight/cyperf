@@ -3,7 +3,10 @@
 # AppInstanceType = "c5.2xlarge"
 # AwsAccessCredentialsAccessKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # AwsAccessCredentialsSecretKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+# InboundIPv4CidrBlocks = [ "1.1.1.1/32" ]
 # PrivateSubnetAvailabilityZone = "us-east-1a"
 # PublicSubnetAvailabilityZone = "us-east-1a"
 # Region = "us-east-1"
+# UserEmailTag = "terraform@example.com"
+# UserLoginTag = "terraform"
 # UserProjectTag = "cloud-ist"
