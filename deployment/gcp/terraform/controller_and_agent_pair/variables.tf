@@ -33,9 +33,18 @@ variable "gcp_project_tag" {
   default = "keysight-gcp-cyperf"
 }
 
-variable "gcp_allowed_cidr" {
+variable "gcp_allowed_cidr_ipv4" {
   type = list(string)
   default = ["0.0.0.0/0"]
+}
+variable "gcp_allowed_cidr_ipv6" {
+  type = list(string)
+  default = ["::/0"]
+}
+variable "stack_type" {
+  type = string
+  default = "ipv4"
+  description = "Possible options: ipv4 / dual-stack"
 }
 
 variable "gcp_mdw_machine_type" {
