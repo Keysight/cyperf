@@ -6,17 +6,19 @@ provider "aws" {
 
 locals{
     main_cidr = "172.16.0.0/16"
-    mgmt_cidr = "172.16.1.0/24"
+    mgmt_cidr_ipv4 = "172.16.1.0/24"
     test_cidr = "172.16.2.0/24"
     broker_name = "${var.aws_stack_name}-broker-${var.broker_version}"
     client_name = "${var.aws_stack_name}-client-${var.agent_version}"
     server_name = "${var.aws_stack_name}-server-${var.agent_version}"
+    firewall_cidr_ipv4 = concat(var.aws_allowed_cidr_ipv4,[local.main_cidr],[local.test_cidr])
+    firewall_cidr_ipv6 = var.aws_allowed_cidr_ipv6
     agent_init_cli = <<-EOF
                 #! /bin/bash
                 sudo sudo chmod 777 /var/log/
                 sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_broker.private_ip} --username "${var.broker_username}" --password "${var.broker_password}">> /var/log/Appsec_init.log
     EOF
-    firewall_cidr = concat(var.aws_allowed_cidr,[local.main_cidr],[local.test_cidr])
+    firewall_cidr = concat(var.aws_allowed_cidr_ipv4,[local.main_cidr],[local.test_cidr])
 }
 
 resource "aws_vpc" "aws_main_vpc" {
@@ -26,11 +28,13 @@ resource "aws_vpc" "aws_main_vpc" {
     enable_dns_hostnames = true
     enable_dns_support = true
     cidr_block = local.main_cidr
+    assign_generated_ipv6_cidr_block = true
 }
 
 resource "aws_subnet" "aws_management_subnet" {
     vpc_id     = aws_vpc.aws_main_vpc.id
-    cidr_block = local.mgmt_cidr
+    cidr_block = local.mgmt_cidr_ipv4
+    ipv6_cidr_block = aws_vpc.aws_main_vpc.ipv6_cidr_block   
     availability_zone = var.availability_zone
     tags = {
         Name = "${var.aws_stack_name}-management-subnet"
@@ -69,8 +73,8 @@ resource "aws_security_group_rule" "aws_cyperf_agent_ingress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = local.firewall_cidr
-  ipv6_cidr_blocks  = ["::/0"]
+  cidr_blocks       = local.firewall_cidr_ipv4
+  ipv6_cidr_blocks  = local.firewall_cidr_ipv6
   security_group_id = aws_security_group.aws_agent_security_group.id
 }
 
@@ -89,8 +93,8 @@ resource "aws_security_group_rule" "aws_cyperf_ui_ingress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = local.firewall_cidr
-  ipv6_cidr_blocks  = ["::/0"]
+  cidr_blocks       = local.firewall_cidr_ipv4
+  ipv6_cidr_blocks  = local.firewall_cidr_ipv6
   security_group_id = aws_security_group.aws_cyperf_security_group.id
 }
 
@@ -99,8 +103,8 @@ resource "aws_security_group_rule" "aws_cyperf_ui_egress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  ipv6_cidr_blocks  = ["::/0"]
+  cidr_blocks       = local.firewall_cidr_ipv4
+  ipv6_cidr_blocks  = local.firewall_cidr_ipv6
   security_group_id = aws_security_group.aws_cyperf_security_group.id
 }
 
@@ -149,12 +153,22 @@ resource "aws_internet_gateway" "aws_internet_gateway" {
     vpc_id = aws_vpc.aws_main_vpc.id  
 }
 
-resource "aws_route" "aws_route_to_internet" {
+resource "aws_route" "aws_route_to_internet_ipv4" {
+    count = var.stack_type == "ipv6" ? 0 : 1
     depends_on = [
       aws_route_table_association.aws_mgmt_rt_association
     ]
     route_table_id            = aws_route_table.aws_public_rt.id
     destination_cidr_block    = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.aws_internet_gateway.id
+}
+resource "aws_route" "aws_route_to_internet_ipv6" {
+    count = var.stack_type == "ipv4" ? 0 : 1
+    depends_on = [
+      aws_route_table_association.aws_mgmt_rt_association
+    ]
+    route_table_id            = aws_route_table.aws_public_rt.id
+    destination_ipv6_cidr_block = "::/0"
     gateway_id = aws_internet_gateway.aws_internet_gateway.id
 }
 
@@ -165,6 +179,7 @@ resource "aws_network_interface" "aws_broker_interface" {
     source_dest_check = true
     subnet_id = aws_subnet.aws_management_subnet.id
     security_groups = [ aws_security_group.aws_cyperf_security_group.id ]
+    ipv6_addresses    = var.stack_type == "ipv4" ? [] : [cidrhost(aws_subnet.aws_management_subnet.ipv6_cidr_block, 16)]
 }
 
 resource "aws_network_interface" "aws_client_mgmt_interface" {
@@ -174,6 +189,7 @@ resource "aws_network_interface" "aws_client_mgmt_interface" {
     security_groups = [ aws_security_group.aws_agent_security_group.id ]
     source_dest_check = true
     subnet_id = aws_subnet.aws_management_subnet.id
+    ipv6_addresses    = var.stack_type == "ipv4" ? [] : [cidrhost(aws_subnet.aws_management_subnet.ipv6_cidr_block, 32)]
 }
 
 resource "aws_network_interface" "aws_server_mgmt_interface" {
@@ -183,6 +199,7 @@ resource "aws_network_interface" "aws_server_mgmt_interface" {
     security_groups = [ aws_security_group.aws_agent_security_group.id ]
     source_dest_check = true
     subnet_id = aws_subnet.aws_management_subnet.id
+    ipv6_addresses    = var.stack_type == "ipv4" ? [] : [cidrhost(aws_subnet.aws_management_subnet.ipv6_cidr_block, 48)]
 }
 
 resource "aws_network_interface" "aws_client_test_interface" {
@@ -204,6 +221,7 @@ resource "aws_network_interface" "aws_server_test_interface" {
 }
 
 resource "aws_eip" "broker_public_ip" {
+  count = var.stack_type == "ipv6" ? 0 : 1   
   instance = aws_instance.aws_broker.id
   vpc = true
   associate_with_private_ip = aws_instance.aws_broker.private_ip
@@ -213,6 +231,7 @@ resource "aws_eip" "broker_public_ip" {
 }
 
 resource "aws_eip" "server_public_ip" {
+  count = var.stack_type == "ipv6" ? 0 : 1
   network_interface = aws_network_interface.aws_server_mgmt_interface.id
   vpc = true
   associate_with_private_ip = aws_instance.aws_server_agent.private_ip
@@ -222,6 +241,7 @@ resource "aws_eip" "server_public_ip" {
 }
 
 resource "aws_eip" "client_public_ip" {
+  count = var.stack_type == "ipv6" ? 0 : 1 
   network_interface = aws_network_interface.aws_client_mgmt_interface.id
   vpc = true
   associate_with_private_ip = aws_instance.aws_client_agent.private_ip
@@ -320,7 +340,10 @@ resource "aws_instance" "aws_server_agent" {
 }
 
 output "broker_public_ip" {
-  value = aws_eip.broker_public_ip.public_ip
+  value = {
+    "cloud" : "aws",
+    "public_ip" : var.stack_type == "ipv6" ? aws_instance.aws_broker.ipv6_addresses[0] : aws_eip.broker_public_ip[0].public_ip
+  }
 }
 
 output "agents_detail"{
@@ -328,12 +351,14 @@ output "agents_detail"{
     {
       "name": local.client_name,
       "management_private_ip": aws_instance.aws_client_agent.private_ip,
-      "management_public_ip": aws_eip.client_public_ip.public_ip
+      "management_public_ip": var.stack_type == "ipv6" ? aws_instance.aws_client_agent.ipv6_addresses[0] : aws_eip.client_public_ip[0].public_ip,
+      "type" : "aws"
     },
     {
       "name": local.server_name,
       "management_private_ip": aws_instance.aws_server_agent.private_ip,
-      "management_public_ip": aws_eip.server_public_ip.public_ip
+      "management_public_ip": var.stack_type == "ipv6" ? aws_instance.aws_server_agent.ipv6_addresses[0] : aws_eip.server_public_ip[0].public_ip,
+      "type" : "aws"
     }
   ]
 }
