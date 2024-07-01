@@ -23,7 +23,8 @@ locals {
     "80",
     "443"
   ]
-  gcp_allowed_cidr                 = concat(var.gcp_allowed_cidr, [local.gcp_mgmt_subnet_ip_range])
+  gcp_allowed_cidr_ipv4                 = concat(var.gcp_allowed_cidr_ipv4, [local.gcp_mgmt_subnet_ip_range])
+  gcp_allowed_cidr_ipv6            = var.gcp_allowed_cidr_ipv6
   gcp_mdw_instance_name                        = join("", ["cyperf-mdw-", var.mdw_version])
   gcp_mdw_serial_port_enable                   = "true"
   gcp_mdw_can_ip_forward                       = "false"
@@ -36,6 +37,7 @@ resource "google_compute_network" "gcp_mgmt_vpc_network" {
   name                    = "${local.gcp_owner_tag}-${local.gcp_mgmt_vpc_network_name}"
   auto_create_subnetworks = "false"
   routing_mode            = "GLOBAL"
+  enable_ula_internal_ipv6 = true
 }
 
 resource "google_compute_subnetwork" "gcp_mgmt_subnet" {
@@ -44,21 +46,32 @@ resource "google_compute_subnetwork" "gcp_mgmt_subnet" {
   network                  = google_compute_network.gcp_mgmt_vpc_network.self_link
   region                   = local.gcp_region_name
   private_ip_google_access = true
+  stack_type       = "IPV4_IPV6"
+  ipv6_access_type = "EXTERNAL"
 }
 
-resource "google_compute_firewall" "gcp_mgmt_firewall_rule" {
-  name = "${local.gcp_owner_tag}-${local.gcp_mgmt_firewall_rule_name}"
+resource "google_compute_firewall" "gcp_mgmt_firewall_rule_ipv4" {
+  name = "${local.gcp_owner_tag}-${local.gcp_mgmt_firewall_rule_name}-ipv4"
   allow {
     protocol = "all"
   }
   direction     = local.gcp_mgmt_firewall_rule_direction
   network       = google_compute_network.gcp_mgmt_vpc_network.self_link
   priority      = local.gcp_mgmt_firewall_rule_priority
-  source_ranges = local.gcp_allowed_cidr
+  source_ranges = local.gcp_allowed_cidr_ipv4
 }
-
-resource "google_compute_firewall" "gcp_mdw_https_server_rule" {
-  name     = "${local.gcp_owner_tag}-mdw-https-server"
+resource "google_compute_firewall" "gcp_mgmt_firewall_rule_ipv6" {
+  name = "${local.gcp_owner_tag}-${local.gcp_mgmt_firewall_rule_name}-ipv6"
+  allow {
+    protocol = "all"
+  }
+  direction     = local.gcp_mgmt_firewall_rule_direction
+  network       = google_compute_network.gcp_mgmt_vpc_network.self_link
+  priority      = local.gcp_mgmt_firewall_rule_priority
+  source_ranges = local.gcp_allowed_cidr_ipv6
+}
+resource "google_compute_firewall" "gcp_mdw_https_server_rule-ipv4" {
+  name     = "${local.gcp_owner_tag}-mdw-https-server-ipv4"
   network  = google_compute_network.gcp_mgmt_vpc_network.self_link
   priority = 999
   allow {
@@ -67,10 +80,22 @@ resource "google_compute_firewall" "gcp_mdw_https_server_rule" {
   }
 
   // Allow traffic from everywhere to instances with an http-server tag
-  source_ranges = local.gcp_allowed_cidr
+  source_ranges = local.gcp_allowed_cidr_ipv4
   target_tags   = ["https-server"]
 }
+resource "google_compute_firewall" "gcp_mdw_https_server_rule-ipv6" {
+  name     = "${local.gcp_owner_tag}-mdw-https-server-ipv6"
+  network  = google_compute_network.gcp_mgmt_vpc_network.self_link
+  priority = 999
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
 
+  // Allow traffic from everywhere to instances with an http-server tag
+  source_ranges = local.gcp_allowed_cidr_ipv6
+  target_tags   = ["https-server"]
+}
 resource "google_compute_address" "gcp_mdw_ip" {
   name = "${local.gcp_owner_tag}-mdw-ip"
 }
@@ -93,6 +118,7 @@ resource "google_compute_instance" "gcp_mdw_instance" {
     network    = google_compute_network.gcp_mgmt_vpc_network.self_link
     subnetwork = google_compute_subnetwork.gcp_mgmt_subnet.self_link
     network_ip = "172.16.5.100"
+    stack_type   = var.stack_type == "ipv4" ? "IPV4_ONLY" : "IPV4_IPV6"
     
     access_config {
       network_tier = "PREMIUM"
