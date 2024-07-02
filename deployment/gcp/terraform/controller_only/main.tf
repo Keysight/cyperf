@@ -23,20 +23,20 @@ locals {
     "80",
     "443"
   ]
-  gcp_allowed_cidr_ipv4                 = concat(var.gcp_allowed_cidr_ipv4, [local.gcp_mgmt_subnet_ip_range])
-  gcp_allowed_cidr_ipv6            = var.gcp_allowed_cidr_ipv6
-  gcp_mdw_instance_name                        = join("", ["cyperf-mdw-", var.mdw_version])
-  gcp_mdw_serial_port_enable                   = "true"
-  gcp_mdw_can_ip_forward                       = "false"
-  gcp_mdw_custom_image_project_name            = var.gcp_project_name
-  gcp_mdw_machine_type                         = var.gcp_mdw_machine_type
-  gcp_ssh_key								   = var.gcp_ssh_key
+  gcp_allowed_cidr_ipv4             = concat(var.gcp_allowed_cidr_ipv4, [local.gcp_mgmt_subnet_ip_range])
+  gcp_allowed_cidr_ipv6             = var.gcp_allowed_cidr_ipv6
+  gcp_mdw_instance_name             = join("", ["cyperf-mdw-", var.mdw_version])
+  gcp_mdw_serial_port_enable        = "true"
+  gcp_mdw_can_ip_forward            = "false"
+  gcp_mdw_custom_image_project_name = var.gcp_project_name
+  gcp_mdw_machine_type              = var.gcp_mdw_machine_type
+  gcp_ssh_key                       = var.gcp_ssh_key
 }
 
 resource "google_compute_network" "gcp_mgmt_vpc_network" {
-  name                    = "${local.gcp_owner_tag}-${local.gcp_mgmt_vpc_network_name}"
-  auto_create_subnetworks = "false"
-  routing_mode            = "GLOBAL"
+  name                     = "${local.gcp_owner_tag}-${local.gcp_mgmt_vpc_network_name}"
+  auto_create_subnetworks  = "false"
+  routing_mode             = "GLOBAL"
   enable_ula_internal_ipv6 = true
 }
 
@@ -46,8 +46,8 @@ resource "google_compute_subnetwork" "gcp_mgmt_subnet" {
   network                  = google_compute_network.gcp_mgmt_vpc_network.self_link
   region                   = local.gcp_region_name
   private_ip_google_access = true
-  stack_type       = "IPV4_IPV6"
-  ipv6_access_type = "EXTERNAL"
+  stack_type               = "IPV4_IPV6"
+  ipv6_access_type         = "EXTERNAL"
 }
 
 resource "google_compute_firewall" "gcp_mgmt_firewall_rule_ipv4" {
@@ -118,11 +118,11 @@ resource "google_compute_instance" "gcp_mdw_instance" {
     network    = google_compute_network.gcp_mgmt_vpc_network.self_link
     subnetwork = google_compute_subnetwork.gcp_mgmt_subnet.self_link
     network_ip = "172.16.5.100"
-    stack_type   = var.stack_type == "ipv4" ? "IPV4_ONLY" : "IPV4_IPV6"
-    
+    stack_type = var.stack_type == "ipv4" ? "IPV4_ONLY" : "IPV4_IPV6"
+
     access_config {
       network_tier = "PREMIUM"
-      nat_ip = google_compute_address.gcp_mdw_ip.address
+      nat_ip       = google_compute_address.gcp_mdw_ip.address
     }
   }
   metadata = {
@@ -142,7 +142,7 @@ resource "google_compute_instance" "gcp_mdw_instance" {
 
 output "mdw_detail" {
   value = {
-    "name": google_compute_instance.gcp_mdw_instance.name,
+    "name" : google_compute_instance.gcp_mdw_instance.name,
     "private_ip" : google_compute_instance.gcp_mdw_instance.network_interface.0.network_ip,
     "public_ip" : google_compute_instance.gcp_mdw_instance.network_interface.0.access_config.0.nat_ip
   }
