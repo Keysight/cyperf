@@ -1,20 +1,20 @@
 variable "gcp_project_name" {
-  type    = string
-  description ="Project name"
+  type        = string
+  description = "Project name"
 }
 
 variable "gcp_owner_tag" {
-  type    = string
+  type        = string
   description = "GCP owner tag name"
 }
 
 variable "gcp_ssh_key" {
-  type = string
+  type        = string
   description = "The gcp public ssh key file path"
 }
 
 variable "gcp_credential_file" {
-  type = string
+  type        = string
   description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
 }
 
@@ -34,16 +34,16 @@ variable "gcp_project_tag" {
 }
 
 variable "gcp_allowed_cidr_ipv4" {
-  type = list(string)
+  type    = list(string)
   default = ["0.0.0.0/0"]
 }
 variable "gcp_allowed_cidr_ipv6" {
-  type = list(string)
+  type    = list(string)
   default = ["::/0"]
 }
 variable "stack_type" {
-  type = string
-  default = "ipv4"
+  type        = string
+  default     = "ipv4"
   description = "Possible options: ipv4 / dual-stack"
 }
 
