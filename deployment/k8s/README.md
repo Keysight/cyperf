@@ -168,10 +168,11 @@ You can deploy in AWS EKS or in AZURE AKS in the following two ways:
     kubectl get svc cyperf-agent-service -o wide
     ```  
     **_NOTE:_** When traffic source (Client Agent) is outside of the cluster
-    - set ServiceType NodePort at server manifest
-    - set nodePort 30080 or any port in the range 30000-32767
-    - set master node's IP of sever cluster in the DUT section of CyPerf config
-    - set "Traffic destination port" with 30080, or other port which set as nodePort at the manifest, in the CyPerf config
+    - change ServiceType to NodePort in the server manifest
+    - set NodePort service port to any port in the range 30000-32767
+    - in the DUT section of CyPerf config, set the master node's IP of cluster where the server is deployed, 
+    - in the CyPerf test config, "Traffic destination port" should be same as the port which is set as NodePort service port in the manifest
+
 ## Deployment in **On-Premise K8s Cluster**
 ### Prerequisites
 1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section.
@@ -350,6 +351,11 @@ TO BE CONTINUED ...
 
 
 ## Releases
+
+- **CyPerf 4.0** - [July, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release4.0
+        - public.ecr.aws/keysight/cyperf-agent:4.0.3.704
 
 - **CyPerf 3.0** - [February, 2024]
     - Image URI: 
