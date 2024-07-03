@@ -2,20 +2,19 @@ provider "azurerm" {
   features {}
 
   subscription_id = var.subscription_id
-  client_id = var.client_id
-  client_secret = var.client_secret
-  tenant_id = var.tenant_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
 }
 
 locals {
-  mdw_name = "${var.azure_owner_tag}-mdw-${var.mdw_name}"
-  mgmt_iprange = ["10.0.1.0/24"]
-  firewall_ip_range = var.azure_allowed_cidr
+  mdw_name     = "${var.azure_owner_tag}-mdw-${var.mdw_name}"
+  mgmt_iprange = ["10.0.1.0/24", "fd00:10::/64"]
 }
 
 resource "azurerm_image" "controller" {
   name                = "cyperf-controller"
-  location = var.azure_region_name
+  location            = var.azure_region_name
   resource_group_name = azurerm_resource_group.azr_automation.name
   hyper_v_generation  = "V1"
   os_disk {
@@ -34,27 +33,28 @@ resource "azurerm_network_security_group" "azr_automation_nsg" {
   name                = "${var.azure_owner_tag}-sg"
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
+
   security_rule {
-    name                       = "${var.azure_owner_tag}-generic-access-inbound"
-    priority                   = 999
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefixes      = local.firewall_ip_range
-    destination_address_prefixes = local.firewall_ip_range
+    name                         = "${var.azure_owner_tag}-generic-access-inbound"
+    priority                     = 999
+    direction                    = "Inbound"
+    access                       = "Allow"
+    protocol                     = "*"
+    source_port_range            = "*"
+    destination_port_range       = "*"
+    source_address_prefixes      = var.azure_allowed_cidr_ipv4
+    destination_address_prefixes = var.azure_allowed_cidr_ipv4
   }
   security_rule {
-    name                       = "${var.azure_owner_tag}-generic-access-outbound"
-    priority                   = 999
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefixes      = local.firewall_ip_range
-    destination_address_prefixes = local.firewall_ip_range
+    name                         = "${var.azure_owner_tag}-ipv6-ixia-access-inbound"
+    priority                     = 998
+    direction                    = "Inbound"
+    access                       = "Allow"
+    protocol                     = "*"
+    source_port_range            = "*"
+    destination_port_range       = "*"
+    source_address_prefixes      = var.azure_allowed_cidr_ipv6
+    destination_address_prefixes = var.azure_allowed_cidr_ipv6
   }
   security_rule {
     name                       = "${var.azure_owner_tag}-deny-public-access"
@@ -69,9 +69,15 @@ resource "azurerm_network_security_group" "azr_automation_nsg" {
   }
 }
 
+resource "azurerm_subnet_network_security_group_association" "azr_mgmt_nsga" {
+  depends_on                = [azurerm_linux_virtual_machine.azr_automation_mdw]
+  subnet_id                 = azurerm_subnet.azr_automation_management_network.id
+  network_security_group_id = azurerm_network_security_group.azr_automation_nsg.id
+}
+
 resource "azurerm_virtual_network" "azr_automation" {
   name                = "${var.azure_owner_tag}-network"
-  address_space       = ["10.0.0.0/16"]
+  address_space       = ["10.0.0.0/16", "fd00:10::/64"]
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 }
@@ -83,11 +89,23 @@ resource "azurerm_subnet" "azr_automation_management_network" {
   address_prefixes     = local.mgmt_iprange
 }
 
-resource "azurerm_public_ip" "azr_automation_mdw_public_ip" {
-  name                = "${var.azure_owner_tag}-cyperf-mdw-public-ip"
+resource "azurerm_public_ip" "azr_automation_mdw_public_ipv4" {
+  count               = var.stack_type == "ipv6" ? 0 : 1
+  name                = "${var.azure_owner_tag}-cyperf-mdw-public-ipv4"
   resource_group_name = azurerm_resource_group.azr_automation.name
   location            = azurerm_resource_group.azr_automation.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  ip_version          = "IPv4"
+  sku                 = "Standard"
+}
+resource "azurerm_public_ip" "azr_automation_mdw_public_ipv6" {
+  count               = var.stack_type == "ipv4" ? 0 : 1
+  name                = "${var.azure_owner_tag}-cyperf-mdw-public-ipv6"
+  resource_group_name = azurerm_resource_group.azr_automation.name
+  location            = azurerm_resource_group.azr_automation.location
+  allocation_method   = "Static"
+  ip_version          = "IPv6"
+  sku                 = "Standard"
 }
 
 resource "azurerm_network_interface" "azr_automation_mdw_nic" {
@@ -95,11 +113,34 @@ resource "azurerm_network_interface" "azr_automation_mdw_nic" {
   location            = azurerm_resource_group.azr_automation.location
   resource_group_name = azurerm_resource_group.azr_automation.name
 
-  ip_configuration {
-    name                          = "${var.azure_owner_tag}-mdw-ip"
-    subnet_id                     = azurerm_subnet.azr_automation_management_network.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.azr_automation_mdw_public_ip.id
+  dynamic "ip_configuration" {
+    for_each = var.stack_type == "ipv6" ? [1] : []
+    content {
+      name                          = "${var.azure_owner_tag}-mdw-private-ipv4"
+      subnet_id                     = azurerm_subnet.azr_automation_management_network.id
+      private_ip_address_allocation = "Dynamic"
+      primary                       = true
+    }
+  }
+  dynamic "ip_configuration" {
+    for_each = var.stack_type == "ipv6" ? [] : [1]
+    content {
+      name                          = "${var.azure_owner_tag}-mdw-public-ipv4"
+      subnet_id                     = azurerm_subnet.azr_automation_management_network.id
+      private_ip_address_allocation = "Dynamic"
+      public_ip_address_id          = azurerm_public_ip.azr_automation_mdw_public_ipv4[0].id
+      primary                       = true
+    }
+  }
+  dynamic "ip_configuration" {
+    for_each = var.stack_type != "ipv4" ? [1] : []
+    content {
+      name                          = "${var.azure_owner_tag}-mdw-ipv6"
+      subnet_id                     = azurerm_subnet.azr_automation_management_network.id
+      private_ip_address_allocation = "Dynamic"
+      public_ip_address_id          = azurerm_public_ip.azr_automation_mdw_public_ipv6[0].id
+      private_ip_address_version    = "IPv6"
+    }
   }
 }
 
@@ -127,8 +168,9 @@ resource "azurerm_linux_virtual_machine" "azr_automation_mdw" {
 
 output "mdw_detail" {
   value = {
-    "name": azurerm_linux_virtual_machine.azr_automation_mdw.name,
-    "private_ip": azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address,
-    "public_ip": azurerm_linux_virtual_machine.azr_automation_mdw.public_ip_address
+    "name" : azurerm_linux_virtual_machine.azr_automation_mdw.name,
+    "private_ip" : azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address,
+    "public_ip" : azurerm_linux_virtual_machine.azr_automation_mdw.public_ip_address,
+    "type" : "azure"
   }
 }

@@ -12,7 +12,6 @@ locals {
       #!/bin/bash
       bash /usr/bin/image_init_azure.sh  ${var.controller_ip} --username "${var.controller_username}" --password "${var.controller_password}" --fingerprint "">> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
-  agent_test_static_ip = "10.0.2.4"
   split_version        = split(".", var.cyperf_version)
   sku_name_agent       = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
   sku                  = length(regexall("D48", var.azure_agent_machine_type)) >= 1 ? "A8" : "A4"
