@@ -63,7 +63,7 @@
                 "AMIxAGENT": "ami-051300268d5175af0",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.233.177.0/29",
-                "EC2xREGION": "Asia Pacific (Mumbai)",
+                "EC2xREGION": "Asia Pacific (Hyderabad)",
                 "REGIONxTAG": "AP_SOUTH_2"
             },
             "ap-northeast-2": {
