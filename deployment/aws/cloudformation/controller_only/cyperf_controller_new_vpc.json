@@ -57,13 +57,13 @@
                 "EC2xREGION": "Asia Pacific (Mumbai)",
                 "REGIONxTAG": "AP_SOUTH_1"
             },
-            "ap-south-2": {
-                "AMIxAPPLICATION": "ami-06368dba989761d64",
-                "AMIxBROKER": "ami-07aecf642109dba38",
-                "AMIxAGENT": "ami-0564d51a83bf53e9b",
+	    "ap-south-2": {
+                "AMIxAPPLICATION": "ami-09ab415b31191ac05",
+                "AMIxBROKER": "ami-09d07236c9cda5de7",
+                "AMIxAGENT": "ami-051300268d5175af0",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.233.177.0/29",
-                "EC2xREGION": "Asia Pacific (Hyderabad)",
+                "EC2xREGION": "Asia Pacific (Mumbai)",
                 "REGIONxTAG": "AP_SOUTH_2"
             },
             "ap-northeast-2": {
@@ -165,10 +165,10 @@
                 "EC2xREGION": "Middle East (Bahrain)",
                 "REGIONxTAG": "ME_SOUTH_1"
             },
-            "sa-east-1": {
-                "AMIxAPPLICATION": "ami-0ff0daa58f8e7ea7b",
-                "AMIxBROKER": "ami-04b1215187b5b7ace",
-                "AMIxAGENT": "ami-0770522ad6f9df4fd",
+	     "sa-east-1": {
+                "AMIxAPPLICATION": "ami-0f44e34b8ca4c2d71",
+                "AMIxBROKER": "ami-06cd3a3410f78daa1",
+                "AMIxAGENT": "ami-0eed92c5f7198ec40",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.48.4.200/30",
                 "EC2xREGION": "South America (Sao Paulo)",
