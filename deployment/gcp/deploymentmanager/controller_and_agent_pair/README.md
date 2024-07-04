@@ -10,7 +10,7 @@ See the Template Parameters Section for more details. Each agent has two interfa
 ## How to Deploy:
 A configuration File [YAML] and Templates [Python] are used for this Deployment. However, users can also use standalone Python Templates from the gcloud console for this Deployment.
 ### Deployment pre-requisites:
-1.	Download following files from OpenIxia.
+1.	Download following files from github.
 2.	From gcp console, open cloud shell window and upload bellow files. 
 - [cyperf_controller_and_agent_pair_new_vpc.py](cyperf_controller_and_agent_pair_new_vpc.py)
 - [cyperf_controller_and_agent_pair_new_vpc.py.schema](cyperf_controller_and_agent_pair_new_vpc.py.schema)
@@ -28,7 +28,7 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
@@ -36,7 +36,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cy
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-3-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
@@ -66,8 +66,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| controllerSourceImage                   | keysight-cyperf-controller-3-0            | Preferred CyPerf Controller image.  |
-| agentSourceImage                   | keysight-cyperf-agent-3-0            | Preferred CyPerf Agent image.  |
+| controllerSourceImage                   | keysight-cyperf-controller-4-0            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-4-0            | Preferred CyPerf Agent image.  |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
@@ -85,8 +85,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | controllerMachineType                   | c2-standard-8            | Preferred machine Type for CyPerf Controller.  |
 | agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| controllerSourceImage                   | keysight-cyperf-controller-3-0            | Preferred CyPerf Controller image.  |
-| agentSourceImage                   | keysight-cyperf-agent-3-0            | Preferred CyPerf Agent image.  |
+| controllerSourceImage                   | keysight-cyperf-controller-4-0            | Preferred CyPerf Controller image.  |
+| agentSourceImage                   | keysight-cyperf-agent-4-0            | Preferred CyPerf Agent image.  |
 | management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | This subnet is attached to CyPerf controller and would be used to access the CyPerf controllers' UI & CyPerf agents will use this subnet for control plane communication with controller.  |
 | management_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where management subnet exists  |
 | test_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"    | CyPerf agents will use this subnet for test traffic.  |
