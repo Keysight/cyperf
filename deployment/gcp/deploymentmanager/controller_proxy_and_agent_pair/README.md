@@ -77,8 +77,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in the cyperf_controller_proxy_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter.  |
-| authUsername                  | admin           | Username for agent to controller authentication.  |
-| authPassword                  | CyPerf&Keysight#1            | Password for agent to controller authentication. |
+| authUsername                  | `admin`           | Username for agent to controller authentication.  |
+| authPassword                  | `CyPerf&Keysight#1`            | Password for agent to controller authentication. |
 
 The following table lists the parameters for this deployment in **Existing VPC**.
 
@@ -96,8 +96,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | test_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where test subnet exists  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in the cyperf_controller_proxy_and_agent_pair_existing_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter.  |
-| authUsername                  | admin           | Username for agent to controller authentication.  |
-| authPassword                  | CyPerf&Keysight#1            | Password for agent to controller authentication. |
+| authUsername                  | `admin`           | Username for agent to controller authentication.  |
+| authPassword                  | `CyPerf&Keysight#1`            | Password for agent to controller authentication. |
 
 ## Post deployment
 
