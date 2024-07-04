@@ -22,7 +22,7 @@ locals {
       bash /usr/bin/image_init_azure.sh  ${azurerm_linux_virtual_machine.azr_automation_mdw.private_ip_address} >> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   split_version = split(".", var.cyperf_version)
-  sku_name_controller = var.cyperf_version != "0.2.0" ? "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}": "keysight-cyperf-controller"
+  sku_name_controller = var.cyperf_version == "0.2.0" ? "keysight-cyperf-controller" : var.cyperf_version == "0.4.0" ? "keysight-cyperf-controller-${local.split_version[1]}-${local.split_version[2]}" : "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}"
   sku_name_agent = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
 
   gcp_project_name                 = var.gcp_project_name

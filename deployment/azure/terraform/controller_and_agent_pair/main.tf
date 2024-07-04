@@ -22,7 +22,7 @@ locals {
   server_test_static_ip = "10.0.2.5"
   sku                   = length(regexall("D48", var.azure_agent_machine_type)) >= 1 ? "A8" : "A4"
   split_version         = split(".", var.cyperf_version)
-  sku_name_controller   = var.cyperf_version != "0.2.0" ? "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-controller"
+  sku_name_controller   = var.cyperf_version == "0.2.0" ? "keysight-cyperf-controller" : var.cyperf_version == "0.4.0" ? "keysight-cyperf-controller-${local.split_version[1]}-${local.split_version[2]}" : "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}"
   sku_name_agent        = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
 }
 
