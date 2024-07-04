@@ -24,23 +24,19 @@ The Deployment Manager requires a Python template and certain parameters to be s
 The list of exposed parameters is defined in the Template parameter section.
 ### Examples of Deployment using Python Template **New VPC**:
 ```
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 
 Example:
 
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,management_subnet:<Existing subnet from prior mentioned region and zone>,management_subnet_project:<project name where management subnet exists>,test_subnet:<Existing subnet from prior mentioned region and zone>,test_subnet_project:<project name where test subnet exists>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent  Imagename>,management_subnet:<Existing subnet from prior mentioned region and zone>,management_subnet_project:<project name where management subnet exists>,test_subnet:<Existing subnet from prior mentioned region and zone>,test_subnet_project:<project name where test subnet exists>,agentCount:2,controllerSourceImage:<Controller-Image>,controllerMachineType:c2-standard-8,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 
 Example:
 
-<<<<<<< HEAD
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
-=======
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
->>>>>>> d0b49ac... CyPerf 4.0 release content update
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
