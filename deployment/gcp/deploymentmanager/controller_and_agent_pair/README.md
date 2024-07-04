@@ -36,7 +36,11 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp --template cy
 
 Example:
 
+<<<<<<< HEAD
 $ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+=======
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-ext2 --template cyperf_controller_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,controllerSourceImage:keysight-cyperf-controller-4-0,controllerMachineType:c2-standard-8,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+>>>>>>> d0b49ac... CyPerf 4.0 release content update
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:

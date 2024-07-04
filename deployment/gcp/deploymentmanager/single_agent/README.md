@@ -27,7 +27,11 @@ The list of exposed parameters is defined in the Template parameter section.
 
 Example:
 
+<<<<<<< HEAD
 $ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent --template cyperf_single_agent_new_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-3-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:1,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+=======
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent --template cyperf_single_agent_new_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:1,uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+>>>>>>> d0b49ac... CyPerf 4.0 release content update
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
@@ -35,7 +39,11 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent --templ
 
 Example:
 
+<<<<<<< HEAD
 $ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent-ext2 --template cyperf_single_agent_existing_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:1,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+=======
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp-agent-ext2 --template cyperf_single_agent_existing_vpc.py --properties zone:us-east1-c,region:us-east1,controllerip:1.1.1.1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:1,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",uthUsername:"admin",authPassword:"CyPerf&Keysight#1"
+>>>>>>> d0b49ac... CyPerf 4.0 release content update
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
