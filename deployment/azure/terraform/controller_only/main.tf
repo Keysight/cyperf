@@ -11,7 +11,7 @@ locals {
   mdw_name            = "${var.azure_owner_tag}-mdw-${var.mdw_name}"
   mgmt_iprange        = ["10.0.1.0/24", "fd00:10::/64"]
   split_version       = split(".", var.cyperf_version)
-  sku_name_controller = var.cyperf_version != "0.2.0" ? "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-controller"
+  sku_name_controller = var.cyperf_version == "0.2.0" ? "keysight-cyperf-controller" : var.cyperf_version == "0.4.0" ? "keysight-cyperf-controller-${local.split_version[1]}-${local.split_version[2]}" : "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}"
 }
 
 
