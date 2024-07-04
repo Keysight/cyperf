@@ -37,11 +37,15 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template c
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
 
-<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,management_subnetwork:<Existing subnet from prior mentioned region and zone>,test_subnetwork:<Existing subnet from prior mentioned region and zone>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+<user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,management_subnetwork:<Existing subnet from prior mentioned region and zone>,management_subnet_project:<project name where management subnet exists>,test_subnetwork:<Existing subnet from prior mentioned region and zone>,test_subnet_project:<project name where test subnet exists>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 
 Example: 
 
+<<<<<<< HEAD
 $gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-4-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+=======
+$gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-4-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+>>>>>>> 817a464... updated with 4.0 release info
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
@@ -91,7 +95,9 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | brokerSourceImage                   | keysight-cyperf-controller-proxy-4-0            | Preferred CyPerf Controller-proxy image. |
 | agentSourceImage                   | keysight-cyperf-agent-4-0            | Preferred CyPerf Agent image. |
 | management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
+| management_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where management subnet exists  |
 | test_subnetwork                  | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"           | CyPerf agents will use this subnet for test traffic.  |
+| test_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where test subnet exists  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
 | serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in the cyperf_controller_proxy_and_agent_pair_existing_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter.  |
 | authUsername                  | admin           | Username for agent to controller authentication.  |
