@@ -19,7 +19,7 @@ properties:
  
   controllerProxySourceImage:
     type: string
-    default: keysight-cyperf-controller-proxy-4-0
+    default: keysight-cyperf-controller-proxy-3-0
     description: sample source image of controller proxy
 
   region:
@@ -44,7 +44,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-4-0
+    default: keysight-cyperf-agent-3-0
     description: source image for agents
 
   management_subnetwork:
