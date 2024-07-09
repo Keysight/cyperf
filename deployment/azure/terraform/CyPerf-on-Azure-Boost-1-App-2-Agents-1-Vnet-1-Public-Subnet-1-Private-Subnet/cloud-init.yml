@@ -1,0 +1,14 @@
+#cloud-config
+runcmd:
+  - snap install azcli
+  - azcopy cp "${AgentBlobSasUrl}" --from-to BlobPipe > ${AgentPackageName}
+  - apt update
+  - dpkg -i ${AgentPackageName}
+  - apt install --fix-broken -y
+  - cyperfagent controller set ${AppEth0IpAddress}
+  - cyperfagent tag set Name=$(hostname),Cloud=azure
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
