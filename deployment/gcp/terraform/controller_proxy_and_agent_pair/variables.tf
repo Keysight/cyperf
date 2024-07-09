@@ -1,20 +1,20 @@
 variable "gcp_project_name" {
-  type    = string
-  description ="Project name"
+  type        = string
+  description = "Project name"
 }
 
 variable "gcp_owner_tag" {
-  type    = string
+  type        = string
   description = "GCP owner tag name"
 }
 
 variable "gcp_ssh_key" {
-  type = string
+  type        = string
   description = "The gcp public ssh key file path"
 }
 
 variable "gcp_credential_file" {
-  type = string
+  type        = string
   description = "GCP credentials file referring this link https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
 }
 
@@ -33,9 +33,18 @@ variable "gcp_project_tag" {
   default = "keysight-gcp-cyperf"
 }
 
-variable "gcp_allowed_cidr" {
-  type = list(string)
+variable "gcp_allowed_cidr_ipv4" {
+  type    = list(string)
   default = ["0.0.0.0/0"]
+}
+variable "gcp_allowed_cidr_ipv6" {
+  type    = list(string)
+  default = ["::/0"]
+}
+variable "stack_type" {
+  type        = string
+  default     = "ipv4"
+  description = "Possible options: ipv4 / dual-stack"
 }
 
 variable "gcp_broker_machine_type" {
@@ -50,12 +59,12 @@ variable "gcp_agent_machine_type" {
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-3-0"
+  default     = "keysight-cyperf-agent-4-0"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-3-0"
+  default     = "keysight-cyperf-controller-proxy-4-0"
   description = "Image id for the cyperf controller proxy machines"
 }

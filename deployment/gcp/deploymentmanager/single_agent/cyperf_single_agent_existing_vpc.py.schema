@@ -40,7 +40,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-3-0
+    default: keysight-cyperf-agent-4-0
     description: source image for agents
 
   management_subnetwork:
@@ -48,11 +48,19 @@ properties:
     default: management-subnetwork
     type: string
   
+  management_subnetwork_project:
+    description: Specify the name of the project where management subnet exists, for example 'kt-nas-cyperf-dev'.
+    type: string
+
   test_subnetwork:
     description: Specify the name of the subnet to use for test traffic, for example 'test-subnetwork'.
     default: test-subnetwork
     type: string
-    
+  
+  test_subnetwork_project:
+    description: Specify the name of the project where test subnet exists, for example 'kt-nas-cyperf-dev'.
+    type: string
+
   agentCount:
     type: integer
     default: 1

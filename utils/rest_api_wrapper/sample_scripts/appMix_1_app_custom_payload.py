@@ -14,7 +14,7 @@ create_traffic_profile(
     duration=test_duration,
 )
 rest.set_application_custom_payload(
-    appName="Portal Chrome to Apache 1",
+    appName="Portal Chrome to Apache",
     actionName="Upload Image",
     paramName="Uploaded file",
     fileName="../resources/payload_file"

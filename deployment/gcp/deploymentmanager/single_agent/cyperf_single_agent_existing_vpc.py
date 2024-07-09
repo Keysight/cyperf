@@ -9,8 +9,12 @@ def GenerateConfig(context):
   #varaible definations
 
   management_subnetwork = context.properties['management_subnetwork']
+
+  management_subnetwork_project = context.properties['management_subnetwork_project']
   
   test_subnetwork = context.properties['test_subnetwork']
+
+  test_subnetwork_project = context.properties['test_subnetwork_project']
 
   auth_username = context.properties['authUsername']
 
@@ -83,7 +87,7 @@ def GenerateConfig(context):
   
               {
                   "kind": "compute#networkInterface",
-                  "subnetwork": 'regions/' + region + '/subnetworks/' + management_subnetwork,
+                  "subnetwork": 'projects/' + management_subnetwork_project + '/regions/' + region + '/subnetworks/' + management_subnetwork,
                   "accessConfigs": [{
                       "kind": "compute#accessConfig",
                       "name": "External NAT",
@@ -93,7 +97,7 @@ def GenerateConfig(context):
                   "aliasIpRanges": [],
               }, {
                   "kind": "compute#networkInterface",
-                  "subnetwork": 'regions/' + region + '/subnetworks/' + test_subnetwork,
+                  "subnetwork": 'projects/' + test_subnetwork_project + '/regions/' + region + '/subnetworks/' + test_subnetwork,
                   "accessConfigs": [{
                       "kind": "compute#accessConfig",
                       "name": "External NAT",
