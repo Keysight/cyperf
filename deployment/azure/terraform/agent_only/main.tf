@@ -14,9 +14,21 @@ locals {
       CUSTOM_DATA
   split_version        = split(".", var.cyperf_version)
   sku_name_agent       = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
-  sku                  = length(regexall("D48", var.azure_agent_machine_type)) >= 1 ? "A8" : "A4"
+  instance_sku_map = {
+    "Standard_F4s_v2"   = "A2"
+    "Standard_F16s_v2"  = "A4"
+    "Standard_D48s_v4"  = "A8"
+    "Standard_D48_v4"   = "A8"
+  }
+  sku = lookup(local.instance_sku_map, var.azure_agent_machine_type)
+    instance_storage_type ={
+    "Standard_F4s_v2"   = "Premium_LRS"
+    "Standard_F16s_v2"  = "Premium_LRS"
+    "Standard_D48s_v4"  = "Premium_LRS"
+    "Standard_D48_v4"   = "StandardSSD_LRS"
+  }
+  storage_type = lookup(local.instance_storage_type, var.azure_agent_machine_type)
 }
-
 data "azurerm_subnet" "mgmt_subnet" {
   name                 = var.mgmt_subnet
   resource_group_name  = var.resource_group_name
@@ -87,7 +99,7 @@ resource "azurerm_network_interface" "azr_automation_agent_test_nic" {
   name                          = "${var.azure_agent_name}-test-nic"
   resource_group_name           = var.resource_group_name
   location                      = var.resource_group_location
-  enable_accelerated_networking = true
+  accelerated_networking_enabled = true
   ip_configuration {
     name                          = "${var.azure_agent_name}-test-ip-1"
     subnet_id                     = data.azurerm_subnet.test_subnet.id
@@ -119,7 +131,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
+    storage_account_type = local.storage_type
   }
   plan {
     name      = local.sku_name_agent

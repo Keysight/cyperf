@@ -20,7 +20,20 @@ locals {
   test_iprange          = ["10.0.2.0/24"]
   client_test_static_ip = "10.0.2.4"
   server_test_static_ip = "10.0.2.5"
-  sku                   = length(regexall("D48", var.azure_agent_machine_type)) >= 1 ? "A8" : "A4"
+  instance_sku_map = {
+    "Standard_F4s_v2"   = "A2"
+    "Standard_F16s_v2"  = "A4"
+    "Standard_D48s_v4"  = "A8"
+    "Standard_D48_v4"   = "A8"
+  }
+  sku = lookup(local.instance_sku_map, var.azure_agent_machine_type)
+  instance_storage_type ={
+    "Standard_F4s_v2"   = "Premium_LRS"
+    "Standard_F16s_v2"  = "Premium_LRS"
+    "Standard_D48s_v4"  = "Premium_LRS"
+    "Standard_D48_v4"   = "StandardSSD_LRS"
+  }
+  storage_type = lookup(local.instance_storage_type, var.azure_agent_machine_type)
   split_version         = split(".", var.cyperf_version)
   sku_name_controller   = var.cyperf_version == "0.2.0" ? "keysight-cyperf-controller" : var.cyperf_version == "0.4.0" ? "keysight-cyperf-controller-${local.split_version[1]}-${local.split_version[2]}" : "keysight-cyperf-controller-${local.split_version[1]}${local.split_version[2]}"
   sku_name_agent        = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
@@ -240,8 +253,8 @@ resource "azurerm_network_interface" "azr_automation_agent_1_test_nic" {
   name                          = "${var.azure_owner_tag}-agent-1-test-nic"
   location                      = azurerm_resource_group.azr_automation.location
   resource_group_name           = azurerm_resource_group.azr_automation.name
-  enable_accelerated_networking = true
-  enable_ip_forwarding          = true
+  accelerated_networking_enabled = true
+  ip_forwarding_enabled          = true
   ip_configuration {
     name                          = "${var.azure_owner_tag}-agent-1-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
@@ -296,8 +309,8 @@ resource "azurerm_network_interface" "azr_automation_agent_2_test_nic" {
   name                          = "${var.azure_owner_tag}-agent-2-test-nic"
   location                      = azurerm_resource_group.azr_automation.location
   resource_group_name           = azurerm_resource_group.azr_automation.name
-  enable_accelerated_networking = true
-  enable_ip_forwarding          = true
+  accelerated_networking_enabled = true
+  ip_forwarding_enabled          = true
   ip_configuration {
     name                          = "${var.azure_owner_tag}-agent-2-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
@@ -367,7 +380,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
+    storage_account_type = local.storage_type
   }
 
   plan {
@@ -408,7 +421,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
+    storage_account_type = local.storage_type
   }
 
   plan {
