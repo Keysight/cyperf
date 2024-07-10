@@ -19,7 +19,20 @@ locals {
       CUSTOM_DATA
   mgmt_iprange = ["10.0.1.0/24", "fd00:10::/64"]
   test_iprange = ["10.0.2.0/24"]
-  sku          = length(regexall("D48", var.azure_agent_machine_type)) >= 1 ? "A8" : "A4"
+  instance_sku_map = {
+    "Standard_F4s_v2"   = "A2"
+    "Standard_F16s_v2"  = "A4"
+    "Standard_D48s_v4"  = "A8"
+    "Standard_D48_v4"   = "A8"
+  }
+  sku = lookup(local.instance_sku_map, var.azure_agent_machine_type)
+  instance_storage_type ={
+    "Standard_F4s_v2"   = "Premium_LRS"
+    "Standard_F16s_v2"  = "Premium_LRS"
+    "Standard_D48s_v4"  = "Premium_LRS"
+    "Standard_D48_v4"   = "StandardSSD_LRS"
+  }
+  storage_type = lookup(local.instance_storage_type, var.azure_agent_machine_type)
 }
 
 resource "azurerm_image" "controller_proxy" {
@@ -261,8 +274,8 @@ resource "azurerm_network_interface" "azr_automation_agent_1_test_nic" {
   name                          = "${var.azure_owner_tag}-agent-1-test-nic"
   location                      = azurerm_resource_group.azr_automation.location
   resource_group_name           = azurerm_resource_group.azr_automation.name
-  enable_accelerated_networking = true
-  enable_ip_forwarding          = true
+  accelerated_networking_enabled = true
+  ip_forwarding_enabled          = true
   ip_configuration {
     name                          = "${var.azure_owner_tag}-agent-1-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
@@ -317,8 +330,8 @@ resource "azurerm_network_interface" "azr_automation_agent_2_test_nic" {
   name                          = "${var.azure_owner_tag}-agent-2-test-nic"
   location                      = azurerm_resource_group.azr_automation.location
   resource_group_name           = azurerm_resource_group.azr_automation.name
-  enable_accelerated_networking = true
-  enable_ip_forwarding          = true
+  accelerated_networking_enabled = true
+  ip_forwarding_enabled          = true
   ip_configuration {
     name                          = "${var.azure_owner_tag}-agent-2-test-ip"
     subnet_id                     = azurerm_subnet.azr_automation_test_network.id
@@ -377,7 +390,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_client_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
+    storage_account_type = local.storage_type
   }
   custom_data = base64encode(local.custom_data)
 }
@@ -405,7 +418,7 @@ resource "azurerm_linux_virtual_machine" "azr_automation_server_agent" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
+    storage_account_type = local.storage_type
   }
 }
 
