@@ -8,7 +8,6 @@ locals {
 	AppVmSize = var.AppVmSize
 	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}"
 	PrivateSubnetName = var.PrivateSubnetName
-	PublicSecurityRuleSourceIpPrefixes = var.PublicSecurityRuleSourceIpPrefixes == null ? [ "${data.http.ip.response_body}/32" ] : var.PublicSecurityRuleSourceIpPrefixes
 	PublicSubnetName = var.PublicSubnetName
 	ResourceGroupLocation = var.ResourceGroupLocation
 	ResourceGroupName = var.ResourceGroupName

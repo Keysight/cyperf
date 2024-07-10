@@ -1,6 +1,6 @@
 module "App" {
 	source = "armdupre/module-cyperf-app/azurerm"
-	version = "3.0.0"
+	version = "4.0.0"
 	Eth0SubnetId = module.Vnet.PublicSubnet.id
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
@@ -17,7 +17,7 @@ module "App" {
 
 module "Agent1" {
 	source = "armdupre/module-cyperf-agent/azurerm"
-	version = "3.0.0"
+	version = "4.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip_address
 	Eth0SubnetId = module.Vnet.PublicSubnet.id
 	Eth1SubnetId = module.Vnet.Private1Subnet.id
@@ -38,7 +38,7 @@ module "Agent1" {
 
 module "Agent2" {
 	source = "armdupre/module-cyperf-agent/azurerm"
-	version = "3.0.0"
+	version = "4.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip_address
 	Eth0IpAddress = local.Agent2Eth0IpAddress
 	Eth0SubnetId = module.Vnet.PublicSubnet.id

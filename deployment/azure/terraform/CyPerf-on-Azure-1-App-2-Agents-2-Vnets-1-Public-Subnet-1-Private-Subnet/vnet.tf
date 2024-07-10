@@ -1,6 +1,6 @@
 module "Vnet1" {
 	source = "armdupre/module-1-vnet-1-public-subnet-1-private-subnet/azurerm"
-	version = "3.0.0"
+	version = "4.0.0"
 	InstanceId = local.Vnet1InstanceId
 	PublicSecurityRuleSourceIpPrefixes = local.PublicSecurityRuleSourceIpPrefixes
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
@@ -14,7 +14,7 @@ module "Vnet1" {
 
 module "Vnet2" {
 	source = "armdupre/module-1-vnet-1-public-subnet-1-private-subnet/azurerm"
-	version = "3.0.0"
+	version = "4.0.0"
 	InstanceId = local.Vnet2InstanceId
 	PrivateSubnetPrefix = local.Vnet2PrivateSubnetPrefix
 	PublicSecurityRuleSourceIpPrefixes = local.PublicSecurityRuleSourceIpPrefixes
