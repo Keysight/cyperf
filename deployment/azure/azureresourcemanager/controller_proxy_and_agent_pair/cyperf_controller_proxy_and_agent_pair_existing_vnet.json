@@ -66,6 +66,29 @@
 
          },
 
+         
+         "Accelerated Connections": {
+            
+            "type": "string",
+            
+            "defaultValue": "Disable",
+            
+            "allowedValues": [
+                
+                 "Enable",
+                
+                 "Disable"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of Accelerated Connections"
+
+             }
+
+         },
+
         "Virtual Network": {
 
             "type": "string",
@@ -112,7 +135,9 @@
 
                "Standard_F4s_v2",
 
-               "Standard_F16s_v2"
+               "Standard_F16s_v2",
+
+               "Standard_D48s_v4"
 
             ],
 
@@ -323,7 +348,7 @@
 
             "location": "[variables('location')]",
 
-            "apiVersion": "2020-05-01",
+            "apiVersion": "2022-11-01",
 
             "dependsOn": [
 
@@ -382,7 +407,7 @@
 
             "location": "[variables('location')]",
 
-            "apiVersion": "2020-05-01",
+            "apiVersion": "2022-11-01",
 
             "copy": {
 
@@ -428,7 +453,9 @@
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
-            "apiVersion": "2020-05-01",
+            "condition": "[equals(parameters('Accelerated Connections'),'Disable')]",
+
+            "apiVersion": "2022-11-01",
 
             "location": "[variables('location')]",
 
@@ -465,6 +492,299 @@
                     }
 
                 ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F4s_v2'))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A2",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F16s_v2'))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A4",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48s_v4'))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A8",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates the controllerproxy vm from image specified by the user but before this step we fetch the private IP of the instance using updateIP",
+
+            "type": "Microsoft.Compute/virtualMachines",
+
+            "name": "[variables('vmname_controllerproxy')]",
+
+            "apiVersion": "2019-07-01",
+
+            "location": "[variables('location')]",
+
+            "plan": {
+                 
+                "name": "[variables('skunames')[parameters('Cyperf Version')].skunamecontrollerproxy]",
+
+                "product": "keysight-cyperf",
+
+                "publisher": "keysighttechnologies_cyperf"
+                
+            },
+
+            "dependsOn": [
+
+                "updateIP"
+
+            ],
+
+            "properties": {
+
+                "hardwareProfile": {
+
+                    "vmSize": "Standard_D2s_v3"
+
+                },
+
+                "osProfile": {
+
+                    "computerName":"[variables('vmname_controllerproxy')]",
+
+                    "adminUsername": "cyperf",
+
+                    "customData": "[base64(concat('#!/bin/bash -xe\n','sudo echo -ne \"', parameters('Auth Password'),'\" > /.cyperf/local_secret\n','sudo systemctl restart wap-tunnel-server.service\n'))]",
+
+                    "linuxConfiguration": {
+
+                        "disablePasswordAuthentication": true,
+
+                        "ssh": {
+
+                            "publicKeys": [
+
+                                {
+
+                                    "path": "/home/cyperf/.ssh/authorized_keys",
+
+                                    "keyData": "[parameters('SSH Public Key')]"
+
+                                }
+
+                            ]
+
+                        }
+
+                    }
+
+                },
+
+                "storageProfile": {
+                    "osDisk": {
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                    },
+                    "imageReference": {
+                    "publisher": "keysighttechnologies_cyperf",
+                    "offer": "keysight-cyperf",
+                    "sku": "[variables('skunames')[parameters('Cyperf Version')].skunamecontrollerproxy]",
+                    "version": "latest"
+                    }
+                },
+
+                "networkProfile": {
+
+                    "networkInterfaces": [
+
+                        {
+
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('controllerproxy_interface'))]",
+
+                            "properties": {
+
+                                "primary": true
+
+                            }
+
+                        }
+
+                    ]
+
+                }
 
             }
 

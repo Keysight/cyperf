@@ -66,6 +66,28 @@
 
          },
 
+         "Accelerated Connections": {
+            
+            "type": "string",
+            
+            "defaultValue": "Disable",
+            
+            "allowedValues": [
+                
+                 "Enable",
+                
+                 "Disable"
+                
+                ],
+                
+            "metadata": {
+                
+                "description": "Preferred choice of Accelerated Connections"
+
+             }
+
+         },
+
         "Virtual Network": {
 
             "type": "string",
@@ -118,7 +140,9 @@
 
                "Standard_F4s_v2",
 
-               "Standard_F16s_v2"
+               "Standard_F16s_v2",
+
+               "Standard_D48s_v4"
 
             ],
 
@@ -473,7 +497,7 @@
 
             "location": "[variables('location')]",
 
-            "apiVersion": "2020-05-01",
+            "apiVersion": "2022-11-01",
 
             "dependsOn": [
 
@@ -534,7 +558,7 @@
 
             "location": "[variables('location')]",
 
-            "apiVersion": "2020-05-01",
+            "apiVersion": "2022-11-01",
 
             "copy": {
 
@@ -584,9 +608,11 @@
 
             "type": "Microsoft.Network/networkInterfaces",
 
+            "condition": "[equals(parameters('Accelerated Connections'),'Disable')]",
+
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
-            "apiVersion": "2020-05-01",
+            "apiVersion": "2022-11-01",
 
             "location": "[variables('location')]",
 
@@ -607,6 +633,210 @@
             "properties": {
 
                 "enableAcceleratedNetworking": true,
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('agenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F4s_v2'))]",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A2",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('agenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F16s_v2'))]",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A4",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnet'),variables('agenttestsubnet'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48s_v4'))]",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+
+            ],
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A8",
 
                 "ipConfigurations": [
 
