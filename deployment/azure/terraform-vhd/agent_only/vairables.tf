@@ -78,7 +78,7 @@ variable "agent_image" {
 variable "azure_agent_machine_type" {
   type        = string
   default     = "Standard_F4s_v2"
-  description = "Azure machine type"
+  description = "Possible options: Standard_F4s_v2 / Standard_F16s_v2 / Standard_D48s_v4 / Standard_D48_v4"
 }
 
 variable "agent_role" {

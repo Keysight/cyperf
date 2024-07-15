@@ -37,7 +37,7 @@ resource "azurerm_network_interface" "azr_automation_agent_test_nic" {
   name                = "${var.azure_agent_name}-test-nic"
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
-  enable_accelerated_networking = true
+  accelerated_networking_enabled = true
   ip_configuration  {
     name                          = "${var.azure_agent_name}-test-ip-1"
     subnet_id                     = var.test_subnet
