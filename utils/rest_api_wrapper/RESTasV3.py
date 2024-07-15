@@ -1531,6 +1531,11 @@ class RESTasV3:
             self.sessionID, tp_id, app_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()
 
+    def set_attack_action_value(self, attack_id, action_index, value, tp_id=1, param_id=0):
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions/{}/Params/{}'.format(
+            self.sessionID, tp_id, attack_id, action_index, param_id)
+        self.__sendPatch(apiPath, payload= {"Value": value})
+
     def set_application_action_value(self, app_id, action_id, param_id, value, file_value=None, source=None, tp_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(
             self.sessionID, tp_id, app_id, action_id, param_id)
