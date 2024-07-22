@@ -223,8 +223,7 @@ sudo modprobe ip6table_filter
 ```
 3. Controller time and docker hosts time might be out of sync. This may result in an empty stat view in UI. To resolve setup NTP in docker host. A Controller can also be used as an NTP server. Refer to the host OS specific configuration to setup NTP. Example: [Setting NTP in Ubunutu 22.04](https://linuxconfig.org/ubuntu-22-04-ntp-server)
 
-4. CyPerf Container deployment workflow does not recomend using cyperagent cli commands within the containers. container spawing command should supply all the environment variables for initializing the container.
-
+4. CyPerf Container deployment workflow does not recommend using cyperagent CLI commands within the containers. container spawning command should supply all the environment variables for initializing the agent.
 
 ## Releases
 
