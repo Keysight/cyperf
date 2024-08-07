@@ -13,5 +13,6 @@ rest.add_secondary_objective_value(objective="Simulated users", objective_value=
 rest.set_traffic_profile_client_tls(version="tls12Enabled", status=True)
 rest.set_traffic_profile_server_tls(version="tls12Enabled", status=True)
 rest.assign_agents()
+rest.enable_disable_tls_traffic_profile()
 run_test()
 collect_stats("../test_results", "test_imported_test_config_seconday_objective")
