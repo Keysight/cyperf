@@ -31,7 +31,7 @@ s2c_strikes_sublist_ids = [s2c_exploits_ids[i:i+strikes_per_test] for i in range
 
 malware_ids = [strike["id"] for strike in all_strikes if "malware" in strike["Description"].lower()
                                                                 or "malware" in strike["Connections"][0]["DisplayName"].lower() 
-                                                                or strike["Metadata"]["References"][-1]["Type"] == "MD5"]
+                                                                or (len(strike["Metadata"]["References"]) >= 1 and strike["Metadata"]["References"][-1]["Type"] == "MD5")]
 malware_sublist_ids = [malware_ids[i:i+strikes_per_test] for i in range(0, len(malware_ids), strikes_per_test)]
 
 print("-------------------------------Starting Strikes Config tests-------------------------------")
