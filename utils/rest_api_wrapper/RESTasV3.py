@@ -85,49 +85,6 @@ class RESTasV3:
                 'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
-<<<<<<< HEAD
-=======
-
-    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
-        print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url),
-                                    headers=customHeaders if customHeaders else self.headers)
-        if debug:
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url),
-                                        headers=customHeaders if customHeaders else self.headers)
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code != expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202, 204]
-        print("POST at URL: {} with payload: {}".format(url, payload))
-        payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url),
-                                     headers=customHeaders if customHeaders else self.headers, data=payload,
-                                     files=files, verify=False)
-        if debug:
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url),
-                                         headers=customHeaders if customHeaders else self.headers, data=payload,
-                                         files=files, verify=False)
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code not in expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
->>>>>>> 7802762... add new rest methods + update sample scripts
 
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
@@ -466,8 +423,6 @@ class RESTasV3:
             time.sleep(1)
         raise Exception("Failed to connect {} to controller".format(nats_address))
 
-<<<<<<< HEAD
-=======
     def upload_package(self, file_path):
         apiPath = '/api/v2/deployment/helm/cluster/staging/operations/add'
         customHeaders = self.headers
@@ -488,7 +443,6 @@ class RESTasV3:
                                                     "errorNotResolved": True})
         return response
 
->>>>>>> 7802762... add new rest methods + update sample scripts
     def import_config(self, config):
         apiPath = '/api/v2/configs'
         if config.endswith('.json'):
@@ -643,18 +597,12 @@ class RESTasV3:
         self.assign_agents_by_ip(agents_ips=agents_ips[0], network_segment=1)
         self.assign_agents_by_ip(agents_ips=agents_ips[1], network_segment=2)
 
-<<<<<<< HEAD
-    def assign_agents_by_ip(self, agents_ips, network_segment):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
-            self.sessionID, network_segment)
-=======
     def assign_agents_by_ip(self, agents_ips, network_segment, ignore_deleted_network_segments=True):
         if not ignore_deleted_network_segments:
             network_segment_id = [network["id"] for network in self.get_session_config()["Config"]["NetworkProfiles"][0]["IPNetworkSegment"]][network_segment-1]
         else:
             network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment_id)
->>>>>>> 7802762... add new rest methods + update sample scripts
         payload = {"ByID": [], "ByTag": []}
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
@@ -666,18 +614,12 @@ class RESTasV3:
         payload = {"WarmUpPeriod": int(value)}
         self.__sendPatch(apiPath, payload)
 
-<<<<<<< HEAD
-    def assign_agents_by_tag(self, agents_tags, network_segment):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(
-            self.sessionID, network_segment)
-=======
     def assign_agents_by_tag(self, agents_tags, network_segment, ignore_deleted_network_segments=True):
         if not ignore_deleted_network_segments:
             network_segment_id = [network["id"] for network in self.get_session_config()["Config"]["NetworkProfiles"][0]["IPNetworkSegment"]][network_segment-1]
         else:
             network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment_id)
->>>>>>> 7802762... add new rest methods + update sample scripts
         self.__sendPatch(apiPath, payload={"ByID": [], "ByTag": [agents_tags]})
 
     def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
@@ -1194,10 +1136,6 @@ class RESTasV3:
         
         return config_type
 
-<<<<<<< HEAD
-    def start_test(self, initializationTimeout=60):
-        apiPath = '/api/v2/sessions/{}/test-run/operations/start'.format(self.sessionID)
-=======
     def handle_exception(self, e, max_retries=1, sleep_time=1):
         print(f"Exception occurred: {e}")
         self.exception_count += 1
@@ -1218,7 +1156,6 @@ class RESTasV3:
 
     def start_test(self, initializationTimeout=600, counter=1):
         apiPath = f'/api/v2/sessions/{self.sessionID}/test-run/operations/start'
->>>>>>> 7802762... add new rest methods + update sample scripts
         response = self.__sendPost(apiPath, payload={}).json()
         self.startTime = self.__getEpochTime()
         self.read_test_duration()
@@ -1478,15 +1415,9 @@ class RESTasV3:
     
     def get_attack_id(self, attack_name):
         self.attack_list = self.get_attacks(attack_name)
-<<<<<<< HEAD
-        for attack in self.attack_list["data"]:
-            if attack_name == attack['Name']:
-                return attack['id']
-=======
         for attack in self.attack_list["data"]:            
             if attack_name == attack['Name']:
                 return attack['id']            
->>>>>>> 7802762... add new rest methods + update sample scripts
 
     def set_agent_optimization_mode(self, mode: str, tp_id=1):
         """
@@ -1517,8 +1448,6 @@ class RESTasV3:
     def add_attack(self, attack_name, ap_id=1):
         app_id = self.get_attack_id(attack_name=attack_name)
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
-<<<<<<< HEAD
-=======
         if isinstance(attack_name, list):
             payload = []
             for attack in attack_name:
@@ -1532,7 +1461,6 @@ class RESTasV3:
     
     def add_add_multiple_attacks_by_id(self, attack_ids,  ap_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
->>>>>>> 7802762... add new rest methods + update sample scripts
         response = self.__sendPost(apiPath, payload={"ExternalResourceURL": app_id}).json()
         return response[-1]['id']
 
@@ -2390,10 +2318,6 @@ class RESTasV3:
                 self.session.close()
                 break
             elif result["state"] == "ERROR":
-<<<<<<< HEAD
-                self.session.close()
-                raise "Import was not succesful"
-=======
                     self.session.close()
                     raise "Import was not succesfull"
 
@@ -2455,4 +2379,3 @@ class RESTasV3:
         zf = ZipFile(io.BytesIO(response.content), 'r')
         zf.extractall(csvLocation)
         return response
->>>>>>> 7802762... add new rest methods + update sample scripts
