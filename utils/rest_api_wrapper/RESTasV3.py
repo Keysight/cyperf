@@ -1778,6 +1778,19 @@ class RESTasV3:
             self.sessionID, httpApp['id'], postAction['id'], bodyParam['id']
         )
         self.set_custom_payload(apiPath, fileName)
+    
+    def set_application_custom_payload_size(self, appName, actionName, paramName, response_size):
+        config = self.get_session_config()['Config']
+        applicationsByName = {app['Name']: app for app in config['TrafficProfiles'][0]['Applications']}
+        httpApp = applicationsByName[appName]
+        actionsByName = {action['Name']: action for action in httpApp['Tracks'][0]['Actions']}
+        postAction = actionsByName[actionName]
+        actionParametersByName = {param['Name']: param for param in postAction['Params']}
+        bodyParam = actionParametersByName[paramName]
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/Tracks/1/Actions/{}/Params/{}".format(
+            self.sessionID, httpApp['id'], postAction['id'], bodyParam['id']
+        )
+        self.__sendPatch(apiPath, payload={"Value":response_size})
 
     def set_custom_playlist(self, apiPath, fileName, value=None):
         resp = self.__sendPatch(apiPath, payload={"Source": "Playlist"})
