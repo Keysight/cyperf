@@ -2503,3 +2503,15 @@ class RESTasV3:
         zf = ZipFile(io.BytesIO(response.content), 'r')
         zf.extractall(csvLocation)
         return response
+        
+    def export_certificate_file(self,fileName, export_path):
+        apiPath = "/api/v2/resources/tls-certificates/{}/contentFile".format(fileName)
+        response = self.__sendGet(apiPath, 200)
+        with open(f"{export_path}/{fileName}", 'w') as file:
+            file.write(response.text) 
+        
+    def export_key_file(self, fileName, export_path): 
+        apiPath = "/api/v2/resources/tls-keys/{}/contentFile".format(fileName)
+        response = self.__sendGet(apiPath, 200)
+        with open(f"{export_path}/{fileName}", 'w') as file:
+            file.write(response.text)
