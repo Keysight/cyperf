@@ -665,6 +665,11 @@ class RESTasV3:
         for agent_id in agents_ids:
             payload["ByID"].append({"agentId": agent_id})
         self.__sendPatch(apiPath, payload)
+    
+    def rename_network_segment(self, net_seg_id, name):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, net_seg_id)
+        payload = {"Name": name}
+        self.__sendPatch(apiPath, payload)
 
     def test_warmup_value(self, value):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/AdvancedSettings'.format(self.sessionID)
@@ -678,6 +683,12 @@ class RESTasV3:
             network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment_id)
         self.__sendPatch(apiPath, payload={"ByID": [], "ByTag": [agents_tags]})
+
+    def assign_tag_to_agent(self, tag_list, agent_ip):
+        agent_id = self.get_agents_ids(agent_ip)[0]
+        # import pdb; pdb.set_trace()
+        apiPath = f"/api/v2/agents/{agent_id}"
+        self.__sendPatch(apiPath, payload={"AgentTags": tag_list})
 
     def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
@@ -1631,6 +1642,11 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions/{}/Params/{}'.format(
             self.sessionID, tp_id, attack_id, action_index, param_id)
         self.__sendPatch(apiPath, payload= {"Value": value})
+
+    def set_application_response_body(self, app_id, action_id, param_id, value, tp_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
+        payload = {"Value": value}
+        self.__sendPatch(apiPath, payload)
 
     def set_application_action_value(self, app_id, action_id, param_id, value, file_value=None, source=None, tp_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
