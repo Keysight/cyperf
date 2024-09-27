@@ -1101,7 +1101,11 @@
 
                 "[variables('vmname_controllerproxy')]",
 
-                "[variables('proximity_pg_name')]"
+                "[variables('proximity_pg_name')]",
+
+	        "ManagmentInterface",
+
+                "testinterface"
 
             ],
 

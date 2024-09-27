@@ -945,7 +945,11 @@
 
                 "[variables('vmname_controller')]",
 
-                "[variables('proximity_pg_name')]"
+                "[variables('proximity_pg_name')]",
+
+	        "ManagmentInterface",
+
+                "testinterface"
 
             ],
 
