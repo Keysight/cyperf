@@ -25,7 +25,7 @@ services:
      networks:
        cyperf-mgmt-net:
          ipv4_address: 192.168.0.10
-#       cyperf-client-test-net:
+#       cyperf-test-client-net:
 #         ipv4_address: 172.32.12.10
  server:
      image: "public.ecr.aws/keysight/cyperf-agent:latest"
@@ -54,19 +54,19 @@ services:
      networks:
        cyperf-mgmt-net:
          ipv4_address: 192.168.0.11
-#       cyperf-server-test-net:
+#       cyperf-test-server-net:
 #         ipv4_address: 10.10.10.10
 networks:
-#  cyperf-client-test-net:
-#    name: client-test-net
+#  cyperf-test-client-net:
+#    name: cyperf-test-client-net
 #    driver: macvlan
 #    driver_opts:
 #      parent: ens192
 #    ipam:
 #      config:
 #        - subnet: "172.32.12.0/22"
-#  cyperf-server-test-net:
-#    name: server-test-net
+#  cyperf-test-server-net:
+#    name: cyperf-test-server-net
 #    driver: macvlan
 #    driver_opts:
 #      parent: ens224
