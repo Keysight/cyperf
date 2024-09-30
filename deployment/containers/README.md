@@ -99,19 +99,19 @@ By default, when you create or run a container using docker create or docker run
             #   value: "eth1"
         ```
     
-    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces.
+    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces. The networks should be connected alphabetically if the interfaces need to be in a specific order when mounted to the docker container.
     ```
             networks:
-            #  cyperf-client-test-net:
-            #    name: client-test-net
+            #  cyperf-test-client-net:
+            #    name: cyperf-test-client-net
             #    driver: macvlan
             #    driver_opts:
             #      parent: ens192
             #    ipam:
             #      config:
             #        - subnet: "172.32.12.0/22"
-            #  cyperf-server-test-net:
-            #    name: server-test-net
+            #  cyperf-test-server-net:
+            #    name: cyperf-test-server-net
             #    driver: macvlan
             #    driver_opts:
             #      parent: ens224
