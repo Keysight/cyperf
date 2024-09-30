@@ -10,8 +10,7 @@ Choose a provider
 
 - Choose from the following supported platforms:
 
-[![aws](images/aws.jpg)](deployment/aws)   [![azure](images/azure.jpg)](deployment/azure)   [![GCP](images/GCP.jpg)](deployment/gcp)   [![kubernetes](images/kubernetes.jpg)](deployment/k8s)
-
+[![aws](images/aws.jpg)](deployment/aws)   [![azure](images/azure.jpg)](deployment/azure)   [![GCP](images/GCP.jpg)](deployment/gcp)   [![kubernetes](images/kubernetes.jpg)](deployment/k8s) [![containers](images/docker-mark-blue.png)](deployment/containers)
 ### CyPerf Performance
 To achive better performance refer below section [performance](performance)
 
