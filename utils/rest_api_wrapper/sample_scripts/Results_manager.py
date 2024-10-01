@@ -7,8 +7,7 @@ from RESTasV3 import RESTasV3
 
 #Prerequisites: Ensure that no test is in progress when executing this script.
 
-#csvFolder = "/path/to/save/logs"
-csvFolder = "/var/lib/jenkins/public_github/cyperf/utils/rest_api_wrapper/test_results"
+csvFolder = "/path/to/save/logs"
 download_all_csv_from_controller = True
 delete_all_test_results = True
 
