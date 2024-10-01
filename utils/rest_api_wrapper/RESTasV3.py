@@ -6,6 +6,7 @@ import time
 import urllib
 import urllib3
 import requests
+import re
 import simplejson as json
 from zipfile import ZipFile
 from datetime import datetime
@@ -63,6 +64,88 @@ class RESTasV3:
 
         return response
     
+    
+    
+    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
+        expectedResponse = [200, 201, 202, 204]
+        print("POST at URL: {} with payload: {}".format(url, payload))
+        payload = json.dumps(payload) if customHeaders is None else payload
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
+        if debug:
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
+    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
+        expectedResponse = [200, 201, 202, 204]
+        print("POST at URL: {} with payload: {}".format(url, payload))
+        payload = json.dumps(payload) if customHeaders is None else payload
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
+        if debug:
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
     
     def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
         expectedResponse = [200, 201, 202, 204]
@@ -404,6 +487,10 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
+    def delete_license_server(self, licenseServerId):
+        apiPath = '/api/v2/license-servers/{}'.format(licenseServerId)
+        self.__sendDelete(apiPath, self.headers)  
+
     def nats_update_route(self, nats_address, secret, user="admin", fingerprint=None):
         apiPath = '/api/v2/brokers'
         if fingerprint is None:
@@ -490,6 +577,30 @@ class RESTasV3:
         with open(file_name, 'wb') as archive:
             archive.write(response.content)
         return file_name
+    
+    def export_all_configs(self, export_path=None, file_name="all_configs.zip"):
+        apiPath = '/api/v2/configs/operations/exportAll'
+        payload = {
+                    "configIds": []
+        }
+        result = self.__sendPost(apiPath, payload=payload).json()
+        apiPath = apiPath + "/" + str(result["id"])
+        for index in range(36):
+            time.sleep(10)
+            result = self.__sendGet(apiPath, 200).json()
+            if result["state"] == "SUCCESS":
+                download_url = result["resultUrl"]
+                break
+            elif result["state"] == "FAILURE":
+                raise "Export all configs operation did not succeeded after 5 minutes"
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/zip'
+        response = self.session.get('{}{}'.format(self.host, "/" + download_url), headers=customHeaders, stream=True)
+        if export_path:
+            file_name = os.path.join(export_path, file_name)
+        with open(file_name, 'wb') as fd:
+            for chunk in response.iter_content(chunk_size=256):
+                fd.write(chunk)
 
     def open_config(self):
         apiPath = '/api/v2/sessions'
@@ -621,6 +732,11 @@ class RESTasV3:
             network_segment_id = network_segment
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment_id)
         self.__sendPatch(apiPath, payload={"ByID": [], "ByTag": [agents_tags]})
+        
+    def assign_tag_to_agent(self, tag_list, agent_ip):
+        agent_id = self.get_agents_ids(agent_ip)[0]
+        apiPath = f"/api/v2/agents/{agent_id}"
+        self.__sendPatch(apiPath, payload={"AgentTags": tag_list})
 
     def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
@@ -740,6 +856,38 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}/TCPHealthCheck'.format(self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"Port": port})
 
+    def enable_application_inherit_http_profile(self, app_nr):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}'.format(self.sessionID, app_nr)
+        self.__sendPatch(apiPath, payload={"InheritHTTPProfile": True})
+
+    def disable_application_inherit_http_profile(self, app_nr):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}'.format(self.sessionID, app_nr)
+        self.__sendPatch(apiPath, payload={"InheritHTTPProfile": False})
+
+    def set_application_client_http_profile(self, app_nr, profile ='Chrome'):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/ClientHTTPProfile'.format(self.sessionID, app_nr)
+        available_profile = ["Android", "Chrome", "Microsoft Edge", "Firefox", "Internet Explorer", "Opera", "Safari", "custom-client-profile"]
+        if profile not in available_profile:
+            raise ("The http profile you are trying to configure doesn't exist!")
+        http_profile = "/api/v2/resources/http-profiles/" + profile
+        self.__sendPatch(apiPath, payload={"ExternalResourceURL": http_profile})
+        
+    def set_application_client_http_version(self, app_nr, version = "HTTP11"):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/ClientHTTPProfile'.format(self.sessionID, app_nr)
+        self.__sendPatch(apiPath, payload={"HTTPVersion": version})
+
+    def set_application_server_http_profile(self, app_nr, profile ='Apache'):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/ServerHTTPProfile'.format(self.sessionID, app_nr)
+        available_profile = ["Apache", "IIS", "nginx", "custom-server-profile"]
+        if profile not in available_profile:
+            raise ("The http profile you are trying to configure doesn't exist!")
+        http_profile = "/api/v2/resources/http-profiles/" + profile
+        self.__sendPatch(apiPath, payload={"ExternalResourceURL": http_profile})
+        
+    def set_application_server_http_version(self, app_nr, version = "HTTP11"):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/ServerHTTPProfile'.format(self.sessionID, app_nr)
+        self.__sendPatch(apiPath, payload={"HTTPVersion": version})
+
     def set_client_recieve_buffer_size_attack_profile(self, value):
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile'.format(self.sessionID)
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
@@ -801,9 +949,18 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
         self.__sendDelete(apiPath, self.headers)
 
+    def get_ip_range_configuration(self, network_segment=1, ip_range=1,):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
     def set_ip_range_automatic_ip(self, ip_auto=True, network_segment=1, ip_range=1,):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"IpAuto": ip_auto})
+
+    def set_ip_range_automatic_version(self, ip_auto="ONLY_IPV4", network_segment=1, ip_range=1,):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
+        self.__sendPatch(apiPath, payload={"AutomaticIpType": ip_auto})
 
     def set_ip_range_ip_start(self, ip_start, network_segment=1, ip_range=1,):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
@@ -972,7 +1129,6 @@ class RESTasV3:
         return clients_id
 
     def get_CC_min_value(self, configured_cc_value, agent_cpu_cores):
-        favoured_sessions_no = 1  # static value
         global_cc_min_value = 0
         app_info = {}
         config = self.get_session_config()
@@ -1118,7 +1274,10 @@ class RESTasV3:
         
         ipsec_stacks = self.config['Config']['NetworkProfiles'][0]['IPNetworkSegment'][0]['IPSecStacks']
         if len(ipsec_stacks) > 0:
-            config_type['ipsec'] = {"host_count_per_tunnel": ipsec_stacks[0]['EmulatedSubConfig']['HostCountPerTunnel'],
+            host_count = ipsec_stacks[0]['EmulatedSubConfig']['HostCountPerTunnel']
+            if 'LocalSubConfig' in ipsec_stacks[0]:
+                host_count = ipsec_stacks[0]['LocalSubConfig']['HostCountPerTunnel']
+            config_type['ipsec'] = {"host_count_per_tunnel": host_count,
                                     "outer_ip_count": ipsec_stacks[0]['OuterIPRange']['Count'],
                                     "rekey_margin": ipsec_stacks[0]["RekeyMargin"],
                                     "lifetime_phase_1": ipsec_stacks[0]["IPSecRange"]["IKEPhase1Config"]["Lifetime"],
@@ -1312,6 +1471,22 @@ class RESTasV3:
         zf.extractall(csvLocation)
         return response
 
+    def get_pdf_report(self, pdfLocation, exportTimeout=180):
+        test_id = self.get_test_id()
+        apiPath = '/api/v2/results/{}/operations/generate-pdf'.format(test_id)
+        response = self.__sendPost(apiPath, None).json()
+        apiPath = response['url'][len(self.host):]
+        response = self.wait_event_success(apiPath, timeout=exportTimeout)
+        if not response: 
+            raise TimeoutError("Failed to download PDF report. Timeout reached = {} seconds".format(exportTimeout))
+        apiPath = response['resultUrl']
+        with open(pdfLocation, "wb") as f:
+            response = self.__sendGet(apiPath, 200, debug=False)
+            if response.status_code == 200:
+                pdf_response_content = response.content
+                f.write(pdf_response_content)
+        return response
+
     def get_result_ended(self, timeout=5):
         apiPath = '/api/v2/results/{}'.format(self.get_test_id())
         while timeout > 0:
@@ -1391,6 +1566,11 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
+    def get_strikes_by_pages(self, take=50, skip=0):
+        apiPath = '/api/v2/resources/strikes?take={}&skip={}&exclude=links'.format(take, skip)
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
     def get_application_id(self, app_name):
         if not self.app_list:
             self.app_list = self.get_applications()
@@ -1400,10 +1580,24 @@ class RESTasV3:
                 print('Application ID = {}'.format(app['id']))
                 return app['id']    
 
-    def get_application_traffic_type(self, app_id):
-        apiPath = '/api/v2/resources/apps/{}/app/Connections/0'.format(app_id)
+    def get_application_connections(self, app_id):
+        apiPath = '/api/v2/resources/apps/{}/app/Connections?exclude=links'.format(app_id)
         response = self.__sendGet(apiPath, 200).json()
-        return response["Type"]
+        deprecated_connections =[]
+        for item in response:
+            if "IsDeprecated" in item:
+                deprecated_connections.append(item)
+        for deprecated in deprecated_connections:
+            response.remove(deprecated)
+        return response
+    
+    def get_application_traffic_types(self, app_id):
+        app_connections = self.get_application_connections(app_id)
+        traffic_types =[]
+        for connection in app_connections:
+            if connection['Type'] not in traffic_types:
+                traffic_types.append(connection['Type'])
+        return traffic_types
     
     def get_strike_id(self, strike_name):
         if not self.strike_list:
@@ -1461,7 +1655,7 @@ class RESTasV3:
     
     def add_add_multiple_attacks_by_id(self, attack_ids,  ap_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
-        response = self.__sendPost(apiPath, payload={"ExternalResourceURL": app_id}).json()
+        response = self.__sendPost(apiPath, payload={"ExternalResourceURL": attack_ids}).json()
         return response[-1]['id']
 
     def add_strike_as_attack(self, strike_name, ap_id=1):
@@ -1490,7 +1684,7 @@ class RESTasV3:
     def insert_attack_action_at_exact_position(self, attack_id, action_id, insert_at_position):
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{attack_id}/Tracks/1/operations/add-actions'
         response = self.__sendPost(api_path, payload={
-            "Actions": [{"ActionID": action_id, "InsertAtIndex": insert_at_position}]}).json()
+            "Actions": [{"ProtocolID": action_id, "InsertAtIndex": insert_at_position}]}).json()
         status_url = response["url"].split("/")[-1]
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{attack_id}/Tracks/1/operations/add-actions/{status_url}'
         for index in range(10):
@@ -1525,6 +1719,16 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions'.format(self.sessionID, tp_id, app_id)
         self.__sendPost(apiPath, payload={"Name": action_name}).json()
 
+    def set_attack_action_value(self, attack_id, action_index, value, tp_id=1, param_id=0):
+        apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks/{}/Tracks/1/Actions/{}/Params/{}'.format(
+            self.sessionID, tp_id, attack_id, action_index, param_id)
+        self.__sendPatch(apiPath, payload= {"Value": value})
+
+    def set_application_response_body(self, app_id, action_id, param_id, value, tp_id=1):
+        apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
+        payload = {"Value": value}
+        self.__sendPatch(apiPath, payload)
+        
     def set_application_action_value(self, app_id, action_id, param_id, value, file_value=None, source=None, tp_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}'.format(self.sessionID, tp_id, app_id, action_id, param_id)
         payload = {"Value": value, "FileValue": file_value, "Source": source}
@@ -1671,6 +1875,20 @@ class RESTasV3:
             self.sessionID, httpApp['id'], postAction['id'], bodyParam['id']
         )
         self.set_custom_payload(apiPath, fileName)
+        
+    def set_application_custom_payload_size(self, appName, actionName, paramName, response_size):
+        # usage: rest.set_application_custom_payload_size(appName="HTTP App", actionName="HTTP GET", paramName="Response body", response_size="1000000")
+        config = self.get_session_config()['Config']
+        applicationsByName = {app['Name']: app for app in config['TrafficProfiles'][0]['Applications']}
+        httpApp = applicationsByName[appName]
+        actionsByName = {action['Name']: action for action in httpApp['Tracks'][0]['Actions']}
+        postAction = actionsByName[actionName]
+        actionParametersByName = {param['Name']: param for param in postAction['Params']}
+        bodyParam = actionParametersByName[paramName]
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/Tracks/1/Actions/{}/Params/{}".format(
+            self.sessionID, httpApp['id'], postAction['id'], bodyParam['id']
+        )
+        self.__sendPatch(apiPath, payload={"Value":response_size})
 
     def set_custom_playlist(self, apiPath, fileName, value=None):
         resp = self.__sendPatch(apiPath, payload={"Source": "Playlist"})
@@ -2074,8 +2292,10 @@ class RESTasV3:
             raise ("The endpoint you are trying to configure doesn't exist!")
         self.__sendPatch(apiPath, payload={config_endpoint: config_change})
 
-    def configure_client_tls_settings(self, config_endpoint, config_change):
+    def configure_client_tls_settings(self, config_endpoint, config_change, enable_tls_traffic=True):
         apiPath = f'/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTLSProfile'
+        if enable_tls_traffic:
+            self.enable_disable_tls_traffic_profile()
         available_endpoints = ["tls12Enabled", "tls13Enabled", "ciphers12", "ciphers13", "immediateClose",
                                "middleBoxEnabled"]
         if config_endpoint not in available_endpoints:
@@ -2092,8 +2312,10 @@ class RESTasV3:
             raise ("The endpoint you are trying to configure doesn't exist!")
         self.__sendPatch(apiPath, payload={config_endpoint: config_change})
 
-    def configure_server_tls_settings(self, config_endpoint, config_change):
+    def configure_server_tls_settings(self, config_endpoint, config_change, enable_tls_traffic=True):
         apiPath = f'/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTLSProfile'
+        if enable_tls_traffic:
+            self.enable_disable_tls_traffic_profile()
         available_endpoints = ["tls12Enabled", "tls13Enabled", "ciphers12", "ciphers13", "immediateClose",
                                "middleBoxEnabled"]
         if config_endpoint not in available_endpoints:
@@ -2147,7 +2369,7 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"RetryCount": tunnel_reattempt_count})
 
     def set_ipsec_emulated_subnet_settings(self, startIP, increment, prefix=24, host_count_per_tunnel=1, network_segment_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/1/EmulatedSubConfig'.format(self.sessionID, network_segment_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/1/LocalSubConfig'.format(self.sessionID, network_segment_number)
         payload={"Start": startIP,
                 "Increment": increment,
                 "Prefix": prefix,
@@ -2180,11 +2402,11 @@ class RESTasV3:
         self.__sendPatch(apiPath, {"PublicPeerIncrement": public_peer_increment})
     
     def set_ipsec_protected_subnet_start(self, protected_subnet_start, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/ProtectedSubConfig'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/RemoteSubConfig'.format(self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"Start": protected_subnet_start})
 
     def set_ipsec_protected_subnet_increment(self, increment, network_segment_number=1, ipsec_stack_number=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/ProtectedSubConfig'.format(self.sessionID, network_segment_number, ipsec_stack_number)
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPSecStacks/{}/IPSecRange/RemoteSubConfig'.format(self.sessionID, network_segment_number, ipsec_stack_number)
         self.__sendPatch(apiPath, {"Increment": increment})
 
     def set_ipsec_preshared_key(self, sharedkey, network_segment_number, ipsec_stack_number=1):
@@ -2337,7 +2559,7 @@ class RESTasV3:
         apiPath = '/api/v2/stats-dashboards/{}'.format(dashboard_name)
         response = self.__sendGet(apiPath, 200).json()
         return response
-      
+
     def get_results_test_ids(self):
         all_results = self.__sendGet('/api/v2/results', 200).json()
         return [result["id"] for result in all_results]
@@ -2379,3 +2601,15 @@ class RESTasV3:
         zf = ZipFile(io.BytesIO(response.content), 'r')
         zf.extractall(csvLocation)
         return response
+      
+    def export_certificate_file(self,fileName, export_path):
+        apiPath = "/api/v2/resources/tls-certificates/{}/contentFile".format(fileName)
+        response = self.__sendGet(apiPath, 200)
+        with open(f"{export_path}/{fileName}", 'w') as file:
+            file.write(response.text) 
+        
+    def export_key_file(self, fileName, export_path): 
+        apiPath = "/api/v2/resources/tls-keys/{}/contentFile".format(fileName)
+        response = self.__sendGet(apiPath, 200)
+        with open(f"{export_path}/{fileName}", 'w') as file:
+            file.write(response.text)
