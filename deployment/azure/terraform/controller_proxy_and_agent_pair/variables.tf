@@ -71,25 +71,25 @@ variable "azure_agent_machine_type" {
 
 variable "cyperf_version" {
   type        = string
-  default     = "0.4.0"
+  default     = "0.5.0"
   description = "CyPerf release version"
 }
 
 variable "broker_version" {
   type        = string
-  default     = "0.4.0"
+  default     = "0.5.0"
   description = "CyPerf release version"
 }
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-4-0"
+  default     = "keysight-cyperf-agent-5-0"
   description = "Name for the cyperf agent machines"
 }
 
 variable "broker_name" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-4-0"
+  default     = "keysight-cyperf-controller-proxy-5-0"
   description = "Name for the cyperf broker machines"
 }
 
