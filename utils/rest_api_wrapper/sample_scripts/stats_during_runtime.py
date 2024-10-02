@@ -26,7 +26,11 @@ real_time_stats = []
 while time.time()-start_time < test_duration:
     real_time_stats.append({})
     for stat in rest.get_available_stats_name():
-        real_time_stats[-1][stat] = rest.get_stats_values(statName=stat)
+        real_time_stats[stat] = rest.get_stats_values(statName=stat)
+    #take certain actions based on the live stats
+    # if time.time()-start_time > test_duration*3/4:
+    #     import pdb; pdb.set_trace() 
+   
 print(real_time_stats)
 print('Number of read in {} seconds is {}'.format(test_duration,len(real_time_stats)))
 rest.wait_test_finished()
