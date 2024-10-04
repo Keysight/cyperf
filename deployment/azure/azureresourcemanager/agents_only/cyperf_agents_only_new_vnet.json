@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.4.0",
+            "defaultValue": "0.5.0",
 
             "allowedValues": [
+              "0.5.0",
               "0.4.0",
               "0.3.0",
               "0.2.6",
@@ -285,6 +286,9 @@
         "customData": "[concat('#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ', parameters('Cyperf Controller IP'),' --username \"',parameters('Auth Username'),'\" --password \"', parameters('Auth Password'), '\" --fingerprint \"',parameters('Auth Fingerprint'),'\" >> /var/log/image_init.log')]",
        
         "skunames" : {
+            "0.5.0": {
+                "skuname": "keysight-cyperf-agent-50"
+            },
             "0.4.0": {
                 "skuname": "keysight-cyperf-agent-40"
             },
