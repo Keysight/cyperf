@@ -24,8 +24,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | Control Subnet for CyPerf Agents                   | 172.16.1.0/24            | CyPerf agents will use this subnet for control plane communication with Controller.  |
 | Test Subnet for CyPerf Agents                   | 172.16.2.0/24            | CyPerf agents will use this subnet for test traffic.  |
 | Controller               | Requires input   | CyPerf agent  will peer with this Controller/Controller-proxy using Management interface.  |
-| Authentication Username                                        | admin                    | Username for agent to controller authentication.      |
-| Authentication Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Authentication Username                                        | `admin`                    | Username for agent to controller authentication.      |
+| Authentication Password                                        | `CyPerf&Keysight#1`       | Password for agent to controller authentication.      |
 | Authentication Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 | Allowed Subnet for Security Group                   | 1.1.1.1/1            | Subnet range allowed to access deployed AWS resources. Execute `curl ifconfig.co` to know MyIP or google for “what is my IP”. Default value is dummy value. User must use proper subnet range.   |
 
@@ -44,8 +44,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | Test Subnet for CyPerf Agents                   | Select subnet from drop down            | Preferred Existing Test subnet for CyPerf Agent.  |
 | Security Group of CyPerf Agent                   | Select security group from drop down            | Preferred Existing Security group of CyPerf Agent.   |
 | Controller               | Requires input   | CyPerf agent  will peer with this Controller/Controller-proxy using Management interface.  |
-| Authentication Username                                        | admin                    | Username for agent to controller authentication.      |
-| Authentication Password                                        | CyPerf&Keysight#1        | Password for agent to controller authentication.      |
+| Authentication Username                                        | `admin`                    | Username for agent to controller authentication.      |
+| Authentication Password                                        | `CyPerf&Keysight#1`        | Password for agent to controller authentication.      |
 | Authentication Fingerprint                                     |                          | Fingerprint for agent to controller authentication - OPTIONAL  |
 
 ## Post deployment
