@@ -303,7 +303,6 @@ Ensure that the following configurations are appropriate, when configuring the C
     * https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/
 
 ## Known Limitations
-1. CyPerf does not support IPv6 address for management interface yet.
 
 
 ## Releases
