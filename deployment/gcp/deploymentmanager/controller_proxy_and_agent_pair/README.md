@@ -32,7 +32,7 @@ The list of exposed parameters is defined in Template parameter section.
 
 <user>@cloudshell:~ (project name)$ gcloud deployment-manager deployments create <deployment name> --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:<Agent Imagename>,managementNetworkCIDR:<Subnet>,testNetworkCIDR:<Subnet>,agentCount:2, brokerSourceImage:<Controller-Image>,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 Example:
-$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-4-0,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template cyperf_controller_proxy_and_agent_pair_new_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-5-0,managementNetworkCIDR:172.16.5.0/24,testNetworkCIDR:10.0.0.0/8,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-5-0,brokerMachineType:e2-medium,authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 ### Examples of Deployment using Python Template **Existing VPC**:
 ```
@@ -41,7 +41,7 @@ $ gcloud deployment-manager deployments create keysight-cyperf-gcp1 --template c
 
 Example: 
 
-$gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-4-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-4-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
+$gcloud deployment-manager deployments create keysight-cyperf-gcp-ext1 --template cyperf_controller_proxy_and_agent_pair_existing_vpc.py --properties zone:us-east1-c,region:us-east1,agentMachineType:c2-standard-4,agentSourceImage:keysight-cyperf-agent-5-0,agentCount:2,brokerSourceImage:keysight-cyperf-controller-proxy-5-0,brokerMachineType:e2-medium,management_subnetwork:"keysight-cyperf-gcp1-cyperf-management-subnetwork",management_subnetwork_project:"kt-nas-cyperf-dev",test_subnetwork:"keysight-cyperf-gcp1-cyperf-test-subnetwork",test_subnetwork_project:"kt-nas-cyperf-dev",authUsername:"admin",authPassword:"CyPerf&Keysight#1"
 ```
 
 ### Example of Deployment using a YAML file **New VPC**:
@@ -71,8 +71,8 @@ The following table lists the parameters for this deployment in **New VPC**.
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | brokerMachineType                   | e2-medium            | Preferred machine Type for CyPerf Controller-proxy.  |
 | agentMachineType                   | c2-standard-4           | Preferred machine Type for CyPerf Agent.  |
-| brokerSourceImage                   | keysight-cyperf-controller-proxy-4-0            | Preferred CyPerf Controller-proxy image. |
-| agentSourceImage                   | keysight-cyperf-agent-4-0            | Preferred CyPerf Agent image. |
+| brokerSourceImage                   | keysight-cyperf-controller-proxy-5-0            | Preferred CyPerf Controller-proxy image. |
+| agentSourceImage                   | keysight-cyperf-agent-5-0            | Preferred CyPerf Agent image. |
 | managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
 | testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8           | CyPerf agents will use this subnet for test traffic.  |
 | agentCount                  | 2            | Number of CyPerf agents will be deployed from this template.  |
@@ -88,8 +88,8 @@ The following table lists the parameters for this deployment in **Existing VPC**
 | region                   | Requires input            | Preferred Region name for the deployment.  |
 | brokerMachineType                   | e2-medium            | Preferred machine Type for CyPerf Controller-proxy.  |
 | agentMachineType                   | c2-standard-4           | Preferred machine Type for CyPerf Agent.  |
-| brokerSourceImage                   | keysight-cyperf-controller-proxy-4-0            | Preferred CyPerf Controller-proxy image. |
-| agentSourceImage                   | keysight-cyperf-agent-4-0            | Preferred CyPerf Agent image. |
+| brokerSourceImage                   | keysight-cyperf-controller-proxy-5-0            | Preferred CyPerf Controller-proxy image. |
+| agentSourceImage                   | keysight-cyperf-agent-5-0            | Preferred CyPerf Agent image. |
 | management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | This subnet is attached to CyPerf controller-proxy & CyPerf agents will use this subnet for control plane communication with controller-proxy.  |
 | management_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where management subnet exists  |
 | test_subnetwork                  | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"           | CyPerf agents will use this subnet for test traffic.  |
