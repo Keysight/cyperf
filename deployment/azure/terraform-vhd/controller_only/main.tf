@@ -18,6 +18,7 @@ resource "azurerm_image" "controller" {
   resource_group_name = azurerm_resource_group.azr_automation.name
   hyper_v_generation  = "V1"
   os_disk {
+    storage_type = "StandardSSD_LRS"
     os_type  = "Linux"
     os_state = "Generalized"
     blob_uri = var.controller_image
