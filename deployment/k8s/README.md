@@ -347,10 +347,14 @@ TO BE CONTINUED ...
 -->   
    
 ## Known Limitations
-1. CyPerf does not support IPv6 address for management interface yet.
 
 
 ## Releases
+
+- **CyPerf 5.0** - [October, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release5.0
+        - public.ecr.aws/keysight/cyperf-agent:5.0.3.723
 
 - **CyPerf 4.0** - [July, 2024]
     - Image URI: 
