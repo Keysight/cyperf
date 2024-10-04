@@ -347,7 +347,6 @@ TO BE CONTINUED ...
 -->   
    
 ## Known Limitations
-1. CyPerf does not support IPv6 address for management interface yet.
 
 
 ## Releases
