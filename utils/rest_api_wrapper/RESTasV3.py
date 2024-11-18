@@ -2708,3 +2708,47 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200)
         with open(f"{export_path}/{fileName}", 'w') as file:
             file.write(response.text)
+
+    def upload_capture(self, capture_path):
+        apiPath = "/api/v2/resources/captures/operations/uploadFile"
+
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/json'
+        mp_encoder = MultipartEncoder(
+            fields={
+                "packages": ('package', open(capture_path, "rb"), 'application/x-tar')
+                    }
+                )
+        customHeaders['content-type'] = mp_encoder.content_type
+        response = self.__sendPost(apiPath, payload=mp_encoder, customHeaders=customHeaders).json()
+        return response
+    
+    def create_app(self, app_name, action_name, capture_id, app_flow_ids_exchanges, timeout=60):
+        apiPath = "/api/v2/resources/operations/create-app"
+        payload = {
+            "AppName": app_name,
+            "Actions":[
+                {
+                    "Name": action_name,
+                    "Captures":[
+                        {
+                            "CaptureId": capture_id,
+                            "Flows" : [
+                                {
+                                    "AppFlowId":app_flow_id_exchange["app_flow_id"],
+                                    "Exchanges": app_flow_id_exchange["exchanges_list"]
+                                }
+                                for app_flow_id_exchange in app_flow_ids_exchanges
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        response = self.__sendPost(apiPath, payload=payload).json()
+        response = self.wait_event_success(apiPath=f'{response["type"]}/{response["id"]}', timeout=timeout)
+        return response
+    
+    def get_captures(self):
+        apiPath = "/api/v2/resources/captures?take=100&skip=0"
+        return self.__sendGet(apiPath, 200).json()
