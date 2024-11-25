@@ -14,7 +14,6 @@ Choose a provider
 ### CyPerf Performance
 To achive better performance refer below section [performance](performance)
 ### CyPerf CLI Free Edition
-It is a Free and lighter weight version of CyPerf meant to be much easier to install and use albeit with a very limited feature set.
-
+It is a Free and lighter weight version of CyPerf meant to be much easier to install and use albeit with a very limited feature set [CyPerf CLI](cyperfcli).
 
 
