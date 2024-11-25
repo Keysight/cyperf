@@ -158,16 +158,23 @@ The console statistics view should adjust based on console width, wide table wit
 CSV / JSON stats (WIP).
 
 
-
-
-# Installtion
-
 ## Prerequisite
+### Manual
 ```
   curl -O http://cyperfcli.cyperf.io/pgp-key.public
   sudo mkdir -p /etc/apt/keyrings
   cat pgp-key.public | sudo gpg --dearmor -o /etc/apt/keyrings/cyperfcli-repo-keyring.gpg
   echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-repo-keyring.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list
+```
+OR
+### Automated
+```
+  curl -O http://cyperfcli.cyperf.io/set_cyperfcli.cyperf.io_apt_repo.sh
+  sudo chmod +x set_cyperfcli.cyperf.io_apt_repo.sh
+  sudo ./set_cyperfcli.cyperf.io_apt_repo.sh
+```
+### Installation
+```
   sudo apt update
   sudo apt install cyperf
 ```
