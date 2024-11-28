@@ -45,13 +45,14 @@ CyPerf CLI Free Editon can be installed in a few simple steps. We can use Debian
 
 Add CyPerf CLI Free Editon apt repo to apt sources by running the following commands
 ```
-sudo apt-get update && \
-sudo apt-get install ca-certificates curl && \
+sudo apt-get update
+sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings && \
 curl http://cyperfcli.cyperf.io/cyperf_cli_public.gpg | \
-sudo gpg --dearmor -o /etc/apt/keyrings/cyperfcli-pub.gpg && \ 
+sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperfcli-pub.gpg
 echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-pub.gpg] http://cyperfcli.cyperf.io stable main" | \
 sudo tee /etc/apt/sources.list.d/cyperfcli.list > /dev/null
+
 ```
 Install CyPerf CLI Free Edition by running
 ```
