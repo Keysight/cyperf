@@ -1,180 +1,279 @@
-# CyPerf CLI
 
-## What is CyPerf CLI?
+## CyPerf CLI Free Editon 
 
-It is a lighter weight version of CyPerf meant to be much easier to install and use albeit with a very limited feature set. It has the following features:
+CyPerf CLI Free Edition is a command line tool which is designed to help with testing networks by generating different kind of network traffic with relative ease. This tool harnesses some of the key strengths of CyPerf but with much simpler deployment steps. Its also much simpler to use. 
 
-- Standalone package installer (Currently only Debian package (.deb), planned support for RHEL package (.rpm) too)
-- Single binary executable with a simple command line interface.
-Easy to use with just a single command for each node, client / server.
-- Key benefits of CyPerf are also available in this tool: Throughput testing, Connection rate testing, concurrency testing (future)
-- Key statistics available in tabular and CSV format.
+CyPerf CLI Free Editon can be used to generate traffic to test the following performance metrices of a network: 
 
-## What is the purpose of CyPerf CLI?
+- Bandwidth capacity by running throughput tests with throughput up to 10 Gbps. 
 
-This tool is designed to be a free network testing tool which can help Keysight market the key strengths of CyPerf in a more hands on manner. It is expected that with this free tool, many new customers will get to try and get familiarized to the strengths of CyPerf. If this helps them achieve their network testing requirements, Keysight CyPerf will get more exposure to the customers. If they need more features / performance of CyPerf, they may be more ready to try and purchase full CyPerf solution.
+- Connection establishment capacity by running connection rate tests with connection rates up to 100K connections per second. 
 
+We can tune parameters like TCP payload size, TCP receive window size, content of traffic etc. with the help of this tool. 
 
+CyPerf CLI Free Editon also provides statistics like bandwidth, connection rate, average connection establishment latency etc. which are essential for debugging certain network issues. For a deeper investigation, it can also provide some detailed statistics like ARP stats, packet level stats i.e packet rate, packet drop stats etc and TCP level stats. 
 
-## If this tool is free, will it not become a free competition of CyPerf?
+ 
 
-This tool is designed to be a free and limited preview of key CyPerf features. For example, it doesn’t have features like different control plane options, ATI, Zero Trust etc. Also, it is limited to certain performance numbers:
+### Supported platforms 
 
-- Throughput: 10 Gbps
-- Connection rate: 100K CPS
-- Concurrency: 64K (May be 1M in future)
+We aim to make CyPerf CLI Free Edition run on variety of platforms. But so far, we have targeted the following platforms to test and validate: 
 
+**Linux on premises VM**
 
-## How to use CyPerf CLI?
+- OS: Debian 12 / Ubuntu 2204 
+- CPU: 4 vCPU or more 
+- RAM: 4 GB or more 
+- Storage: As required by OS 
+- NIC type: vmxnet3 virtual NIC 
 
-It is a CLI tool which can be invoked from the terminal with certain command line parameters. If server and client side are started correctly and the network connectivity between these two nodes are properly established, traffic should be seen between these two nodes. Also, CyPerf CLI can show variety of stats. For more information on how to run the CyPerf CLI, refer to the attached documentation.
+ 
 
+**Linux on AWS**
 
+- OS: Debian 12 / Ubuntu 2204 
+- Instance type: c5n.2xlarge 
+- NIC type: aws ena 
 
-## What are CyPerf CLI system requirements?
-
-CyPerf CLI should run on any Debian based distribution and any VM with atleast 2 vCPUs and 4 GB of RAM. However to keep CyPerf CLI resource requirements well defined, the following should be considered:
-
-- CPU : 4 vCPU
-- Memory: 4 GB of RAM (And increase proportionally with CPU core count.)
-- Debian 12 / Ubuntu 20.04 / Ubuntu 22.04
-
-
-## How to test CyPerf CLI?
-
-As of now CyPerf CLI can be tested manually until an automated test harness is developed. For testing CyPerf CLI manually, the following steps are needed:
-
-- Prepare two nodes for client and server using one of the supported OS.
-- Ensure there is connectivity to package installation repositories.
-- Install cyperf cli package using the package manager (use apt or apt-get so that dependencies are automatically installed, DO NOT USE dpkg directly, it may result in broken dependency tree).
-Start the cyperf cli process in the server node first by running the desired cyperf tool with desired CLI options.
-- Once the test is stared in server side, start the cyperf cli process in client in the same way except using the client specific cli options in client node.
-- The tool will start printing stats on console (by default every 3 seconds, but this is overridable using -i cli option)
-- If more stats are required, --detailed-stats CLI option can be used.
-- To stop the test, client process should be stopped followed by the server process.
+ 
+CyPerf CLI Free Edition should be able to run on even more platforms like other AWS instance types, Azure instances, Kubernetes clusters with supported CNIs (Callico, AWS VPC CNI, AKS CNI), and we are continuing to test add validate this in more platforms. 
 
 
-## What to test in CyPerf CLI?
+### Installation steps 
 
+CyPerf CLI Free Editon can be installed in a few simple steps. We can use Debian package management system (apt) to install, update and remove CyPerf CLI Free Edition. To install using apt we need to perform the following steps: 
 
-
-The following is a non-exhaustive set of tests for CyPerf CLI, more tests should be carried out but are not listed here yet.
-
-GLOBAL PERFORMANCE LIMITS WHICH SHOULD NOT BE BREACHED IN ANY CIRCUMSTANCES:
-
-- Throughput: 10 Gbps (10 Gigabits per second)
-- Connection rate: 100 K CPS (100000 connections per second)
-
-Some current limitations:
-
-- Currently only TCP is supported
-- Currently only IPv4 is supported
-- Currently only throughput and correction rate objectives can be used, concurrency will appear later.
-Some work in progress features which are not present in current build but should appear before release 1.0:
-
-- Real file payload option.
-- Use of gateway to hop across network.
-- Traffic direction: Download from server.
-- CSV / JSON stats.
-
-Potential tests:
-
-- Basic functionality (network):
-	Test with explicitly specified test NIC
-	Run a test with a specified test NIC in both client and server.
-	For server, -B / --bind CLI option will be needed to specify the test interface by specifying the ip address of that interface.
-	For client:
-Either use -B / --bind CLI option like in server
-Or if the routes are configured properly in linux route table, the client should automatically select the proper test interface. To check if the route is configured correctly, the following command can be used: ip route get <server ip address>
-
-
-Test without explicitly specified test NIC (single NIC in both client and server):
-Run a test without specifying test NIC in both client and server.
-The server should start listening on the only available NIC in server node.
-The client should start connections via the only available NIC in client.
-Test without explicitly specified test NIC (multiple NIC in both client and server):
-Run a test without specifying test NIC in both client and server.
-The server should start listening on all available NIC in server node.
-The client should pick the correct NIC to use from the linux route table.
-The server should be able to accept connection coming from all NICs in server side.
-
-
-Basic functionality (input validation tests, both positive and negative):
-WIP
-
-
-Basic functionality (throughput):
-Basic throughput test without specific throughput limit:
-Run a test without any explicitly specified throughput limit
-The test should still be automatically limited to global limits mentioned earlier.
-Basic throughput test with specific throughput limit under or equals to global throughput limit:
-Run a test with a specific throughput limit which is under the global throughput limit mentioned above.
-The test should achieve the throughput as specified if the resources are sufficient for that and it should not overshoot the specified throughput.
-The test should not breach the global connection rate limit.
-Basic throughput test with specific throughput limit over the global throughput limit:
-Run a test with a specific throughput limit which is over the global throughput limit mentioned above.
-The client should not start and show a proper error message and exit.
-
-
-Basic functionality (connection rate):
-Basic connection rate without specific connection rate limit:
-Run a test without any explicitly specified connection rate limit
-The test should still be automatically limited to global limits mentioned earlier.
-Basic throughput test with specific connection rate limit under or equals to global connection rate limit:
-Run a test with a specific connection rate limit which is under the global connection rate limit mentioned above.
-The test should achieve the connection rate as specified if the resources are sufficient for that and it should not overshoot the specified connection rate.
-The test should not breach the global throughput limit.
-Basic connection rate test with specific connection rate limit over the global connection rate limit:
-Run a test with a specific connection rate limit which is over the global connection rate limit mentioned above.
-The client should not start and show a proper error message and exit.
-
-
-## Advanced functionality (traffic direction):
-Tests with traffic direction from client to server (default):
-Run a test with configuration where traffic will flow from client to server.
-The stats should show traffic flowing from client to server.
-Tests with traffic direction from server to client:
-Run a test with configuration where traffic will flow from server to client.
-The stats should show traffic flowing from server to client.
-Tests with traffic direction - bidirectional:
-Run a test with configuration where traffic will flow in both direction (--bidir cli option).
-The stats should show traffic flowing in both directions in approximately 50%-50% ration.
-
-
-## Advanced functionality (payloads):
-Test with different payload size (-l / --length CLI option)
-Test with real file payload (-F / --file CLI option)
-
-
-## Advanced functionality (connection properties):
-Test with different window size (-w / --window CLI option)
-Test with different MSS (-M / --set-mss CLI option)
-Test with different server port (-p / --port CLI option)
-
-
-## Advanced functionality (statistics):
-Test with detailed statistics to test for different L23 and L4 statistics.
-The console statistics view should adjust based on console width, wide table with 3 side by side sub tables if the console is wide enough, else tall table with 3 sub tables stacked.
-CSV / JSON stats (WIP).
-
-
-## Prerequisite
-### Manual
+### Prerequisite
+#### Manual
 ```
   curl -O http://cyperfcli.cyperf.io/pgp-key.public
+
   sudo mkdir -p /etc/apt/keyrings
+
   cat pgp-key.public | sudo gpg --dearmor -o /etc/apt/keyrings/cyperfcli-repo-keyring.gpg
+
   echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-repo-keyring.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list
 ```
 OR
-### Automated
+#### Automated
 ```
   curl -O http://cyperfcli.cyperf.io/set_cyperfcli.cyperf.io_apt_repo.sh
+
   sudo chmod +x set_cyperfcli.cyperf.io_apt_repo.sh
+
   sudo ./set_cyperfcli.cyperf.io_apt_repo.sh
 ```
-### Installation
+#### Installation
 ```
   sudo apt update
+  
   sudo apt install cyperf
 ```
+ 
+### Getting started 
+
+
+**Start a simple bandwidth test using CyPerf CLI Free Edition**
+
+On server machine, run: 
+```
+sudo cyperf -s 
+```
+
+Yes, we need sudo permission, unfortunately, as we don’t know any other easy way of using the types of linux sockets we are using. And we need to set and manage some iptables rules as well. 
+
+Once the cyperf server has started, on client run: 
+```
+sudo cyperf -c <server machine ip address> 
+```
+
+If there is proper network connectivity between the two machines, now we should see positive values in bandwidth statistics shown by both client and server. Once we are done with the test, we can stop it pressing Ctrl + C in the terminal. 
+
+ 
+
+**Debugging if first test doesn’t show positive results**
+
+First, if we have only IPv6 addresses available, then sorry, but currently CyPerf CLI Free Edition can only run using IPv4 addresses. 
+
+Ok, tests started in both client and server without any errors, but we are not seeing any positive bandwidth stats, now what? 
+
+Well, if proper stats cannot be seen, here are a few steps to help debug the issue: 
+
+- Ensure both client and server machines have at least one NIC which has IPv4 address assigned to it and is in UP state. 
+
+- Ensure there is a proper route available from client to server machine IP address. This can be checked by running 
+
+ ```
+ip route get <server machine ip address> 
+```
+- Ensure that ARP is not blocked by any network element. 
+
+- CyPerf CLI Free Edition uses port 8080 by default to connect to server, ensure this is not blocked by any firewall or other element of the network. 
+
+- Use --detailed-stats option in both client and server commands to diagnose the issue further: 
+
+```
+sudo cyperf -s –detailed-stats 
+sudo cyperf -c <server machine ip address> --detailed-stats 
+```
+
+Now it will show some more stats like ARP stats, packet related stats and TCP stats. We can use these as per our knowledge of the network. For example, first we should check if the ARP requests are being sent from and ARP responses are getting back to client. We can check if the server receives the ARP requests and sent ARP response back. If there is no problem is ARP, then we can move to TCP stats and see if connections are getting established or not, and if not why, for example we can check whether SYN, SYN-ACK packet count, retransmission count, TCP RST packet count. These can guide us to the actual problem if there is any. 
+ 
+**Ok, first test ran successfully, now what?**
+
+Well, now we can play with different parameters and try to test different aspects of the network under test. Here are a few examples: 
+
+- **Run a throughput test but with smaller payload size and a bandwidth limit of 1Gbps** 
+```
+sudo cyperf -s --length 1k --bitrate 1G/s 
+sudo cyperf -c <server machine ip address> --length 1k 
+```
+
+- **Run a connection rate test**
+```
+sudo cyperf -s –cps 
+sudo cyperf -c <server machine ip address> --cps 
+```
+
+- **Run a connection rate test with more realistic payload size and a connection rate limit of 1000 CPS** 
+```
+sudo cyperf -s –cps –-length 1k 
+sudo cyperf -c <server machine ip address> --cps 1k/s –-length 1k 
+```
+ 
+- **Run a test using a real file as TCP payload**
+```
+sudo cyperf -s –-file <path to file> 
+sudo cyperf -c <server machine ip address> –-file <path to file> 
+```
+ 
+**Ok great, what else can we do?**
+
+Well, a here is a starting tip: 
+```
+cyperf –help 
+```
+This will print something like this in the console 
+```
+Usage: sudo cyperf [-s|-c host] [options] 
+
+            cyperf [-h|--help] [-v|--version] [--about] 
+
+ 
+
+Server or Client: 
+
+  -p, --port      #           server port to listen on/connect to 
+
+  -i, --interval  #           seconds between periodic statistics reports 
+
+  -t, --time      #           time in seconds to run the test for (default 600 secs) 
+
+  --cps           [#KMG][/#]  target connection rate in connections/sec (0 for unlimited) 
+
+                              the value is optional and takes effect in client side only 
+
+  --bidir                     run in bidirectional mode. 
+
+                              client and server send and receive data. 
+
+  -R, --reverse               run in reverse mode (server sends, client receives). 
+
+  -l, --length    #[KMG]      length of buffer to read or write 
+
+  -F, --file      <filepath>  use the specified file as the buffer to read or write 
+
+  -B, --bind      <host>      bind to the interface associated with the address <host> 
+
+  -w, --window    #[KMG]      set window size / socket buffer size 
+
+  --csv-stats     <filepath>  write all stats to specified csv file 
+
+  --detailed-stats            show more detailed stats in console 
+
+  -v, --version               show version information and quit 
+
+  -h, --help                  show this message and quit 
+
+  --about                     show the Keysight contact and license information. 
+
+Server specific: 
+
+  -s, --server                run in server mode 
+
+Client specific: 
+
+  -c, --client    <host>      run in client mode, connecting to <host> 
+
+  -b, --bitrate   #[KMG][/#]  target bitrate in bits/sec (0 for unlimited) 
+
+  -P, --parallel  #           number of parallel client sessions to run 
+
+ 
+
+[KMG] indicates options that support a K/M/G suffix for kilo-, mega-, or giga- 
+
+```
+
+If we have mandb installed in our system, we can also try reading the manual page by running 
+```
+man cyperf 
+```
+We can use these options as needed. One primary example is -P / --parallel option. Let’s retry our connection rate test with this option: 
+```
+sudo cyperf -s –cps -P 64 
+sudo cyperf -c <server machine ip address> --cps -P 64 
+```
+ 
+Hopefully we are seeing at least some improvements in connection rate now (unless we were already running with 64 core CPUs before). 
+
+We will keep updating this documentation with more detailed information about how we can tune different test parameters, how to interpret the test configuration summary that gets shown at the start of the test and how to interpret the stats and test result summary at the end of the test. 
+
+ 
+**But before we stop, here are a few troubleshooting steps, and a few things to keep in mind** 
+
+ 
+CyPerf CLI Free Edition needs to set some iptables rules to execute tests without interfering with linux stack traffic. But this can have a few bad side effects if we are not careful 
+
+First, lets hammer this into our head: we will not use ssh ports or any other ports currently being used by any important program as the listen port while running CyPerf CLI Free Edition. Why, we will explore in the next item in this list. 
+
+The iptables rules will block all traffic coming to server port (default 8080, can be changed using -p / --port option) from getting to linux network stack. And if any program was communicating using that port, then that program may not be able to continue. 
+
+Now we can see why it is a very bad idea to use ssh port (default: 22) as the listen port, a very bad scenario would arise if we tried to do that, if the server machine is being used over ssh then this test will kill all ssh communication to that server machine. Then only way we can reach to that server machine again is by waiting out the test duration (default: 600 seconds) after which CyPerf CLI Free Edition server should automatically stop and cleanup the iptables rules blocking the ssh connection. 
+
+But the above situation may get worse if for some reason the CyPerf CLI Free Edition server crashes due to some reason, for example being killed by kernel due to memory pressure, then we will not be able to use ssh to connect to that machine at all. To avoid such possibilities, please don’t use ports which can be or being actively used by other applications. 
+
+ 
+
+**Ok, we will avoid using ssh ports as test ports like a plague. What else?**
+
+Well, we still can run into some issues: 
+
+We have tried to catch and squash as many bugs as we can, but there are still some possibilities that CyPerf CLI Free Edition client or server may exit unexpectedly for some reason, i.e crash or killed by kernel / user, and in that case, it will leave some iptables rules behind. These should get automatically cleaned up when we run CyPerf CLI Free Edition next time. But if for some reason, the client / server keeps crashing, it is recommended to reboot the client / server machine to clean up the iptables rules and other potential changes. But in case a reboot is not a preferred option, we can still remove these rules manually. To do that, first we can check the residual iptables rules by running: 
+```
+sudo iptables -S 
+```
+We should see an output like this: 
+```
+-P INPUT ACCEPT 
+
+-P FORWARD ACCEPT 
+
+-P OUTPUT ACCEPT 
+
+-A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP 
+```
+Now we can remove all the rules which have the comment “Added by CyPerf CLI, ruleset id: …”
+
+For example, we can remove the rule in this example by running 
+```
+sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j  
+
+DROP 
+```
+- CyPerf CLI Free Edition currently doesn’t support running both the client and the server in same machine. We don’t know if we will be able to support it in future as well. 
+
+
+
+
+
