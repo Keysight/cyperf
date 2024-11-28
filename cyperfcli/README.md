@@ -43,33 +43,16 @@ CyPerf CLI Free Edition should be able to run on even more platforms like other 
 
 CyPerf CLI Free Editon can be installed in a few simple steps. We can use Debian package management system (apt) to install, update and remove CyPerf CLI Free Edition. To install using apt we need to perform the following steps: 
 
-### Prerequisite
-#### Manual
+Add CyPerf CLI Free Editon apt repo to apt sources by running the following commands
 ```
-  curl -O http://cyperfcli.cyperf.io/pgp-key.public
-
-  sudo mkdir -p /etc/apt/keyrings
-
-  cat pgp-key.public | sudo gpg --dearmor -o /etc/apt/keyrings/cyperfcli-repo-keyring.gpg
-
-  echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-repo-keyring.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list
+sudo mkdir -p /etc/apt/keyrings && \ 
+curl http://cyperfcli.cyperf.io/cyperf_cli_public.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/cyperfcli-repo-keyring.gpg && \ 
+echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-repo-keyring.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list
 ```
-OR
-#### Automated
+Install CyPerf CLI Free Edition by running
 ```
-  curl -O http://cyperfcli.cyperf.io/set_cyperfcli.cyperf.io_apt_repo.sh
-
-  sudo chmod +x set_cyperfcli.cyperf.io_apt_repo.sh
-
-  sudo ./set_cyperfcli.cyperf.io_apt_repo.sh
+sudo apt update && sudo apt install cyperf 
 ```
-#### Installation
-```
-  sudo apt update
-  
-  sudo apt install cyperf
-```
- 
 ### Getting started 
 
 
@@ -113,7 +96,10 @@ ip route get <server machine ip address>
 - Use --detailed-stats option in both client and server commands to diagnose the issue further: 
 
 ```
+# On Server machine
 sudo cyperf -s –detailed-stats 
+
+# On Client machine
 sudo cyperf -c <server machine ip address> --detailed-stats 
 ```
 
@@ -125,25 +111,37 @@ Well, now we can play with different parameters and try to test different aspect
 
 - **Run a throughput test but with smaller payload size and a bandwidth limit of 1Gbps** 
 ```
-sudo cyperf -s --length 1k --bitrate 1G/s 
+# On Server machine
+sudo cyperf -s --length 1k --bitrate 1G/s
+
+# On Client machine
 sudo cyperf -c <server machine ip address> --length 1k 
 ```
 
 - **Run a connection rate test**
 ```
-sudo cyperf -s –cps 
+# On Server machine
+sudo cyperf -s –cps
+
+# On Client machine
 sudo cyperf -c <server machine ip address> --cps 
 ```
 
 - **Run a connection rate test with more realistic payload size and a connection rate limit of 1000 CPS** 
 ```
-sudo cyperf -s –cps –-length 1k 
+# On Server machine
+sudo cyperf -s –cps –-length 1k
+
+# On Client machine
 sudo cyperf -c <server machine ip address> --cps 1k/s –-length 1k 
 ```
  
 - **Run a test using a real file as TCP payload**
 ```
-sudo cyperf -s –-file <path to file> 
+# On Server machine
+sudo cyperf -s –-file <path to file>
+
+# On Client machine
 sudo cyperf -c <server machine ip address> –-file <path to file> 
 ```
  
@@ -221,7 +219,10 @@ man cyperf
 ```
 We can use these options as needed. One primary example is -P / --parallel option. Let’s retry our connection rate test with this option: 
 ```
-sudo cyperf -s –cps -P 64 
+# On Server machine
+sudo cyperf -s –cps -P 64
+
+# On Client machine
 sudo cyperf -c <server machine ip address> --cps -P 64 
 ```
  
@@ -230,7 +231,7 @@ Hopefully we are seeing at least some improvements in connection rate now (unles
 We will keep updating this documentation with more detailed information about how we can tune different test parameters, how to interpret the test configuration summary that gets shown at the start of the test and how to interpret the stats and test result summary at the end of the test. 
 
  
-**But before we stop, here are a few troubleshooting steps, and a few things to keep in mind** 
+### **But before we stop, here are a few troubleshooting steps, and a few things to keep in mind** 
 
  
 CyPerf CLI Free Edition needs to set some iptables rules to execute tests without interfering with linux stack traffic. But this can have a few bad side effects if we are not careful 
@@ -243,8 +244,6 @@ Now we can see why it is a very bad idea to use ssh port (default: 22) as the li
 
 But the above situation may get worse if for some reason the CyPerf CLI Free Edition server crashes due to some reason, for example being killed by kernel due to memory pressure, then we will not be able to use ssh to connect to that machine at all. To avoid such possibilities, please don’t use ports which can be or being actively used by other applications. 
 
- 
-
 **Ok, we will avoid using ssh ports as test ports like a plague. What else?**
 
 Well, we still can run into some issues: 
@@ -256,20 +255,15 @@ sudo iptables -S
 We should see an output like this: 
 ```
 -P INPUT ACCEPT 
-
 -P FORWARD ACCEPT 
-
 -P OUTPUT ACCEPT 
-
 -A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP 
 ```
 Now we can remove all the rules which have the comment “Added by CyPerf CLI, ruleset id: …”
 
 For example, we can remove the rule in this example by running 
 ```
-sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j  
-
-DROP 
+sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP 
 ```
 - CyPerf CLI Free Edition currently doesn’t support running both the client and the server in same machine. We don’t know if we will be able to support it in future as well. 
 
