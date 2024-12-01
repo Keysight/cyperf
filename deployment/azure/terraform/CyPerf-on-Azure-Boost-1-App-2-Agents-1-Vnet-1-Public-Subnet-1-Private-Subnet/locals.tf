@@ -6,16 +6,15 @@ locals {
 	Agent2Eth0IpAddress = "10.0.10.12"
 	Agent2Eth1IpAddresses = [ "10.0.2.22" ]
 	Agent2InstanceId = "agent2"
-	AppTag = "ubuntu"
-	AppVersion = "2204-lts"
+	AppTag = "cyperf"
 	AppVmSize = var.AppVmSize
 	ClientId = var.ClientId
 	ClientSecret = var.ClientSecret
-	Preamble = "${local.UserLoginTag}-${local.AppTag}-${local.AppVersion}"
+	Preamble = "${local.UserLoginTag}-${local.UserProjectTag}-${local.AppTag}"
 	PublicSecurityRuleSourceIpPrefixes = var.PublicSecurityRuleSourceIpPrefixes == null ? [ "${data.http.ip.response_body}/32" ] : var.PublicSecurityRuleSourceIpPrefixes
 	ResourceGroupLocation = var.ResourceGroupLocation
 	ResourceGroupName = var.ResourceGroupName == null ? "${local.Preamble}-resource-group" : var.ResourceGroupName
-	SkipProviderRegistration = var.SkipProviderRegistration
+	ResourceProviderRegistrations = var.ResourceProviderRegistrations
 	SshKeyAlgorithm = "RSA"
 	SshKeyName = "${local.Preamble}-ssh-key"
 	SshKeyRsaBits = "4096"
