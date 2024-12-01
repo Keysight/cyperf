@@ -1,6 +1,5 @@
 module "Vnet1" {
-	source = "armdupre/module-1-vnet-1-public-subnet-1-private-subnet/azurerm"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-azurerm-module-1-vnet-1-public-subnet-1-private-subnet.git?ref=5.0.0"
 	InstanceId = local.Vnet1InstanceId
 	PublicSecurityRuleSourceIpPrefixes = local.PublicSecurityRuleSourceIpPrefixes
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
@@ -9,12 +8,10 @@ module "Vnet1" {
 	UserEmailTag = local.UserEmailTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag
-	Version = local.AppVersion
 }
 
 module "Vnet2" {
-	source = "armdupre/module-1-vnet-1-public-subnet-1-private-subnet/azurerm"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-azurerm-module-1-vnet-1-public-subnet-1-private-subnet.git?ref=5.0.0"
 	InstanceId = local.Vnet2InstanceId
 	PrivateSubnetPrefix = local.Vnet2PrivateSubnetPrefix
 	PublicSecurityRuleSourceIpPrefixes = local.PublicSecurityRuleSourceIpPrefixes
@@ -25,7 +22,6 @@ module "Vnet2" {
 	UserEmailTag = local.UserEmailTag
 	UserLoginTag = local.UserLoginTag
 	UserProjectTag = local.UserProjectTag
-	Version = local.AppVersion
 	VnetAddressPrefix = local.Vnet2AddressPrefix
 }
 
