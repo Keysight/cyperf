@@ -1,6 +1,5 @@
 module "App" {
-	source = "armdupre/module-cyperf-app/aws"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-aws-module-cyperf-app.git?ref=4.0.0"
 	Eth0SecurityGroupId = data.aws_security_group.PublicSecurityGroup.id
 	Eth0SubnetId = data.aws_subnet.PublicSubnet.id
 	InstanceType = local.AppInstanceType
@@ -10,8 +9,7 @@ module "App" {
 }
 
 module "Agent1" {
-	source = "armdupre/module-cyperf-agent/aws"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-aws-module-cyperf-agent.git?ref=4.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip
 	Eth0SecurityGroupId = data.aws_security_group.PublicSecurityGroup.id
 	Eth0SubnetId = data.aws_subnet.PublicSubnet.id
@@ -30,8 +28,7 @@ module "Agent1" {
 }
 
 module "Agent2" {
-	source = "armdupre/module-cyperf-agent/aws"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-aws-module-cyperf-agent.git?ref=4.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip
 	Eth0PrivateIpAddress = local.Agent2Eth0PrivateIpAddress
 	Eth0SecurityGroupId = data.aws_security_group.PublicSecurityGroup.id
