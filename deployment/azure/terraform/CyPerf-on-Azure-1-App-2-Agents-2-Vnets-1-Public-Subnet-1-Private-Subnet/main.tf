@@ -1,6 +1,5 @@
 module "App" {
-	source = "armdupre/module-cyperf-app/azurerm"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-azurerm-module-cyperf-app.git?ref=5.0.0"
 	Eth0SubnetId = module.Vnet1.PublicSubnet.id
 	ResourceGroupLocation = azurerm_resource_group.ResourceGroup.location
 	ResourceGroupName = azurerm_resource_group.ResourceGroup.name
@@ -16,8 +15,7 @@ module "App" {
 }
 
 module "Agent1" {
-	source = "armdupre/module-cyperf-agent/azurerm"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-azurerm-module-cyperf-agent.git?ref=5.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip_address
 	Eth0SubnetId = module.Vnet1.PublicSubnet.id
 	Eth1SubnetId = module.Vnet1.PrivateSubnet.id
@@ -37,8 +35,7 @@ module "Agent1" {
 }
 
 module "Agent2" {
-	source = "armdupre/module-cyperf-agent/azurerm"
-	version = "4.0.0"
+	source = "git::https://github.com/armdupre/terraform-azurerm-module-cyperf-agent.git?ref=5.0.0"
 	AppEth0IpAddress = module.App.Instance.private_ip_address
 	Eth0IpAddress = local.Agent2Eth0IpAddress
 	Eth0SubnetId = module.Vnet2.PublicSubnet.id
