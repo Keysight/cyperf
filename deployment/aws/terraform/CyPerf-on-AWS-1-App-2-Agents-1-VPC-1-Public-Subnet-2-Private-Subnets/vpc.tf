@@ -1,5 +1,5 @@
 module "Vpc" {
-	source = "git::https://github.com/armdupre/terraform-aws-module-1-vpc-1-public-subnet-2-private-subnets.git?ref=4.0.0"
+	source = "git::https://github.com/armdupre/terraform-aws-module-1-vpc-1-public-subnet-2-private-subnets.git?ref=5.0.0"
 	InboundIPv4CidrBlocks = local.InboundIPv4CidrBlocks
 	Private1SubnetAvailabilityZone = local.Private1SubnetAvailabilityZone
 	Private2SubnetAvailabilityZone = local.Private2SubnetAvailabilityZone
