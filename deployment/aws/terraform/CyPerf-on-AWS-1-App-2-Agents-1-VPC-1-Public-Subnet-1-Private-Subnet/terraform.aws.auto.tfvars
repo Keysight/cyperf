@@ -1,0 +1,2 @@
+# AwsAccessCredentialsAccessKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# AwsAccessCredentialsSecretKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
