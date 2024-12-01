@@ -1,8 +1,6 @@
 # AgentInstanceType = "c5n.9xlarge"
 # ApiMaxRetries = 1
 # AppInstanceType = "c5.2xlarge"
-# AwsAccessCredentialsAccessKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# AwsAccessCredentialsSecretKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 # InboundIPv4CidrBlocks = [ "1.1.1.1/32" ]
 # PrivateSubnetAvailabilityZone = "us-east-1a"
 # PublicSubnetAvailabilityZone = "us-east-1a"
