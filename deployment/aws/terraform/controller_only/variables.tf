@@ -52,12 +52,12 @@ variable "aws_mdw_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-4-0"
+  default     = "keysight-cyperf-controller-5-0"
   description = "Version for the cyperf controller machine"
 }
 
 variable "cyperf_release" {
   type        = string
-  default     = "4.0"
+  default     = "5.0"
   description = "The version of the cyperf release"
 }

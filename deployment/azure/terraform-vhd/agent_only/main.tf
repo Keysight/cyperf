@@ -46,6 +46,7 @@ resource "azurerm_image" "agent" {
   resource_group_name = var.resource_group_name
   hyper_v_generation  = "V1"
   os_disk {
+    storage_type = local.storage_type
     os_type  = "Linux"
     os_state = "Generalized"
     blob_uri = var.agent_image

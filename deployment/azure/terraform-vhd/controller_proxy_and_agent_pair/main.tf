@@ -41,6 +41,7 @@ resource "azurerm_image" "controller_proxy" {
   resource_group_name = azurerm_resource_group.azr_automation.name
   hyper_v_generation  = "V1"
   os_disk {
+    storage_type = local.storage_type
     os_type  = "Linux"
     os_state = "Generalized"
     blob_uri = var.controller_proxy_image
@@ -53,6 +54,7 @@ resource "azurerm_image" "agent" {
   resource_group_name = azurerm_resource_group.azr_automation.name
   hyper_v_generation  = "V1"
   os_disk {
+    storage_type = local.storage_type
     os_type  = "Linux"
     os_state = "Generalized"
     blob_uri = var.agent_image

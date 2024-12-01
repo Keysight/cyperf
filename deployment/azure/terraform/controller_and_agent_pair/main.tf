@@ -443,7 +443,7 @@ resource "azurerm_route_table" "er_route" {
   name                          = "${var.azure_owner_tag}-ER-route"
   location                      = azurerm_resource_group.azr_automation.location
   resource_group_name           = azurerm_resource_group.azr_automation.name
-  disable_bgp_route_propagation = false
+  bgp_route_propagation_enabled = false
   route {
     name                   = "${var.azure_owner_tag}-client-server"
     address_prefix         = var.server_IP_stack_range

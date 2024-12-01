@@ -99,19 +99,19 @@ By default, when you create or run a container using docker create or docker run
             #   value: "eth1"
         ```
     
-    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces.
+    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces. The networks should be connected alphabetically if the interfaces need to be in a specific order when mounted to the docker container.
     ```
             networks:
-            #  cyperf-client-test-net:
-            #    name: client-test-net
+            #  cyperf-test-client-net:
+            #    name: cyperf-test-client-net
             #    driver: macvlan
             #    driver_opts:
             #      parent: ens192
             #    ipam:
             #      config:
             #        - subnet: "172.32.12.0/22"
-            #  cyperf-server-test-net:
-            #    name: server-test-net
+            #  cyperf-test-server-net:
+            #    name: cyperf-test-server-net
             #    driver: macvlan
             #    driver_opts:
             #      parent: ens224
@@ -223,10 +223,14 @@ sudo modprobe ip6table_filter
 ```
 3. Controller time and docker hosts time might be out of sync. This may result in an empty stat view in UI. To resolve setup NTP in docker host. A Controller can also be used as an NTP server. Refer to the host OS specific configuration to setup NTP. Example: [Setting NTP in Ubunutu 22.04](https://linuxconfig.org/ubuntu-22-04-ntp-server)
 
-4. CyPerf Container deployment workflow does not recomend using cyperagent cli commands within the containers. container spawing command should supply all the environment variables for initializing the container.
-
+4. CyPerf Container deployment workflow does not recommend using cyperagent CLI commands within the containers. container spawning command should supply all the environment variables for initializing the agent.
 
 ## Releases
+
+- **CyPerf 5.0** - [October, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release5.0
+        - public.ecr.aws/keysight/cyperf-agent:5.0.3.723
 
 - **CyPerf 4.0** - [July, 2024]
     - Image URI: 

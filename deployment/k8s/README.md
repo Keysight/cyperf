@@ -303,10 +303,14 @@ Ensure that the following configurations are appropriate, when configuring the C
     * https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/
 
 ## Known Limitations
-1. CyPerf does not support IPv6 address for management interface yet.
 
 
 ## Releases
+
+- **CyPerf 5.0** - [October, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release5.0
+        - public.ecr.aws/keysight/cyperf-agent:5.0.3.723
 
 - **CyPerf 4.0** - [July, 2024]
     - Image URI: 
