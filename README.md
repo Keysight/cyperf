@@ -1,19 +1,25 @@
 # Introduction
-Welcome to the GitHub repository for Keysight CyPerf product.
+Welcome to the GitHub repository for CyPerf, a Keysight product. CyPerf is an agent-based network application and security test solution, that meticulously recreates realistic workloads across diverse physical and cloud environments to deliver unparalleled insights into the end-user quality of experience (QoE), security posture, and performance bottlenecks of distributed networks.
+
+A licensed CyPerf product is compatible with multiple environments. Choose from the following supported platforms for accessing ready-to-use deployment templates.
 
 ### CyPerf Deployment Templates 
-
-A licensed CyPerf product from Keysight is compatible with multiple environments.
-
 
 Choose a provider
 
 - Choose from the following supported platforms:
 
-[![aws](images/aws.jpg)](deployment/aws)   [![azure](images/azure.jpg)](deployment/azure)   [![GCP](images/GCP.jpg)](deployment/gcp)   [![kubernetes](images/kubernetes.jpg)](deployment/k8s) [![containers](images/containers.png)](deployment/containers)
-### CyPerf Performance
-To achive better performance refer below section [performance](performance)
+[![aws](images/aws.jpg)](deployment/aws) [![azure](images/azure.jpg)](deployment/azure) [![GCP](images/GCP.jpg)](deployment/gcp)
+[![kubernetes](images/kubernetes.jpg)](deployment/k8s) [![containers](images/containers.png)](deployment/containers)
+
 ### CyPerf CLI Free Edition
-It is a Free and lighter weight version of CyPerf meant to be much easier to install and use albeit with a very limited feature set. For exploring it refer [CyPerf CLI](cyperfcli).
+
+A free CLI version of CyPerf with limited features and performance is also available. For installation steps and more details refer [CyPerf CLI](cyperfcli).
+
+### CyPerf Performance
+
+ A licensed CyPerf offers unparalled performance. For more details refer to [performance](performance)
+
+
 
 
