@@ -240,9 +240,9 @@ We will keep updating this documentation with more detailed information about ho
 
 1. **Iptables rules and test port selection:** CyPerf CLI Free Edition needs to set some iptables rules to execute tests without interfering with linux stack traffic. But this can have a few bad side effects if we are not careful 
 
-- The iptables rules will block all traffic coming to server listen port from getting to Linux network stack. And if any program was communicating using that port, then that program may not be able to continue. Currently port 8080 is used as a server listen port, but this can be overridden by using the -p / --port option. 
+   - The iptables rules will block all traffic coming to server listen port from getting to Linux network stack. And if any program was communicating using that port, then that program may not be able to continue. Currently port 8080 is used as a server listen port, but this can be overridden by using the -p / --port option. 
 
-- So, let’s keep this thing in mind: We absolutely should not try to use any port that is being used by the server for any critical network communication as server listen port. An example of critical network communication would be SSH. 
+   - So, let’s keep this thing in mind: We absolutely should not try to use any port that is being used by the server for any critical network communication as server listen port. An example of critical network communication would be SSH. 
 
  
 2. **Running both client and server in same host:** CyPerf CLI Free Edition currently doesn’t support running both the client and the server in same machine. 
@@ -261,19 +261,19 @@ We will keep updating this documentation with more detailed information about ho
     sudo iptables -s 
 ```
  
-We should see an output like this: 
+  We should see an output like this: 
 
--P INPUT ACCEPT 
--P FORWARD ACCEPT 
--P OUTPUT ACCEPT 
--A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP 
+  -P INPUT ACCEPT  
+  -P FORWARD ACCEPT  
+  -P OUTPUT ACCEPT  
+  -A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
 
-Now we can remove all the rules which have the comment “Added by CyPerf CLI, ruleset id: …”. 
+  Now we can remove all the rules which have the comment “Added by CyPerf CLI, ruleset id: …”. 
 
-For example, we can remove the rule in this example by running 
-```
-sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j  DROP
-```
+  For example, we can remove the rule in this example by running 
+  ```
+  sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j  DROP
+  ```
 
 **Both client and server start successfully, but the statistics show no traffic being exchanged**
 
@@ -283,29 +283,28 @@ sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment
 
 - If there is connectivity between client and server then we need to check few more things when the server and client starts 
 
-    - Ensure the server picked correct network interface and IPv4 address as the test address. This can be checked in the “Test Configuration Summary” shown just at the start of the test. 
+    - Ensure the server picked correct network interface and IPv4 address as the test address. This can be checked in the **“Test Configuration Summary”** shown just at the start of the test. 
 
         - If it is found that the IPv4 addresses and network interfaces picked by the server does not contain the correct address and network interface, then this can be fixed by using the -B / --bind option. 
 
-    - Ensure the client picked the correct network interface and gateway (if applicable) for the test. This can be checked in the “Test Configuration Summary” shown just at the start of the test. 
+    - Ensure the client picked the correct network interface and gateway (if applicable) for the test. This can be checked in the **“Test Configuration Summary”** shown just at the start of the test. 
 
-          - If it is found that the IPv4 address and network interface picked by the client is not correct, then check the Linux route table by running ip route and if any issue is found there, that needs to be fixed before trying to run client again. 
+        - If it is found that the IPv4 address and network interface picked by the client is not correct, then check the Linux route table by running ip route and if any issue is found there, that needs to be fixed before trying to run client again. 
 
-          - In some less likely cases using the -B / --bind option may help 
+        - In some less likely cases using the -B / --bind option may help 
 
- 
 
     - Ensure that the “Test Configuration Summary” shows the correct server address and server port in the “Server address” field in client and match that server port against the “Listen port” field in server. If they don’t match, check the command line options being passed in both client and server. 
 
     - Ensure that settings like traffic direction, payload length etc are correctly set properly in both client and server. 
 
-  - If after ensuring everything mentioned above, if still test doesn’t show traffic, then we need to investigate some possible deeper issue in the network being tested. To do this we can take help of CyPerf CLI Free Edition by using its --detailed-stats option. Check the following stats to debug the different types of issues: 
+- If after ensuring everything mentioned above, if still test doesn’t show traffic, then we need to investigate some possible deeper issue in the network being tested. To do this we can take help of CyPerf CLI Free Edition by using its --detailed-stats option. Check the following stats to debug the different types of issues: 
 
-        - Check packet drop stats in Ethernet / IP stats section to check if packets are being dropped by the NIC or kernel. 
+   - Check packet drop stats in Ethernet / IP stats section to check if packets are being dropped by the NIC or kernel. 
 
-        - Check ARP stats in both client and server to check if network is causing some issue in ARP resolution. 
+    - Check ARP stats in both client and server to check if network is causing some issue in ARP resolution. 
 
-        - Check TCP level stats like SYN, SYN-ACK, ACK sent and receive counters in both client and server to check if the network is impacting these packets in anyway. 
+    - Check TCP level stats like SYN, SYN-ACK, ACK sent and receive counters in both client and server to check if the network is impacting these packets in anyway. 
 
 With these investigations we should have a more clear understanding of the underlying issue and take the necessary steps to remedy that. 
 
