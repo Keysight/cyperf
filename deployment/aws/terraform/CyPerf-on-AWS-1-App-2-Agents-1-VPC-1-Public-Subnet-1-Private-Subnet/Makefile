@@ -1,8 +1,16 @@
 SHELL := /bin/bash
 
-all: init apply
+all: install init apply
 
-clean: state destroy
+clean: install state destroy
+
+install:
+ifeq ($(shell grep "^ID=" /etc/*elease | cut -d "=" -f 2| sed -e 's/^"//' -e 's/"$$//' 2> /dev/null), amzn)
+ifeq ($(shell command -v terraform 2> /dev/null),)
+	sudo yum install -y yum-utils
+	sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+	sudo yum -y install terraform
+endif
 
 init:
 	time terraform init
