@@ -11,6 +11,7 @@ ifeq ($(shell command -v terraform 2> /dev/null),)
 	sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 	sudo yum -y install terraform
 endif
+endif
 
 init:
 	time terraform init
