@@ -1,17 +1,9 @@
 
 ## CyPerf CLI Free Editon 
 
-CyPerf CLI Free Edition is a command line tool which is designed to help with testing networks by generating different kind of network traffic with relative ease. This tool harnesses some of the key strengths of CyPerf but with much simpler deployment steps. Its also much simpler to use. 
+CyPerf CLI Free Edition is an easy-to-use command line tool which is designed  for testing networks by generating different kind of network traffic to measure performance metrices like bandwidth, connection rate capacity etc. This tool harnesses some of the key strengths of the licensed product CyPerf. This Free Edition supports throughput up to 10 Gbps and connection rate up to 100K connections per second.  
 
-CyPerf CLI Free Editon can be used to generate traffic to test the following performance metrices of a network: 
-
-- Bandwidth capacity by running throughput tests with throughput up to 10 Gbps. 
-
-- Connection establishment capacity by running connection rate tests with connection rates up to 100K connections per second. 
-
-We can tune parameters like TCP payload size, TCP receive window size, content of traffic etc. with the help of this tool. 
-
-CyPerf CLI Free Editon also provides statistics like bandwidth, connection rate, average connection establishment latency etc. which are essential for debugging certain network issues. For a deeper investigation, it can also provide some detailed statistics like ARP stats, packet level stats i.e packet rate, packet drop stats etc and TCP level stats. 
+CyPerf CLI Free Edition also provides different types of statistics for a deeper insight into the network’s performance behaviour. 
 
  
 
@@ -40,272 +32,150 @@ CyPerf CLI Free Edition should be able to run on even more platforms like other 
 
 
 ### Installation steps 
+**System requirements** 
 
-CyPerf CLI Free Editon can be installed in a few simple steps. We can use Debian package management system (apt) to install, update and remove CyPerf CLI Free Edition. To install using apt we need to perform the following steps: 
+Two Hosts for running client and server 
+OS: Ubuntu 2204 / Debian 12 
+4 vCPU and 4 GB RAM* 
+Network connectivity with IPv4 addresses 
+Root access for installation and running tests 
 
-Add CyPerf CLI Free Editon apt repo to apt sources by running the following commands
-```
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings && \
-curl http://cyperfcli.cyperf.io/cyperfcli-public.gpg | \
-sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperfcli-public.gpg
-echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-public.gpg] http://cyperfcli.cyperf.io stable main" | \
-sudo tee /etc/apt/sources.list.d/cyperfcli.list > /dev/null
+Add CyPerf CLI Free Edition apt repo to apt sources by running the following commands 
 
 ```
-Install CyPerf CLI Free Edition by running
+sudo apt-get update 
+sudo apt-get install ca-certificates curl 
+sudo install -m 0755 -d /etc/apt/keyrings && curl http://cyperfcli.cyperf.io/cyperfcli-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperfcli-public.gpg 
+echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-public.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list > /dev/null 
+sudo apt update 
 ```
-sudo apt update && sudo apt install cyperf 
+ 
+
+Install CyPerf CLI Free Edition by running 
 ```
+sudo apt install cyperf  
+```
+*This is suggested as a typical system requirement. Note that higher number of CPU cores will require higher free RAM. 
 ### Getting started 
-
+<div style="border: 2px solid #FF6666; padding: 10px;">
+CyPerf CLI Free Edition by default uses port 8080 for test traffic. To avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the -p / --port option in both client and server. 
+</div>  
+<br>
 
 **Start a simple bandwidth test using CyPerf CLI Free Edition**
 
-On server machine, run: 
+Start the sever first using the following command 
 ```
 sudo cyperf -s 
 ```
 
-Yes, we need sudo permission, unfortunately, as we don’t know any other easy way of using the types of linux sockets we are using. And we need to set and manage some iptables rules as well. 
-
-Once the cyperf server has started, on client run: 
+Once the server has started, start the client using the following command 
 ```
 sudo cyperf -c <server machine ip address> 
 ```
 
-If there is proper network connectivity between the two machines, now we should see positive values in bandwidth statistics shown by both client and server. Once we are done with the test, we can stop it pressing Ctrl + C in the terminal. 
+Both client and server can be stopped by pressing Ctrl + C in their respective terminals. 
 
+### Example use cases 
+
+- **Throughput test with custom payload size and bandwidth limit of 1Gbps**
+  ```
+  sudo cyperf -s --length 1k 
+  ```
+  ```
+  sudo cyperf -c <server ip address> --length 1k --bitrate 1G/s 
+  ```
  
-
-**Debugging if first test doesn’t show positive results**
-
-First, if we have only IPv6 addresses available, then sorry, but currently CyPerf CLI Free Edition can only run using IPv4 addresses. 
-
-Ok, tests started in both client and server without any errors, but we are not seeing any positive bandwidth stats, now what? 
-
-Well, if proper stats cannot be seen, here are a few steps to help debug the issue: 
-
-- Ensure both client and server machines have at least one NIC which has IPv4 address assigned to it and is in UP state. 
-
-- Ensure there is a proper route available from client to server machine IP address. This can be checked by running 
-
- ```
-ip route get <server machine ip address> 
-```
-- Ensure that ARP is not blocked by any network element. 
-
-- CyPerf CLI Free Edition uses port 8080 by default to connect to server, ensure this is not blocked by any firewall or other element of the network. 
-
-- Use --detailed-stats option in both client and server commands to diagnose the issue further: 
-
-```
-# On Server machine
-sudo cyperf -s –detailed-stats 
-
-# On Client machine
-sudo cyperf -c <server machine ip address> --detailed-stats 
-```
-
-Now it will show some more stats like ARP stats, packet related stats and TCP stats. We can use these as per our knowledge of the network. For example, first we should check if the ARP requests are being sent from and ARP responses are getting back to client. We can check if the server receives the ARP requests and sent ARP response back. If there is no problem is ARP, then we can move to TCP stats and see if connections are getting established or not, and if not why, for example we can check whether SYN, SYN-ACK packet count, retransmission count, TCP RST packet count. These can guide us to the actual problem if there is any. 
+- **Connection rate test with default limits**
+  ```
+  sudo cyperf -s –cps 
+  ```
+  ```
+  sudo cyperf -c <server ip address> --cps 
+  ```
  
-**Ok, first test ran successfully, now what?**
+- **Connection rate test with custom payload size and connection rate limit of 1000 CPS**
+  ```
+  sudo cyperf -s –cps –-length 1k 
+  ```
+  ```
+  sudo cyperf -c <server ip address> --cps 1k/s –-length 1k 
+  ```
 
-Well, now we can play with different parameters and try to test different aspects of the network under test. Here are a few examples: 
+- **Customize number of parallel sessions**
 
-- **Run a throughput test but with smaller payload size and a bandwidth limit of 1Gbps** 
-```
-# On Server machine
-sudo cyperf -s --length 1k --bitrate 1G/s
-
-# On Client machine
-sudo cyperf -c <server machine ip address> --length 1k 
-```
-
-- **Run a connection rate test**
-```
-# On Server machine
-sudo cyperf -s –cps
-
-# On Client machine
-sudo cyperf -c <server machine ip address> --cps 
-```
-
-- **Run a connection rate test with more realistic payload size and a connection rate limit of 1000 CPS** 
-```
-# On Server machine
-sudo cyperf -s –cps –-length 1k
-
-# On Client machine
-sudo cyperf -c <server machine ip address> --cps 1k/s –-length 1k 
-```
+  By default, client runs with parallel session count same as CPU core count. To customize parallel session count, use -P / --parallel option. 
+  ```
+  sudo cyperf -c <server machine IP address> --cps --parallel <count>
+  ```
  
-- **Run a test using a real file as TCP payload**
-```
-# On Server machine
-sudo cyperf -s –-file <path to file>
-
-# On Client machine
-sudo cyperf -c <server machine ip address> –-file <path to file> 
-```
+**Complete list of options can be found <here/ link to separate page> or in manpage and quick help**
+  ```
+  man cyperf 
+  ```
+  ```
+  cyperf --help 
+  ```
  
-**Ok great, what else can we do?**
-
-Well, a here is a starting tip: 
-```
-cyperf –help 
-```
-This will print something like this in the console 
-```
-Usage: sudo cyperf [-s|-c host] [options] 
-
-            cyperf [-h|--help] [-v|--version] [--about] 
-
- 
-
-Server or Client: 
-
-  -p, --port      #           server port to listen on/connect to 
-
-  -i, --interval  #           seconds between periodic statistics reports 
-
-  -t, --time      #           time in seconds to run the test for (default 600 secs) 
-
-  --cps           [#KMG][/#]  target connection rate in connections/sec (0 for unlimited) 
-
-                              the value is optional and takes effect in client side only 
-
-  --bidir                     run in bidirectional mode. 
-
-                              client and server send and receive data. 
-
-  -R, --reverse               run in reverse mode (server sends, client receives). 
-
-  -l, --length    #[KMG]      length of buffer to read or write 
-
-  -F, --file      <filepath>  use the specified file as the buffer to read or write 
-
-  -B, --bind      <host>      bind to the interface associated with the address <host> 
-
-  -w, --window    #[KMG]      set window size / socket buffer size 
-
-  --csv-stats     <filepath>  write all stats to specified csv file 
-
-  --detailed-stats            show more detailed stats in console 
-
-  -v, --version               show version information and quit 
-
-  -h, --help                  show this message and quit 
-
-  --about                     show the Keysight contact and license information. 
-
-Server specific: 
-
-  -s, --server                run in server mode 
-
-Client specific: 
-
-  -c, --client    <host>      run in client mode, connecting to <host> 
-
-  -b, --bitrate   #[KMG][/#]  target bitrate in bits/sec (0 for unlimited) 
-
-  -P, --parallel  #           number of parallel client sessions to run 
-
- 
-
-[KMG] indicates options that support a K/M/G suffix for kilo-, mega-, or giga- 
-
-```
-
-If we have mandb installed in our system, we can also try reading the manual page by running 
-```
-man cyperf 
-```
-We can use these options as needed. One primary example is -P / --parallel option. Let’s retry our connection rate test with this option: 
-```
-# On Server machine
-sudo cyperf -s –cps -P 64
-
-# On Client machine
-sudo cyperf -c <server machine ip address> --cps -P 64 
-```
- 
-Hopefully we are seeing at least some improvements in connection rate now (unless we were already running with 64 core CPUs before). 
-
-We will keep updating this documentation with more detailed information about how we can tune different test parameters, how to interpret the test configuration summary that gets shown at the start of the test and how to interpret the stats and test result summary at the end of the test. 
-
-
 ### Known limitations 
 
-1. **Iptables rules and test port selection:** CyPerf CLI Free Edition needs to set some iptables rules to execute tests without interfering with linux stack traffic. But this can have a few bad side effects if we are not careful 
+- In case of listen port collision in server, cyperf will cause disruption in any other application using that port. 
 
-   - The iptables rules will block all traffic coming to server listen port from getting to Linux network stack. And if any program was communicating using that port, then that program may not be able to continue. Currently port 8080 is used as a server listen port, but this can be overridden by using the -p / --port option. 
+- Client and server cannot be run in the same host. 
 
-   - So, let’s keep this thing in mind: We absolutely should not try to use any port that is being used by the server for any critical network communication as server listen port. An example of critical network communication would be SSH. 
-
- 
-2. **Running both client and server in same host:** CyPerf CLI Free Edition currently doesn’t support running both the client and the server in same machine. 
-
-3. As mentioned above in debugging steps, currently only IPv4 addresses are supported. 
- 
-4. Currently only supported transport protocol is TCP. We are planning to include UDP sometime in future. But we don’t know the timeline yet. 
+- Only IPv4 addresses are supported. 
 
  
 ### Troubleshooting 
 
-**CyPerf CLI Free Edition client / server crashed unexpectedly.**
+**In case of abnormal program termination,** cyperf may fail to cleanup certain modifications in the host. A next successful run or a reboot will clean up these modifications automatically. However, these can be cleaned up manually by the following steps: 
 
-- We have tried to catch and squash as many bugs as we can, but there are still some possibilities that CyPerf CLI Free Edition client or server may exit unexpectedly for some reason, i.e crash or killed by kernel / user. In that case, it will leave some iptables rules behind. These should get automatically cleaned up when we run CyPerf CLI Free Edition next time. But if for some reason, the client / server keeps crashing, it is recommended to reboot the client / server machine to clean up the iptables rules and other potential changes. But in case a reboot is not a preferred option, we can still remove these rules manually. To do that, first we can check the residual iptables rules by running: 
-```
-    sudo iptables -s 
-```
+  - Check iptables rule by running
+      ```
+      sudo iptables -s 
+      ```
  
-  We should see an output like this: 
+    If there are some rules which have the comment ``Added by CyPerf CLI …``, remove those. 
 
-  -P INPUT ACCEPT  
-  -P FORWARD ACCEPT  
-  -P OUTPUT ACCEPT  
-  -A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    For example, the following rule 
 
-  Now we can remove all the rules which have the comment “Added by CyPerf CLI, ruleset id: …”. 
+    ```
+    -A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    ```
+    can be removed by running 
+    ```
+    sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    ``` 
 
-  For example, we can remove the rule in this example by running 
-  ```
-  sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j  DROP
-  ```
+- Restore sysctl entries net.core.rmem_max and net.core.wmem_max if needed 
 
-**Both client and server start successfully, but the statistics show no traffic being exchanged**
+    If cyperf failed to restore these values, the following files should be found: 
+    
+    - ``/var/log/cyperf/cli/net.core.rmem_max.bkp``
+    - ``/var/log/cyperf/cli/net.core.wmem_max.bkp``
 
-- There are a few things that we need to be check first 
+    These can be used to restore these sysctl entries to the value before they were modified by cyperf. Run 
+    ```
+    sudo sysctl -w net.core.rmem_max=$(cat /var/log/cyperf/cli/net.core.rmem_max.bkp) 
+    ```
+    ```
+    sudo sysctl -w net.core.wmem_max=$(cat /var/log/cyperf/cli/net.core.wmem_max.bkp)
+    ``` 
+**In case both client and server start successfully, but the statistics show no traffic being exchanged**
 
-    - Ensure there is network connectivity between the client and server using tools such as ping, just remember in some platforms ping (ICMP messages) may be blocked.
+- Ensure there is network connectivity between the client and server.
+- Ensure the server picked correct network interface and IPv4 address as the test address. This can be viewed in the ``Test Configuration Summary`` shown just at the start of the test.
+  - If it is found that the IPv4 addresses and network interfaces picked by the server does not contain the correct address and network interface, then this can be fixed by using the ``-B / --bind`` option.
+ 
+- Ensure the client picked the correct network interface and gateway (if applicable) for the test. This can be checked in the ``Test Configuration Summary`` shown just at the start of the test.
+  - If it is found that the IPv4 address and network interface picked by the client is not correct, then check the Linux route table by running ip route and if any issue is found there, that needs to be fixed before trying to run client again.
+  - In some less likely cases using the ``-B / --bind`` option may help
+ 
+- Ensure that the ``Test Configuration Summary`` shows the correct server address and server port in the ``Server address`` field in client and match that server port against the ``Listen port`` field in server. If they don’t match, check the command line options being passed in both client and server.
+ 
+- Ensure that settings like traffic direction, payload length etc are set properly in both client and server.
 
-- If there is connectivity between client and server then we need to check few more things when the server and client starts 
-
-    - Ensure the server picked correct network interface and IPv4 address as the test address. This can be checked in the **“Test Configuration Summary”** shown just at the start of the test. 
-
-        - If it is found that the IPv4 addresses and network interfaces picked by the server does not contain the correct address and network interface, then this can be fixed by using the -B / --bind option. 
-
-    - Ensure the client picked the correct network interface and gateway (if applicable) for the test. This can be checked in the **“Test Configuration Summary”** shown just at the start of the test. 
-
-        - If it is found that the IPv4 address and network interface picked by the client is not correct, then check the Linux route table by running ip route and if any issue is found there, that needs to be fixed before trying to run client again. 
-
-        - In some less likely cases using the -B / --bind option may help 
-
-
-    - Ensure that the “Test Configuration Summary” shows the correct server address and server port in the “Server address” field in client and match that server port against the “Listen port” field in server. If they don’t match, check the command line options being passed in both client and server. 
-
-    - Ensure that settings like traffic direction, payload length etc are correctly set properly in both client and server. 
-
-- If after ensuring everything mentioned above, if still test doesn’t show traffic, then we need to investigate some possible deeper issue in the network being tested. To do this we can take help of CyPerf CLI Free Edition by using its --detailed-stats option. Check the following stats to debug the different types of issues: 
-
-   - Check packet drop stats in Ethernet / IP stats section to check if packets are being dropped by the NIC or kernel. 
-
-    - Check ARP stats in both client and server to check if network is causing some issue in ARP resolution. 
-
-    - Check TCP level stats like SYN, SYN-ACK, ACK sent and receive counters in both client and server to check if the network is impacting these packets in anyway. 
-
-With these investigations we should have a more clear understanding of the underlying issue and take the necessary steps to remedy that. 
-
-
+- Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
+ 
+ 
+ 
