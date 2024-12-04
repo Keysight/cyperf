@@ -34,11 +34,11 @@ CyPerf CLI Free Edition should be able to run on even more platforms like other 
 ### Installation steps 
 **System requirements** 
 
-Two Hosts for running client and server 
-OS: Ubuntu 2204 / Debian 12 
-4 vCPU and 4 GB RAM* 
-Network connectivity with IPv4 addresses 
-Root access for installation and running tests 
+- Two Hosts for running client and server 
+- OS: Ubuntu 2204 / Debian 12 
+- 4 vCPU and 4 GB RAM* 
+- Network connectivity with IPv4 addresses 
+- Root access for installation and running tests 
 
 Add CyPerf CLI Free Edition apt repo to apt sources by running the following commands 
 
@@ -57,10 +57,9 @@ sudo apt install cyperf
 ```
 *This is suggested as a typical system requirement. Note that higher number of CPU cores will require higher free RAM. 
 ### Getting started 
-<div style="border: 2px solid #FF6666; padding: 10px;">
-CyPerf CLI Free Edition by default uses port 8080 for test traffic. To avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the -p / --port option in both client and server. 
-</div>  
-<br>
+
+**_NOTE: CyPerf CLI Free Edition by default uses port 8080 for test traffic. To avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the ``-p / --port`` option in both client and server._**
+ 
 
 **Start a simple bandwidth test using CyPerf CLI Free Edition**
 
