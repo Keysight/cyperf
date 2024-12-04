@@ -1,5 +1,5 @@
 
-## CyPerf CLI Free Editon 
+## CyPerf CLI Free Edition 
 
 CyPerf CLI Free Edition is an easy-to-use command line tool which is designed  for testing networks by generating different kind of network traffic to measure performance metrices like bandwidth, connection rate capacity etc. This tool harnesses some of the key strengths of the licensed product CyPerf. This Free Edition supports throughput up to 10 Gbps and connection rate up to 100K connections per second.  
 
