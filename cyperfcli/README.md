@@ -108,7 +108,7 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
   sudo cyperf -c <server machine IP address> --cps --parallel <count>
   ```
  
-**Complete list of options can be found <here/ link to separate page> or in manpage and quick help**
+**Complete list of options can be found [here](HELP.md) or in manpage and quick help**
   ```
   man cyperf 
   ```
