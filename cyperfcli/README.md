@@ -1,34 +1,15 @@
 
-## CyPerf CLI Free Edition 
+## CyPerf Community Edition 
 
-CyPerf CLI Free Edition is an easy-to-use command line tool which is designed  for testing networks by generating different kind of network traffic to measure performance metrices like bandwidth, connection rate capacity etc. This tool harnesses some of the key strengths of the licensed product CyPerf. This Free Edition supports throughput up to 10 Gbps and connection rate up to 100K connections per second.  
+CyPerf Community Edition is an easy-to-use command line tool designed for testing networks by generating different kinds of network traffic to measure performance metrices like bandwidth, connection rate capacity, etc. It supports throughput up to 10 Gbps and connection rate up to 100K connections per second. 
+CyPerf Community Edition also provides different types of statistics for a deeper insight into the network’s performance behaviour.
 
-CyPerf CLI Free Edition also provides different types of statistics for a deeper insight into the network’s performance behaviour. 
-
- 
-
-### Supported platforms 
-
-We aim to make CyPerf CLI Free Edition run on variety of platforms. But so far, we have targeted the following platforms to test and validate: 
-
-**Linux on premises VM**
-
-- OS: Debian 12 / Ubuntu 2204 
-- CPU: 4 vCPU or more 
-- RAM: 4 GB or more 
-- Storage: As required by OS 
-- NIC type: vmxnet3 virtual NIC 
-
- 
-
-**Linux on AWS**
-
-- OS: Debian 12 / Ubuntu 2204 
-- Instance type: c5n.2xlarge 
-- NIC type: aws ena 
-
- 
-CyPerf CLI Free Edition should be able to run on even more platforms like other AWS instance types, Azure instances, Kubernetes clusters with supported CNIs (Callico, AWS VPC CNI, AKS CNI), and we are continuing to test add validate this in more platforms. 
+- [Installation steps](#Installation-steps)
+- [Qualified platforms](#qualified-platforms)
+- [Getting started](#getting-started)
+- [Example use cases](#Example-use-cases)
+- [Known limitations](#Known-limitation)
+- [Troubleshooting](#Troubleshooting)
 
 
 ### Installation steps 
@@ -40,29 +21,61 @@ CyPerf CLI Free Edition should be able to run on even more platforms like other 
 - Network connectivity with IPv4 addresses 
 - Root access for installation and running tests 
 
-Add CyPerf CLI Free Edition apt repo to apt sources by running the following commands 
+Add CyPerf Community Edition apt repo to apt sources by running the following commands 
 
 ```
-sudo apt-get update 
-sudo apt-get install ca-certificates curl 
+sudo apt update 
+sudo apt install ca-certificates curl 
 sudo install -m 0755 -d /etc/apt/keyrings && curl http://cyperfcli.cyperf.io/cyperfcli-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperfcli-public.gpg 
 echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-public.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list > /dev/null 
-sudo apt update 
+sudo apt update
+ 
 ```
  
 
-Install CyPerf CLI Free Edition by running 
+Install CyPerf Community Edition by running 
 ```
 sudo apt install cyperf  
 ```
+
+> [!NOTE]
+> **Noninteractive installation**
+> To install this package in a noninteractive mode, for example in a Dockerfile, the Keysight CyPerf CE EULA needs to be accepted by setting the environment variable CYPERF_CE_EULA_ACCEPTED to true before attempting to install.
+> Set to true if you accept the CyPerf EULA: https://link_to_cyperf_ce_EULA
+> ```
+> CYPERF_CE_EULA_ACCEPTED=true sudo -E apt install cyperf
+> ```
+
+
 *This is suggested as a typical system requirement. Note that higher number of CPU cores will require higher free RAM. 
+
+### Qualified platforms 
+
+At present CyPerf Community Edition can be used on following platforms.
+
+**Linux on premises VM**
+
+- OS: Debian 12 / Ubuntu 2204 
+- CPU: 4 vCPU or more 
+- RAM: 4 GB or more 
+- Storage: As required by OS 
+- NIC type: vmxnet3 virtual NIC 
+
+**Linux on AWS**
+
+- OS: Debian 12 / Ubuntu 2204 
+- Instance type: c5n.2xlarge 
+- NIC type: aws ena 
+
+CyPerf Community Edition should be able to run on platforms like AWS, Azure and GCP instances, Kubernetes clusters with supported CNIs (Calico, AWS VPC CNI, AKS CNI) etc.
+
 ### Getting started 
 
 > [!CAUTION]
-> CyPerf CLI Free Edition by default uses port 8080 for test traffic. To   avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the ``-p / --port`` option in both client and server.
+> CyPerf Community Edition by default uses port 8080 for test traffic. To   avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the ``-p / --port`` option in both client and server.
  
 
-**Start a simple bandwidth test using CyPerf CLI Free Edition**
+**Start a simple bandwidth test using CyPerf Community Edition**
 
 Start the sever first using the following command 
 ```
@@ -163,6 +176,20 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
     ``` 
 **In case both client and server start successfully, but the statistics show no traffic being exchanged**
 
+-	Ensure that there is network connectivity between the client and server and Linux route table is configured properly.
+
+-	Ensure that the server selects the desired IPv4 addresses and network interfaces for the test. This can be viewed in the ``Test Configuration Summary`` shown at the start of the test.
+    - If server selected the incorrect IPv4 addresses and network interfaces, fix this by using the ``-B / --bind`` option.
+
+-	Ensure that the client selects the correct network interface and gateway (if applicable) for the test. This can be viewed in the ``Test Configuration Summary``.
+
+-	Ensure that the ``Test Configuration Summary`` shows the correct server address and server port in the ``Server address`` field in client. Match that server port against the ``Listen port`` field in server.
+
+-	Ensure that options like traffic direction, payload length etc are set correctly in both client and server.
+
+-	Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
+
+
 - Ensure there is network connectivity between the client and server.
 - Ensure the server picked correct network interface and IPv4 address as the test address. This can be viewed in the ``Test Configuration Summary`` shown just at the start of the test.
   - If it is found that the IPv4 addresses and network interfaces picked by the server does not contain the correct address and network interface, then this can be fixed by using the ``-B / --bind`` option.
@@ -176,6 +203,3 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
 - Ensure that settings like traffic direction, payload length etc are set properly in both client and server.
 
 - Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
- 
- 
- 
