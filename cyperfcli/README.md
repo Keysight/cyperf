@@ -1,8 +1,10 @@
 
 ## CyPerf Community Edition 
 
-CyPerf Community Edition is an easy-to-use command line tool designed for testing networks by generating different kinds of network traffic to measure performance metrices like bandwidth, connection rate capacity, etc. It supports throughput up to 10 Gbps and connection rate up to 100K connections per second. 
-CyPerf Community Edition also provides different types of statistics for a deeper insight into the network’s performance behaviour.
+CyPerf Community Edition (CE) is a free stateful network traffic generator derived from the award-winning commercial network application and security test solution – CyPerf.
+
+CyPerf CE features a flexible and easy to use command line tool designed for testing end to end networks or network devices by generating stateful network traffic unlocking access to key performance metrics – e.g., bandwidth, connection rate, capacity, etc. It supports throughput of up to 10 Gbps and connection rates up to 100K connections per second. To review the main feature set included in CyPerf Community Edition and CyPerf Commercial please navigate to the relevant section below.
+
 
 - [Installation steps](#Installation-steps)
 - [Qualified platforms](#qualified-platforms)
@@ -13,7 +15,7 @@ CyPerf Community Edition also provides different types of statistics for a deepe
 
 
 ### Installation steps 
-**System requirements** 
+**Recommended system requirements** 
 
 - Two Hosts for running client and server 
 - OS: Ubuntu 2204 / Debian 12 
@@ -72,7 +74,7 @@ CyPerf Community Edition should be able to run on platforms like AWS, Azure and 
 ### Getting started 
 
 > [!CAUTION]
-> CyPerf Community Edition by default uses port 8080 for test traffic. To   avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the ``-p / --port`` option in both client and server.
+> CyPerf Community Edition by default uses port 5201 for test traffic. To   avoid disruption, ensure that no other application running in that host is using the same port. To use a different port for the test, use the ``-p / --port`` option in both client and server.
  
 
 **Start a simple bandwidth test using CyPerf Community Edition**
@@ -203,3 +205,35 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
 - Ensure that settings like traffic direction, payload length etc are set properly in both client and server.
 
 - Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
+
+### CyPerf Community Edition vs CyPerf Commercial
+
+
+|                  | CyPerf CE        | CyPerf           | 
+|------------------|------------------|------------------|
+| Performance   | Up to 10Gbps and 100K Connections per Second   | Bound the acquired license and hardware capabilities (up to multiple Tbps and millions of Connections per Second)    |
+| Uni-directional and bi-directional traffic generation    | Yes  | Yes    |
+| Configurable object size and real payload file   | Yes   | Yes   |
+| Traffic type generation    | TCP traffic	    | Highly realistic application traffic emulation   |
+| Customizable application actions and parameters    | No    | Yes    |
+| Security Attack Emulation (Exploits & Malware)    | No   | Yes  |
+| VPN Emulation (IPsec and SSL VPN) and ZTNA    | No    | Yes    |
+| ZTNA Emulation    | No    | Yes    |
+| Advanced L23 Features (multiple configurable IPs, VLANs, MACs etc) |	No |	Yes |
+Advanced pcap replay    | No    | Yes   |
+| Web-based UI and automation    | CLI only    | Web-based UI with comprehensive RestAPI support    |
+| Statistics    | Basic stats	Advanced    | detailed stats    |
+| Deployment    | Deb packages    | Deb packages, VMs (ESXi, KVM), Containers, Public Cloud (AWS, Azure, GCP)    |
+
+### Support
+
+For any issues, queries or concerns related to CyPerf Community Edition, please contact us at support@keysight.com, and make sure to start your email subject with CyPerfCE keyword. As being a free product, support queries will be handled on a best effort basis.
+
+### Copyright and License
+
+© Keysight Technologies 2021
+
+To  view  the licence to use this product, check the [EULA](www.keysight.com/find/sweula).
+
+Notices about third-party software distributed with this software can be found [here](License/cyperf_thrid_party_license_document).
+
