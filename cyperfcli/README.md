@@ -180,33 +180,14 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
     ``` 
 **In case both client and server start successfully, but the statistics show no traffic being exchanged**
 
--	Ensure that there is network connectivity between the client and server and Linux route table is configured properly.
-
+-	Ensure proper network connectivity between the client and server and Linux route table is configured properly.
 -	Ensure that the server selects the desired IPv4 addresses and network interfaces for the test. This can be viewed in the ``Test Configuration Summary`` shown at the start of the test.
     - If server selected the incorrect IPv4 addresses and network interfaces, fix this by using the ``-B / --bind`` option.
 
 -	Ensure that the client selects the correct network interface and gateway (if applicable) for the test. This can be viewed in the ``Test Configuration Summary``.
-
 -	Ensure that the ``Test Configuration Summary`` shows the correct server address and server port in the ``Server address`` field in client. Match that server port against the ``Listen port`` field in server.
-
--	Ensure that options like traffic direction, payload length etc are set correctly in both client and server.
-
+-	Ensure that options like traffic direction, payload length etc. are set correctly in both client and server.
 -	Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
-
-
-- Ensure there is network connectivity between the client and server.
-- Ensure the server picked correct network interface and IPv4 address as the test address. This can be viewed in the ``Test Configuration Summary`` shown just at the start of the test.
-  - If it is found that the IPv4 addresses and network interfaces picked by the server does not contain the correct address and network interface, then this can be fixed by using the ``-B / --bind`` option.
- 
-- Ensure the client picked the correct network interface and gateway (if applicable) for the test. This can be checked in the ``Test Configuration Summary`` shown just at the start of the test.
-  - If it is found that the IPv4 address and network interface picked by the client is not correct, then check the Linux route table by running ip route and if any issue is found there, that needs to be fixed before trying to run client again.
-  - In some less likely cases using the ``-B / --bind`` option may help
- 
-- Ensure that the ``Test Configuration Summary`` shows the correct server address and server port in the ``Server address`` field in client and match that server port against the ``Listen port`` field in server. If they don’t match, check the command line options being passed in both client and server.
- 
-- Ensure that settings like traffic direction, payload length etc are set properly in both client and server.
-
-- Use ``--detailed-stats`` option to view the Ethernet / IP, ARP and TCP level stats to diagnose the issue.
 
 ### CyPerf Community Edition vs CyPerf Commercial
 
