@@ -12,9 +12,9 @@ Choose a provider
 [![aws](images/aws.jpg)](deployment/aws) [![azure](images/azure.jpg)](deployment/azure) [![GCP](images/GCP.jpg)](deployment/gcp)
 [![kubernetes](images/kubernetes.jpg)](deployment/k8s) [![containers](images/containers.png)](deployment/containers)
 
-### CyPerf CLI Free Edition
+### CyPerf Community Edition
 
-A free CLI version of CyPerf with limited features and performance is also available. For installation steps and more details refer [CyPerf CLI](cyperfcli).
+A free CLI version of CyPerf with limited features and performance is also available. For installation steps and more details refer [CyPerf Community Edition](cyperfcli).
 
 ### CyPerf Performance
 

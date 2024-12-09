@@ -157,11 +157,11 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
     For example, the following rule 
 
     ```
-    -A INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    -A INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
     ```
     can be removed by running 
     ```
-    sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 8080 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
     ``` 
 
 - Restore sysctl entries net.core.rmem_max and net.core.wmem_max if needed 
