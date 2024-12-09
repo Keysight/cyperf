@@ -12,7 +12,9 @@ CyPerf CE features a flexible and easy to use command line tool designed for tes
 - [Example use cases](#Example-use-cases)
 - [Known limitations](#Known-limitation)
 - [Troubleshooting](#Troubleshooting)
-
+- [CyPerf Community Edition vs CyPerf Commercial](#cyperf-community-edition-vs-cyperf-commercial)
+- [Support](#support)
+- [Copyright and License](#copyright-and-license)
 
 ### Installation steps 
 **Recommended system requirements** 
