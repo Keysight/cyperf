@@ -216,7 +216,7 @@ For any issues, queries or concerns related to CyPerf Community Edition, please 
 
 © Keysight Technologies 2013 - 2021
 
-To  view  the licence to use this product, check the [EULA](www.keysight.com/find/sweula).
+To  view  the licence to use this product, check the [EULA](https://www.keysight.com/find/sweula).
 
 Notices about third-party software distributed with this software can be found [here](License/cyperf_thrid_party_license_document).
 
