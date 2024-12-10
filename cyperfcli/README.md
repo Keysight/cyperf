@@ -44,7 +44,7 @@ sudo apt install cyperf
 
 > [!NOTE]
 > **Noninteractive installation**
-> To install this package in a noninteractive mode, for example in a Dockerfile, the Keysight CyPerf CE EULA needs to be accepted by setting the environment variable ``CYPERF_CE_EULA_ACCEPTED`` to ``true`` before attempting to install.
+> To install this package in a noninteractive mode, for example in a Dockerfile, the Keysight EULA needs to be accepted by setting the environment variable ``CYPERF_CE_EULA_ACCEPTED`` to ``true`` before attempting to install.
 > ```
 > # Set to true if you accept the CyPerf EULA: https://www.keysight.com/find/sweula
 > CYPERF_CE_EULA_ACCEPTED=true sudo -E apt install cyperf
