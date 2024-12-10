@@ -214,7 +214,7 @@ For any issues, queries or concerns related to CyPerf Community Edition, please 
 
 ### Copyright and License
 
-© Keysight Technologies 2021
+© Keysight Technologies 2013 - 2021
 
 To  view  the licence to use this product, check the [EULA](www.keysight.com/find/sweula).
 
