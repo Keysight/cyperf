@@ -280,7 +280,7 @@ class RESTasV3:
         print(response.text)
         return response
 
-    def __get_configured_users(self, start_point=0, max_no_of_users_in_resp=20):
+    def __get_configured_users(self, start_point=0, max_no_of_users_in_resp=200):
         apiPath = f'/auth/admin/realms/keysight/users?briefRepresentation=true&first={start_point}&max={max_no_of_users_in_resp}'
         customHeaders = {"Authorization": f"Bearer {self.cookie}",
                          "Content-Type": "application/json"}
@@ -654,6 +654,39 @@ class RESTasV3:
         else:
             raise Exception("Expected {} agents connected after {}s. Got only {}.".format(agents_nr, init_timeout, len(response)))
 
+    def get_port_agents(self):
+        apiPath = '/api/v2/agents?includePorts=true'
+        return self.__sendGet(apiPath, 200).json()
+
+    def get_controller_info(self):
+        apiPath = '/api/v2/controllers?include=all'
+        return self.__sendGet(apiPath, 200).json()    
+
+    def get_controller_id(self, controllerId):
+        eagle_setup_info = self.get_controller_info()
+        controller_found = False
+        for controller in eagle_setup_info:
+            if  "Controller {}".format(controllerId) == controller['name']:
+                controller_found = True
+                return controller["id"]
+        if not controller_found:
+            raise Exception("Controller {} not found.".format(controllerId))
+
+    def get_compute_node_id(self, ControllerComputeNode):
+        controllerId, computeNode = ControllerComputeNode.split("-")
+        eagle_setup_info = self.get_controller_info()
+        compute_node_found = False
+        for controller in eagle_setup_info:
+            if  "Controller {}".format(controllerId) == controller['name']:
+                compute_nodes = controller['computeNodes']
+                for cn in compute_nodes:
+                    if  "Compute node {}".format(computeNode) == cn['name']:
+                        compute_node_found =True
+                        return cn["id"]
+
+        if not compute_node_found:
+            raise Exception("Compute Node {} not found.".format(ControllerComputeNode))
+        
     def get_agents(self):
         apiPath = '/api/v2/agents'
         return self.__sendGet(apiPath, 200).json()
@@ -673,7 +706,25 @@ class RESTasV3:
                     self.reboot_agents(agents_ids=agent_ids)
                     raise Exception("The agents are still running after {} seconds the test stopped.\nAgents will be rebooted".format(waiting_time))
             time.sleep(5)
-            waiting_time += 5            
+            waiting_time += 5    
+
+    
+    def get_agents_ids_from_ports(self, ControllerCardPorts=None, wait=None):
+        if wait:
+            self.wait_agents_connect()
+        agentsIDs = list()
+        response = self.get_port_agents()
+        print('Found {} agents'.format(len(response)))
+        if type(ControllerCardPorts) is str:
+            ControllerCardPorts = [ControllerCardPorts]
+        for ControllerCardPort in ControllerCardPorts:
+            for agent in response:
+                agentSystemInfo = 'cn.' + agent['systemInfo']['chassisInfo']['computeNodeID'] + '.' + agent['systemInfo']['chassisInfo']['portID']
+                if self.get_agents_by_port(ControllerCardPort) == agentSystemInfo:
+                    print("Port ID: {}, Node ID: {}".format(ControllerCardPort, agent['id']))
+                    agentsIDs.append(agent['id'])  # agent ID format = card id - port id - agent id
+                    break
+        return agentsIDs        
 
     def get_agents_ids(self, agentIPs=None, wait=None):
         if wait:
@@ -690,6 +741,26 @@ class RESTasV3:
                     agentsIDs.append(agent['id'])
                     break
         return agentsIDs
+    
+    def get_controller_node_ports(self, ControllerId, ComputeNode):
+        ports = []
+        controller_found = False
+        compute_node_found = False
+        eagle_setup_info = self.get_controller_info()
+        for controller in eagle_setup_info:
+            if  "Controller {}".format(ControllerId) == controller['name']:
+                controller_found = True
+                compute_nodes = controller['computeNodes']
+                for cn in compute_nodes:
+                    if  "Compute node {}".format(ComputeNode) == cn['name']:
+                        compute_node_found =True
+                        for port in cn['ports']:
+                            ports.append(port)
+        if not controller_found:
+            raise Exception("Controller {} not found.".format(ControllerId))
+        if not compute_node_found:
+            raise Exception("Compute Node {} not found.".format(ComputeNode))
+        return ports
 
     def get_agents_ips(self, wait=None):
         if wait:
@@ -720,6 +791,171 @@ class RESTasV3:
             payload["ByID"].append({"agentId": agent_id})
         self.__sendPatch(apiPath, payload)
 
+    def assign_agents_by_port(self, ControllerComputeNodePort, network_segment_id):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment_id)
+        payload = {"ByID": [], "ByTag": [], "ByPort": []}
+        port_found = False
+        ControllerComputeNodeList=ControllerComputeNodePort.split('-')
+        pattern = r'^\d+-\d+-\d+$'
+        if not bool(re.match(pattern, ControllerComputeNodePort)):
+            raise Exception("Controller-Card-Port format not entered correctly")
+        available_ports = self.get_controller_node_ports(ControllerComputeNodeList[0],ControllerComputeNodeList[1])
+        for port in available_ports:
+            if "Port {}".format(ControllerComputeNodeList[2]) == port['name']:
+                port_found = True
+                if port.get('disabled',False):
+                    raise Exception("The port {} you are trying to assign is not enabled.".format(ControllerComputeNodeList[2]))
+                else:
+                    payload["ByPort"].append({"portId": port['id']})
+                    self.__sendPatch(apiPath, payload)
+                break
+        if not port_found:
+            raise Exception("Port {} not found.".format(ControllerComputeNodeList[2]))
+
+    def set_node_aggregation(self, ControllerComputeNode, aggregated):
+        """
+        aggregated = True / False
+        """
+        apiPath = "/api/v2/controllers/operations/set-node-aggregation"
+        controller, _ = ControllerComputeNode.split("-")
+        controller_id = self.get_controller_id(controller)
+        compute_node_id = self.get_compute_node_id(ControllerComputeNode)
+        payload = {
+            "aggregated": aggregated,
+            "controllers": [
+                {
+                    "controllerId": controller_id,
+                    "computeNodes": [compute_node_id]
+                }
+            ]
+        }
+        response = self.__sendPost(apiPath, payload).json()
+        self.wait_event_success(apiPath=f"/api/v2/controllers/operations/set-node-aggregation/{response['url'].split('/')[-1]}", timeout=180)
+
+    def set_port_link_state(self, ControllerComputeNodePort, link):
+        """
+        link = 'UP' / 'DOWN'
+        """
+        apiPath = "/api/v2/controllers/operations/set-port-link-state"
+        controller, compute_node, _ = ControllerComputeNodePort.split("-")
+        controller_id = self.get_controller_id(controller)
+        compute_node_id = self.get_compute_node_id(f"{controller}-{compute_node}")
+        port_id = self.get_agents_by_port(ControllerComputeNodePort)
+        payload = {
+            "link": link,
+            "controllers": [
+                {
+                    "controllerId": controller_id,
+                    "computeNodes": [
+                        {
+                            "computeNodeId": compute_node_id,
+                            "ports": [port_id]
+                        }
+                    ]
+                }
+            ]
+        }
+        response = self.__sendPost(apiPath, payload).json()
+        self.wait_event_success(apiPath=f"/api/v2/controllers/operations/set-port-link-state/{response['url'].split('/')[-1]}", timeout=180)
+
+    def clear_port_ownership(self, ControllerComputeNodePort):
+        apiPath = "/api/v2/controllers/operations/clear-port-ownership"
+        controller, compute_node, _ = ControllerComputeNodePort.split("-")
+        controller_id = self.get_controller_id(controller)
+        compute_node_id = self.get_compute_node_id(f"{controller}-{compute_node}")
+        port_id = self.get_agents_by_port(ControllerComputeNodePort)
+        payload = {
+            "controllers": [
+                {
+                    "controllerId": controller_id,
+                    "computeNodes": [
+                        {
+                            "computeNodeId": compute_node_id,
+                            "ports": [port_id]
+                        }
+                    ]
+                }
+            ]  
+        }
+        response = self.__sendPost(apiPath, payload).json()
+        self.wait_event_success(apiPath=f"/api/v2/controllers/operations/clear-port-ownership/{response['url'].split('/')[-1]}", timeout=180)
+
+    def reboot_port(self, ControllerComputeNodePort):
+        apiPath = "/api/v2/controllers/operations/reboot-port"
+        controller, compute_node, _ = ControllerComputeNodePort.split("-")
+        controller_id = self.get_controller_id(controller)
+        compute_node_id = self.get_compute_node_id(f"{controller}-{compute_node}")
+        port_id = self.get_agents_by_port(ControllerComputeNodePort)
+        payload = {
+            "controllers": [
+                {
+                    "controllerId": controller_id,
+                    "computeNodes": [
+                        {
+                            "computeNodeId": compute_node_id,
+                            "ports": [port_id]
+                        }
+                    ]
+                }
+            ]
+        }
+        response = self.__sendPost(apiPath, payload).json()
+        self.wait_event_success(apiPath=f"/api/v2/controllers/operations/reboot-port/{response['url'].split('/')[-1]}", timeout=180)
+
+    def power_cycle_compute_node(self, ControllerComputeNode):
+        ControllerId = self.get_controller_id(ControllerComputeNode.split("-")[0])
+        ComputeNodeId = self.get_compute_node_id(ControllerComputeNode)
+        apiPath = f"/api/v2/controllers/operations/power-cycle-nodes"
+        payload = {
+                "controllers": [
+                    {
+                        "controllerId": ControllerId,
+                        "computeNodes": [ComputeNodeId]
+                    }
+                ]
+            }
+        response = self.__sendPost(apiPath, payload).json()
+        self.wait_event_success(apiPath=f"/api/v2/controllers/operations/power-cycle-nodes/{response['url'].split('/')[-1]}", timeout=1000)
+
+    def wait_for_port_status(self, ControllerCardPort, status="READY",timeout=300):
+        ControllerCardPortList=ControllerCardPort.split('-')
+        pattern = r'^\d+-\d+-\d+$'
+        if not bool(re.match(pattern, ControllerCardPort)):
+            raise Exception("Controller-Card-Port format not entered correctly")
+        print(f"Waiting for ports from {ControllerCardPort} to be available...")
+        now = time.time()
+        while time.time() < now + timeout:
+            available_ports = self.get_controller_node_ports(ControllerCardPortList[0],ControllerCardPortList[1])
+            for port in available_ports:
+                if "Port {}".format(ControllerCardPortList[2]) == port['name']:
+                    if port["status"] == status:
+                        print(f"Port: {ControllerCardPort} reached state: {status}")
+                        return True
+            time.sleep(5)
+        raise Exception(f"Port: {ControllerCardPort} didn't reached state: {status} in {timeout} seconds. It's state is {port['status']}")
+
+    def get_agents_by_port(self, ControllerCardPort):
+        port_found = False
+        ControllerCardPort_list=ControllerCardPort.split('-')
+        pattern = r'^\d+-\d+-\d+$'
+        if not bool(re.match(pattern, ControllerCardPort)):
+            raise Exception("Controller-Card-Port format not entered correctly")
+        available_ports = self.get_controller_node_ports(ControllerCardPort_list[0],ControllerCardPort_list[1])
+        for port in available_ports:
+            if "Port {}".format(ControllerCardPort_list[2]) == port['name']:
+                port_found = True
+                if port.get('disabled',False):
+                    raise Exception("The port {} you are trying to assign is not enabled.".format(ControllerCardPort_list[2]))
+                else:
+                    return port['id']
+        if not port_found:
+            raise Exception("Port {} not found.".format(ControllerCardPort_list[2]))
+
+    def rename_network_segment(self, net_seg_id, name):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, net_seg_id)
+        payload = {"Name": name}
+        self.__sendPatch(apiPath, payload)
+
     def test_warmup_value(self, value):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/AdvancedSettings'.format(self.sessionID)
         payload = {"WarmUpPeriod": int(value)}
@@ -738,13 +974,21 @@ class RESTasV3:
         apiPath = f"/api/v2/agents/{agent_id}"
         self.__sendPatch(apiPath, payload={"AgentTags": tag_list})
 
-    def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
+    def set_traffic_capture_vm_agents(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
         payload = {"ByID": []}
         capture_settings = {"captureEnabled": is_enabled, "captureLatestPackets": capture_latest_packets, "maxCaptureSize": max_capture_size}
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
             payload["ByID"].append({"agentId": agent_id, "captureSettings": capture_settings})
+        self.__sendPatch(apiPath, payload)
+
+    def set_traffic_capture_eagle_port(self, ControllerNodePort, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
+        payload = {"ByPort": []}
+        capture_settings = {"captureEnabled": is_enabled, "captureLatestPackets": capture_latest_packets, "maxCaptureSize": max_capture_size}
+        port_id = self.get_agents_by_port(ControllerNodePort)
+        payload["ByPort"].append({"portId": port_id, "captureSettings": capture_settings})
         self.__sendPatch(apiPath, payload)
 
     def get_capture_files(self, captureLocation, exportTimeout=180):
@@ -787,6 +1031,10 @@ class RESTasV3:
     def set_dut_host(self, host, network_segment=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
         self.__sendPatch(apiPath, payload={"host": host})
+    
+    def set_dut_name(self, name, dut_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, dut_segment)
+        self.__sendPatch(apiPath, payload={"Name":name})
 
     def set_active_dut_configure_host(self, hostname, active=True, network_segment=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, network_segment)
@@ -1091,6 +1339,15 @@ class RESTasV3:
             AttackProfilesDuration = self.get_profile_duration(profile_type='AttackProfiles')
         self.testDuration = max(TrafficProfilesDuration, AttackProfilesDuration)
 
+    def set_ip_range_vlan(self, vlan_id, vlan_incr, count, count_per_agent, network_segment=1, ip_range = 1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}/InnerVlanRange'.format(
+            self.sessionID, network_segment, ip_range)
+        self.__sendPatch(apiPath, payload={"VlanEnabled": True})
+        self.__sendPatch(apiPath, payload={"VlanId": vlan_id})
+        self.__sendPatch(apiPath, payload={"VlanIncr": vlan_incr})
+        self.__sendPatch(apiPath, payload={"Count": count})
+        self.__sendPatch(apiPath, payload={"CountPerAgent": count_per_agent}) 
+    
     def send_modified_config(self):
         apiPath = '/api/v2/sessions/{}/config'.format(self.sessionID)
         self.__sendPut(apiPath, self.config)
@@ -1431,6 +1688,28 @@ class RESTasV3:
             self.stop_test()
             raise Exception("Error! Test failed to stop after timeout {}s.".format(timeout))
 
+    def wait_for_test_status(self, status='STOPPED', timeout=300):
+        print('Waiting for the test to stop...')
+        response = self.get_test_status()
+        actual_duration = 0
+        counter = 1
+        while actual_duration < timeout:
+            response = self.perform_request_with_retry(
+                callback=lambda: self.get_test_status(),
+                max_retries=1,
+            )
+            if response['status'] == status:
+                print(f'Test reached state: {status}')
+                return True
+            else:
+                print('Test duration = {}; Elapsed = {}'.format(response['testDuration'], response['testElapsed']))
+            actual_duration += counter
+            time.sleep(counter)
+        else:
+            print("Test did not stop after timeout {}s. Test status= {}. TestDetails = {}. Force stopping the test!".format(timeout, response['status'], response['testDetails']))
+            self.stop_test()
+            raise Exception("Error! Test failed to stop after timeout {}s.".format(timeout))
+
     @staticmethod
     def __getEpochTime():
         pattern = "%d.%m.%Y %H:%M:%S"
@@ -1757,6 +2036,51 @@ class RESTasV3:
         response = self.__sendPost(apiPath, payload={}).json()
         return response[-1]['id']
 
+    def create_customized_attack(self, application_name, strike_name, insert_at_position):
+
+        app_id = self.get_application_id(app_name=application_name)
+
+        api_path = '/api/v2/sessions/{}/config/config/AttackProfiles/1/Attacks/operations/create'.format(self.sessionID)
+
+        payload = {"Actions": [{"ProtocolID": strike_name, "InsertAtIndex": insert_at_position}],
+
+                   "ResourceURL": f'api/v2/resources/apps/{app_id}'}
+
+        response = self.__sendPost(api_path, payload=payload).json()
+
+        status_url = response["url"].split("/")[-1]
+
+        api_path = '/api/v2/sessions/{}/config/config/AttackProfiles/1/Attacks/operations/create/{}'.format(self.sessionID, status_url)
+
+        for index in range(10):
+
+            response = self.__sendGet(api_path, 200).json()
+
+            time.sleep(1)
+
+            if response["state"] == "SUCCESS":
+
+                return
+
+            else:
+
+                continue
+
+        raise Exception("Application action was not added after 10 seconds")
+
+
+
+    def add_customize_attack_by_id(self, id_list, timeout=60):
+        api_path = f"/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/operations/create"
+        payload = {"Actions": [{"ProtocolID": strike_id} for strike_id in id_list]}
+        response = self.__sendPost(api_path, payload=payload).json()
+        while timeout > 0:
+            if self.__sendGet(f"{api_path}/{response['id']}", 200).json()["state"] == 'SUCCESS':
+                return response
+            time.sleep(1)
+            timeout-=1
+        raise Exception(f"Couldn't add al the attacks within {timeout} seconds")
+    
     def set_traffic_profile_timeline(self, duration, objective_value, objective_unit=None, pr_id=1):
         apiPath = '/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/TimelineSegments/1'.format(self.sessionID, pr_id)
         payload = {"Duration": duration, "PrimaryObjectiveValue": objective_value, "PrimaryObjectiveUnit": objective_unit}
@@ -2437,6 +2761,11 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response['Enabled']
     
+    def get_IP_stack_IP_count(self, network_segment_number=1, IP_range=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment_number, IP_range)
+        response = self.__sendGet(apiPath, 200).json()
+        return response['Count']
+
     def get_IP_stack_IP_start(self, network_segment_number=1, IP_range=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment_number, IP_range)
         response = self.__sendGet(apiPath, 200).json()
@@ -2613,3 +2942,22 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200)
         with open(f"{export_path}/{fileName}", 'w') as file:
             file.write(response.text)
+
+    def check_ports_status(self, test_ports, timeout=20):
+        """
+        test_ports(list): example: ["1-2-1", "1-2-3"]
+        """
+        now = time.time()
+        print('Waiting for ports to be available')
+        while time.time() < now + timeout:
+            test_ports_state = []
+            for test_port in test_ports:
+                controller_id, node_id, port_id = test_port.split("-")
+                test_ports_state.extend([port["trafficStatus"] for port in self.get_controller_node_ports(controller_id, node_id) if port["name"]==f"Port {port_id}"])               
+            if all(status == 'STOPPED' for status in test_ports_state):
+                print('Ports are available')
+                return True
+            time.sleep(2)
+        print(f"Ports status after {timeout} seconds are: {test_ports_state}")
+        print("The ports are still running after {} seconds the test stopped.\nPorts will be rebooted".format(timeout))
+        raise Exception("The Ports are still running after {} seconds the test stopped.".format(timeout))
