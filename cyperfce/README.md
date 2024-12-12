@@ -10,7 +10,7 @@ CyPerf CE features a flexible and easy to use command line tool designed for tes
 - [Qualified platforms](#qualified-platforms)
 - [Getting started](#getting-started)
 - [Example use cases](#Example-use-cases)
-- [Known limitations](#Known-limitation)
+- [Known limitations](#Known-limitations)
 - [Troubleshooting](#Troubleshooting)
 - [CyPerf Community Edition vs CyPerf Commercial](#cyperf-community-edition-vs-cyperf-commercial)
 - [Support](#support)
@@ -126,7 +126,7 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
   sudo cyperf -c <server machine IP address> --cps --parallel <count>
   ```
  
-**Complete list of options can be found [here](HELP.md) or in manpage and quick help**
+**Complete list of options can be found [here](OPTIONS.md) or in manpage and quick help**
   ```
   man cyperf 
   ```
