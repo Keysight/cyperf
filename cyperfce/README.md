@@ -55,7 +55,7 @@ sudo apt install -y cyperf
 
 ### Qualified platforms 
 
-At present CyPerf Community Edition can be used on following platforms.
+At present CyPerf Community Edition has been officially qualified on following platforms:
 
 **Linux on premises VM**
 
@@ -71,7 +71,7 @@ At present CyPerf Community Edition can be used on following platforms.
 - Instance type: c5n.2xlarge 
 - NIC type: aws ena 
 
-CyPerf Community Edition should be able to run on platforms like AWS, Azure and GCP instances, Kubernetes clusters with supported CNIs (Calico, AWS VPC CNI, AKS CNI) etc.
+CyPerf Community Edition is also compatible with platforms such as AWS, Azure and GCP instances, Kubernetes clusters with supported CNIs (Calico, AWS VPC CNI, AKS CNI) etc.
 
 ### Getting started 
 
