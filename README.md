@@ -14,7 +14,7 @@ Choose a provider
 
 ### CyPerf Community Edition
 
-A free CLI version of CyPerf with limited features and performance is also available. For installation steps and more details refer [CyPerf Community Edition](cyperfcli/README.md).
+A free CLI version of CyPerf with limited features and performance is also available. For installation steps and more details refer [CyPerf Community Edition](cyperfce/README.md).
 
 ### CyPerf Performance
 
