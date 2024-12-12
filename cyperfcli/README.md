@@ -30,8 +30,8 @@ Add CyPerf Community Edition apt repo to apt sources by running the following co
 ```
 sudo apt update 
 sudo apt install -y ca-certificates curl gpg
-sudo install -m 0755 -d /etc/apt/keyrings && curl http://cyperfcli.cyperf.io/cyperfcli-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperfcli-public.gpg 
-echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperfcli-public.gpg] http://cyperfcli.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperfcli.list > /dev/null 
+sudo install -m 0755 -d /etc/apt/keyrings && curl http://cyperfce.cyperf.io/cyperf-ce-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperf-ce-public.gpg 
+echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperf-ce-public.gpg] http://cyperfce.cyperf.io stable main" | sudo tee /etc/apt/sources.list.d/cyperf-ce.list > /dev/null 
 sudo apt update
  
 ```
@@ -152,31 +152,33 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
       sudo iptables -s 
       ```
  
-    If there are some rules which have the comment ``Added by CyPerf CLI …``, remove those. 
+    If there are some rules which have the comment ``Added by CyPerf CE …``, remove those. 
 
     For example, the following rule 
 
     ```
-    -A INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    -A INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CE, ruleset id: cyperf_cli_server_13977" -j DROP
     ```
     can be removed by running 
     ```
-    sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CLI, ruleset id: cyperf_cli_server_13977" -j DROP
+    sudo iptables -D INPUT -i ens160 -p tcp -m tcp --dport 5201 -m comment --comment "Added by CyPerf CE, ruleset id: cyperf_cli_server_13977" -j DROP
     ``` 
 
 - Restore sysctl entries net.core.rmem_max and net.core.wmem_max if needed 
 
     If cyperf failed to restore these values, the following files should be found: 
     
-    - ``/var/log/cyperf/cli/net.core.rmem_max.bkp``
-    - ``/var/log/cyperf/cli/net.core.wmem_max.bkp``
+    - ``/var/log/cyperf/ce/net.core.rmem_max.bkp``
+    - ``/var/log/cyperf/ce/net.core.wmem_max.bkp``
 
     These can be used to restore these sysctl entries to the value before they were modified by cyperf. Run 
     ```
-    sudo sysctl -w net.core.rmem_max=$(cat /var/log/cyperf/cli/net.core.rmem_max.bkp) 
+    sudo sysctl -w net.core.rmem_max=$(cat /var/log/cyperf/ce/net.core.rmem_max.bkp) && \
+    sudo rm /var/log/cyperf/ce/net.core.rmem_max.bkp
     ```
     ```
-    sudo sysctl -w net.core.wmem_max=$(cat /var/log/cyperf/cli/net.core.wmem_max.bkp)
+    sudo sysctl -w net.core.wmem_max=$(cat /var/log/cyperf/ce/net.core.wmem_max.bkp) && \
+    sudo rm /var/log/cyperf/ce/net.core.wmem_max.bkp
     ``` 
 **In case both client and server start successfully, but the statistics show no traffic being exchanged**
 
@@ -218,5 +220,5 @@ For any issues, queries or concerns related to CyPerf Community Edition, please 
 
 To  view  the licence to use this product, check the [EULA](https://www.keysight.com/find/sweula).
 
-Notices about third-party software distributed with this software can be found [here](License/cyperf_thrid_party_license_document).
+Notices and licenses for the third-party software distributed with this software can be found [here](License/cyperf_thrid_party_license_document).
 
