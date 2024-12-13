@@ -19,7 +19,7 @@ CyPerf CE features a flexible and easy to use command line tool designed for tes
 ### Installation steps 
 **Recommended system requirements** 
 
-- Two Hosts for running client and server 
+- Two hosts for running client and server 
 - OS: Ubuntu 2204 / Debian 12 
 - 4 vCPU and 4 GB RAM* 
 - Network connectivity with IPv4 addresses 
@@ -212,7 +212,7 @@ Advanced pcap replay    | No    | Yes   |
 
 ### Support
 
-For any issues, queries or concerns related to CyPerf Community Edition, please contact us at support@keysight.com, and make sure to start your email subject with CyPerfCE keyword. As being a free product, support queries will be handled on a best effort basis.
+For any issues, queries or concerns related to CyPerf Community Edition, please contact us at support@keysight.com, and make sure to start your email subject with **_CyPerfCE_** keyword. As being a free product, support queries will be handled on a best effort basis.
 
 ### Copyright and License
 
