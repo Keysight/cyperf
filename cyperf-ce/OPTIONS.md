@@ -49,7 +49,7 @@
       <td style="padding: 8px;">Length of buffer to transmit / receive.<br>cyperf will attempt to use this much data as a single block to read and write repeatedly. Increasing it may help increasing bitrate and decreasing it may help increasing connection rate.<br>Default: For bandwidth test, 100 MB and for connection rate test, 1 B.<br>If this option is used, it must be used in both server and client commands.<br>This option cannot be used together with -F / --file option.</td>
     </tr>
     <tr>
-      <td style="padding: 8px;">-F, --file <filepath></td>
+      <td style="padding: 8px;">-F, --file &lt;filepath&gt;</td>
       <td style="padding: 8px;">Transmit / receive the specified file.<br>cyper will attempt to use this file as a single block to read and write repeatedly. The file needs to exist in the specified path, cannot be empty and cannot be more than 128 megabytes in size.<br>If this option is used, it must be used in both server and client commands.<br>This option cannot be used together with -l / --length option.</td>
     </tr>
     <tr>
@@ -77,7 +77,7 @@
       <td style="padding: 8px;">Show more detailed stats in console.<br>This option can be used to show more detailed stats like ARP stats, ethernet and IP level packet stats and TCP stats.<br>These stats can be helpful in debugging different network issues.</td>
     </tr>
     <tr>
-      <td style="padding: 8px;">--csv-stats <filepath></td>
+      <td style="padding: 8px;">--csv-stats &lt;filepath&gt;</td>
       <td style="padding: 8px;">Write all stats to specified csv file.<br>The parent directory of the specified file must exist and the specified file must not exist. Otherwise cyperf will print an error message and will not continue.<br>If this option is used, the stats dumped in csv file is always detailed stats, but depending on whether --detailed-stats option is provided, either basic stats or detailed stats are printed in console.</td>
     </tr>
     <tr>
