@@ -88,7 +88,7 @@ sudo cyperf -s
 
 Once the server has started, start the client using the following command 
 ```
-sudo cyperf -c <server machine ip address> 
+sudo cyperf -c <server ip address> 
 ```
 
 Both client and server can be stopped by pressing Ctrl + C in their respective terminals. 
@@ -123,7 +123,7 @@ Both client and server can be stopped by pressing Ctrl + C in their respective t
 
   By default, client runs with parallel session count same as CPU core count. To customize parallel session count, use -P / --parallel option. 
   ```
-  sudo cyperf -c <server machine IP address> --cps --parallel <count>
+  sudo cyperf -c <server IP address> --cps --parallel <count>
   ```
  
 **Complete list of options can be found [here](OPTIONS.md) or in manpage and quick help**
