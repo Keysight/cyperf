@@ -212,7 +212,7 @@ Advanced pcap replay    | No    | Yes   |
 
 ### Support
 
-For any issues, queries or concerns related to CyPerf Community Edition, please contact us at support@keysight.com, and make sure to start your email subject with **_CyPerfCE_** keyword. As being a free product, support queries will be handled on a best effort basis.
+For any issues, queries or concerns related to CyPerf Community Edition, please contact us at support@keysight.com, and make sure to start your email subject with  <ins>**_CyPerfCE_**</ins>  keyword. As being a free product, support queries will be handled on a best effort basis.
 
 ### Copyright and License
 
