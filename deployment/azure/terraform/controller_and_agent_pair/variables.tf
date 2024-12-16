@@ -76,7 +76,7 @@ variable "azure_agent_machine_type" {
 
 variable "cyperf_version" {
   type        = string
-  default     = "0.5.0"
+  default     = "0.6.0"
   description = "CyPerf release version"
 }
 
