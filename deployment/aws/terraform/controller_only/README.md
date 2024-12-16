@@ -68,7 +68,7 @@ The following table lists the parameters for this deployment.
 | aws_region            | us-east-2   | The AWS region for deployment. |
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
 | aws_mdw_machine_type   | c5.2xlarge   | The machine type used for deploying the CyPerf controller. |
-| mdw_version   | keysight-cyperf-controller-5-0           | The CyPerf controller image version. |
+| mdw_version   | keysight-cyperf-controller-6-0           | The CyPerf controller image version. |
 | cyperf_release   | 5.0           | The version of the cyperf release. |
 
 ## Destruction
