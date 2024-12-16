@@ -140,7 +140,7 @@ By default, when you create or run a container using docker create or docker run
     ```
 
 ## Managing Resources for the CyPerf Agents
-- It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achive this by using the `client` section in one host nad `server` section in other host.
+- It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achieve this by using the `client` section in one host and `server` section in other host.
 
 - If you need to share the resources among multiple CyPerf Agents, (for example: when multiple Agent containers are runing in the same node) then use the following:
 
@@ -157,7 +157,7 @@ By default, when you create or run a container using docker create or docker run
 #        cpus: "2"
 #        cpuset: "2-3"
 ```
-- If any specific command you need to execute during docker deployent, use below section
+- If any specific command you need to execute during docker deployment, use below section
 ```
 #     command:
 #         - /bin/bash
