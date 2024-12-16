@@ -26,9 +26,9 @@ Before you deploy this Python template, we recommend that you become familiar wi
 
 ## GCP images
 Following CyPerf images are publicly available
-- For CyPerf Controller, keysight-cyperf-controller-5-0 (Family name)
-- For CyPerf Agents, keysight-cyperf-agent-5-0 (Family name)
-- For CyPerf Controller Proxy, keysight-cyperf-controller-proxy-5-0 (Family name)
+- For CyPerf Controller, keysight-cyperf-controller-6-0 (Family name)
+- For CyPerf Agents, keysight-cyperf-agent-6-0 (Family name)
+- For CyPerf Controller Proxy, keysight-cyperf-controller-proxy-6-0 (Family name)
 
 ## Supported instance types 
 - For CyPerf Controller, supported Machine type c2-standard-8.

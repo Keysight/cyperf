@@ -66,19 +66,19 @@ variable "agent_number"{
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-5-0"
+  default     = "keysight-cyperf-controller-6-0"
   description = "Version for the cyperf controller machine"
 }
 
 variable "broker_version" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-5-0"
+  default     = "keysight-cyperf-controller-proxy-6-0"
   description = "Version for the controller-proxy machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-5-0"
+  default     = "keysight-cyperf-agent-6-0"
   description = "Version for the cyperf agent"
 }
 
