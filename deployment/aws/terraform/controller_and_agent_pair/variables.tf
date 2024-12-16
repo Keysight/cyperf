@@ -84,6 +84,6 @@ variable "agent_version" {
 
 variable "cyperf_release" {
   type        = string
-  default     = "5.0"
+  default     = "6.0"
   description = "The version of the cyperf release"
 }
