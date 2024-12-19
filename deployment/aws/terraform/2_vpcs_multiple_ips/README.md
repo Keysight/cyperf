@@ -76,7 +76,7 @@ The following table lists the parameters for this deployment.
 | mdw_version   | keysight-cyperf-controller-6-0           | The CyPerf controller image version. |
 | broker_version   | keysight-cyperf-controller-proxy-6-0         | The CyPerf controller proxy image version. |
 | agent_version       | keysight-cyperf-agent-6-0     | The CyPerf agent image version.   |
-| cyperf_release   | 5.0           | The version of the cyperf release. |
+| cyperf_release   | 6.0           | The version of the cyperf release. |
 
 ## Destruction
 
