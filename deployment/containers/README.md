@@ -17,10 +17,15 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
 2. Understand docker compose. Refer [Docker Compose](https://docs.docker.com/compose/gettingstarted/)
 3. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent:latest` . Refer [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
 
-```
-sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
-```
-    
+    ```
+    sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
+    ```
+    > [!NOTE]
+    > In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) [here](https://support.ixiacom.com/keysight-cyperf-60) and load it using the following command
+    > 
+    ```
+    sudo docker load -i <downloaded tar file>
+    ```
 4.  A CyPerf Controller that is already deployed and accessible from the Agent docker containers.  
     - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
 
