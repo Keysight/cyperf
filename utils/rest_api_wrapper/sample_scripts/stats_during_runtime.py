@@ -25,7 +25,7 @@ while time.time()-start_time < test_duration:
     # if time.time()-start_time > test_duration*3/4:
     #     import pdb; pdb.set_trace() 
    
-pprint(real_time_stats)
+print(real_time_stats)
 
 print('Number of read in {} seconds is {}'.format(test_duration,len(real_time_stats)))
 rest.wait_test_finished()

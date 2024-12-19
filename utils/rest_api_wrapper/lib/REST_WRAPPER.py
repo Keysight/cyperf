@@ -135,3 +135,34 @@ def wait_for_eula(timeout=600):
             timeout -= count
     else:
         raise Exception("CyPerf controller did not properly boot after timeout {}s".format(init_timeout))
+
+
+def get_all_apps_from_mdw(preferred_browser_http_apps=None):
+    """
+    Collect all available applications from the controller and return the outpus in list format
+
+    preferred_browser_http_apps (str): specify the browser name to gather exclusively HTTPS-based apps for it
+    """
+    take = 100
+    skip = 0
+    app_list = rest.get_applications_by_pages(take=take, skip=skip)
+    rounds =  int(app_list['totalCount']/take)
+    all_browsers = ["Chrome", "Firefox", "Internet Explorer", "Microsoft Edge"]
+    browsers_to_search = ["Chrome", "Firefox", "Internet Explorer", "Microsoft Edge"] if preferred_browser_http_apps is None else [preferred_browser_http_apps]
+    browsers_apps = []
+    other_apps = []
+    restricted_list = ["DNS Flood"] #ISGAPPSEC2-30650
+    for i in range(rounds+1):
+        for app in app_list['data']:
+            for browser in browsers_to_search:
+                if browser in app['Name'] and app['Name'] not in restricted_list:
+                    browsers_apps.append(app['Name'])
+                    break
+            if app['Name'] not in browsers_apps and not(any(True for browser in all_browsers if browser in app['Name'])) and app['Name'] not in restricted_list:
+                other_apps.append(app['Name'])
+        skip += take
+        app_list = rest.get_applications_by_pages(take=take, skip=skip)
+    
+    print(f"HTTP-based apps:\n{browsers_apps}")
+    print(f"Non- HTTP-based apps:\n{other_apps}")
+    return other_apps, browsers_apps

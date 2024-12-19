@@ -15,7 +15,7 @@ services:
 #           cyperfagent feature allow_mgmt_iface_for_test disable
      environment:
          - AGENT_CONTROLLER=44.224.242.39
-         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Client,node-owner=KB"
+         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Client,node-owner=CyPerf"
 #         - AGENT_MANAGEMENT_INTERFACE=eth0
 #         - AGENT_TEST_INTERFACE=eth1
      cap_add:
@@ -41,7 +41,7 @@ services:
 #           cyperfagent feature allow_mgmt_iface_for_test disable
      environment:
          - AGENT_CONTROLLER=44.224.242.39
-         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Server,node-owner=KB"
+         - AGENT_TAGS="Dockers-Group=CyPerf-Agent-Server,node-owner=CyPerf"
 #         - AGENT_MANAGEMENT_INTERFACE=eth0
 #         - AGENT_TEST_INTERFACE=eth1
      cap_add:
@@ -74,7 +74,7 @@ networks:
 #      config:
 #        - subnet: "10.10.10.0/24"
   cyperf-mgmt-net:
-    name: mgmt-net
+    name: cyperf-mgmt-net
     ipam:
       config:
         - subnet: "192.168.0.0/24"

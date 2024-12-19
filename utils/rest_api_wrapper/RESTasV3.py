@@ -169,6 +169,63 @@ class RESTasV3:
 
         return response
 
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
+    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
+        expectedResponse = [200, 201, 202, 204]
+        print("POST at URL: {} with payload: {}".format(url, payload))
+        payload = json.dumps(payload) if customHeaders is None else payload
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
+        if debug:
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
         response = self.session.get('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers)
@@ -654,10 +711,6 @@ class RESTasV3:
         else:
             raise Exception("Expected {} agents connected after {}s. Got only {}.".format(agents_nr, init_timeout, len(response)))
 
-    def get_port_agents(self):
-        apiPath = '/api/v2/agents?includePorts=true'
-        return self.__sendGet(apiPath, 200).json()
-
     def get_controller_info(self):
         apiPath = '/api/v2/controllers?include=all'
         return self.__sendGet(apiPath, 200).json()    
@@ -706,25 +759,7 @@ class RESTasV3:
                     self.reboot_agents(agents_ids=agent_ids)
                     raise Exception("The agents are still running after {} seconds the test stopped.\nAgents will be rebooted".format(waiting_time))
             time.sleep(5)
-            waiting_time += 5    
-
-    
-    def get_agents_ids_from_ports(self, ControllerCardPorts=None, wait=None):
-        if wait:
-            self.wait_agents_connect()
-        agentsIDs = list()
-        response = self.get_port_agents()
-        print('Found {} agents'.format(len(response)))
-        if type(ControllerCardPorts) is str:
-            ControllerCardPorts = [ControllerCardPorts]
-        for ControllerCardPort in ControllerCardPorts:
-            for agent in response:
-                agentSystemInfo = 'cn.' + agent['systemInfo']['chassisInfo']['computeNodeID'] + '.' + agent['systemInfo']['chassisInfo']['portID']
-                if self.get_agents_by_port(ControllerCardPort) == agentSystemInfo:
-                    print("Port ID: {}, Node ID: {}".format(ControllerCardPort, agent['id']))
-                    agentsIDs.append(agent['id'])  # agent ID format = card id - port id - agent id
-                    break
-        return agentsIDs        
+            waiting_time += 5            
 
     def get_agents_ids(self, agentIPs=None, wait=None):
         if wait:
@@ -789,6 +824,11 @@ class RESTasV3:
         agents_ids = self.get_agents_ids(agentIPs=agents_ips)
         for agent_id in agents_ids:
             payload["ByID"].append({"agentId": agent_id})
+        self.__sendPatch(apiPath, payload)
+    
+    def rename_network_segment(self, net_seg_id, name):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, net_seg_id)
+        payload = {"Name": name}
         self.__sendPatch(apiPath, payload)
 
     def assign_agents_by_port(self, ControllerComputeNodePort, network_segment_id):
@@ -974,7 +1014,7 @@ class RESTasV3:
         apiPath = f"/api/v2/agents/{agent_id}"
         self.__sendPatch(apiPath, payload={"AgentTags": tag_list})
 
-    def set_traffic_capture_vm_agents(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
+    def set_traffic_capture(self, agents_ips, network_segment, is_enabled=True, capture_latest_packets=False, max_capture_size=104857600):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/agentAssignments'.format(self.sessionID, network_segment)
         payload = {"ByID": []}
         capture_settings = {"captureEnabled": is_enabled, "captureLatestPackets": capture_latest_packets, "maxCaptureSize": max_capture_size}
@@ -1259,6 +1299,19 @@ class RESTasV3:
     def set_ip_range_mss(self, mss=1460, network_segment=1, ip_range=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment, ip_range)
         self.__sendPatch(apiPath, payload={"Mss": mss})
+
+    def set_ip_range_vlan(self, vlan_id, vlan_incr, count, count_per_agent, network_segment=1, ip_range = 1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}/InnerVlanRange'.format(
+            self.sessionID, network_segment, ip_range)
+        self.__sendPatch(apiPath, payload={"VlanEnabled": True})
+        self.__sendPatch(apiPath, payload={"VlanId": vlan_id})
+        self.__sendPatch(apiPath, payload={"VlanIncr": vlan_incr})
+        self.__sendPatch(apiPath, payload={"Count": count})
+        self.__sendPatch(apiPath, payload={"CountPerAgent": count_per_agent})
+    
+    def set_network_segment_name(self, name, network_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}'.format(self.sessionID, network_segment)
+        self.__sendPatch(apiPath, payload={"Name":name})
 
     def set_eth_range_mac_auto_false(self, network_segment=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange'.format(self.sessionID, network_segment)
@@ -1688,28 +1741,6 @@ class RESTasV3:
             self.stop_test()
             raise Exception("Error! Test failed to stop after timeout {}s.".format(timeout))
 
-    def wait_for_test_status(self, status='STOPPED', timeout=300):
-        print('Waiting for the test to stop...')
-        response = self.get_test_status()
-        actual_duration = 0
-        counter = 1
-        while actual_duration < timeout:
-            response = self.perform_request_with_retry(
-                callback=lambda: self.get_test_status(),
-                max_retries=1,
-            )
-            if response['status'] == status:
-                print(f'Test reached state: {status}')
-                return True
-            else:
-                print('Test duration = {}; Elapsed = {}'.format(response['testDuration'], response['testElapsed']))
-            actual_duration += counter
-            time.sleep(counter)
-        else:
-            print("Test did not stop after timeout {}s. Test status= {}. TestDetails = {}. Force stopping the test!".format(timeout, response['status'], response['testDetails']))
-            self.stop_test()
-            raise Exception("Error! Test failed to stop after timeout {}s.".format(timeout))
-
     @staticmethod
     def __getEpochTime():
         pattern = "%d.%m.%Y %H:%M:%S"
@@ -1919,7 +1950,6 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"WarmUpPeriod": int(warmup_period)})
 
     def add_attack(self, attack_name, ap_id=1):
-        app_id = self.get_attack_id(attack_name=attack_name)
         apiPath = '/api/v2/sessions/{}/config/config/AttackProfiles/{}/Attacks'.format(self.sessionID, ap_id)
         if isinstance(attack_name, list):
             payload = []
@@ -1959,6 +1989,23 @@ class RESTasV3:
             else:
                 continue
         raise Exception("Application action was not added after 10 seconds")
+
+    def add_customize_attack_by_id(self, id_list, timeout=60):
+        api_path = f"/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/operations/create"
+        payload = {"Actions": [{"ProtocolID": strike_id} for strike_id in id_list]}
+        response = self.__sendPost(api_path, payload=payload).json()
+        while timeout > 0:
+            if self.__sendGet(f"{api_path}/{response['id']}", 200).json()["state"] == 'SUCCESS':
+                return response
+            time.sleep(1)
+            timeout-=1
+        raise Exception(f"Couldn't add al the attacks within {timeout} seconds")
+
+    def rename_custom_attack(self, name, index=1):
+         api_path = f"/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{index}"
+         payload = {"Name": name}
+         response = self.__sendPatch(api_path, payload=payload)
+         return response
 
     def insert_attack_action_at_exact_position(self, attack_id, action_id, insert_at_position):
         api_path = f'/api/v2/sessions/{self.sessionID}/config/config/AttackProfiles/1/Attacks/{attack_id}/Tracks/1/operations/add-actions'
@@ -2761,11 +2808,6 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response['Enabled']
     
-    def get_IP_stack_IP_count(self, network_segment_number=1, IP_range=1):
-        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment_number, IP_range)
-        response = self.__sendGet(apiPath, 200).json()
-        return response['Count']
-
     def get_IP_stack_IP_start(self, network_segment_number=1, IP_range=1):
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}'.format(self.sessionID, network_segment_number, IP_range)
         response = self.__sendGet(apiPath, 200).json()
@@ -2806,6 +2848,10 @@ class RESTasV3:
         apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/1/ReverseProxyPepDUT/AuthProfileParams/3'.format(self.sessionID)
         self.__sendPatch(apiPath, payload={"Value": okta_password})
 
+    def set_dut_name(self, name, dut_segment=1):
+        apiPath = '/api/v2/sessions/{}/config/config/NetworkProfiles/1/DUTNetworkSegment/{}'.format(self.sessionID, dut_segment)
+        self.__sendPatch(apiPath, payload={"Name":name})
+    
     def export_controller(self, export_path=None, file_name="mycontroller.zip"):
         apiPath = '/api/v2/controller-migration/operations/export'
         payload = {
@@ -2943,21 +2989,46 @@ class RESTasV3:
         with open(f"{export_path}/{fileName}", 'w') as file:
             file.write(response.text)
 
-    def check_ports_status(self, test_ports, timeout=20):
-        """
-        test_ports(list): example: ["1-2-1", "1-2-3"]
-        """
-        now = time.time()
-        print('Waiting for ports to be available')
-        while time.time() < now + timeout:
-            test_ports_state = []
-            for test_port in test_ports:
-                controller_id, node_id, port_id = test_port.split("-")
-                test_ports_state.extend([port["trafficStatus"] for port in self.get_controller_node_ports(controller_id, node_id) if port["name"]==f"Port {port_id}"])               
-            if all(status == 'STOPPED' for status in test_ports_state):
-                print('Ports are available')
-                return True
-            time.sleep(2)
-        print(f"Ports status after {timeout} seconds are: {test_ports_state}")
-        print("The ports are still running after {} seconds the test stopped.\nPorts will be rebooted".format(timeout))
-        raise Exception("The Ports are still running after {} seconds the test stopped.".format(timeout))
+    def upload_capture(self, capture_path):
+        apiPath = "/api/v2/resources/captures/operations/uploadFile"
+
+        customHeaders = self.headers
+        customHeaders['Accept'] = 'application/json'
+        mp_encoder = MultipartEncoder(
+            fields={
+                "packages": ('package', open(capture_path, "rb"), 'application/x-tar')
+                    }
+                )
+        customHeaders['content-type'] = mp_encoder.content_type
+        response = self.__sendPost(apiPath, payload=mp_encoder, customHeaders=customHeaders).json()
+        return response
+    
+    def create_app(self, app_name, action_name, capture_id, app_flow_ids_exchanges, timeout=60):
+        apiPath = "/api/v2/resources/operations/create-app"
+        payload = {
+            "AppName": app_name,
+            "Actions":[
+                {
+                    "Name": action_name,
+                    "Captures":[
+                        {
+                            "CaptureId": capture_id,
+                            "Flows" : [
+                                {
+                                    "AppFlowId":app_flow_id_exchange["app_flow_id"],
+                                    "Exchanges": app_flow_id_exchange["exchanges_list"]
+                                }
+                                for app_flow_id_exchange in app_flow_ids_exchanges
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        response = self.__sendPost(apiPath, payload=payload).json()
+        response = self.wait_event_success(apiPath=f'{response["type"]}/{response["id"]}', timeout=timeout)
+        return response
+    
+    def get_captures(self):
+        apiPath = "/api/v2/resources/captures?take=100&skip=0"
+        return self.__sendGet(apiPath, 200).json()

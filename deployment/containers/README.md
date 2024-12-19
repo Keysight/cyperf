@@ -17,10 +17,17 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
 2. Understand docker compose. Refer [Docker Compose](https://docs.docker.com/compose/gettingstarted/)
 3. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent:latest` . Refer [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
 
-```
-sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
-```
+    ```
+    sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
+    ```
+    - **_NOTE:_**
+    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) [here](https://support.ixiacom.com/keysight-cyperf-60) and load it using the following command
     
+        ```
+        sudo docker load -i <downloaded tar file>
+        ```
+        The loaded image needs to be tagged properly and samples need to be updated accordingly.
+
 4.  A CyPerf Controller that is already deployed and accessible from the Agent docker containers.  
     - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
 
@@ -140,7 +147,7 @@ By default, when you create or run a container using docker create or docker run
     ```
 
 ## Managing Resources for the CyPerf Agents
-- It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achive this by using the `client` section in one host nad `server` section in other host.
+- It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achieve this by using the `client` section in one host and `server` section in other host.
 
 - If you need to share the resources among multiple CyPerf Agents, (for example: when multiple Agent containers are runing in the same node) then use the following:
 
@@ -157,7 +164,7 @@ By default, when you create or run a container using docker create or docker run
 #        cpus: "2"
 #        cpuset: "2-3"
 ```
-- If any specific command you need to execute during docker deployent, use below section
+- If any specific command you need to execute during docker deployment, use below section
 ```
 #     command:
 #         - /bin/bash
@@ -226,6 +233,11 @@ sudo modprobe ip6table_filter
 4. CyPerf Container deployment workflow does not recommend using cyperagent CLI commands within the containers. container spawning command should supply all the environment variables for initializing the agent.
 
 ## Releases
+
+- **CyPerf 6.0** - [December, 2024]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release6.0
+        - public.ecr.aws/keysight/cyperf-agent:6.0.3.746
 
 - **CyPerf 5.0** - [October, 2024]
     - Image URI: 
