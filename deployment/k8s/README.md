@@ -90,46 +90,6 @@ To test a device or a service that is running inside a K8s cluster, do the follo
                 port: 80
             periodSeconds: 5
     ```
-###  **Example agent helm chart**
-[Install helm](https://helm.sh/docs/intro/install/)
- in k8s cluster if not already installed. By default helm get installed with cluster deployement. Execute bellow helm commands sequencially.
-  Here are the [chart manifest](agent_helm_chart/cyperfchart) files for your reference.
-
-- Add helm repo in the k8s cluster
-
-```
-helm repo add cyperf_agent_helm_repo https://biskaushik.github.io/helm-chart/ 
-
-```
-- Search for repo justed added
-```
-helm search repo cyperf_agent_helm_repo
-```
-- update helm repo
-```
-helm repo update
-```
-Pull helm chart in the k8s cluster for agent verion 0.3.656
-```
-helm pull cyperf_agent_helm_repo/cyperfchart --version 0.3.656
-```
-- untar helm chart
-```
-tar -xvf cyperfchart-0.3.656.tgz
-```
-Deploy cyperf agent 
-- Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then set controller IP 0.0.0.0. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
-- Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
-```
-# Client Agent
-
-helm install  cyperfagentclient --set AGENT_CONTROLLER=68.154.33.20,AGENT_TAGS="K8s-Group=CyPerf-Agent-Client,node-owner=KB-helm-chrt",serveragentflag=false ./cyperfchart
-
-# Server Agent
-
-helm install  cyperfagentserver --set AGENT_CONTROLLER=68.154.33.20 AGENT_TAGS="K8s-Group=CyPerf-Agent-Server,node-owner=KB-helm-chrt" ./cyperfchart
-```
-
 ## Deployment in **AWS EKS or AZURE AKS**
 ### Prerequisites
 1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section. 
@@ -172,10 +132,7 @@ You can deploy in AWS EKS or in AZURE AKS in the following two ways:
     - set NodePort service port to any port in the range 30000-32767
     - in the DUT section of CyPerf config, set the master node's IP of cluster where the server is deployed, 
     - in the CyPerf test config, "Traffic destination port" should be same as the port which is set as NodePort service port in the manifest
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
 ## Deployment in **On-Premise K8s Cluster**
 ### Prerequisites
 1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section.
