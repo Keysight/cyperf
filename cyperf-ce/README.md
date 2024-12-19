@@ -30,8 +30,8 @@ Add CyPerf Community Edition apt repo to apt sources by running the following co
 ```
 sudo apt update 
 sudo apt install -y ca-certificates curl gpg
-sudo install -m 0755 -d /etc/apt/keyrings && curl http://cyperfce.cyperf.io/cyperf-ce-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperf-ce-public.gpg 
-echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperf-ce-public.gpg] http://cyperfce.cyperf.io/debian stable main" | sudo tee /etc/apt/sources.list.d/cyperf-ce.list > /dev/null 
+sudo install -m 0755 -d /etc/apt/keyrings && curl https://cyperfce.cyperf.io/cyperf-ce-public.gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/cyperf-ce-public.gpg 
+echo "deb [arch=amd64  signed-by=/etc/apt/keyrings/cyperf-ce-public.gpg] https://cyperfce.cyperf.io/debian stable main" | sudo tee /etc/apt/sources.list.d/cyperf-ce.list > /dev/null 
 sudo apt update
  
 ```
