@@ -64,168 +64,28 @@ class RESTasV3:
 
         return response
     
+    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
+        expectedResponse = [200, 201, 202, 204]
+        print("POST at URL: {} with payload: {}".format(url, payload))
+        payload = json.dumps(payload) if customHeaders is None else payload
+        response = self.session.post('{}{}'.format(self.host, url),
+                                     headers=customHeaders if customHeaders else self.headers, data=payload,
+                                     files=files, verify=False)
+        if debug:
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.post('{}{}'.format(self.host, url),
+                                         headers=customHeaders if customHeaders else self.headers, data=payload,
+                                         files=files, verify=False)
+            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
     
-    
-    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202, 204]
-        print("POST at URL: {} with payload: {}".format(url, payload))
-        payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url),
-                                     headers=customHeaders if customHeaders else self.headers, data=payload,
-                                     files=files, verify=False)
-        if debug:
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url),
-                                         headers=customHeaders if customHeaders else self.headers, data=payload,
-                                         files=files, verify=False)
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code not in expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
-        print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url),
-                                    headers=customHeaders if customHeaders else self.headers)
-        if debug:
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url),
-                                        headers=customHeaders if customHeaders else self.headers)
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code != expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202, 204]
-        print("POST at URL: {} with payload: {}".format(url, payload))
-        payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url),
-                                     headers=customHeaders if customHeaders else self.headers, data=payload,
-                                     files=files, verify=False)
-        if debug:
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url),
-                                         headers=customHeaders if customHeaders else self.headers, data=payload,
-                                         files=files, verify=False)
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code not in expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
-        print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url),
-                                    headers=customHeaders if customHeaders else self.headers)
-        if debug:
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url),
-                                        headers=customHeaders if customHeaders else self.headers)
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code != expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    
-    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202, 204]
-        print("POST at URL: {} with payload: {}".format(url, payload))
-        payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url),
-                                     headers=customHeaders if customHeaders else self.headers, data=payload,
-                                     files=files, verify=False)
-        if debug:
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url),
-                                         headers=customHeaders if customHeaders else self.headers, data=payload,
-                                         files=files, verify=False)
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code not in expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
-        print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url),
-                                    headers=customHeaders if customHeaders else self.headers)
-        if debug:
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url),
-                                        headers=customHeaders if customHeaders else self.headers)
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code != expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendPost(self, url, payload, customHeaders=None, files=None, debug=True):
-        expectedResponse = [200, 201, 202, 204]
-        print("POST at URL: {} with payload: {}".format(url, payload))
-        payload = json.dumps(payload) if customHeaders is None else payload
-        response = self.session.post('{}{}'.format(self.host, url),
-                                     headers=customHeaders if customHeaders else self.headers, data=payload,
-                                     files=files, verify=False)
-        if debug:
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.post('{}{}'.format(self.host, url),
-                                         headers=customHeaders if customHeaders else self.headers, data=payload,
-                                         files=files, verify=False)
-            print("POST response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code not in expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
-
-    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
-        print("GET at URL: {}".format(url))
-        response = self.session.get('{}{}'.format(self.host, url),
-                                    headers=customHeaders if customHeaders else self.headers)
-        if debug:
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if response.status_code == 401:
-            print('Token has expired, resending request')
-            self.refresh_access_token()
-            response = self.session.get('{}{}'.format(self.host, url),
-                                        headers=customHeaders if customHeaders else self.headers)
-            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
-        if self.verify and response.status_code != expectedResponse:
-            raise Exception(
-                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
-
-        return response
     def __sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
         print("GET at URL: {}".format(url))
         response = self.session.get('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers)
@@ -240,8 +100,42 @@ class RESTasV3:
             raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
+    
+    def sendGet(self, url, expectedResponse, customHeaders=None, debug=True):
+        print("GET at URL: {}".format(url))
+        response = self.session.get('{}{}'.format(self.host, url),
+                                    headers=customHeaders if customHeaders else self.headers)
+        if debug:
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.get('{}{}'.format(self.host, url),
+                                        headers=customHeaders if customHeaders else self.headers)
+            print("GET response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code != expectedResponse:
+            raise Exception(
+                'Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
 
     def __sendPut(self, url, payload, customHeaders=None, debug=True):
+        print("PUT at URL: {} with payload: {}".format(url, payload))
+        expectedResponse = [200, 204]
+        response = self.session.put('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers, data=json.dumps(payload))
+        if debug:
+            print("PUT response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.put('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers, data=json.dumps(payload))
+            print("PUT response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+    
+    def sendPut(self, url, payload, customHeaders=None, debug=True):
         print("PUT at URL: {} with payload: {}".format(url, payload))
         expectedResponse = [200, 204]
         response = self.session.put('{}{}'.format(self.host, url), headers=customHeaders if customHeaders else self.headers, data=json.dumps(payload))
@@ -272,8 +166,40 @@ class RESTasV3:
             raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
 
         return response
+    
+    def sendPatch(self, url, payload, debug=True):
+        print("PATCH at URL: {} with payload: {}".format(url, payload))
+        expectedResponse = [200, 204]
+        response = self.session.patch('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
+        if debug:
+            print("PATCH response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.patch('{}{}'.format(self.host, url), headers=self.headers, data=json.dumps(payload))
+            print("PATCH response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
 
     def __sendDelete(self, url, headers=None, debug=True):
+        print("DELETE at URL: {}".format(url))
+        expectedResponse = [200, 202, 204]
+        response = self.session.delete('%s%s' % (self.host, url), headers=headers)
+        if debug:
+            print("DELETE response message: {}, response code: {}".format(response.content, response.status_code))
+        if response.status_code == 401:
+            print('Token has expired, resending request')
+            self.refresh_access_token()
+            response = self.session.delete('%s%s' % (self.host, url), headers=headers)
+            print("DELETE response message: {}, response code: {}".format(response.content, response.status_code))
+        if self.verify and response.status_code not in expectedResponse:
+            raise Exception('Unexpected response code. Actual: {} Expected: {}'.format(response.status_code, expectedResponse))
+
+        return response
+    
+    def sendDelete(self, url, headers=None, debug=True):
         print("DELETE at URL: {}".format(url))
         expectedResponse = [200, 202, 204]
         response = self.session.delete('%s%s' % (self.host, url), headers=headers)
