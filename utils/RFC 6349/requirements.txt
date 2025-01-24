@@ -1,0 +1,9 @@
+--prefer-binary
+pytest
+paramiko
+urllib3
+requests
+simplejson
+pandas
+tabulate
+Pyyaml

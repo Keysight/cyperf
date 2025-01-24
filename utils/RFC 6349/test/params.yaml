@@ -1,0 +1,15 @@
+description: 
+    #Paramaters for Ixload RCC 6349 configs.
+config:
+    "IPAddress" : "10.39.46.181" #"10.39.46.242""10.39.44.178"  #Ixload App server IP
+    "username" : "admin"
+    "password" : "CyPerf&Keysight#1"
+    "client_id" : "clt-wap"
+    "ClientAgent" : "10.39.47.53" #10.39.47.254
+    "ServerAgent" : "10.39.47.97"
+    "ClientIP" : "10.0.0.30"
+    "ClientSubnetMask" : 16
+    "ClientGatewayIP" : "0.0.0.0"
+    "ServerIP" : "10.0.0.40"
+    "ServerSubnetMask" : 16
+    "ServerGatewayIP" : "0.0.0.0"
