@@ -1,0 +1,74 @@
+# RFC2544 Throughput Test Parameters
+
+# Line rate for the media in gbps
+line_rate_for_the_media_in_gbps: 10
+
+# Maximum allowable throughput in gbps
+max_allowable_througput_in_gbps: 10
+
+# Initial target throughput in gbps
+initial_target_throughput_in_gbps: 6
+
+# Initial minimum throughput limit in gbps (MUST be acheived)
+initial_minimum_throughput_limit_in_gbps: 1
+
+# Interval between test runs in seconds
+interval_between_test_run_in_seconds: 5
+
+# Maximum allowable fluctuations between target and achieved throughput
+# for example 2% equals 0.02 , 4% equals .04
+tolerance: 0.03
+
+# Criteria to stop binary search ( units in gbps)
+resolution: 0.5
+
+# List of frame sizes in bytes (RFC recommended for Ethernet)
+list_of_frame_size_in_bytes:
+  - 1518
+  - 1280
+
+# Direction of stream (allowed values: ClientToServer, ServerToClient, Bidirectional)
+direction_of_stream: "Bidirectional"
+
+# Number of streams
+number_of_streams: 1
+
+# Number of trials (to ensure consistent and repeatable results)
+number_of_trials: 1
+
+# Test duration in seconds
+test_duration_in_seconds: 30
+
+# Ethernet header size in bytes
+Ethernet_header_size_in_bytes: 18
+
+# IP header size in bytes
+IP_header_size_in_bytes: 20
+
+# UDP header size in bytes
+UDP_header_size_in_bytes: 8
+
+# Initiator management IP
+Initiator_mgmt_ip: "10.38.166.115"
+
+# Responder management IP
+responder_mgmt_ip: "10.38.166.211"
+
+# User-input emulated IP endpoints for client and server
+client_start_ip: "10.0.0.10"
+client_gateway: "10.0.0.1"
+Server_start_ip: "10.0.0.100"
+server_gateway: "10.0.0.1"
+
+# Rate control while ramping
+Max_pending_simulated_user_in_percentage: "10%"
+
+# Maximum number of streams to be initiated per second
+Max_simulated_users_per_second: 2
+
+# Maximum binary search count
+Max_BS_count: 16
+
+#Packet loss tolerance
+#for example 2% equals 0.02 , 4% equals .04
+packet_loss_tolerance : .01

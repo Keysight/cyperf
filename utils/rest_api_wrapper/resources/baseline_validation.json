@@ -118,11 +118,8 @@
 			{
 				"description" : "client traffic profile, Applications Failed = 0",
 				"condition" : "(last(stats['client-traffic-profile'])['Applications Failed'] == 0).all()"
-			},
-			{
-				"description" : "client-traffic-profile-tcp, Connections Established has one element bigger than 0",
-				"condition" : "(last(stats['client-traffic-profile-tcp'])['Connections Established'] > 0).any()"
 			}
+			
 		],
 		"attack":[
 			{

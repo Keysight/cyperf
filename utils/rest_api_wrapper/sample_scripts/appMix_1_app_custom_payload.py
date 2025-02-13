@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from lib.REST_WRAPPER import rest, create_new_config, create_traffic_profile, run_test, collect_stats
+from cyperf.utils.rest_api_wrapper.lib.REST_WRAPPER_trail import rest, create_new_config, create_traffic_profile, run_test, collect_stats
 
 
 # CyPerf API test with 1 Traffic profile, 1 App, Throughput objective, custom payload and B2B agents

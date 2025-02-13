@@ -1,0 +1,13 @@
+Timestamp epoch ms,IP,Agent,Profile - Network Segment,Timestamp,Applications Failed,Applications Initiated,Applications Succeeded
+1739456322000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:42.000Z,0,1,0
+1739456325000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:45.000Z,0,1,0
+1739456328000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:48.000Z,0,1,0
+1739456331000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:51.000Z,0,1,0
+1739456334000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:54.000Z,0,1,0
+1739456337000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:18:57.000Z,0,1,0
+1739456340000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:00.000Z,0,1,0
+1739456343000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:03.000Z,0,1,0
+1739456346000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:06.000Z,0,1,0
+1739456349000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:09.000Z,0,1,0
+1739456352000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:12.000Z,0,1,1
+1739456355000,10.38.166.115,10.38.166.115,App Client Application Profile-IP Network 1,2025-02-13T14:19:15.000Z,0,1,1

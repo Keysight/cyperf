@@ -1,0 +1,414 @@
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **************************************************                            
+The throughput of 1.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 1 gbps                                                                                   
+The maximum throughput value = 10 gbps                                                                                  
+The target  throughput value = 6 gbps                                                                                   
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 2.373450460841294% and server to client Loss %  = 2.364779891392798%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  6 gbps                                                                                  
+minimum throughput limit     =  1 gbps                                                                                  
+The target throughput value = 3.5 gbps                                                                                  
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 3.5 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 3                                                                                                               
+The minimum throughput value = 3.5 gbps                                                                                 
+The maximum throughput value = 6 gbps                                                                                   
+The target  throughput value = 4.75 gbps                                                                                
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 1.708686679171875% and server to client Loss %  = 0.0%  
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 4.75 gbps could not be acheived                                                                
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 4                                                                                            
+maximum allowable throughput =  4.75 gbps                                                                               
+minimum throughput limit     =  3.5 gbps                                                                                
+The target throughput value = 4.125 gbps                                                                                
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 4.125 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                          
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 5                                                                                                               
+The minimum throughput value = 4.125 gbps                                                                               
+The maximum throughput value = 4.75 gbps                                                                                
+The target  throughput value = 4.4375 gbps                                                                              
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 4.4375 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                         
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 6                                                                                                               
+The minimum throughput value = 4.4375 gbps                                                                              
+The maximum throughput value = 4.75 gbps                                                                                
+The target  throughput value = 4.59375 gbps                                                                             
+*******************************************************************************************                             
+**********  The list of achieved throughput (gbps) was =[3.5, 4.125, 4.4375]************************                    
+**********  The highest  throughput (gbps) acheived was = 4.4375  ***************************                           
+                                                                                                                        
+Frame size # 1518 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **************************************************                            
+The throughput of 1.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 1 gbps                                                                                   
+The maximum throughput value = 10 gbps                                                                                  
+The target  throughput value = 6 gbps                                                                                   
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 6.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 2                                                                                                               
+The minimum throughput value = 6 gbps                                                                                   
+The maximum throughput value = 10 gbps                                                                                  
+The target  throughput value = 8.0 gbps                                                                                 
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 0.547079575193131% and server to client Loss %  = 3.8988160455059573%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 8.0 gbps could not be acheived                                                                 
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 3                                                                                            
+maximum allowable throughput =  8.0 gbps                                                                                
+minimum throughput limit     =  6 gbps                                                                                  
+The target throughput value = 7.0 gbps                                                                                  
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 7.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 4                                                                                                               
+The minimum throughput value = 7.0 gbps                                                                                 
+The maximum throughput value = 8.0 gbps                                                                                 
+The target  throughput value = 7.5 gbps                                                                                 
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 0.6272686983884662% and server to client Loss %  = 1.0268271718519861%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.5 gbps could not be acheived                                                                 
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 5                                                                                            
+maximum allowable throughput =  7.5 gbps                                                                                
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.25 gbps                                                                                 
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 0.3357078275080673% and server to client Loss %  = 1.131786931387477%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.25 gbps could not be acheived                                                                
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 6                                                                                            
+maximum allowable throughput =  7.25 gbps                                                                               
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.125 gbps                                                                                
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 0.005540791106238733% and server to client Loss %  = 1.0979487667849814%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.125 gbps could not be acheived                                                               
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 7                                                                                            
+maximum allowable throughput =  7.125 gbps                                                                              
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.0625 gbps                                                                               
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 1.450978852195659% and server to client Loss %  = 2.2665068437328095%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.0625 gbps could not be acheived                                                              
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 8                                                                                            
+maximum allowable throughput =  7.0625 gbps                                                                             
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.03125 gbps                                                                              
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 1.46928579614957% and server to client Loss %  = 1.633489309774044%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.03125 gbps could not be acheived                                                             
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 9                                                                                            
+maximum allowable throughput =  7.03125 gbps                                                                            
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.015625 gbps                                                                             
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 2.236315030862767% and server to client Loss %  = 2.0167768255820633%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.015625 gbps could not be acheived                                                            
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 10                                                                                           
+maximum allowable throughput =  7.015625 gbps                                                                           
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.0078125 gbps                                                                            
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 1.5686246018807934% and server to client Loss %  = 3.4569906301586997%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.0078125 gbps could not be acheived                                                           
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 11                                                                                           
+maximum allowable throughput =  7.0078125 gbps                                                                          
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.00390625 gbps                                                                           
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 0.7634329019399725% and server to client Loss %  = 1.3522957373191071%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.00390625 gbps could not be acheived                                                          
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 12                                                                                           
+maximum allowable throughput =  7.00390625 gbps                                                                         
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.001953125 gbps                                                                          
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 2.2636857158176262% and server to client Loss %  = 2.26413432483535%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.001953125 gbps could not be acheived                                                         
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 13                                                                                           
+maximum allowable throughput =  7.001953125 gbps                                                                        
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.0009765625 gbps                                                                         
+*******************************************************************************************                             
+Packet Loss beyond tolerance limits. Client to server Loss %  = 2.4026244056370545% and server to client Loss %  = 4.718738407198846%
+Packet Loss detected . Throughput validation will not be performed.                                                     
+The target throughput of 7.0009765625 gbps could not be acheived                                                        
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 14                                                                                           
+maximum allowable throughput =  7.0009765625 gbps                                                                       
+minimum throughput limit     =  7.0 gbps                                                                                
+The target throughput value = 7.00048828125 gbps                                                                        
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 7.00048828125 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                  
+********************************************************************************************                            
+**********  The list of achieved throughput (gbps) was =[6, 7.0, 7.00048828125]************************                 
+**********  The highest  throughput (gbps) acheived was = 7.00048828125  ***************************                    
+The Test has ended . All Trails are completed                                                                           
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **************************************************                            
+The throughput of 1.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 1 gbps                                                                                   
+The maximum throughput value = 10 gbps                                                                                  
+The target  throughput value = 6 gbps                                                                                   
+*******************************************************************************************                             
+*************** Result ***************                                                                                  
+The throughput of 6.0 gbps was not acheived considering the tolerance level of 3.0% 
+                                   
+There is no packet loss . There may be throughput fluctuations  
+                                                       
+***** throughput fluctions at client  from configured value *************************
+                                  
+{1739456385000: '33.2669956%',
+ 1739456388000: '32.3382432%',
+ 1739456391000: '32.8374764%',
+ 1739456394000: '33.05862053333333%',
+ 1739456397000: '30.773568400000002%'}
+
+*****throughput fluctions at server  from configured value  *************************
+                                 
+{1739456385000: '33.253938%',
+ 1739456388000: '32.34834853333333%',
+ 1739456391000: '32.899786533333334%',
+ 1739456394000: '33.024181600000006%',
+ 1739456397000: '30.744822533333334%'}
+
+Need to continue -  Binary search to find the best possible throughput ******                                          
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  6 gbps                                                                                  
+minimum throughput limit     =  1 gbps                                                                                  
+The target throughput value = 3.5 gbps                                                                                  
+*******************************************************************************************                             
+*************** Result ***************                                                                                  
+The throughput of 3.5 gbps was not acheived considering the tolerance level of 3.0% 
+                                   
+There is no packet loss . There may be throughput fluctuations  
+                                                       
+***** throughput fluctions at client  from configured value *************************
+                                  
+{1739456451000: '16.803333942857144%',
+ 1739456454000: '17.011229485714285%',
+ 1739456457000: '16.918305142857143%',
+ 1739456460000: '17.327226971428573%',
+ 1739456463000: '16.69643794285714%'}
+
+*****throughput fluctions at server  from configured value  *************************
+                                 
+{1739456451000: '16.7820256%',
+ 1739456454000: '17.039040457142857%',
+ 1739456457000: '16.910887314285713%',
+ 1739456460000: '17.36185257142857%',
+ 1739456463000: '16.661268114285715%'}
+
+Need to continue -  Binary search to find the best possible throughput ******                                          
+The target throughput of 3.5 gbps could not be acheived                                                                 
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 3                                                                                            
+maximum allowable throughput =  3.5 gbps                                                                                
+minimum throughput limit     =  1 gbps                                                                                  
+The target throughput value = 2.25 gbps                                                                                 
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 2.25 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                           
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 4                                                                                                               
+The minimum throughput value = 2.25 gbps                                                                                
+The maximum throughput value = 3.5 gbps                                                                                 
+The target  throughput value = 2.875 gbps                                                                               
+*******************************************************************************************                             
+*************** Result ***************                                                                                  
+The throughput of 2.875 gbps was not acheived considering the tolerance level of 3.0% 
+                                 
+There is no packet loss . There may be throughput fluctuations  
+                                                       
+***** throughput fluctions at client  from configured value *************************
+                                  
+{1739456577000: '10.54551791304348%',
+ 1739456580000: '9.149627547826086%',
+ 1739456583000: '10.481940591304348%',
+ 1739456586000: '9.190512973913044%',
+ 1739456589000: '9.994317356521739%'}
+
+*****throughput fluctions at server  from configured value  *************************
+                                 
+{1739456577000: '10.609495373913044%',
+ 1739456580000: '9.1951424%',
+ 1739456583000: '10.271041669565218%',
+ 1739456586000: '9.234281182608695%',
+ 1739456589000: '9.994400834782608%'}
+
+Need to continue -  Binary search to find the best possible throughput ******                                          
+The target throughput of 2.875 gbps could not be acheived                                                               
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 5                                                                                            
+maximum allowable throughput =  2.875 gbps                                                                              
+minimum throughput limit     =  2.25 gbps                                                                               
+The target throughput value = 2.5625 gbps                                                                               
+*******************************************************************************************                             
+********************************** Result **************************************************                            
+The throughput of 2.5625 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                         
+********************************************************************************************                            
+**********  The list of achieved throughput (gbps) was =[2.25, 2.5625]************************                          
+**********  The highest  throughput (gbps) acheived was = 2.5625  ***************************                           
+                                                                                                                        
+Frame size # 1518 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **************************************************                            
+The throughput of 1.0 gbps was acheived considering the fluctuation tolerance level of 3.0%
+                            
+********************************************************************************************                            
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 1 gbps                                                                                   
+The maximum throughput value = 10 gbps                                                                                  
+The target  throughput value = 6 gbps                                                                                   
+*******************************************************************************************                             
+*************** Result ***************                                                                                  
+The throughput of 6.0 gbps was not acheived considering the tolerance level of 3.0% 
+                                   
+There is no packet loss . There may be throughput fluctuations  
+                                                       
+***** throughput fluctions at client  from configured value *************************
+                                  
+{1739456760000: '46.73183426666667%',
+ 1739456763000: '26.460365200000002%',
+ 1739456766000: '31.445396799999997%',
+ 1739456769000: '44.217436533333334%',
+ 1739456772000: '37.89235266666667%'}
+
+*****throughput fluctions at server  from configured value  *************************
+                                 
+{1739456760000: '46.81114413333333%',
+ 1739456763000: '26.443948933333335%',
+ 1739456766000: '31.418827333333333%',
+ 1739456769000: '44.27009653333333%',
+ 1739456772000: '37.88846306666667%'}
+
+Need to continue -  Binary search to find the best possible throughput ******                                          
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  6 gbps                                                                                  
+minimum throughput limit     =  1 gbps                                                                                  
+The target throughput value = 3.5 gbps                                                                                  
+*******************************************************************************************                             
+*************** Result ***************                                                                                  
+The throughput of 3.5 gbps was not acheived considering the tolerance level of 3.0% 
+                                   
+There is no packet loss . There may be throughput fluctuations  
+                                                       
+***** throughput fluctions at client  from configured value *************************
+                                  
+{1739456823000: '20.191476114285713%',
+ 1739456826000: '12.372099885714286%',
+ 1739456832000: '6.850741257142857%'}
+
+*****throughput fluctions at server  from configured value  *************************
+                                 
+{1739456823000: '20.142621485714287%',
+ 1739456826000: '12.5868224%',
+ 1739456832000: '6.807829028571429%'}
+
+Need to continue -  Binary search to find the best possible throughput ******                                          
+The target throughput of 3.5 gbps could not be acheived                                                                 
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 3                                                                                            
+maximum allowable throughput =  3.5 gbps                                                                                
+minimum throughput limit     =  1 gbps                                                                                  
+The target throughput value = 2.25 gbps                                                                                 
+*******************************************************************************************                             

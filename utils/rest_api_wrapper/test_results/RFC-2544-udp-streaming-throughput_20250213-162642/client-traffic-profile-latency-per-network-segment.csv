@@ -1,0 +1,13 @@
+Timestamp epoch ms,Profile - Network Segment,Timestamp,Avg Connection Latency(microseconds),Avg Time to First Byte(microseconds),Avg Time to Last Byte(microseconds),Max Time To First Byte (microseconds),Max Time To Last Byte (microseconds),Min Time To First Byte (microseconds),Min Time To Last Byte (microseconds)
+1739456754000,App Client Application Profile-IP Network 1,2025-02-13T14:25:54.000Z,0,0,0,0,0,null,null
+1739456757000,App Client Application Profile-IP Network 1,2025-02-13T14:25:57.000Z,null,null,null,0,0,null,null
+1739456760000,App Client Application Profile-IP Network 1,2025-02-13T14:26:00.000Z,null,null,null,0,0,null,null
+1739456763000,App Client Application Profile-IP Network 1,2025-02-13T14:26:03.000Z,null,null,null,0,0,null,null
+1739456766000,App Client Application Profile-IP Network 1,2025-02-13T14:26:06.000Z,null,null,null,0,0,null,null
+1739456769000,App Client Application Profile-IP Network 1,2025-02-13T14:26:09.000Z,null,null,null,0,0,null,null
+1739456772000,App Client Application Profile-IP Network 1,2025-02-13T14:26:12.000Z,null,null,null,0,0,null,null
+1739456775000,App Client Application Profile-IP Network 1,2025-02-13T14:26:15.000Z,null,null,null,0,0,null,null
+1739456778000,App Client Application Profile-IP Network 1,2025-02-13T14:26:18.000Z,null,null,null,0,0,null,null
+1739456781000,App Client Application Profile-IP Network 1,2025-02-13T14:26:21.000Z,null,null,null,0,0,null,null
+1739456784000,App Client Application Profile-IP Network 1,2025-02-13T14:26:24.000Z,null,null,null,0,0,null,null
+1739456787000,App Client Application Profile-IP Network 1,2025-02-13T14:26:27.000Z,null,null,null,0,0,null,null
