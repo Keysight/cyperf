@@ -1,4 +1,4 @@
-import sys
+import sys, os, datetime
 import logging
 sys.path.append("..")
 from lib.logger_config import selective_logger
@@ -16,6 +16,25 @@ count=0
 
 #Specify the path of the yaml file which contains all the parameters specified by the user for RFC2544 throughput test
 file_path = "./RFC-2544-throughput/parameters.yaml"
+
+
+def rename_file_with_timestamp(file_path):
+    """
+    Renames a file by appending a timestamp suffix to it.
+    Args:
+        file_path (str): The path to the file to be renamed.
+    Returns:
+        str: The new file path with the timestamp suffix.
+    """
+    # Get the file name and extension
+    file_name, file_extension = os.path.splitext(file_path)
+    # Generate a timestamp suffix
+    timestamp_suffix = datetime.datetime.now().strftime("_%Y%m%d_%H%M%S")
+    # Create the new file path with the timestamp suffix
+    new_file_path = f"{file_name}{timestamp_suffix}{file_extension}"
+    # Rename the file
+    os.rename(file_path, new_file_path)
+    return new_file_path
 
 
 def print_selective(message, *args, width=120):
@@ -397,4 +416,5 @@ for i in range(number_of_trials):
     list_of_frame_size_in_bytes = store_list_of_frame_size          
     
     if ( i == number_of_trials) :
-         print_selective(f"The Test has ended . All Trails are completed")
+        print_selective(f"The Test has ended . All Trails are completed")
+        rename_file_with_timestamp('selective.log')
