@@ -80,8 +80,14 @@ variable "aws_agent_machine_type" {
   description = "Agent machines instance type"
 }
 
-variable "agents" {
+variable "clientagents" {
   type = number
   default = 2
-  description = "Number of clients & servers each to be deployed"
+  description = "Number of clients to be deployed"
+}
+
+variable "serveragents" {
+  type = number
+  default = 2
+  description = "Number of servers to be deployed"
 }

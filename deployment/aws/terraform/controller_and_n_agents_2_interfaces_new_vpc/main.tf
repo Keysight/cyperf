@@ -236,12 +236,12 @@ module "mdw" {
 ####### Agents #######
 module "clientagents" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
-    count = var.agents
+    count = var.clientagents
     source = "../modules/aws_cli_agent"
     resource_group = {
         aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
         aws_ControllerManagementSubnet = aws_subnet.aws_management_subnet.id,
-        aws_AgentClientTesSubnet = aws_subnet.aws_cli_test_subnet.id,
+        aws_AgentClientTestSubnet = aws_subnet.aws_cli_test_subnet.id,
         instance_profile = aws_iam_instance_profile.instance_profile.name
     }
     tags = {
@@ -259,12 +259,12 @@ module "clientagents" {
 
 module "serveragents" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
-    count = var.agents
+    count = var.serveragents
     source = "../modules/aws_srv_agent"
     resource_group = {
         aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
         aws_ControllerManagementSubnet = aws_subnet.aws_management_subnet.id,
-        aws_AgentClientTesSubnet = aws_subnet.aws_srv_test_subnet.id,
+        aws_AgentServerTestSubnet = aws_subnet.aws_srv_test_subnet.id,
         instance_profile = aws_iam_instance_profile.instance_profile.name
     }
     tags = {
