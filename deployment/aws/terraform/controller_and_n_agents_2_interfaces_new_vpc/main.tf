@@ -280,6 +280,58 @@ module "serveragents" {
     agent_init_cli = local.agent_init_cli
 }
 
+##### AWS NGFW ####
+resource "aws_network_firewall_firewall" "aws-ngfw" {
+  name              = "cyperf-aws-ngfw"
+  firewall_policy_arn = aws_network_firewall_firewall_policy.aws-ngfw.arn
+  vpc_id            = aws_vpc.aws_main_vpc.id
+  subnet_mapping {
+    subnet_id = aws_subnet.aws_management_subnet.id
+  }
+  subnet_mapping {
+    subnet_id = aws_subnet.aws_cli_test_subnet.id
+  }
+  subnet_mapping {
+    subnet_id = aws_subnet.aws_srv_test_subnet.id
+  }
+}
+
+resource "aws_network_firewall_firewall_policy" "aws-ngfw" {
+  name = "aws-ngfw-firewall-policy"
+  firewall_policy {
+    stateless_rule_group_references {
+      resource_arn = aws_network_firewall_rule_group.aws-ngfw.arn
+      priority     = 1
+    }
+    stateless_default_actions = ["aws:forward_to_sfe"]
+  }
+}
+
+resource "aws_network_firewall_rule_group" "aws-ngfw" {
+  capacity = 100
+  name     = "aws-ngfw-rule-group"
+  type     = "STATELESS"
+  rule_group {
+    rules_source {
+      stateless_rules_and_custom_actions {
+        stateless_rules {
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              sources {
+                address_definition = "172.16.3.0/24"
+              }
+              destinations {
+                address_definition = "172.16.4.0/24"
+              }
+            }
+          }
+          priority = 1
+        }
+      }
+    }
+  }
+}
 ##### Output ######
 output "mdw_detail"{
   value = {
@@ -289,11 +341,18 @@ output "mdw_detail"{
   }
 }
 
-output "agent_detail"{
-  value = [for x in module.agents :   {
+output "client_agent_detail"{
+  value = [for x in module.clientagents :   {
     "name" : x.agents_detail.name,
     "private_ip" : x.agents_detail.private_ip
   }]
+
+  output "server_agent_detail"{
+  value = [for x in module.serveragents :   {
+    "name" : x.agents_detail.name,
+    "private_ip" : x.agents_detail.private_ip
+  }]
+
 }
 
 
