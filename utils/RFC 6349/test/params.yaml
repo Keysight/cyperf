@@ -1,7 +1,7 @@
 description: 
-    #Paramaters for Ixload RCC 6349 configs.
+    #Paramaters for Cyperf RFC 6349 configs.
 config:
-    "IPAddress" : "10.39.46.181" #"10.39.46.242""10.39.44.178"  #Ixload App server IP
+    "IPAddress" : "10.39.46.181"  #Cyperf server IP
     "username" : "admin"
     "password" : "CyPerf&Keysight#1"
     "client_id" : "clt-wap"
