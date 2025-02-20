@@ -55,11 +55,7 @@ Using this method you can ensure that all further deployments will be done with 
 
 **terraform apply** , will look inside the file and match all the variable with the ones found in the variable.tf## Destruction
 
-### CyPerf terraform script for AWS 
-
-The following is a list of the current supported CyPerf terraform scripts. Click the links to view the README files.
-
-### I. [Controller and n agents with aws ngfw , PAN](controller_and_n_agents_2_interfaces_new_vpc):
+### 3. CyPerf terraform script for AWS 
  
 This template deploys:
 
@@ -67,7 +63,7 @@ This template deploys:
 
 - n no of CyPerf Client and Server Agents in two different VPC, having two interfaces each. There is aws Network firewall and PAN Firewall between client and server agents. Basically, firewalls protect Client's test subnet. All test traffic from clients pass through firewalls.
 
-### exposed terraform variables 
+### 4. exposed terraform variables 
 
 "aws_region" - specify aws region where to deploy
 
@@ -109,7 +105,7 @@ This template deploys:
 
 Refer variables.tf for default values.
 
-## Destruction
+## 5. Destruction
 
 The terraform destroy command will destroy the previous deployed infrastructure.
 If the deployment was done using -var options, you will also need to provide the same set of parameters to the terraform destroy command
@@ -118,7 +114,7 @@ terraform destroy -var input\_variable=&quot;value&quot;
 
 If you used **terraform apply** in conjunction with **.tfvars** file, you will not need to provide the parameters.
 
-## Workspaces
+## 6. Workspaces
 
 There are certain cases where multiple deployments are required using the same terraform template. To keep the previous deployments states intact, we recommend using the **workspace** feature of the terraform. This will help you to preserve the state of the previous deployments, allowing you to modify/destroy whenever you wish, while also enabling you to create multiple deployments of the same infrastructure.
 
