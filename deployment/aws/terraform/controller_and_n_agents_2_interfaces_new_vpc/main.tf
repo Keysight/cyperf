@@ -11,11 +11,14 @@ locals{
     cli_agent_tag               = "clientagent"
     srv_agent_tag               = "serveragent"
     agent_init_cli = <<-EOF
-                #! /bin/bash
-                 sudo rm -rf /etc/portmanager/node_id.txt
-                 cyperfagent feature allow_mgmt_iface_for_test enable
-                 sudo cyperfagent controller set ${module.mdw.mdw_detail.private_ip} --skip-restart
-                 sudo cyperfagent configuration reload
+        #! /bin/bash
+        sudo sudo chmod 777 /var/log/
+        sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_mdw.private_ip} --username "${var.controller_username}" --password "${var.controller_password}">> /var/log/Appsec_init.log
+    EOF
+    agent_init_srv = <<-EOF
+        #! /bin/bash
+        sudo sudo chmod 777 /var/log/
+        sudo sh /opt/keysight/tiger/active/bin/Appsec_init ${aws_instance.aws_mdw.public_ip} --username "${var.controller_username}" --password "${var.controller_password}">> /var/log/Appsec_init.log
     EOF
 }
 
@@ -404,7 +407,7 @@ module "serveragents" {
     aws_auth_key   = var.aws_auth_key
     aws_agent_machine_type = var.aws_agent_machine_type
     agent_role = "agents-role"
-    agent_init_cli = local.agent_init_cli
+    agent_init_srv = local.agent_init_srv
 }
 
 ##### AWS NGFW ####

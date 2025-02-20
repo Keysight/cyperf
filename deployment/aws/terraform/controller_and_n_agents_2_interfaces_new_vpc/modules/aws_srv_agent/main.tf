@@ -67,7 +67,7 @@ resource "aws_instance" "aws_srv_agent" {
     credit_specification {
         cpu_credits = "unlimited"
     }
-    user_data = var.agent_init_cli
+    user_data = var.agent_init_srv
 
     key_name = var.aws_auth_key
 }

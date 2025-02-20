@@ -37,7 +37,7 @@ variable "agent_role" {
   description = "Agent role: server or client"
 }
 
-variable "agent_init_cli" { 
+variable "agent_init_srv" { 
   type = string
   description = "Init script"
 }

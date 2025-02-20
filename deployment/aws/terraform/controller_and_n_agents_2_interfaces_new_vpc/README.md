@@ -103,6 +103,10 @@ This template deploys:
 
 "serveragents" - "Number of servers to be deployed"
 
+"controller_username" - "Controller's authentication username"
+  
+"controller_password" - "Controller's authentication password"
+
 Refer variables.tf for default values.
 
 ## 5. Destruction

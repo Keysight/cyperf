@@ -109,3 +109,14 @@ variable "serveragents" {
   default = 2
   description = "Number of servers to be deployed"
 }
+
+variable "controller_username" {
+  type        = string
+  default     = "admin"
+  description = "Controller's authentication username"
+  }
+variable "controller_password" {
+  type        = string
+  default     = "CyPerf&Keysight#1"
+  description = "Controller's authentication password"
+}
