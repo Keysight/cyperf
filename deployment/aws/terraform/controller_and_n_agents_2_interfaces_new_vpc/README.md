@@ -2,9 +2,9 @@
 
 # Introduction
 
-This is the Terraform approach for CyPerf Application and CyPerf Agents in different cloud providers.
+This Terraform sciprt deploy CyPerf Controller, CyPerf Agents and firewalls in aws cloud providers.
 
-All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, Nat-gateway etc.
+All the necessary resources will be created from scratch, including VPC, subnets, route table, Internet Gateway, NGFW etc.
 
 # Prerequisites
 
@@ -65,23 +65,23 @@ This template deploys:
 
 ### 4. exposed terraform variables 
 
-"aws_region" - specify aws region where to deploy
+"aws_region" - "specify aws region where to deploy"
 
-"availability_zone" - specify aws zone where to deploy
+"availability_zone" - "specify aws zone where to deploy"
  
-"aws_main_cidr" - client & firewall vpc cidr
+"aws_main_cidr" - "client & firewall vpc cidr"
 
-"aws_srv_cidr" - server vpc cidr
+"aws_srv_cidr" - "server vpc cidr"
 
-"aws_mgmt_cidr" - client mgmt subnet cidr
+"aws_mgmt_cidr" - "client mgmt subnet cidr"
 
-"aws_srv_mgmt_cidr" - server mgmt subnet cidr
+"aws_srv_mgmt_cidr" - "server mgmt subnet cidr"
 
-"aws_cli_test_cidr" - client test subnet cidr
+"aws_cli_test_cidr" - "client test subnet cidr"
 
-"aws_srv_test_cidr" - server test subnet cidr
+"aws_srv_test_cidr" - "server test subnet cidr"
 
-"aws_firewall_cidr" - firewall subnet cidr
+"aws_firewall_cidr" - "firewall subnet cidr"
 
 "aws_access_key" - "AWS-cli access key"
 
