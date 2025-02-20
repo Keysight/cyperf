@@ -3,16 +3,16 @@ locals{
 }
 
 
-resource "aws_network_interface" "aws_mgmt_interface" {
+resource "aws_network_interface" "aws_srv_mgmt_interface" {
     tags = {
         Owner = var.tags.aws_owner
-        Name = "${var.aws_stack_name}-mgmt-interface"
+        Name = "${var.aws_stack_name}-srv-mgmt-interface"
         Project = var.tags.project_tag
         Options = var.tags.options_tag
     }
     source_dest_check = true
-    subnet_id = var.resource_group.aws_ControllerManagementSubnet
-    security_groups = [var.resource_group.aws_agent_security_group]
+    subnet_id = var.resource_group.aws_ServerManagementSubnet
+    security_groups = [var.resource_group.aws_server_agent_security_group]
 }
 
 resource "aws_network_interface" "aws_srv_test_interface" {
@@ -24,7 +24,7 @@ resource "aws_network_interface" "aws_srv_test_interface" {
     }
     source_dest_check = true
     subnet_id = var.resource_group.aws_AgentServerTestSubnet
-    security_groups = [var.resource_group.aws_agent_security_group]
+    security_groups = [var.resource_group.aws_server_agent_security_group]
 }
 
 data "aws_ami" "agent_ami" {
@@ -55,7 +55,7 @@ resource "aws_instance" "aws_srv_agent" {
     }
 
     network_interface {
-        network_interface_id = aws_network_interface.aws_mgmt_interface.id
+        network_interface_id = aws_network_interface.aws_srv_mgmt_interface.id
         device_index         = 0
     }
 

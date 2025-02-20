@@ -1,7 +1,7 @@
 variable "resource_group" {
   type    = object({
-    aws_agent_security_group = string,
-    aws_ControllerManagementSubnet = string
+    aws_server_agent_security_group = string,
+    aws_ServerManagementSubnet = string
     aws_AgentServerTestSubnet = string
     //instance_profile = string
   })

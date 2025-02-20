@@ -14,22 +14,40 @@ variable "aws_main_cidr" {
   description = "AWS vpc cidr"
 }
 
+variable "aws_srv_cidr" {
+  type = string
+  default = "192.168.0.0/16"
+  description = "AWS server vpc cidr"
+}
+
 variable "aws_mgmt_cidr" {
   type = string
   default = "172.16.1.0/24"
   description = "AWS mgmt subnet"
 }
 
+variable "aws_srv_mgmt_cidr" {
+  type = string
+  default = "192.168.1.0/24"
+  description = "AWS server mgmt subnet"
+}
+
 variable "aws_cli_test_cidr" {
   type = string
-  default = "172.16.3.0/16"
+  default = "172.16.3.0/24"
   description = "AWS client test subnet"
 }
 
 variable "aws_srv_test_cidr" {
   type = string
-  default = "172.16.4.0/16"
+  default = "192.168.2.0/24"
   description = "AWS server test subnet"
+}
+
+variable "aws_firewall_cidr" {
+  type = string
+  default = "172.16.5.0/24"
+  description = "AWS firewall subnet"
 }
 
 variable "aws_access_key" {
