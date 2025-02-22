@@ -49,12 +49,30 @@ resource "aws_subnet" "aws_cli_test_subnet" {
     }
 }
 
+resource "aws_subnet" "aws_cli_test_subnet_pan" {
+    vpc_id     = aws_vpc.aws_main_vpc.id
+    availability_zone = var.availability_zone
+    cidr_block = var.aws_cli_test_cidr_pan
+    tags = {
+        Name = "${var.aws_stack_name}-cli-test-subnet-pan"
+    }
+}
+
 resource "aws_subnet" "aws_srv_test_subnet" {
     vpc_id     = aws_vpc.aws_main_vpc.id
     availability_zone = var.availability_zone
     cidr_block = var.aws_srv_test_cidr
     tags = {
         Name = "${var.aws_stack_name}-srv-test-subnet"
+    }
+}
+
+resource "aws_subnet" "aws_srv_test_subnet_pan" {
+    vpc_id     = aws_vpc.aws_main_vpc.id
+    availability_zone = var.availability_zone
+    cidr_block = var.aws_srv_test_cidr_pan
+    tags = {
+        Name = "${var.aws_stack_name}-srv-test-subnet-pan"
     }
 }
 
@@ -77,6 +95,14 @@ resource "aws_route_table" "aws_public_rt" {
     }        
 }
 
+resource "aws_route_table" "aws_ngfw_rt" {
+    vpc_id = aws_vpc.aws_main_vpc.id
+    tags = {
+        Owner = var.aws_owner
+        Name = "${var.aws_stack_name}-ngfw-rt"
+    }        
+}
+
 
 resource "aws_route_table_association" "aws_mgmt_rt_association" {
     subnet_id      = aws_subnet.aws_management_subnet.id
@@ -85,13 +111,20 @@ resource "aws_route_table_association" "aws_mgmt_rt_association" {
 
 resource "aws_route_table_association" "aws_firewall_rt_association" {
     subnet_id      = aws_subnet.aws_firewall_subnet.id
-    route_table_id = aws_route_table.aws_public_rt.id
+    route_table_id = aws_route_table.aws_ngfw_rt.id
 }
 
 resource "aws_route_table" "aws_private_rt" {
     vpc_id = aws_vpc.aws_main_vpc.id
     tags = {
         Name = "${var.aws_stack_name}-private-rt"
+    }    
+}
+
+resource "aws_route_table" "aws_private_rt_srv" {
+    vpc_id = aws_vpc.aws_main_vpc.id
+    tags = {
+        Name = "${var.aws_stack_name}-private-rt-srv"
     }    
 }
 
@@ -102,7 +135,17 @@ resource "aws_route_table_association" "aws_cli_test_rt_association" {
 
 resource "aws_route_table_association" "aws_srv_test_rt_association" {
     subnet_id      = aws_subnet.aws_srv_test_subnet.id
+    route_table_id = aws_route_table.aws_private_rt_srv.id
+}
+
+resource "aws_route_table_association" "aws_cli_test_rt_association_pan" {
+    subnet_id      = aws_subnet.aws_cli_test_subnet_pan.id
     route_table_id = aws_route_table.aws_private_rt.id
+}
+
+resource "aws_route_table_association" "aws_srv_test_rt_association_pan" {
+    subnet_id      = aws_subnet.aws_srv_test_subnet_pan.id
+    route_table_id = aws_route_table.aws_private_rt_srv.id
 }
 
 resource "aws_internet_gateway" "aws_internet_gateway" {
@@ -137,9 +180,36 @@ resource "aws_route" "aws_route_to_ngfw1" {
       aws_route_table_association.aws_cli_test_rt_association,
       aws_route_table_association.aws_srv_test_rt_association
     ]
-    route_table_id            = aws_route_table.aws_private_rt.id
+    route_table_id            = aws_route_table.aws_private_rt_srv.id
     destination_cidr_block    = "172.16.3.0/24"
     vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
+}
+
+resource "aws_route" "aws_route_ngfw_to_agent1" {
+    depends_on = [
+      aws_route_table_association.aws_firewall_rt_association
+    ]
+    route_table_id            = aws_route_table.aws_ngfw_rt.id
+    destination_cidr_block    = "172.16.3.0/24"
+    vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
+}
+
+resource "aws_route" "aws_route_ngfw_to_agent2" {
+    depends_on = [
+      aws_route_table_association.aws_firewall_rt_association
+    ]
+    route_table_id            = aws_route_table.aws_ngfw_rt.id
+    destination_cidr_block    = "172.16.4.0/24"
+    vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
+}
+
+resource "aws_route" "aws_route_ngfw_to_igw" {
+    depends_on = [
+      aws_route_table_association.aws_firewall_rt_association
+    ]
+    route_table_id            = aws_route_table.aws_ngfw_rt.id
+    destination_cidr_block    = "0.0.0.0/0"
+    gateway_id                = aws_internet_gateway.aws_internet_gateway.id
 }
 
 ####### Security groups #######
@@ -234,15 +304,19 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = ["*"]
   }
 }
+
 resource "aws_iam_role" "instance_iam_role" {
   name               = "${var.aws_stack_name}_instance_role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.instance-assume-role-policy.json
-  inline_policy {
-    name   = "${var.aws_stack_name}-policy"
-    policy = data.aws_iam_policy_document.inline_policy.json
-  }
 }
+
+resource  aws_iam_role_policy "instance_iam_role_policy" {
+    name   = "${var.aws_stack_name}-policy"
+    role   = aws_iam_role.instance_iam_role.name
+    policy = data.aws_iam_policy_document.inline_policy.json
+}
+
 resource "aws_iam_instance_profile" "instance_profile" {
   name = "${var.aws_stack_name}-instance_profile"
   role = aws_iam_role.instance_iam_role.name
@@ -280,11 +354,14 @@ resource "aws_iam_role" "bootstrap_iam_role" {
   name               = "${var.aws_stack_name}_bootstrap_role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.bootstrap-assume-role-policy.json
-  inline_policy {
-    name   = "${var.aws_stack_name}-bootstrap-policy"
-    policy = data.aws_iam_policy_document.bootstrap_inline_policy.json
-  }
 }
+
+resource  aws_iam_role_policy bootstrap_iam_role_policy {
+    name   = "${var.aws_stack_name}-bootstrap-policy"
+    role   = aws_iam_role.bootstrap_iam_role.name
+    policy = data.aws_iam_policy_document.bootstrap_inline_policy.json
+}
+
 resource "aws_iam_instance_profile" "bootstrap_profile" {
   name = "${var.aws_stack_name}-bootstrap_profile"
   role = aws_iam_role.bootstrap_iam_role.name
@@ -304,7 +381,7 @@ module "mdw" {
     aws_mdw_machine_type = var.aws_mdw_machine_type
 }
 
-####### Agents #######
+####### Agents for awsfw #######
 module "clientagents" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
     count = var.clientagents
@@ -324,7 +401,7 @@ module "clientagents" {
     aws_stack_name = var.aws_stack_name
     aws_auth_key   = var.aws_auth_key
     aws_agent_machine_type = var.aws_agent_machine_type
-    agent_role = "client"
+    agent_role = "client-awsfw"
     agent_init_cli = local.agent_init_cli
 }
 
@@ -347,7 +424,54 @@ module "serveragents" {
     aws_stack_name = var.aws_stack_name
     aws_auth_key   = var.aws_auth_key
     aws_agent_machine_type = var.aws_agent_machine_type
-    agent_role = "server"
+    agent_role = "server-awsfw"
+    agent_init_cli = local.agent_init_cli
+}
+
+####### Agents for panfw #######
+module "clientagents-pan" {
+    depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
+    count = var.clientagents
+    source = "./modules/aws_agent"
+    resource_group = {
+        aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
+        aws_ControllerManagementSubnet = aws_subnet.aws_management_subnet.id,
+        aws_AgentTestSubnet = aws_subnet.aws_cli_test_subnet_pan.id,
+        instance_profile = aws_iam_instance_profile.instance_profile.name
+    }
+    tags = {
+        project_tag = local.project_tag,
+        aws_owner   = var.aws_owner,
+        options_tag = local.options_tag,
+        cli_agent_tag = local.cli_agent_tag
+    }
+    aws_stack_name = var.aws_stack_name
+    aws_auth_key   = var.aws_auth_key
+    aws_agent_machine_type = var.aws_agent_machine_type
+    agent_role = "client-panfw"
+    agent_init_cli = local.agent_init_cli
+}
+
+module "serveragents-pan" {
+    depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
+    count = var.serveragents
+    source = "./modules/aws_agent"
+    resource_group = {
+        aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
+        aws_ControllerManagementSubnet = aws_subnet.aws_management_subnet.id,
+        aws_AgentTestSubnet = aws_subnet.aws_srv_test_subnet_pan.id,
+        instance_profile = aws_iam_instance_profile.instance_profile.name
+    }
+    tags = {
+        project_tag = local.project_tag,
+        aws_owner   = var.aws_owner,
+        options_tag = local.options_tag,
+        srv_agent_tag = local.srv_agent_tag
+    }
+    aws_stack_name = var.aws_stack_name
+    aws_auth_key   = var.aws_auth_key
+    aws_agent_machine_type = var.aws_agent_machine_type
+    agent_role = "server-panfw"
     agent_init_cli = local.agent_init_cli
 }
 

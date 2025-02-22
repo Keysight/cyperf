@@ -77,9 +77,13 @@ This template deploys:
 
 "aws_srv_mgmt_cidr" - "server mgmt subnet cidr"
 
-"aws_cli_test_cidr" - "client test subnet cidr"
+"aws_cli_test_cidr" - "client test subnet cidr for aws nfw"
 
-"aws_srv_test_cidr" - "server test subnet cidr"
+"aws_cli_test_cidr_pan" - "client test subnet cidr for pan fw"
+
+"aws_srv_test_cidr" - "server test subnet cidr for aws nfw"
+
+"aws_srv_test_cidr_pan" - "server test subnet cidr for pan fw"
 
 "aws_firewall_cidr" - "firewall subnet cidr"
 

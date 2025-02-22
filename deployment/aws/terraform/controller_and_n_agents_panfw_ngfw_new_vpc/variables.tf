@@ -26,9 +26,21 @@ variable "aws_cli_test_cidr" {
   description = "AWS client test subnet"
 }
 
+variable "aws_cli_test_cidr_pan" {
+  type = string
+  default = "172.16.6.0/24"
+  description = "AWS client test subnet"
+}
+
 variable "aws_srv_test_cidr" {
   type = string
   default = "172.16.4.0/24"
+  description = "AWS server test subnet"
+}
+
+variable "aws_srv_test_cidr_pan" {
+  type = string
+  default = "172.16.7.0/24"
   description = "AWS server test subnet"
 }
 
@@ -94,14 +106,14 @@ variable "aws_panfw_machine_type"{
 
 variable "clientagents" {
   type = number
-  default = 2
-  description = "Number of clients to be deployed"
+  default = 1
+  description = "Number of clients to be deployed for awsfw and panfw each"
 }
 
 variable "serveragents" {
   type = number
-  default = 2
-  description = "Number of servers to be deployed"
+  default = 1
+  description = "Number of servers to be deployed for awsfw and panfw each"
 }
 
 variable "controller_username" {

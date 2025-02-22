@@ -31,7 +31,7 @@ variable "aws_panfw_machine_type"{
 
 variable "panfw_version" {
   type        = string
-  default     = "pan-fw"
+  default     = "PA-VM-AWS-10.2.10-h12"
   description = "Version for the pan fw"
 }
 

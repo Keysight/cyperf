@@ -1,5 +1,5 @@
 locals{
-    mdw_name = "${var.aws_stack_name}-mdw-${var.mdw_version}"
+    mdw_name = "${var.aws_stack_name}-controller-${var.mdw_version}"
 }
 
 resource "aws_network_interface" "aws_mdw_interface" {
@@ -23,8 +23,7 @@ data "aws_ami" "mdw_ami" {
 
 resource "aws_eip" "mdw_public_ip" {
   instance = aws_instance.aws_mdw.id
-  //domain = "vpc"
-  vpc                       = true  // temporary fix
+  domain = "vpc"
   associate_with_private_ip = aws_instance.aws_mdw.private_ip
 }
 

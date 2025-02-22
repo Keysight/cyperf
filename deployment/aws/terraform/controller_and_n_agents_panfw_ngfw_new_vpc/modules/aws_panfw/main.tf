@@ -42,10 +42,8 @@ data "aws_ami" "panfw_ami" {
 }
 
 resource "aws_eip" "panfw_public_ip" {
-  //instance = aws_instance.aws_panfw.id
   network_interface         = aws_network_interface.aws_panfw_interface.id
   domain = "vpc"
-  //vpc                       = true  // temporary fix
   associate_with_private_ip = aws_instance.aws_panfw.private_ip
 }
 
