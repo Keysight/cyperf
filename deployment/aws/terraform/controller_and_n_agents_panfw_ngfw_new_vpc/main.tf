@@ -530,8 +530,8 @@ module "panfw" {
     resource_group = {
         security_group = aws_security_group.aws_cyperf_security_group.id,
         management_subnet = aws_subnet.aws_management_subnet.id
-        client_subnet = aws_subnet.aws_cli_test_subnet.id
-        server_subnet = aws_subnet.aws_srv_test_subnet.id
+        client_subnet = aws_subnet.aws_cli_test_subnet_pan.id
+        server_subnet = aws_subnet.aws_srv_test_subnet_pan.id
         bootstrap_profile = aws_iam_instance_profile.bootstrap_profile.name
     }
     aws_stack_name = var.aws_stack_name
