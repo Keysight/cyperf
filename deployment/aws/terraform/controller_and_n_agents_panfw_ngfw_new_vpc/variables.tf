@@ -107,13 +107,25 @@ variable "aws_panfw_machine_type"{
 variable "clientagents" {
   type = number
   default = 1
-  description = "Number of clients to be deployed for awsfw and panfw each"
+  description = "Number of clients to be deployed for awsfw"
 }
 
 variable "serveragents" {
   type = number
   default = 1
-  description = "Number of servers to be deployed for awsfw and panfw each"
+  description = "Number of servers to be deployed for awsfw"
+}
+
+variable "clientagents_pan" {
+  type = number
+  default = 1
+  description = "Number of clients to be deployed for panfw"
+}
+
+variable "serveragents_pan" {
+  type = number
+  default = 1
+  description = "Number of servers to be deployed for panfw"
 }
 
 variable "controller_username" {

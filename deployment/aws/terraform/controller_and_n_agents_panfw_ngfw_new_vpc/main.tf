@@ -128,6 +128,13 @@ resource "aws_route_table" "aws_private_rt_srv" {
     }    
 }
 
+resource "aws_route_table" "aws_igw_rt" {
+    vpc_id = aws_vpc.aws_main_vpc.id
+    tags = {
+        Name = "${var.aws_stack_name}-igw-rt"
+    }    
+}
+
 resource "aws_route_table_association" "aws_cli_test_rt_association" {
     subnet_id      = aws_subnet.aws_cli_test_subnet.id
     route_table_id = aws_route_table.aws_private_rt.id
@@ -154,6 +161,14 @@ resource "aws_internet_gateway" "aws_internet_gateway" {
         Name = "${var.aws_stack_name}-internet-gateway"
     }
     vpc_id = aws_vpc.aws_main_vpc.id  
+}
+
+resource "aws_route_table_association" "aws_igw_rt_association" {
+    depends_on = [
+      aws_internet_gateway.aws_internet_gateway
+    ]
+    gateway_id = aws_internet_gateway.aws_internet_gateway.id
+    route_table_id = aws_route_table.aws_igw_rt.id
 }
 
 resource "aws_route" "aws_route_to_internet" {
@@ -185,20 +200,20 @@ resource "aws_route" "aws_route_to_ngfw1" {
     vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
 }
 
-resource "aws_route" "aws_route_ngfw_to_agent1" {
+resource "aws_route" "aws_route_igw_to_agent1" {
     depends_on = [
-      aws_route_table_association.aws_firewall_rt_association
+      aws_route_table_association.aws_igw_rt_association
     ]
-    route_table_id            = aws_route_table.aws_ngfw_rt.id
+    route_table_id            = aws_route_table.aws_igw_rt.id
     destination_cidr_block    = "172.16.3.0/24"
     vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
 }
 
-resource "aws_route" "aws_route_ngfw_to_agent2" {
+resource "aws_route" "aws_route_igw_to_agent2" {
     depends_on = [
-      aws_route_table_association.aws_firewall_rt_association
+      aws_route_table_association.aws_igw_rt_association
     ]
-    route_table_id            = aws_route_table.aws_ngfw_rt.id
+    route_table_id            = aws_route_table.aws_igw_rt.id
     destination_cidr_block    = "172.16.4.0/24"
     vpc_endpoint_id = element([for ss in tolist(aws_networkfirewall_firewall.aws-ngfw.firewall_status[0].sync_states) : ss.attachment[0].endpoint_id if ss.attachment[0].subnet_id == aws_subnet.aws_firewall_subnet.id], 0)
 }
@@ -431,7 +446,7 @@ module "serveragents" {
 ####### Agents for panfw #######
 module "clientagents-pan" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
-    count = var.clientagents
+    count = var.clientagents_pan
     source = "./modules/aws_agent"
     resource_group = {
         aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
@@ -454,7 +469,7 @@ module "clientagents-pan" {
 
 module "serveragents-pan" {
     depends_on = [module.mdw.mdw_detail, time_sleep.wait_5_seconds]
-    count = var.serveragents
+    count = var.serveragents_pan
     source = "./modules/aws_agent"
     resource_group = {
         aws_agent_security_group = aws_security_group.aws_agent_security_group.id,
