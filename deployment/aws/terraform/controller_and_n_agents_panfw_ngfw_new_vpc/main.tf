@@ -492,7 +492,7 @@ module "serveragents-pan" {
 
 ##### AWS NGFW ####
 resource "aws_networkfirewall_firewall" "aws-ngfw" {
-  name              = "cyperf-aws-ngfw"
+  name              = "${var.aws_stack_name}-aws-ngfw"
   firewall_policy_arn = aws_networkfirewall_firewall_policy.aws-ngfw.arn
   vpc_id            = aws_vpc.aws_main_vpc.id
   subnet_mapping {
@@ -503,9 +503,8 @@ resource "aws_networkfirewall_firewall" "aws-ngfw" {
 resource "aws_networkfirewall_firewall_policy" "aws-ngfw" {
   name = "aws-ngfw-firewall-policy"
   firewall_policy {
-    stateless_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.aws-ngfw.arn
-      priority     = 1
+      stateful_rule_group_reference {
+        resource_arn = aws_networkfirewall_rule_group.aws-ngfw.arn
     }
     stateless_fragment_default_actions = ["aws:pass"]    
     stateless_default_actions = ["aws:forward_to_sfe"]
@@ -515,26 +514,28 @@ resource "aws_networkfirewall_firewall_policy" "aws-ngfw" {
 resource "aws_networkfirewall_rule_group" "aws-ngfw" {
   capacity = 100
   name     = "aws-ngfw-rule-group"
-  type     = "STATELESS"
+  type     = "STATEFUL"
   rule_group {
     rules_source {
-      stateless_rules_and_custom_actions {
-        stateless_rule {
-          rule_definition {
-            actions = ["aws:pass"]
-            match_attributes {
-              source {
-                address_definition = "172.16.3.0/24"
-              }
-              destination {
-                address_definition = "172.16.4.0/24"
-              }
-            }
-          }
-          priority = 1
+      stateful_rule {
+        action = "PASS"
+        header {
+          destination      = "172.16.4.0/24"
+          destination_port = "ANY"
+          direction        = "FORWARD"
+          protocol         = "TCP"
+          source           = "172.16.3.0/24"
+          source_port      = "ANY"
+        }
+        rule_option {
+          keyword  = "sid"
+          settings = ["1"]
         }
       }
     }
+  }
+  tags = {
+    Tag1 = "cyperf-test-ngfw"
   }
 }
 

@@ -22,6 +22,13 @@ This command is required the first time you use as template. It is not required 
 
 ## Deployment
 
+A python script 'cyperf_e2e.py' will deploy entire topology using terraform and retrun CyPerf controller IP.
+
+```python3 cyperf_e2e.py```
+
+Note: Create terraform.tfvars and store aws cli credentials as described in the below example, before executing python script. 
+
+
 The  **terraform apply**  command executes the actions proposed in a terraform template. All the default deployment variables may be changed.
 
 ### 1. Using the **-var** command
@@ -103,9 +110,13 @@ This template deploys:
 
 "aws_agent_machine_type" - "Agent machines instance type"
 
-"clientagents" - "Number of clients to be deployed"
+"clientagents" - "Number of clients to be deployed for aws fw"
 
-"serveragents" - "Number of servers to be deployed"
+"serveragents" - "Number of servers to be deployed for aws fw"
+
+"clientagents_pan" - "Number of clients to be deployed for pan fw"
+
+"serveragents_pan" - "Number of servers to be deployed pan fw"
 
 "controller_username" - "Controller's authentication username"
   
