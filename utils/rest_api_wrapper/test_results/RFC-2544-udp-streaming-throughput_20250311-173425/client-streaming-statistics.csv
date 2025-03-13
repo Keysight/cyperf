@@ -1,0 +1,16 @@
+Timestamp epoch ms,Profile - Network Segment,Application,Timestamp,Duplicate Packets,Error Packets,Late Packets,Lost Packets,Misordered Packets,Received Bytes,Received Packets,Sent Bytes,Sent Packets
+1741694607000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:27.000Z,0,0,0,0,0,160109032,129748,0,0
+1741694610000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:30.000Z,0,0,0,0,0,567841142,460159,0,0
+1741694613000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:33.000Z,0,0,0,0,0,1223232116,991272,0,0
+1741694616000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:36.000Z,0,0,0,0,0,2056142628,1666241,0,0
+1741694619000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:39.000Z,0,0,0,0,0,2895625424,2346524,0,0
+1741694622000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:42.000Z,0,0,0,0,0,3735142772,3026844,0,0
+1741694625000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:45.000Z,0,0,0,0,0,4574558932,3707081,0,0
+1741694628000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:48.000Z,0,0,0,0,0,5411995756,4385718,0,0
+1741694631000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:51.000Z,0,0,0,0,0,6249512790,5064414,0,0
+1741694634000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:54.000Z,0,0,0,0,0,7089096774,5744785,0,0
+1741694637000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:03:57.000Z,0,0,0,0,0,7819754344,6336890,0,0
+1741694640000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:04:00.000Z,0,0,0,0,0,8287590892,6716019,0,0
+1741694643000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:04:03.000Z,0,0,0,0,0,8517129700,6902027,0,0
+1741694646000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:04:06.000Z,0,0,0,0,0,8536805830,6917972,0,0
+1741694649000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:04:09.000Z,0,0,0,0,0,8536805830,6917972,0,0

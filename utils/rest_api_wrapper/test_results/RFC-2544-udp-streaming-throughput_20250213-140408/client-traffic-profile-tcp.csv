@@ -1,0 +1,13 @@
+Timestamp epoch ms,filter,Profile,Timestamp,Connections Established,Connections Initiation Failed,Data Retransmission Aborted,Data Retransmitted,FIN Received,FIN Sent,FIN-ACK Received,FIN-ACK Sent,RST Received,RST Sent,SYN Failed,SYN Received,SYN Retransmission Aborted,SYN Retransmitted,SYN Sent,SYN-ACK Failed,SYN-ACK Received,SYN-ACK Retransmission Aborted,SYN-ACK Retransmitted,SYN-ACK Sent
+1739435601000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:21.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435604000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:24.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435607000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:27.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435610000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:30.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435613000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:33.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435616000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:36.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435619000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:39.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435622000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:42.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435625000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:45.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435628000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:48.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435631000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:51.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739435634000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:33:54.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

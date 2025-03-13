@@ -1,0 +1,16 @@
+Timestamp epoch ms,filter,Profile,Timestamp,Connections Established,Connections Initiation Failed,Data Retransmission Aborted,Data Retransmitted,FIN Received,FIN Sent,FIN-ACK Received,FIN-ACK Sent,RST Received,RST Sent,SYN Failed,SYN Received,SYN Retransmission Aborted,SYN Retransmitted,SYN Sent,SYN-ACK Failed,SYN-ACK Received,SYN-ACK Retransmission Aborted,SYN-ACK Retransmitted,SYN-ACK Sent
+1741695171000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:12:51.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695174000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:12:54.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695177000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:12:57.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695180000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:00.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695183000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:03.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695186000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:06.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695189000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:09.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695192000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:12.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695195000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:15.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695198000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:18.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695201000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:21.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695204000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:24.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695207000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:27.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695210000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:30.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1741695213000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:13:33.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

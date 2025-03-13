@@ -1,0 +1,14 @@
+Timestamp epoch ms,Timestamp,Avg Connection Latency(microseconds),Avg Time to First Byte(microseconds),Avg Time to Last Byte(microseconds),Max Time To First Byte (microseconds),Max Time To Last Byte (microseconds),Min Time To First Byte (microseconds),Min Time To Last Byte (microseconds)
+1739436564000,2025-02-13T08:49:24.000Z,0,0,0,0,0,null,null
+1739436567000,2025-02-13T08:49:27.000Z,null,null,null,0,0,null,null
+1739436570000,2025-02-13T08:49:30.000Z,null,null,null,0,0,null,null
+1739436573000,2025-02-13T08:49:33.000Z,null,null,null,0,0,null,null
+1739436576000,2025-02-13T08:49:36.000Z,null,null,null,0,0,null,null
+1739436579000,2025-02-13T08:49:39.000Z,null,null,null,0,0,null,null
+1739436582000,2025-02-13T08:49:42.000Z,null,null,null,0,0,null,null
+1739436585000,2025-02-13T08:49:45.000Z,null,null,null,0,0,null,null
+1739436588000,2025-02-13T08:49:48.000Z,null,null,null,0,0,null,null
+1739436591000,2025-02-13T08:49:51.000Z,null,null,null,0,0,null,null
+1739436594000,2025-02-13T08:49:54.000Z,null,null,null,0,0,null,null
+1739436597000,2025-02-13T08:49:57.000Z,null,null,null,0,0,null,null
+1739436600000,2025-02-13T08:50:00.000Z,null,null,null,0,0,null,null

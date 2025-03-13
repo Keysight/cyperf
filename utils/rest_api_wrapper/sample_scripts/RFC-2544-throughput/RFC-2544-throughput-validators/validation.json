@@ -1,0 +1,51 @@
+{
+    "include_baseline" : true,
+    "B2B":[
+     {
+      "description": "In Client Streaming Statistics lost packets should be zero ",
+      "condition":   "(last(stats['client-streaming-statistics'])['Lost Packets'] >= 0).all()" 
+     },
+     {
+      "description": "In Client Streaming Statistics Received Packets should be greater zero ",
+      "condition":   "(last(stats['client-streaming-statistics'])['Received Packets'] > 0).all()" 
+     },
+     {
+      "description": "In Client Streaming Statistics Received Bytes should be greater than zero ",
+      "condition":   "(last(stats['client-streaming-statistics'])['Received Bytes'] > 0).all()" 
+     },
+     {
+      "description": "In Client Streaming Statistics Sent Bytes should be greater than zero ",
+      "condition":   "(last(stats['client-streaming-statistics'])['Sent Bytes'] > 0).all()" 
+     },
+
+     {
+      "description": "In Client Streaming Statistics Sent Packets should be greater than zero ",
+      "condition":   "(last(stats['client-streaming-statistics'])['Sent Packets'] > 0).all()" 
+     },
+     {
+      "description": "In Server  Streaming Statistics Lost Packets should be equal zero ",
+      "condition":   "(last(stats['server-streaming-statistics'])['Lost Packets'] >= 0).all()" 
+     },
+     
+     {
+      "description": "In Server  Streaming Statistics Received Bytes should be greater than zero ",
+      "condition":   "(last(stats['server-streaming-statistics'])['Received Bytes'] > 0).all()" 
+     },
+     {
+      "description": "In Server  Streaming Statistics Received Packets should be greater than zero  ",
+      "condition":   "(last(stats['server-streaming-statistics'])['Received Packets'] > 0).all()" 
+     },
+     {
+      "description": "In Server  Streaming Statistics Sent Packets should greater   zero  ",
+      "condition":   "(last(stats['server-streaming-statistics'])['Sent Packets'] >  0).all()" 
+     },
+
+     {
+      "description": "In Server  Streaming Statistics Sent Bytes should be zero  ",
+      "condition":   "(last(stats['server-streaming-statistics'])['Sent Bytes'] > 0).all()" 
+     }
+     
+    ],
+    "DUT":[]
+}
+

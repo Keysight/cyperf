@@ -1,0 +1,68 @@
+# This is a file where user needs to input all the parameters for RFC2544 thoughput test
+
+line_rate_for_the_media_in_gbps : 10
+
+
+max_allowable_througput_in_gbps : 10
+
+
+initial_target_throughput_in_gbps : 3
+
+#This provides the lower limit of throughput which the dut/sut MUST attain. 
+#Test stops minimum throughput cannot be achieved.
+#To be populated when the direction of Stream is Unidirectional
+initial_minimum_throughput_limit_in_gbps : .5
+
+##To be populated when the direction of Stream is Bidirectional 
+#initial_target_throughput_in_gbps_client_serever : 5
+#initial_target_throughput_in_gbps_serever_client : 5
+
+
+interval_between_test_run_in_seconds : 5
+
+
+#Maximum allowable fluctions between target throughput and acheived throughput  
+tolerance: 0.02
+
+#criteria to stop Binary search in gbps
+resolution : .5
+
+#RFC recommened frame sizes for Testing Ethernet [64, 128, 256, 512, 1024, 1280, 1518]
+list_of_frame_size_in_bytes : 
+          - 1280
+          - 1518
+
+#allowed values  for "direction_of_stream " are ClientToServer,ServerToClient,Bidirectional
+direction_of_stream : "ClientToServer"
+
+number_of_streams : 1
+
+# here trial means running tests multiple times to ensure consistent repetable results. 
+# This is not to be confused with the trial of binary serach for a particular framesize to ensure throughput .
+# For example even if I have a good run with throughput acheived & no packet loss , i want to re run test to ensure teh results are repeatable
+number_of_trials: 1 
+
+#this refers to the maximum number of binary serach runs allowed for a particular frame size to obtain optimal throughput . 
+#number_of_trials_in_binary_search : 6 
+
+test_duration_in_seconds : 30
+Ethernet_header_size_in_bytes: 18
+IP_header_size_in_bytes : 20
+UDP_header_size_in_bytes : 8
+Initiator_mgmt_ip : "10.39.69.98"
+responder_mgmt_ip : "10.39.69.99"
+
+#User Input Emulated IP endpoints for client and Server 
+client_start_ip : "10.0.0.10"
+client_gateway  : "10.0.0.1"
+Server_start_ip : "10.0.0.100"
+server_gateway  : "10.0.0.1"
+
+#rate control while ramp
+#Max_pending_simulated_user_in_percentage=str(number_of_streams)
+Max_pending_simulated_user_in_percentage : "100%"
+
+#how many streams to be initaited per second.The value of zero (0) suggest that the test initiates all the streams at once.
+#The maximum possible streams that can be opened per second is equal to the "number_of_streams" defined earlier 
+Max_simulated_users_per_second : 0
+

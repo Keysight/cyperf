@@ -1,6 +1,6 @@
 import sys, time
 sys.path.append("..")
-from lib.REST_WRAPPER import rest, create_new_config, create_traffic_profile, run_test, collect_stats
+from cyperf.utils.rest_api_wrapper.lib.REST_WRAPPER_trail import rest, create_new_config, create_traffic_profile, run_test, collect_stats
 from pprint import pprint
 
 # CyPerf API test with 1 Traffic profile, 1 App, Throughput objective, custom payload and B2B agents
@@ -25,7 +25,7 @@ while time.time()-start_time < test_duration:
     # if time.time()-start_time > test_duration*3/4:
     #     import pdb; pdb.set_trace() 
    
-print(real_time_stats)
+pprint(real_time_stats)
 
 print('Number of read in {} seconds is {}'.format(test_duration,len(real_time_stats)))
 rest.wait_test_finished()

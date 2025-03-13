@@ -1,0 +1,13 @@
+Timestamp epoch ms,Profile,Application,Timestamp,Actions Timed Out,Applications Failed,Applications Initiated,Applications Succeeded,Bytes Received,Bytes Sent,Connections Aborted,Connections Failed,Connections Initiated,Connections Succeeded
+1740943506000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:06.000Z,0,0,1,0,553654544,566887822,0,0,1,1
+1740943509000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:09.000Z,0,0,1,0,1135496400,1157813390,0,0,1,1
+1740943512000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:12.000Z,0,0,1,0,1717299984,1748738958,0,0,1,1
+1740943515000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:15.000Z,0,0,1,0,2299144784,2339663054,0,0,1,1
+1740943518000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:18.000Z,0,0,1,0,2881010192,2930731406,0,0,1,1
+1740943521000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:21.000Z,0,0,1,0,3462802000,3521899854,0,0,1,1
+1740943524000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:24.000Z,0,0,1,0,4044662992,4112573710,0,0,1,1
+1740943527000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:27.000Z,0,0,1,0,4626484240,4703441870,0,0,1,1
+1740943530000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:30.000Z,0,0,1,0,5208309904,5294785486,0,0,1,1
+1740943533000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:33.000Z,0,0,1,0,5790139984,5885307726,0,0,1,1
+1740943536000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:36.000Z,0,0,1,1,5909226263,5910272849,0,0,1,1
+1740943539000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:25:39.000Z,0,0,1,1,5909226263,5910272849,0,0,1,1

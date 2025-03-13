@@ -1,0 +1,17 @@
+Timestamp epoch ms,Profile - Network Segment,Application,Timestamp,Active Received Streams,Active Sent Streams,Bytes Received Per Second,Bytes Sent Per Second,Packets Received Per Second,Packets Sent Per Second
+1741694766000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:06.000Z,3,0,96054869,0,65254,0
+1741694769000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:09.000Z,6,0,264144352,0,179444,0
+1741694772000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:12.000Z,9,0,366497046,0,248975,0
+1741694775000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:15.000Z,10,0,368244678,0,250164,0
+1741694778000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:18.000Z,10,0,366060596,0,248682,0
+1741694781000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:21.000Z,10,0,363479383,0,246927,0
+1741694784000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:24.000Z,10,0,362885290,0,246526,0
+1741694787000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:27.000Z,10,0,361096064,0,245309,0
+1741694790000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:30.000Z,10,0,369413552,0,250960,0
+1741694793000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:33.000Z,10,0,375377202,0,255013,0
+1741694796000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:36.000Z,8,0,367298415,0,249517,0
+1741694799000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:39.000Z,4,0,317349349,0,215589,0
+1741694802000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:42.000Z,1,0,160981575,0,109363,0
+1741694805000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:45.000Z,0,0,56749357,0,38552,0
+1741694808000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:48.000Z,0,0,1015409,0,689,0
+1741694811000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:06:51.000Z,0,0,0,0,0,0

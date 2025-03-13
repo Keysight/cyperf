@@ -1,0 +1,14 @@
+Timestamp epoch ms,IP,Agent,Profile - Network Segment,Timestamp,Applications Failed,Applications Initiated,Applications Succeeded
+1740942822000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:42.000Z,0,1,0
+1740942825000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:45.000Z,0,1,0
+1740942828000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:48.000Z,0,1,0
+1740942831000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:51.000Z,0,1,0
+1740942834000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:54.000Z,0,1,0
+1740942837000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:13:57.000Z,0,1,0
+1740942840000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:00.000Z,0,1,0
+1740942843000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:03.000Z,0,1,0
+1740942846000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:06.000Z,0,1,0
+1740942849000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:09.000Z,0,1,0
+1740942852000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:12.000Z,0,1,1
+1740942855000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:15.000Z,0,1,1
+1740942858000,10.39.69.98,10.39.69.98,App Client Application Profile-IP Network 1,2025-03-02T19:14:18.000Z,0,1,1

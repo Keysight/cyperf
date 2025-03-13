@@ -1,0 +1,499 @@
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  100                                                                        
+number of trials                          =  1                                                                          
+test duration in seconds                  =  6                                                                          
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+Max simulated users per second            =  2                                                                          
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  100                                                                        
+number of trials                          =  1                                                                          
+test duration in seconds                  =  6                                                                          
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+Max simulated users per second            =  2                                                                          
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  100                                                                        
+number of trials                          =  1                                                                          
+test duration in seconds                  =  6                                                                          
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  12%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **********************************************************                    
+The throughput of 0.5 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+                 
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 0.5 gbps                                                                                 
+The maximum throughput value = 9 gbps                                                                                   
+The target  throughput value = 4.75 gbps                                                                                
+*****************************************************************************************************                   
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 42.834107369304704%                                    
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  4.75 gbps                                                                               
+minimum throughput limit     =  0.5 gbps                                                                                
+The target throughput value = 2.625 gbps                                                                                
+*******************************************************************************************                             
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  12%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  51%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+**********************************Test parameters ***************************************************                   
+line rate for the media (in gbps)         =  10                                                                         
+max allowable througput (in gbps)         =  9                                                                          
+list of frame size (in bytes)             =  None                                                                       
+initial minimum throughput limit (in_gbps)=  0.5                                                                        
+Throughput fluctuation tolerance          =  3.0%                                                                       
+resolution in Gbps                        =  0.5                                                                        
+direction of stream                       =  ServerToClient                                                             
+number of streams                         =  10                                                                         
+number of trials                          =  1                                                                          
+test duration in seconds                  =  30                                                                         
+interval between test run in seconds      =  5                                                                          
+Ethernet header size in bytes             =  18                                                                         
+IP_header size in bytes                   =  20                                                                         
+UDP header size in bytes                  =  8                                                                          
+Initiator mgmt ip address                 =  10.39.69.98                                                                
+responder mgmt ip address                 =  10.39.69.99                                                                
+client start ip  address                  =  10.0.0.10                                                                  
+client gateway   address                  =  10.0.0.1                                                                   
+Server start ip  address                  =  10.0.0.100                                                                 
+server gateway address                    =  10.0.0.1                                                                   
+Max pending simulated user in percentage  =  10%                                                                        
+packet loss tolerance                     =  1.0 %                                                                      
+Max Binary search count                   =  16                                                                         
+****************************************************************************************************                    
+
+ Trail # 1 
+                                                                                                           
+                                                                                                                        
+Frame size # 1280 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **********************************************************                    
+The throughput of 0.5 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+                 
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 0.5 gbps                                                                                 
+The maximum throughput value = 9 gbps                                                                                   
+The target  throughput value = 4.75 gbps                                                                                
+*****************************************************************************************************                   
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 34.834332713647356%                                    
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  4.75 gbps                                                                               
+minimum throughput limit     =  0.5 gbps                                                                                
+The target throughput value = 2.625 gbps                                                                                
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 2.586278407871966%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 2.625 gbps could not be acheived                                                               
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 3                                                                                            
+maximum allowable throughput =  2.625 gbps                                                                              
+minimum throughput limit     =  0.5 gbps                                                                                
+The target throughput value = 1.5625 gbps                                                                               
+*******************************************************************************************                             
+********************************** Result **********************************************************                    
+The throughput of 1.5625 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+              
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 4                                                                                                               
+The minimum throughput value = 1.5625 gbps                                                                              
+The maximum throughput value = 2.625 gbps                                                                               
+The target  throughput value = 2.09375 gbps                                                                             
+*******************************************************************************************                             
+********************************** Result **********************************************************                    
+The throughput of 2.09375 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+             
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 5                                                                                                               
+The minimum throughput value = 2.09375 gbps                                                                             
+The maximum throughput value = 2.625 gbps                                                                               
+The target  throughput value = 2.359375 gbps                                                                            
+*******************************************************************************************                             
+********************************** Result **********************************************************                    
+The throughput of 2.359375 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+            
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 6                                                                                                               
+The minimum throughput value = 2.359375 gbps                                                                            
+The maximum throughput value = 2.625 gbps                                                                               
+The target  throughput value = 2.4921875 gbps                                                                           
+*******************************************************************************************                             
+**********  Binary search is terminated as resolution is reached **************************************                 
+**********  The list of achieved throughput (gbps) was =[1.5625, 2.09375, 2.359375]************************             
+**********  The highest  throughput (gbps) acheived was = 2.359375  *************************************               
+                                                                                                                        
+Frame size # 1518 
+                                                                                                     
+                                                                                                                        
+Validating the configured minimum throughput first                                                                      
+********************************** Result **********************************************************                    
+The throughput of 0.5 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+                 
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 1 ********                                                                                                      
+The minimum throughput value = 0.5 gbps                                                                                 
+The maximum throughput value = 9 gbps                                                                                   
+The target  throughput value = 4.75 gbps                                                                                
+*****************************************************************************************************                   
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 27.704718576735992%                                    
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 2                                                                                            
+maximum allowable throughput =  4.75 gbps                                                                               
+minimum throughput limit     =  0.5 gbps                                                                                
+The target throughput value = 2.625 gbps                                                                                
+*******************************************************************************************                             
+********************************** Result **********************************************************                    
+The throughput of 2.625 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+               
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 3                                                                                                               
+The minimum throughput value = 2.625 gbps                                                                               
+The maximum throughput value = 4.75 gbps                                                                                
+The target  throughput value = 3.6875 gbps                                                                              
+*******************************************************************************************                             
+********************************** Result **********************************************************                    
+The throughput of 3.6875 gbps was acheived considering the throughput fluctuation tolerance level of 3.0%
+              
+****************************************************************************************************                    
+Binary search initiated                                                                                                 
+** BS = 4                                                                                                               
+The minimum throughput value = 3.6875 gbps                                                                              
+The maximum throughput value = 4.75 gbps                                                                                
+The target  throughput value = 4.21875 gbps                                                                             
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 19.388172699161988%                                    
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 4.21875 gbps could not be acheived                                                             
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 5                                                                                            
+maximum allowable throughput =  4.21875 gbps                                                                            
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.953125 gbps                                                                             
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 10.50851137571743%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.953125 gbps could not be acheived                                                            
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 6                                                                                            
+maximum allowable throughput =  3.953125 gbps                                                                           
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.8203125 gbps                                                                            
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 11.57124968928726%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.8203125 gbps could not be acheived                                                           
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 7                                                                                            
+maximum allowable throughput =  3.8203125 gbps                                                                          
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.75390625 gbps                                                                           
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 4.621505409780275%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.75390625 gbps could not be acheived                                                          
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 8                                                                                            
+maximum allowable throughput =  3.75390625 gbps                                                                         
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.720703125 gbps                                                                          
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 7.4869127203235255%                                    
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.720703125 gbps could not be acheived                                                         
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 9                                                                                            
+maximum allowable throughput =  3.720703125 gbps                                                                        
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.7041015625 gbps                                                                         
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 4.150888803392645%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.7041015625 gbps could not be acheived                                                        
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 10                                                                                           
+maximum allowable throughput =  3.7041015625 gbps                                                                       
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.69580078125 gbps                                                                        
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 8.849662949592092%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.69580078125 gbps could not be acheived                                                       
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 11                                                                                           
+maximum allowable throughput =  3.69580078125 gbps                                                                      
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.691650390625 gbps                                                                       
+*******************************************************************************************                             
+
+Server to Client packet loss beyond tolerance limits. Loss %  = 4.131558881129623%                                     
+As Packet Loss is detected ,  throughput validation will not be performed.                                              
+The target throughput of 3.691650390625 gbps could not be acheived                                                      
+
+Binary search initiated                                                                                                
+*** Binary Search count  = 12                                                                                           
+maximum allowable throughput =  3.691650390625 gbps                                                                     
+minimum throughput limit     =  3.6875 gbps                                                                             
+The target throughput value = 3.6895751953125 gbps                                                                      
+*******************************************************************************************                             

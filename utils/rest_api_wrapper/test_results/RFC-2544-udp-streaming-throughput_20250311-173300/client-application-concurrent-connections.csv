@@ -1,0 +1,16 @@
+Timestamp epoch ms,filter,Profile,Timestamp,Concurrent Connections
+1741694523000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:03.000Z,3
+1741694526000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:06.000Z,6
+1741694529000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:09.000Z,9
+1741694532000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:12.000Z,10
+1741694535000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:15.000Z,10
+1741694538000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:18.000Z,10
+1741694541000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:21.000Z,10
+1741694544000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:24.000Z,10
+1741694547000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:27.000Z,10
+1741694550000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:30.000Z,10
+1741694553000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:33.000Z,7
+1741694556000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:36.000Z,4
+1741694559000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:39.000Z,1
+1741694562000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:42.000Z,0
+1741694565000,Client,App Client Application Profile-IP Network 1,2025-03-11T12:02:45.000Z,0

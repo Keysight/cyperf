@@ -1,0 +1,14 @@
+Timestamp epoch ms,Profile - Network Segment,Application,Timestamp,Active Received Streams,Active Sent Streams,Bytes Received Per Second,Bytes Sent Per Second,Packets Received Per Second,Packets Sent Per Second
+1740942210000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:30.000Z,1,1,54992798,57769298,44564,46814
+1740942213000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:33.000Z,1,1,59404578,60290126,48139,48857
+1740942216000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:36.000Z,1,1,59411168,60335021,48145,48893
+1740942219000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:39.000Z,1,1,56696840,57416639,45945,46528
+1740942222000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:42.000Z,1,1,59405814,60331726,48140,48891
+1740942225000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:45.000Z,1,1,59403755,60339552,48139,48897
+1740942228000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:48.000Z,1,1,59368653,60334285,48110,48893
+1740942231000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:51.000Z,1,1,59447558,60334521,48174,48893
+1740942234000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:54.000Z,1,1,59407050,60338728,48141,48896
+1740942237000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:03:57.000Z,1,1,59344331,60353257,48091,48908
+1740942240000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:04:00.000Z,0,0,13626738,2484480,11042,2013
+1740942243000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:04:03.000Z,0,0,0,0,0,0
+1740942246000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-02T19:04:06.000Z,0,0,0,0,0,0

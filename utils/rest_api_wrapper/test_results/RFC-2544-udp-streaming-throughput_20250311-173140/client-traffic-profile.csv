@@ -1,0 +1,16 @@
+Timestamp epoch ms,Profile,Application,Timestamp,Actions Timed Out,Applications Failed,Applications Initiated,Applications Succeeded,Bytes Received,Bytes Sent,Connections Aborted,Connections Failed,Connections Initiated,Connections Succeeded
+1741694442000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:42.000Z,0,0,3,0,101453358,42,0,0,3,3
+1741694445000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:45.000Z,0,0,6,0,366902848,84,0,0,6,6
+1741694448000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:48.000Z,0,0,9,0,796063417,127,0,0,9,9
+1741694451000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:51.000Z,0,0,10,0,1345662354,142,0,0,10,10
+1741694454000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:54.000Z,0,0,10,0,1901162262,142,0,0,10,10
+1741694457000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:00:57.000Z,0,0,10,0,2459571942,142,0,0,10,10
+1741694460000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:00.000Z,0,0,10,0,3014780626,142,0,0,10,10
+1741694463000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:03.000Z,0,0,10,0,3570291640,142,0,0,10,10
+1741694466000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:06.000Z,0,0,10,0,4125701466,142,0,0,10,10
+1741694469000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:09.000Z,0,0,10,0,4681229756,142,0,0,10,10
+1741694472000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:12.000Z,0,0,10,3,5160619033,151,0,0,10,10
+1741694475000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:15.000Z,0,0,10,6,5481982270,160,0,0,10,10
+1741694478000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:18.000Z,0,0,10,9,5639277803,169,0,0,10,10
+1741694481000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:21.000Z,0,0,10,10,5660629712,172,0,0,10,10
+1741694484000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:01:24.000Z,0,0,10,10,5660629712,172,0,0,10,10

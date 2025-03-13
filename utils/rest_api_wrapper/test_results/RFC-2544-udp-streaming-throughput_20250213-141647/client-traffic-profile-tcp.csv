@@ -1,0 +1,14 @@
+Timestamp epoch ms,filter,Profile,Timestamp,Connections Established,Connections Initiation Failed,Data Retransmission Aborted,Data Retransmitted,FIN Received,FIN Sent,FIN-ACK Received,FIN-ACK Sent,RST Received,RST Sent,SYN Failed,SYN Received,SYN Retransmission Aborted,SYN Retransmitted,SYN Sent,SYN-ACK Failed,SYN-ACK Received,SYN-ACK Retransmission Aborted,SYN-ACK Retransmitted,SYN-ACK Sent
+1739436357000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:45:57.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436360000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:00.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436363000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:03.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436366000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:06.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436369000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:09.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436372000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:12.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436375000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:15.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436378000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:18.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436381000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:21.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436384000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:24.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436387000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:27.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436390000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:30.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1739436393000,Client,App Client Application Profile-IP Network 1,2025-02-13T08:46:33.000Z,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

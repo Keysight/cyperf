@@ -1,0 +1,17 @@
+Timestamp epoch ms,Profile - Network Segment,Application,Timestamp,Active Received Streams,Active Sent Streams,Bytes Received Per Second,Bytes Sent Per Second,Packets Received Per Second,Packets Sent Per Second
+1741695567000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:27.000Z,3,0,80463445,0,54662,0
+1741695570000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:30.000Z,6,0,210989451,0,143331,0
+1741695573000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:33.000Z,9,0,340999244,0,231652,0
+1741695576000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:36.000Z,10,0,411640846,0,279645,0
+1741695579000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:39.000Z,10,0,414741034,0,281748,0
+1741695582000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:42.000Z,10,0,414052711,0,281283,0
+1741695585000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:45.000Z,10,0,414528961,0,281604,0
+1741695588000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:48.000Z,10,0,412532788,0,280249,0
+1741695591000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:51.000Z,10,0,421499213,0,286339,0
+1741695594000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:54.000Z,10,0,417039680,0,283312,0
+1741695597000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:19:57.000Z,7,0,375929219,0,255385,0
+1741695600000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:20:00.000Z,4,0,249179590,0,169268,0
+1741695603000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:20:03.000Z,1,0,116570604,0,79190,0
+1741695606000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:20:06.000Z,0,0,11418689,0,7757,0
+1741695609000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:20:09.000Z,0,0,0,0,0,0
+1741695612000,App Client Application Profile-IP Network 1,UDP Stream,2025-03-11T12:20:12.000Z,0,0,0,0,0,0

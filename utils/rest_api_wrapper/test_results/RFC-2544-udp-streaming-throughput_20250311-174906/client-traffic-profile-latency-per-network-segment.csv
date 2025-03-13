@@ -1,0 +1,17 @@
+Timestamp epoch ms,Profile - Network Segment,Timestamp,Avg Connection Latency(microseconds),Avg Time to First Byte(microseconds),Avg Time to Last Byte(microseconds),Max Time To First Byte (microseconds),Max Time To Last Byte (microseconds),Min Time To First Byte (microseconds),Min Time To Last Byte (microseconds)
+1741695489000,App Client Application Profile-IP Network 1,2025-03-11T12:18:09.000Z,0,0,0,0,0,null,null
+1741695492000,App Client Application Profile-IP Network 1,2025-03-11T12:18:12.000Z,null,null,null,0,0,null,null
+1741695495000,App Client Application Profile-IP Network 1,2025-03-11T12:18:15.000Z,null,null,null,0,0,null,null
+1741695498000,App Client Application Profile-IP Network 1,2025-03-11T12:18:18.000Z,null,null,null,0,0,null,null
+1741695501000,App Client Application Profile-IP Network 1,2025-03-11T12:18:21.000Z,null,null,null,0,0,null,null
+1741695504000,App Client Application Profile-IP Network 1,2025-03-11T12:18:24.000Z,null,null,null,0,0,null,null
+1741695507000,App Client Application Profile-IP Network 1,2025-03-11T12:18:27.000Z,null,null,null,0,0,null,null
+1741695510000,App Client Application Profile-IP Network 1,2025-03-11T12:18:30.000Z,null,null,null,0,0,null,null
+1741695513000,App Client Application Profile-IP Network 1,2025-03-11T12:18:33.000Z,null,null,null,0,0,null,null
+1741695516000,App Client Application Profile-IP Network 1,2025-03-11T12:18:36.000Z,null,null,null,0,0,null,null
+1741695519000,App Client Application Profile-IP Network 1,2025-03-11T12:18:39.000Z,null,null,null,0,0,null,null
+1741695522000,App Client Application Profile-IP Network 1,2025-03-11T12:18:42.000Z,null,null,null,0,0,null,null
+1741695525000,App Client Application Profile-IP Network 1,2025-03-11T12:18:45.000Z,null,null,null,0,0,null,null
+1741695528000,App Client Application Profile-IP Network 1,2025-03-11T12:18:48.000Z,null,null,null,0,0,null,null
+1741695531000,App Client Application Profile-IP Network 1,2025-03-11T12:18:51.000Z,null,null,null,0,0,null,null
+1741695534000,App Client Application Profile-IP Network 1,2025-03-11T12:18:54.000Z,null,null,null,0,0,null,null

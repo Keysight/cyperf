@@ -53,12 +53,12 @@ class Statistics:
 
     @staticmethod
     def last(df):
-        df = df[df['Timestamp epoch ms'] == max(df['Timestamp epoch ms'])]
+        df = df[df['Timestamp epoch ms'] == max(df['Timestamp epoch ms'])]#returns a data frame not a pandas series
         return df
 
     def preform_validation(self, validation_entry):
         stats = self.stats
-        last = Statistics.last
+        last = Statistics.last ## kind of function pointer 
         try:
             validation_ok = eval(validation_entry.condition)
         except :
@@ -112,14 +112,15 @@ class Statistics:
         config_type: A dictionary that flags the types of profiles present inside the test
         config_name: same name as the test that ran.
         """
-
         self.config_type = config_type
         if os.path.exists(config_path):
             config_name = os.path.basename(config_path)
             print("Config: {}\n\n".format(config_name))
             criteria_path = os.path.join(config_path, 'validation.json')
-            print(criteria_path)
-            print('Running Validations for {}'.format(config_name))
+            #print(criteria_path)
+            print(f'********Applying packet loss Validation present in the configuration file @ {criteria_path} *******************'.ljust(100))
+            print("**************************************************************************************".ljust(100))
+            print(f'*********Running packet loss Validation for {config_name}******************************************'.ljust(100))
 
             if os.path.exists(criteria_path):
 
@@ -130,11 +131,10 @@ class Statistics:
             else:
                 self.include_baseline_file = True
         if self.include_baseline_file:
-            print('Baseline validation applied')
             criteria_path = os.path.join("../resources", "baseline_validation.json")
             self.validate_baseline_file(criteria_path)
         else:
-            print('Baseline validation skipped')
+            print('****************Baseline validation skipped********************************************')
         print(tabulate(self.table, self.headers, tablefmt="grid"))
         return "; ".join(self.stats_failures)
 
