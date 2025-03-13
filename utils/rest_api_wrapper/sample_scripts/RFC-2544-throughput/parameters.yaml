@@ -63,9 +63,6 @@ server_gateway: "10.0.0.1"
 # Rate control while ramping
 Max_pending_simulated_user_in_percentage: "10%"
 
-# Maximum number of streams to be initiated per second
-#Max_simulated_users_per_second: 2
-
 # Maximum binary search count
 Max_BS_count: 16
 
