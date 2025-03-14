@@ -311,7 +311,7 @@ packet_loss_tolerance                    = yaml_dict['packet_loss_tolerance']
 print_selective(f"**********************************Test parameters ***************************************************")
 print_selective(f"line rate for the media (in gbps)         =  {line_rate_for_the_media_in_gbps}")
 print_selective(f"max allowable througput (in gbps)         =  {max_allowable_througput_in_gbps}")
-print_selective(f"list of frame size (in bytes)             =  {list_of_frame_size_in_bytes.reverse() }")
+print_selective(f"list of frame size (in bytes)             =  {list_of_frame_size_in_bytes}")
 print_selective(f"initial minimum throughput limit (in_gbps)=  {initial_minimum_throughput_limit_in_gbps}")
 print_selective(f"Throughput fluctuation tolerance          =  {tolerance *100}%")
 print_selective(f"resolution in Gbps                        =  {resolution}")
@@ -356,10 +356,9 @@ max_simulated_users_per_second=math.ceil(max_pending_streams/2)
 Max_simulated_users_per_second=str(max_simulated_users_per_second)
 #print(f"Max_simulated_users_per_second ={Max_simulated_users_per_second}\n")
 ramp_up_time =  math.ceil(number_of_streams/max_simulated_users_per_second)
-minimum_estimated_sustain_time = ramp_up_time + 3 
+minimum_estimated_sustain_time = ramp_up_time + 30 
 if (test_duration_in_seconds <= ramp_up_time ) :
-        raise Exception( " Test Duration {} seconds  is less than required ramp-up time {} seconds.Mininum recommended sustain time must be greater than {}Test Duration must be greater than the ramp-up time".format(test_duration_in_seconds,ramp_up_time))
-
+    raise Exception( "\nTest Duration {} seconds  is less than required ramp-up time {} seconds.\nMininum recommended sustain time must be greater than {}\nTest Duration must be greater than the ramp-up time".format(test_duration_in_seconds,ramp_up_time))
 ###==========================================================================####
 #Bild the test configuration in the controller from scratch 
 create_new_config()

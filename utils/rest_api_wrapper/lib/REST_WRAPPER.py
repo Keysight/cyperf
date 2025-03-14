@@ -321,19 +321,19 @@ def validate_max_throughput(results_path,config_path,number_of_streams,Initiator
         throughput_value_server_Tx = df2.loc[(df2['Timestamp epoch ms'] == ts) & (df2['IP'] == responder_mgmt_ip), 'Bytes Sent Per Second'].iloc[0]
 
         #check if this value is within tolerance level % of the configured thoughput ( units Bytes per second(Bps) ) 
-        if( direction_of_stream =='ClientToServer' ):
+        if( direction_of_stream == 'ClientToServer' ):
             deviation_at_client_from_configured_throughput  = (initial_target_throughput_in_Bps - throughput_value_client_Tx )/ initial_target_throughput_in_Bps
             if( (deviation_at_client_from_configured_throughput ) > tolerance):
                 throughput_fluctuation_count= throughput_fluctuation_count + 1
                 client_deviation[ts] = str( (deviation_at_client_from_configured_throughput) * 100)+"%"
 
-        if( direction_of_stream ==' ServerToClient' ):
+        if( direction_of_stream == 'ServerToClient' ):
             deviation_at_server_from_configured_throughput  = ( initial_target_throughput_in_Bps - throughput_value_server_Tx)/ initial_target_throughput_in_Bps
             if( (deviation_at_server_from_configured_throughput) > tolerance) :
                throughput_fluctuation_count= throughput_fluctuation_count + 1
                server_deviation[ts] = str( (deviation_at_server_from_configured_throughput) * 100)+"%" 
         
-        if( direction_of_stream =='Bidirectional' ):
+        if( direction_of_stream == 'Bidirectional' ):
             deviation_at_client_from_configured_throughput = ( ((initial_target_throughput_in_Bps)/2) - ( throughput_value_client_Tx ))/initial_target_throughput_in_Bps
             deviation_at_server_from_configured_throughput = ( ((initial_target_throughput_in_Bps)/2) -  (throughput_value_server_Tx))/ initial_target_throughput_in_Bps
             

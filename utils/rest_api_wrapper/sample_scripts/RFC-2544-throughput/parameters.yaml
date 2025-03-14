@@ -6,9 +6,6 @@ line_rate_for_the_media_in_gbps: 10
 # Maximum allowable throughput in gbps
 max_allowable_througput_in_gbps: 9
 
-# Initial target throughput in gbps
-#initial_target_throughput_in_gbps: 6
-
 # Initial minimum throughput limit in gbps (MUST be acheived)
 initial_minimum_throughput_limit_in_gbps: .5
 
