@@ -2,13 +2,18 @@
 ## Introduction
 This document describes how you can deploy the Keysight CyPerf agents inside Docker Container. The following sections contain information about the prerequisites, manual deployment steps and sample bash scripts for automated deployment.
 
-- [General Prerequisites](#general-prerequisites)
-- [Workflow](#workflow)
-- [Manual Deployment](#manual-deployment)
-- [Automated Deployments](#automated-deployment)
-- [Test Configuration Checklist](#test-configuration-checklist)
-- [Troubleshooting](#troubleshooting)
-- [Known Limitations](#known-limitations)
+- [CyPerf Agents in Containers environments](#cyperf-agents-in-containers-environments)
+  - [Introduction](#introduction)
+  - [General Prerequisites](#general-prerequisites)
+  - [Workflow](#workflow)
+    - [**Manual Deployment**](#manual-deployment)
+    - [**Docker Compose**](#docker-compose)
+  - [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents)
+    - [**Automated Deployment**](#automated-deployment)
+  - [Test Configuration Checklist](#test-configuration-checklist)
+  - [Troubleshooting](#troubleshooting)
+  - [Known Limitations](#known-limitations)
+  - [Releases](#releases)
 
 
 ## General Prerequisites
@@ -55,15 +60,15 @@ sudo docker network create --subnet=192.168.0.0/24 test-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
 
 # If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
 - Deploy both server and client agent containers on different host
@@ -74,7 +79,7 @@ sudo docker network create --subnet=192.168.0.0/24 test-client-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=test-client-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=test-client-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
 
 # Create a local network on a server host
 
@@ -84,7 +89,7 @@ Please note, that client and server network CIDR should be different. This step 
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 By default, when you create or run a container using docker create or docker run, the container doesn't expose any of its ports to the outside world. Use the --publish or -p flag to make a port available to services outside of Docker. This creates a firewall rule in the host, mapping a container port to a port on the Docker host to the outside world. In the above  example:
 
