@@ -333,3 +333,138 @@ sudo modprobe ip6table_filter
 
         - public.ecr.aws/keysight/cyperf-agent:release1.0
         - public.ecr.aws/keysight/cyperf-agent:1.0.3.170
+# DPDK Support - CyPerf Agents in Container Environments
+
+
+## Introduction
+## General Prerequisites
+## Preparing the Host for using DPDK
+#### OS type qualified
+As of now only Ubuntu 22.04 is qualifed.
+#### NIC type qualified
+- Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
+- MT2892 Family [ConnectX-6 Dx] -  mlx5_core driver
+#### DPDK version qualified
+- 22.11
+
+#### DPDK Installtion
+```
+# Folow these steps at Ubutu 22.04 host
+
+sudo su 
+cd /root
+apt install -y build-essential cmake
+
+# If python3 and python3-pip already pre installed in the OS,bellow step NOT REQUIRED
+
+apt install -y python3 python3-pip
+
+apt install -y libnuma-dev libpcap-dev 
+pip3 install meson ninja pyelftools 
+wget https://fast.dpdk.org/rel/dpdk-22.11.tar.xz 
+tar -xvf ./dpdk-22.11.tar.xz 
+cd dpdk-22.11 
+meson build 
+ninja -C build 
+ninja -C build install 
+cd /root 
+git clone git://dpdk.org/dpdk-kmods 
+cd dpdk-kmods/linux/igb_uio/ 
+make clean && make 
+modprobe uio 
+insmod igb_uio.ko 
+cd /root/dpdk-22.11 
+./usertools/dpdk-devbind.py --status 
+```
+
+### Hugepage Configuration
+```
+cd /root/dpdk-22.11 
+sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 2M, 1G> -r <Reserve memory e.g. 32G> -m
+
+# Check huge page allocation
+mount | grep huge
+
+# If required to hugepage cleanup and unmount
+sudo ./usertools/dpdk-hugepages.py -u -c
+
+```
+### Binding Interface for DPDK
+Please note for interface ConnectX-6 Dx devbind is not requird.
+Below devbind steps are required for Intel Nic only.
+```
+#pci id and interface name mapping 
+cd /root/dpdk-22.11
+sudo ./usertools/dpdk-devbind.py -s
+
+# It is recommended that vfio-pci be used as the kernel module for DPDK-bound ports in all cases
+
+# Bind PCI device with ID.
+sudo ./usertools/dpdk-devbind.py --bind=vfio-pci <PCI ID> 
+sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
+
+```
+### Docker container deployment
+
+- Deploy both server and client agent containers on the same host
+  - **_NOTE:_** Check details about the NUMA topology of the system before deployment using bellow command
+  
+```
+numactl --hardware
+```
+#### **Deploy Client agent**
+  Decide which NUMA node will be used for it. Based on NUMA ID selection, set hugepage size in bytes at NUMA id's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
+```
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent  -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+```
+Example:
+```
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent  -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,32000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+```
+
+#### **Deploy Server agent**
+  Decide which NUMA node will be used for it. Based on NUMA ID selection, set hugepage size in bytes at NUMA id's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
+```
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent  -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+````
+
+Example:
+```
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent  -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="32000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+
+```
+
+#### If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below for Server continer
+
+```
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent  -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware -p 80:80 -p 443:443 public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+
+```
+
+- Deploy both server and client agent containers on different host
+
+By default, when you create or run a container using docker create or docker run, the container doesn't expose any of its ports to the outside world. Use the --publish or -p flag to make a port available to services outside of Docker. This creates a firewall rule in the host, mapping a container port to a port on the Docker host to the outside world.
+
+ClientAgent deployment is same as above. For ServerAgent deployment just enable port mapping between host and container like below
+
+```
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent  -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware -p 80:80 -p 443:443 public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+
+```
+
+-p 80:80 -p 443:443 Map port 80 and 443 respectively on the Docker host to TCP port 80 and 443 in the container.
+
+#### Attach MT2892 Family [ConnectX-6 Dx] NIC to dpdk container
+
+~~~
+# Use the following command to attach the interface to the dpdk container 
+
+docker top <Container Name>| grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <interface name> netns {}  
+
+ 
+
+#To detach  use the following command 
+
+docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <interface name> netns 1 
+~~~
+
