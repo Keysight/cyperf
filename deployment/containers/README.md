@@ -342,10 +342,10 @@ sudo modprobe ip6table_filter
 
 
 ## Introduction
-CyPerf Agent container support DPDK. Below sections provides step by step guide.
+CyPerf Agent container supports DPDK. Below sections provides step by step guide.
 - [Prerequisites](#prerequisites)
 - [DPDK Host Preparation](#preparing-the-host-for-using-dpdk)
-- [OS Type Qualifed](#os-type-qualified)
+- [OS Type Qualified](#os-type-qualified)
 - [Nic Type Qualified](#nic-type-qualified)
 - [Dpdk Version Qualified](#dpdk-version-qualified)
 - [DPDK Installation](#dpdk-installtion)
@@ -356,22 +356,22 @@ CyPerf Agent container support DPDK. Below sections provides step by step guide.
 ## Prerequisites
 ## Preparing the Host for using DPDK
 #### OS type qualified
-As of now only Ubuntu 22.04 is qualifed.
+As of now only Ubuntu 22.04 is qualified.
 #### NIC type qualified
 - Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
 - MT2892 Family [ConnectX-6 Dx] -  mlx5_core driver
 #### DPDK version qualified
 - 22.11
 
-#### DPDK Installtion
+#### DPDK Installation
 ```shell
-# Folow these steps at Ubutu 22.04 host
+# Follow these steps at Ubutu 22.04 host
 
 sudo su 
 cd /root
 apt install -y build-essential cmake
 ```
-> [!NOTE] If python3 and python3-pip already pre installed in the OS,bellow step NOT REQUIRED
+> [!NOTE] If python3 and python3-pip are already pre-installed in the OS, the bellow step is NOT REQUIRED.
 
 > apt install -y python3 python3-pip
 
@@ -399,7 +399,7 @@ cd /root/dpdk-22.11
 cd /root/dpdk-22.11 
 sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 2M, 1G> -r <Reserve memory e.g. 32G> -m
 
-# Check `hugepage` allocation
+# Check the `hugepage` allocation
 mount | grep huge
 
 # If required to hugepage cleanup and unmount
@@ -408,7 +408,7 @@ sudo ./usertools/dpdk-hugepages.py -u -c
 ```
 ### Binding Interface for DPDK
 > [!NOTE] 
-> For interface **ConnectX-6 Dx** `devbind` is not requird.Below devbind steps are required for Intel Nic only.
+> Bellow `devbind` steps are required for Intel Nic only.
 ```shell
 #pci id and interface name mapping 
 cd /root/dpdk-22.11
@@ -425,7 +425,9 @@ sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
 
 - Deploy both server and client agent containers on the same host
   > [!NOTE]
-  Check details about the NUMA topology of the system before deployment using the bellow command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>"
+  Check details about the NUMA topology of the system before deployment using the bellow command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
+  
+  > Also, note down pci bus id of the relevant interfaces using `lspci` command.
 
   
 >```shell
@@ -453,7 +455,7 @@ docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name Server
 
 ```
 
-#### If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below for Server continer
+#### If the client is sending traffic outside the host to a DUT and traffic is coming back to the server container from the DUT via the host then use port forwarding like the below for the Server container
 
 ```shell
 sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent  -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware -p 80:80 -p 443:443 public.ecr.aws/keysight/cyperf-agent-dpdk:latest
