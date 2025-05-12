@@ -395,7 +395,7 @@ sudo su
 cd /root
 apt install -y build-essential cmake
 ```
-> [!NOTE] If python3 and python3-pip are already pre-installed in the OS, the bellow step is NOT REQUIRED.
+> [!NOTE] If python3 and python3-pip are already pre-installed in the OS, the below step is NOT REQUIRED.
 
 > apt install -y python3 python3-pip
 
@@ -426,13 +426,13 @@ sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g
 # Check the `hugepage` allocation
 mount | grep huge
 
-# If required to hugepage cleanup and unmount
+# `hugepage` cleanup and unmount
 sudo ./usertools/dpdk-hugepages.py -u -c
 
 ```
 ### Binding Interface for DPDK
 > [!NOTE] 
-> Bellow `devbind` steps are required for Intel Nic only.
+> Below `devbind` steps are required for Intel NIC only.
 
 > For attaching MT2892 Family [ConnectX-6 Dx] refer
 [Attach MT2892 Family [ConnectX-6 Dx] NIC to dpdk container](#attach-mt2892-family-connectx-6-dx-nic-to-dpdk-container)
@@ -453,7 +453,7 @@ sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
 
 - Deploy both server and client agent containers on the same host
   > [!NOTE]
-  Check details about the NUMA topology of the system before deployment using the bellow command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
+  Check details about the NUMA topology of the system before deployment using the below command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
   
   > Also, note down pci bus id of the relevant interfaces using `lspci` command.
 
