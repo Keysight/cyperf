@@ -354,11 +354,12 @@ CyPerf Agent container supports DPDK. Below sections provides step by step guide
 - [Hugepage Configuration](#hugepage-configuration)
 - [Binding Interface](#binding-interface-for-dpdk)
 - [Docker Container Deployment](#docker-container-deployment)
+- [Troubleshooting](#troubleshooting-1)
 - [Known Limitation](#known-limitations-1)
 ## Prerequisites
 To deploy a Keysight CyPerf agent container at Docker, you need the following:
 1. Install Docker Engine in your desired host platform if not already. Refer [Install Docker Engine Server](https://docs.docker.com/engine/install/#server) for more details.
-2. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent-dpdk:latest` . Refer [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
+2. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent-dpdk:latest` . Refer to [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
 
     ```
     sudo docker pull public.ecr.aws/keysight/cyperf-agent-dpdk:latest
@@ -376,7 +377,7 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
 
 4.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
-5.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+5.  Ensure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port number **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
      
 ## Preparing the Host for using DPDK
 #### OS type qualified
@@ -476,7 +477,7 @@ docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name Client
 ```
 
 #### **Deploy Server agent**
-  Decide which NUMA node will be used for it. Based on NUMA ID selection, set hugepage size in MB at NUMA id's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
+  Decide which NUMA node will be used for it. Based on the NUMA ID selection, set the huge page size in MB at the NUMA ID's position for the DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
 ```shell
 sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 ````
@@ -510,13 +511,20 @@ sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name S
 
 docker top <Container Name>| grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <interface name> netns {}  
 
-# check whether interface actually added to the container
+#  check whether the interface was added to the container
 docker exec -it <Container Name> ifconfig -a | grep <interface name>
   
 #To detach the interface use the following command 
 
 docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <interface name> netns 1 
 ```
+### Troubleshooting
+In any case, if the docker container needs to be removed, follow the below steps
+
+- docker container stop <container name>
+- docker container rm -v <container name> 
+
 ### Known Limitations
 - DPDK Container with Single Interface as Management & Test  - Not supported.
 - Automatic MAC not supported. User need to disable Automatic mac in the Ethernet Range section of all Network segments.
+- In controller UI, DPDK is shown as enabled but Supported section shows "No".
