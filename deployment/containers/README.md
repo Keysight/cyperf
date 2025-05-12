@@ -380,7 +380,7 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
      
 ## Preparing the Host for using DPDK
 #### OS type qualified
-As of now only Ubuntu 22.04 is qualified.
+- Ubuntu 22.04
 #### NIC type qualified
 - Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
 - MT2892 Family [ConnectX-6 Dx] -  mlx5_core driver
@@ -389,7 +389,7 @@ As of now only Ubuntu 22.04 is qualified.
 
 #### DPDK Installation
 ```shell
-# Follow these steps at Ubutu 22.04 host
+# Follow these steps at Ubuntu 22.04 host
 
 sudo su 
 cd /root
@@ -421,13 +421,14 @@ cd /root/dpdk-22.11
 ### Hugepage Configuration
 ```shell
 cd /root/dpdk-22.11 
-sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g. 32G> -m
+
+# `hugepage` cleanup and unmount
+sudo ./usertools/dpdk-hugepages.py -u -c -s
+
+sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g. 32G> -m -s
 
 # Check the `hugepage` allocation
 mount | grep huge
-
-# `hugepage` cleanup and unmount
-sudo ./usertools/dpdk-hugepages.py -u -c
 
 ```
 ### Binding Interface for DPDK
@@ -467,22 +468,22 @@ sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
 ```shell
 sudo docker network create --subnet=192.168.0.0/24 mgmt-network
 
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 ```
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 ```
 
 #### **Deploy Server agent**
-  Decide which NUMA node will be used for it. Based on NUMA ID selection, set hugepage size in bytes at NUMA id's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
+  Decide which NUMA node will be used for it. Based on NUMA ID selection, set hugepage size in MB at NUMA id's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
 ```shell
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 ````
 
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="1000000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 
 ```
 
@@ -492,13 +493,13 @@ docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name Server
 ```shell
 sudo docker network create --subnet=192.168.0.0/24 mgmt-client-network
 
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-client-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,32000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-client-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,10000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 ```
 #### Create a local network on a server host
 ```shell
 sudo docker network create --subnet=172.18.0.0/24 mgmt-server-network
 
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-server-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev/hugepages:/dev/hugepages -v /dev/vfio:/dev/vfio -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-server-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
 
 ```
 
@@ -509,9 +510,13 @@ sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name S
 
 docker top <Container Name>| grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <interface name> netns {}  
 
+# check whether interface actually added to the container
+docker exec -it <Container Name> ifconfig -a | grep <interface name>
+  
 #To detach the interface use the following command 
 
 docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <interface name> netns 1 
 ```
 ### Known Limitations
-DPDK Container with Single Interface as Management & Test  - Not Supported.
+- DPDK Container with Single Interface as Management & Test  - Not supported.
+- Automatic MAC not supported. User need to disable Automatic mac in the Ethernet Range section of all Network segments.
