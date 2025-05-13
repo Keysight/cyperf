@@ -20,7 +20,7 @@ CyPerf Agent container supports DPDK. Below sections provides step by step guide
 
 ### Prepare host for CyPerf Agent DPDK containers
 User needs to carryout following steps to get the host ready
-- Install Docker on the host. For detail steps click [Install Docker](../README.md/#general-prerequisites) #1.
+- Install Docker on the host. For detail steps click [Install Docker][1](../README.md/#general-prerequisites).
 
 - Install DPDK. For detail steps click [Install DPDK](#dpdk-installation)
 
@@ -35,10 +35,10 @@ User needs to carryout following steps to get the host ready
 - Bind Test interface. Check [bind interface](#binding-interface-for-dpdk)
   
 ### Container Deployment
-- CyPerf Controller or Controller-proxy must pre exists. For detail description check [here](../README.md/#general-prerequisites) #4, #5, #6.
+- CyPerf Controller or Controller-proxy must pre exists. For detail description check [here][4,5,6](../README.md/#general-prerequisites).
 - Deploy DPDK docker conainer. Check [container deployment](#docker-container-deployment)
 
-#### DPDK Installation
+### DPDK Installation
 ```shell
 # Follow these steps at Ubuntu 22.04 host
 
