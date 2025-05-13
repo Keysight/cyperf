@@ -4,7 +4,7 @@ This document describes how you can deploy the Keysight CyPerf agents as Docker 
 
 ## Want to use DPDK?
 
-For enhanced performance, CyPerf Agent Containers can be deployed in a DPDK enabled enviornment. For detailed steps switch to this page [DPDK Support - CyPerf Agents in Container Environments](#dpdk/dpdk-support---cyperf-agents-in-container-environments)
+For enhanced performance, CyPerf Agent Containers can be deployed in a DPDK enabled enviornment. For detailed steps switch to this page [DPDK Support - CyPerf Agents in Container Environments](./dpdk/README.md/#dpdk-support---cyperf-agents-in-container-environments)
 
 
 If you cannot use DPDK, follow the steps below

@@ -20,10 +20,9 @@ CyPerf Agent container supports DPDK. Below sections provides step by step guide
 
 ### Prepare host for CyPerf Agent DPDK containers
 User needs to carryout following steps to get the host ready
-- Install Docker on the host. For detail steps click [here](../README.md/#general-prerequisites) #1.
->[!Note] CyPerf Agent DPDK container image is available at public ECR public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+- Install Docker on the host. For detail steps click [Install Docker](../README.md/#general-prerequisites) #1.
 
-- Install DPDK. For detail steps click [here](#dpdk-installation)
+- Install DPDK. For detail steps click [Install DPDK](#dpdk-installation)
 
 ### Configure host for CyPerf DPDK containers
  - NUMA (Non-Uniform Memory Access) architecture is mandatory for optimal DPDK performance. Ensure that your system is configured with NUMA nodes.
@@ -36,7 +35,7 @@ User needs to carryout following steps to get the host ready
 - Bind Test interface. Check [bind interface](#binding-interface-for-dpdk)
   
 ### Container Deployment
-- CyPerf Controller or Controller-proxy must pre exists. For detail check [here](../README.md/#general-prerequisites) #4, #5, #6.
+- CyPerf Controller or Controller-proxy must pre exists. For detail description check [here](../README.md/#general-prerequisites) #4, #5, #6.
 - Deploy DPDK docker conainer. Check [container deployment](#docker-container-deployment)
 
 #### DPDK Installation
