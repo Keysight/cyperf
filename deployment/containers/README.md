@@ -1,15 +1,23 @@
 # CyPerf Agents in Containers environments
 ## Introduction
-This document describes how you can deploy the Keysight CyPerf agents inside Docker Container. The following sections contain information about the prerequisites, manual deployment steps and sample bash scripts for automated deployment.
+This document describes how you can deploy the Keysight CyPerf agents as Docker Container. The following sections contain information about the prerequisites, manual deployment steps and sample bash scripts for automated deployment.
 
-CyPerf Agent container also supports DPDK. Refer [DPDK Support - CyPerf Agents in Container Environments](#dpdk-support---cyperf-agents-in-container-environments)
-- [General Prerequisites](#general-prerequisites)
-- [Workflow](#workflow)
-- [Manual Deployment](#manual-deployment)
-- [Automated Deployments](#automated-deployment)
-- [Test Configuration Checklist](#test-configuration-checklist)
-- [Troubleshooting](#troubleshooting)
-- [Known Limitations](#known-limitations)
+## Want to use DPDK?
+
+For enhanced performance, CyPerf Agent Containers can be deployed in a DPDK enabled enviornment. For detailed steps switch to this page [DPDK Support - CyPerf Agents in Container Environments](#dpdk/dpdk-support---cyperf-agents-in-container-environments)
+
+
+If you cannot use DPDK, follow the steps below
+
+  - [General Prerequisites](#general-prerequisites)
+  - [Workflow](#workflow)
+  - [**Manual Deployment**](#manual-deployment)
+  - [**Automated Deployment using Docker Compose**](#docker-compose)
+  - [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents)
+  - [Test Configuration Checklist](#test-configuration-checklist)
+  - [Troubleshooting](#troubleshooting)
+  - [Known Limitations](#known-limitations)
+  - [Releases](#releases)
 
 
 ## General Prerequisites
@@ -340,212 +348,3 @@ sudo modprobe ip6table_filter
   </details>
 
 
-# DPDK Support - CyPerf Agents in Container Environments
-
-
-## Introduction
-CyPerf Agent container supports DPDK. Below sections provides step by step guide.
-- [Prerequisites](#prerequisites)
-- [DPDK Host Preparation](#preparing-the-host-for-using-dpdk)
-- [OS Type Qualified](#os-type-qualified)
-- [Nic Type Qualified](#nic-type-qualified)
-- [Dpdk Version Qualified](#dpdk-version-qualified)
-- [DPDK Installation](#dpdk-installtion)
-- [Hugepage Configuration](#hugepage-configuration)
-- [Interface and NUMA Node mapping](#interface-and-numa-node-mapping)
-- [Binding Interface](#binding-interface-for-dpdk)
-- [Docker Container Deployment](#docker-container-deployment)
-- [Troubleshooting](#troubleshooting-1)
-- [Known Limitation](#known-limitations-1)
-## Prerequisites
-To deploy a Keysight CyPerf agent container at Docker, you need the following:
-1. Install Docker Engine in your desired host platform if not already. Refer [Install Docker Engine Server](https://docs.docker.com/engine/install/#server) for more details.
-2. Pull CyPerf Agent Docker image from public ECR `public.ecr.aws/keysight/cyperf-agent-dpdk:latest` . Refer to [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
-
-    ```
-    sudo docker pull public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-    ```
-    - **_NOTE:_**
-    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) [here](https://support.ixiacom.com/keysight-cyperf-70) and load it using the following command
-    
-        ```
-        sudo docker load -i <downloaded tar file>
-        ```
-        The loaded image needs to be tagged properly and samples need to be updated accordingly.
-
-3.  A CyPerf Controller that is already deployed and accessible from the Agent docker containers.  
-    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
-
-4.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
-
-5.  Ensure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port number **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
-6.  NUMA (Non-Uniform Memory Access) architecture is mandatory for optimal DPDK performance. Ensure that your system is configured with NUMA nodes.
- 
-    Verify NUMA Nodes:
-    ```shell
-        lscpu | grep NUMA
-    ```
-     
-## Preparing the Host for using DPDK
-#### OS type qualified
-- Ubuntu 22.04
-#### NIC type qualified
-- Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
-- MT2892 Family [ConnectX-6 Dx] -  mlx5_core driver
-#### DPDK version qualified
-- 22.11
-
-#### DPDK Installation
-```shell
-# Follow these steps at Ubuntu 22.04 host
-
-sudo su 
-cd /root
-apt install -y build-essential cmake
-```
-> [!NOTE] If python3 and python3-pip are already pre-installed in the OS, the below step is NOT REQUIRED.
-
-> apt install -y python3 python3-pip
-
-```shell
-apt install -y libnuma-dev libpcap-dev 
-pip3 install meson ninja pyelftools 
-wget https://fast.dpdk.org/rel/dpdk-22.11.tar.xz 
-tar -xvf ./dpdk-22.11.tar.xz 
-cd dpdk-22.11 
-meson build 
-ninja -C build 
-ninja -C build install 
-cd /root 
-git clone git://dpdk.org/dpdk-kmods 
-cd dpdk-kmods/linux/igb_uio/ 
-make clean && make 
-modprobe uio 
-insmod igb_uio.ko 
-cd /root/dpdk-22.11 
-./usertools/dpdk-devbind.py --status 
-```
-
-### Hugepage Configuration
-```shell
-cd /root/dpdk-22.11 
-
-# `hugepage` cleanup and unmount
-sudo ./usertools/dpdk-hugepages.py -u -c -s
-
-sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g. 32G> -m -s
-
-# Check the `hugepage` allocation
-mount | grep huge
-
-```
-### Interface and NUMA Node mapping
-
- The following steps are required to identifying the interface, its PCI ID, and its NUMA node binding.
-
-- Fetch the Interface name that need to be use
-- Fetch the bus-info/PCI ID of that interface using  
-  ```shell
-  ethtool -i <interface name>
-  ``` 
-- Identify which NUMA node the interface is connected
-   ```shell
-   cat /sys/class/net/<interface name>/device/numa_node
-   ```
-### Binding Interface for DPDK
-> [!NOTE] 
-> Below `devbind` steps are required for Intel NIC only.
-
-> For attaching MT2892 Family [ConnectX-6 Dx] refer
-[Attach MT2892 Family [ConnectX-6 Dx] NIC to dpdk container](#attach-mt2892-family-connectx-6-dx-nic-to-dpdk-container)
-
-```shell
-#pci id and interface name mapping 
-cd /root/dpdk-22.11
-sudo ./usertools/dpdk-devbind.py -s
-
-# It is recommended that vfio-pci be used as the kernel module for DPDK-bound ports in all cases
-
-# Bind PCI device with ID
-sudo ./usertools/dpdk-devbind.py --bind=vfio-pci <PCI ID> 
-sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
-
-```
-  
-### Docker container deployment
->[!Note]
-Check details about the NUMA topology of the system before deployment using the below command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
-    
->```shell
->    numactl --hardware
->```
-
-- Deploy both server and client agent containers on the same host
-  
-#### **Deploy Client agent**
-
-#### Create a local network
-```shell
-sudo docker network create --subnet=192.168.0.0/24 mgmt-network
-
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-```
-Example:
-```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-```
-
-#### **Deploy Server agent**
-  Decide which NUMA node will be used for it. Based on the NUMA ID selection, set the huge page size in MB at the NUMA ID's position for the DPDK_HUGEMEM_ALLOCATION_SIZE parameter.
-```shell
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-````
-
-Example:
-```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-
-```
-
-- Deploy both server and client agent containers on different host
-
-#### Create a local network on a client host
-```shell
-sudo docker network create --subnet=192.168.0.0/24 mgmt-client-network
-
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=mgmt-client-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,10000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-```
-#### Create a local network on a server host
-```shell
-sudo docker network create --subnet=172.18.0.0/24 mgmt-server-network
-
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=mgmt-server-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware public.ecr.aws/keysight/cyperf-agent-dpdk:latest
-
-```
-
-#### Attach MT2892 Family [ConnectX-6 Dx] NIC to dpdk container
-
-```shell
-# Use the following command to attach the interface to the dpdk container 
-
-docker top <Container Name>| grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <interface name> netns {}  
-
-#  check whether the interface was added to the container
-docker exec -it <Container Name> ifconfig -a | grep <interface name>
-  
-#To detach the interface use the following command 
-
-docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <interface name> netns 1 
-```
-### Removing Docker containers
-```shell
-docker container stop <container name>
-docker container rm -v <container name>
-```
-### Troubleshooting
- 
-
-### Known Limitations
-- DPDK Container with Single Interface as Management & Test  - Not supported.
-- Automatic MAC not supported. User need to disable Automatic mac in the Ethernet Range section of all Network segments.
-- In controller UI, DPDK is shown as enabled but Supported section shows "No".
