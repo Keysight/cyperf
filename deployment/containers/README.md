@@ -352,6 +352,7 @@ CyPerf Agent container supports DPDK. Below sections provides step by step guide
 - [Dpdk Version Qualified](#dpdk-version-qualified)
 - [DPDK Installation](#dpdk-installtion)
 - [Hugepage Configuration](#hugepage-configuration)
+- [Interface and NUMA Node mapping](#interface-and-numa-node-mapping)
 - [Binding Interface](#binding-interface-for-dpdk)
 - [Docker Container Deployment](#docker-container-deployment)
 - [Troubleshooting](#troubleshooting-1)
@@ -378,6 +379,12 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
 4.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
 5.  Ensure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port number **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+6.  NUMA (Non-Uniform Memory Access) architecture is mandatory for optimal DPDK performance. Ensure that your system is configured with NUMA nodes.
+ 
+    Verify NUMA Nodes:
+    ```shell
+        lscpu | grep NUMA
+    ```
      
 ## Preparing the Host for using DPDK
 #### OS type qualified
@@ -432,6 +439,19 @@ sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g
 mount | grep huge
 
 ```
+### Interface and NUMA Node mapping
+
+ The following steps are required to identifying the interface, its PCI ID, and its NUMA node binding.
+
+- Fetch the Interface name that need to be use
+- Fetch the bus-info/PCI ID of that interface using  
+  ```shell
+  ethtool -i <interface name>
+  ``` 
+- Identify which NUMA node the interface is connected
+   ```shell
+   cat /sys/class/net/<interface name>/device/numa_node
+   ```
 ### Binding Interface for DPDK
 > [!NOTE] 
 > Below `devbind` steps are required for Intel NIC only.
@@ -451,18 +471,17 @@ sudo ./usertools/dpdk-devbind.py --bind=vfio-pci <PCI ID>
 sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
 
 ```
+  
 ### Docker container deployment
-
-- Deploy both server and client agent containers on the same host
-  > [!NOTE]
-  Check details about the NUMA topology of the system before deployment using the below command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
-  
-  > Also, note down pci bus id of the relevant interfaces using `lspci` command.
-
-  
+>[!Note]
+Check details about the NUMA topology of the system before deployment using the below command. Also, decide which NUMA node will be used for each container. Based on the NUMA Node selection, set the hugepage size in bytes at the NUMA node's position for DPDK_HUGEMEM_ALLOCATION_SIZE parameter. Ex, if NUMA_NODE=0 selected, then set DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in Byte>,0", on the other hand for NUMA_NODE=1, set DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>".
+    
 >```shell
 >    numactl --hardware
 >```
+
+- Deploy both server and client agent containers on the same host
+  
 #### **Deploy Client agent**
 
 #### Create a local network
@@ -518,11 +537,13 @@ docker exec -it <Container Name> ifconfig -a | grep <interface name>
 
 docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <interface name> netns 1 
 ```
+### Removing Docker containers
+```shell
+docker container stop <container name>
+docker container rm -v <container name>
+```
 ### Troubleshooting
-In any case, if the docker container needs to be removed, follow the below steps
-
-- docker container stop <container name>
-- docker container rm -v <container name> 
+ 
 
 ### Known Limitations
 - DPDK Container with Single Interface as Management & Test  - Not supported.
