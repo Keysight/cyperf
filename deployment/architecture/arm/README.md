@@ -24,13 +24,14 @@ Create a new VM booting from the ISO image, choose x86_64 as CPU architecture, d
 - Disk Size: 8 GB minimum
 - CPU/RAM: Allocate as needed
 
-
+![create new VM](images/Picture1.png)
 #### Networking Setup
 You have two options for networking:
 
 ##### Option 1: Usermode Networking (Simpler, NAT-ed)
 Add two NICs, both using Usermode. Default: Can reach internet but not inbound reachable.
- 
+
+ ![virtual network Interface](images/Picture2.png)
 
 ##### Option 2: Bridged Networking (Full Access on Host Network)
 
