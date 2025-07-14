@@ -163,7 +163,7 @@ While deploying Agent, user needs to generate or needs to reuse ssh key pair.
 
 SSH to CyPerf agent with public ssh-key
 
-``` ssh -i <ssh public key> cyperf@<agent's mamagement ip>```
+``` ssh -i <ssh public key> cyperf@<agent's management ip>```
 
 Use the CyPerf  CLI command 'cyperfagent' to configure the required parameters.
 
