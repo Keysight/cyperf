@@ -159,7 +159,14 @@ sudo netplan apply
 ```
 ### Set cyperfagent configuration ###
 
-Use the CLI cyperfagent to configure the required parameters.
+While deploying Agent, user needs to generate or needs to reuse ssh key pair.
+
+SSH to CyPerf agent with public ssh-key
+
+``` ssh -i <ssh public key> cyperf@<agent's mamagement ip>```
+
+Use the CyPerf  CLI command 'cyperfagent' to configure the required parameters.
+
 The following commands are available in CLI:
 ```
 cyperfagent controller show
@@ -168,7 +175,7 @@ Shows the currently configured controller.
 ```
 cyperfagent controller set <Controller-IPv4|Controller-Hostname> --username=<USERNAME> --password=<PASSWORD> --skipidentity-verification
 ```
-Sets the controller. Default username "admin", password "CyPerf&Keysight#1"
+Sets the controller. Default username `admin`, password `CyPerf&Keysight#1`
 For more details, see Connecting [CyPerf Agents to a Controller](#https://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/3.0/CyPerf_Deployment_Guide.pdf).
 ```
 cyperfagent interface management show
