@@ -1,18 +1,13 @@
 # CyPerf Agents in Containers environments
 ## Introduction
-This document describes how you can deploy the Keysight CyPerf agents as Docker Container. The following sections contain information about the prerequisites, manual deployment steps and sample bash scripts for automated deployment.
+This document describes how you can deploy the Keysight CyPerf agents inside Docker Container. The following sections contain information about the prerequisites, manual deployment steps and sample bash scripts for automated deployment.
 
-## Want to use DPDK?
-
-For enhanced performance, CyPerf Agent Containers can be deployed in a DPDK enabled enviornment. For detailed steps switch to this page [DPDK Support - CyPerf Agents in Container Environments](./dpdk/README.md/#dpdk-support---cyperf-agents-in-container-environments)
-
-
-If you cannot use DPDK, follow the steps below
-
+- [CyPerf Agents in Containers environments](#cyperf-agents-in-containers-environments)
+  - [Introduction](#introduction)
   - [General Prerequisites](#general-prerequisites)
   - [Workflow](#workflow)
-  - [**Manual Deployment**](#manual-deployment)
-  - [**Automated Deployment using Docker Compose**](#docker-compose)
+    - [**Manual Deployment**](#manual-deployment)
+    - [**Docker Compose**](#docker-compose)
   - [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents)
   - [Test Configuration Checklist](#test-configuration-checklist)
   - [Troubleshooting](#troubleshooting)
@@ -30,7 +25,7 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
     sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
     ```
     - **_NOTE:_**
-    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) [here](https://support.ixiacom.com/keysight-cyperf-60) and load it using the following command
+    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-60) and load it using the following command
     
         ```
         sudo docker load -i <downloaded tar file>
@@ -55,112 +50,167 @@ To test a device which is running inside a Docker, do the following:
   - **_NOTE:_** For more information, see _Chapter 3_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
 
 ###  **Manual Deployment**
+By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also. If you need to select a management or test interface explicitly, use [separate management & test interface](#separate-management-test-interface). Before applying this, identify which network interfaces of host sytem will be used as test traffic.
 
-- Deploy both server and client agent containers on the same host
-```
+- Deploy both server and client agent containers with single test and management interface on the same host
+```shell
 # Create a local network
 
-sudo docker network create --subnet=192.168.0.0/24 test-network
+sudo docker network create --subnet=192.168.0.0/24 mgmt-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
 
 # If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
 - Deploy both server and client agent containers on different host
-```
+```shell
 # Create a local network on a client host
 
-sudo docker network create --subnet=192.168.0.0/24 test-client-network
+sudo docker network create --subnet=192.168.0.0/24 mgmt-client-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent --network=test-client-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-client-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
 
 # Create a local network on a server host
 
-sudo docker network create --subnet=172.18.0.0/24 test-server-network
+sudo docker network create --subnet=172.18.0.0/24 mgmt-server-network
 
 Please note, that client and server network CIDR should be different. This step has been added to separate Client and Server IP on the Controller side as CyPerf agents are identified by IP at CyPerf Controller.
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent --network=test-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 By default, when you create or run a container using docker create or docker run, the container doesn't expose any of its ports to the outside world. Use the --publish or -p flag to make a port available to services outside of Docker. This creates a firewall rule in the host, mapping a container port to a port on the Docker host to the outside world. In the above  example:
 
 -p 80:80 Map port 80 on the Docker host to TCP port 80 in the container.
+
+### Separate management and test interface
+- Deploy both server and client agent containers with seperate test and management interface on the same host
+```shell
+# Create a local network
+
+sudo docker network create --subnet=192.168.0.0/24 mgmt-network
+
+# Deploy Client agent
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
+
+# Deploy Server agent
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
+
+# If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding like below
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+```
+
+- Deploy both server and client agent containers on different host
+```shell
+# Create a local network on a client host
+
+sudo docker network create --subnet=192.168.0.0/24 mgmt-client-network
+
+# Deploy Client agent
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-client-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
+
+# Create a local network on a server host
+
+sudo docker network create --subnet=172.18.0.0/24 mgmt-server-network
+
+Please note, that client and server network CIDR should be different. This step has been added to separate Client and Server IP on the Controller side as CyPerf agents are identified by IP at CyPerf Controller.
+
+# Deploy Server agent
+
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-server-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+```
+#### Attach Test Interface
+
+```shell
+# Use the following command to attach the interface to the container 
+
+docker top <Container Name>| grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <host interface name> netns {}  
+
+#  check whether the interface was added to the container
+docker exec -it <Container Name> ifconfig -a | grep <host interface name>
+```  
+#### Detach the interface
+```shell
+docker top <Container Name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <host interface name> netns 1 
+```
+### Removing Docker containers
+```shell
+docker container stop <container name>
+docker container rm -v <container name>
+```
 
 ### **Docker Compose**
 
 - Compose manifest: [agent_examples/docker-compose.yml](agent_examples/docker-compose.yml) 
 
 - Modifications that are required to delpoy a CyPerf Agents, are as follows:
-    1. Replace the place holder container `image` URL with the specific version, that you want to use for the CyPerf Agent container. You can get this URL from [Keysight software download portal](https://support.ixiacom.com/keysight-cyperf-software-downloads-documentation).
-    2. Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then this variable must be ommitted from the yaml. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
-    3. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also. If you need to select a management or test interface explicitly, use the following `env` variables. You can find these variables in the example yaml scripts as comments.
+    i. Replace the place holder container `image` URL with the specific version, that you want to use for the CyPerf Agent container. You can get this URL from [Keysight software download portal](https://support.ixiacom.com/keysight-cyperf-software-downloads-documentation).
 
-        ```
-            #   name: AGENT_MANAGEMENT_INTERFACE
-            #   value: "eth0"
-            #   name: AGENT_TEST_INTERFACE
-            #   value: "eth1"
-        ```
+    ii. Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then this variable must be ommitted from the yaml. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
+
+    iii. By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also. If you need to select a management or test interface explicitly, use the following env variables. You can find these variables in the example compose file as comments. Before applying this, identify which network interfaces of host sytem will be used as test traffic.
+    ```js
+    #   name: AGENT_MANAGEMENT_INTERFACE
+    #   value: "eth0"
+    #   name: AGENT_TEST_INTERFACE
+    #   value: "<host interface name>"
+    ```
+    iv. Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
     
-    3. Update the docker network `driver` and `parent` as per your requirment. This is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces. The networks should be connected alphabetically if the interfaces need to be in a specific order when mounted to the docker container.
-    ```
-            networks:
-            #  cyperf-test-client-net:
-            #    name: cyperf-test-client-net
-            #    driver: macvlan
-            #    driver_opts:
-            #      parent: ens192
-            #    ipam:
-            #      config:
-            #        - subnet: "172.32.12.0/22"
-            #  cyperf-test-server-net:
-            #    name: cyperf-test-server-net
-            #    driver: macvlan
-            #    driver_opts:
-            #      parent: ens224
-            #    ipam:
-            #      config:
-            #        - subnet: "10.10.10.0/24"
-    ```
-    4. Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
-    5. When Client and Server containers are running in two different hosts, them Server container must do port mirroring with host for port 80 and 443.
-    ```
+    v. When Client and Server containers are running in two different hosts, them Server container must do port mirroring with host for port 80 and 443.
+    ```js
             #     ports:
             #       - "80:80"
             #       - "443:443"
     ```
-    5. Reserve and limit the memory and cpu resources for CyPerf Agent containers, depending on your requirement. 
+    vi. Reserve and limit the memory and cpu resources for CyPerf Agent containers, depending on your requirement. 
         
-        **_NOTE:_** For more information, see [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents).
-- Apply the conpose file.
-  Download the docker compose file and place in the docker host. Change to the directory where docker compose file present.
-    ```
+    **_NOTE:_** For more information, see [Managing Resources for the CyPerf Agents](#managing-resources-for-the-cyperf-agents).
+
+- Apply the conpose file. Download the docker compose file and place in the docker host. Change to the directory where docker compose file present.
+    ```js
     # For creating containers
     sudo docker compose up -d
+    ```
+   vii. This step is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces of the host system. 
+    ```js
+    # Attach host network interfaces to the containers
 
-    # For removing containers
+    docker top <container name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo ip link set <host interface name> netns {}
+    ```
+
+- For removing containers
+    ```js
+    # Detach test interface if step vii performed
+
+    docker top <container name> | grep startup.sh | sed -n '1p' | awk '{ print $2 }' | xargs -I{} sudo nsenter --target {} --net ip link set <host interface name> netns 1 
+
+    # removing containers
     sudo docker compose down
     ```
 
-## Managing Resources for the CyPerf Agents
+### Managing Resources for the CyPerf Agents
 - It is recommended to run the CyPerf Agent clients and servers in different docker host. The example manifests can achieve this by using the `client` section in one host and `server` section in other host.
 
 - If you need to share the resources among multiple CyPerf Agents, (for example: when multiple Agent containers are runing in the same node) then use the following:
 
-```
+```js
 #    client:
 #        mem_limit: "4g"
 #        mem_reservation: "2g"
@@ -173,34 +223,7 @@ By default, when you create or run a container using docker create or docker run
 #        cpus: "2"
 #        cpuset: "2-3"
 ```
-- If any specific command you need to execute during docker deployment, use below section
-```
-#     command:
-#         - /bin/bash
-#         - -c
-#         - |
-#           cyperfagent feature allow_mgmt_iface_for_test disable
 
-```
-###  **Automated Deployment**
-
-To deploy a Keysight CyPerf agent container at Docker, you need to install Docker engine on the docker host if not done already. Below is a sample bash script to install the docker engine on the Ubuntu host.
-
-- Docker Installation: [install_docker_ubuntu.sh](agent_examples/install_docker_ubuntu.sh)
-
-Execute this script from your ubuntu host. This will install Docker Engine in your host.
-
-```
-$bash containers/agent_examples/install_docker_ubuntu.sh
-```
-
-- Docker Uninstalltion: [uninstall_docker_ubuntu.sh](agent_examples/uninstall_docker_ubuntu.sh)
-
-Execute this script from your ubuntu host. This will uninstall Docker Engine from your host.
-
-```
-$bash containers/agent_examples/uninstall_docker_ubuntu.sh
-```
 ## Test Configuration Checklist
 Ensure that the following configurations are appropriate, when configuring the CyPerf Controller for a test where CyPerf Agents container are running in the docker host. 
 
@@ -216,7 +239,7 @@ Ensure that the following configurations are appropriate, when configuring the C
 
 1. Collecting CyPerf Agent Logs
 - At present, CyPerf Agent that is running as a container does not publish logs when collecting diagnostics from CyPerf Controller UI. However, individual container logs can be collected manually. First identify the container and then use the ID for redirecting the logs to a file. You need to transfer them manually.        
-    ```
+    ```js
     sudo docker logs [cyperf-agent-container-id]
 
     sudo docker logs [cyperf-agent-container-id]  > [cyperf-agent-container-id].log 
@@ -224,7 +247,7 @@ Ensure that the following configurations are appropriate, when configuring the C
 2. Agents not visible in CyPerf Controller
 - Make sure that the ingress security rules for CyPerf Controller [(or Contoller Proxy)](#general-prerequisites) allow port numbers 443 for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate. 
 - Also check that the Agent containers are in ready state after deployment.
-    ```
+    ```js
     sudo docker container ls
     ```  
      If containers are stuck in pending state, check the available resource in the docker host.
@@ -232,7 +255,7 @@ Ensure that the following configurations are appropriate, when configuring the C
 ## Known Limitations
 1. CyPerf does not support IPv6 address for management interface yet.
 2. If host doesn’t have ip6tables module enabled container deployment might fail. Try following the steps in host machine to fix the problem.
-```
+```js
 find /lib/modules/$(uname -r) -type f -name ip6*
 sudo modprobe ip6_tables
 sudo modprobe ip6table_filter
@@ -252,9 +275,6 @@ sudo modprobe ip6table_filter
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release5.0
         - public.ecr.aws/keysight/cyperf-agent:5.0.3.723
-<details>
-
-<Summary> Old cyperf agent contriner release </summary>
 
 - **CyPerf 4.0** - [July, 2024]
     - Image URI: 
@@ -345,6 +365,3 @@ sudo modprobe ip6table_filter
 
         - public.ecr.aws/keysight/cyperf-agent:release1.0
         - public.ecr.aws/keysight/cyperf-agent:1.0.3.170
-  </details>
-
-

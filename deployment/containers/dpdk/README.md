@@ -116,36 +116,19 @@ sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name <
 ```
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent1 --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware <DPDK Agent Container Image>
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent1 --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware <DPDK Agent Container Image>
 ```
 
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent1 --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=KBMLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent1 --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
 
 ```
 
 #### Deploy DPDK agent containers on different host
 Deployment steps are the same as above. But the management network, specified with `--network` parameter, for each container, must be from a different subnet, otherwise, there is a possibility of getting the same management IP for different containers.
 
-### Binding Interface for DPDK
-
-- For Intel NIC
-
-```shell
-#pci id and interface name mapping 
-cd /root/dpdk-22.11
-sudo ./usertools/dpdk-devbind.py -s
-
-# It is recommended that vfio-pci be used as the kernel module for DPDK-bound ports in all cases
-
-# Bind PCI device with ID
-sudo ./usertools/dpdk-devbind.py --bind=vfio-pci <PCI ID> 
-sudo ./usertools//dpdk-devbind.py --bind=vfio-pci <PCI ID>
-
-```
-
-- For MT2892 Family [ConnectX-6 Dx] NIC
+### Attaching Interface for DPDK
 
 ```shell
 # Use the following command to attach the interface to the dpdk container 
