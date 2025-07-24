@@ -112,16 +112,16 @@ sudo docker network create --subnet=192.168.0.0/24 mgmt-network
 ```
 #### Deploy Containers
 ```Shell
-sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name <DPDK Agent Container Name> --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="<Unique prefix >" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
+sudo docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name <DPDK Agent Container Name> --network=mgmt-network -e NUMA_NODE=<REPLACE WITH NUMA ID> -e AGENT_CPU_SET="<REPLACE WITH CPU IDS ASSOCIATED WITH PREVIOUS SPECIFIED NUMA ID>" -e DPDK_TEST_INTERFACE_PCI_ID=<PCI ID> -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in Byte>" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="<Unique prefix >" -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
 ```
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ClientAgent1 --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware <DPDK Agent Container Image>
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent1 --network=mgmt-network -e NUMA_NODE=1 -e AGENT_CPU_SET="1,3,5,7,9,11,13,15" -e DPDK_TEST_INTERFACE_PCI_ID=0000:ca:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="0,1000" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_client1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerClient" -v /lib/modules:/lib/modules -v /dev:/dev -v /lib/firmware:/lib/firmware <DPDK Agent Container Image>
 ```
 
 Example:
 ```shell
-docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --name ServerAgent1 --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
+docker run -td --privileged --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent1 --network=mgmt-network -e NUMA_NODE=0 -e AGENT_CPU_SET="0,2,4,6,8,10,12,14" -e DPDK_TEST_INTERFACE_PCI_ID=0000:17:00.0 -e DPDK_HUGEMEM_ALLOCATION_SIZE="10000,0" -e DPDK_HUGEMEM_ALLOCATION_PREFIX="dpdk_server1" -e AGENT_CONTROLLER=10.39.34.33 -e AGENT_TAGS="AgentType=MLXDockerServer" -v /lib/modules:/lib/modules -v /dev:/dev -v  /lib/firmware:/lib/firmware <DPDK Agent Container Image>
 
 ```
 
