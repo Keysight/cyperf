@@ -155,3 +155,11 @@ docker container rm -v <container name>
 - DPDK Container with Single Interface as Management & Test  - Not supported.
 - Automatic MAC not supported. User need to disable Automatic mac in the Ethernet Range section of all Network segments.
 - In controller UI, DPDK is shown as enabled but Supported section shows "No".
+
+### Releases
+
+
+- **CyPerf 7.0** - [July, 2025]
+    - Image URI:
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:release7.0
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:7.0.3.807

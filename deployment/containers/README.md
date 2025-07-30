@@ -266,6 +266,12 @@ sudo modprobe ip6table_filter
 
 ## Releases
 
+
+- **CyPerf 7.0** - [July, 2025]
+    - Image URI: 
+        - public.ecr.aws/keysight/cyperf-agent:release7.0
+        - public.ecr.aws/keysight/cyperf-agent:7.0.3.807
+
 - **CyPerf 6.0** - [December, 2024]
     - Image URI: 
         - public.ecr.aws/keysight/cyperf-agent:release6.0
