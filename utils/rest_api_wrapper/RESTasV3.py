@@ -1809,12 +1809,27 @@ class RESTasV3:
 
     def get_application_id(self, app_name):
         if not self.app_list:
-            self.app_list = self.get_applications()
+            self.app_list = self.get_applications_list_by_pages()
         print('Getting application {} ID...'.format(app_name))
         for app in self.app_list:
             if app['Name'] == app_name:
                 print('Application ID = {}'.format(app['id']))
-                return app['id']    
+                return app['id'] 
+            
+    def get_applications_list_by_pages(self, take=50, skip=0):
+        apps_list = []
+        apps = self.get_applications_by_pages(take=take, skip=skip)
+        total_count = apps['totalCount']
+        full_pages = total_count // take
+        has_partial_page = total_count % take > 0
+        rounds = full_pages + (1 if has_partial_page else 0)
+        for i in range(rounds):
+            apps_list.extend(apps['data'])  # Flatten the list
+            skip += take
+            if skip >= total_count:
+                break
+            apps = self.get_applications_by_pages(take=take, skip=skip)
+        return apps_list
 
     def get_application_connections(self, app_id):
         apiPath = '/api/v2/resources/apps/{}/app/Connections?exclude=links'.format(app_id)
