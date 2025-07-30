@@ -80,8 +80,8 @@ The following table lists the parameters for this deployment.
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_broker_machine_type | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
 | azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
-| broker_name   | keysight-cyperf-controller-proxy-6-0      | Name for the cyperf broker machines. |
-| agent_name   | keysight-cyperf-agent-6-0            | Name for the cyperf agent machines. |
+| broker_name   | keysight-cyperf-controller-proxy-7-0      | Name for the cyperf broker machines. |
+| agent_name   | keysight-cyperf-agent-7-0            | Name for the cyperf agent machines. |
 
 ## Destruction
 

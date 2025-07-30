@@ -68,13 +68,13 @@ variable "azure_mdw_machine_type" {
 }
 
 variable "controller_image" {
-  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-6-0/keysight-cyperf-controller-6-0.vhd"
+  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-7-0/keysight-cyperf-controller-7-0.vhd"
   type        = string
   description = "Controller image path"
 }
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-6-0"
+  default     = "keysight-cyperf-controller-7-0"
   description = "Name for the cyperf controller machine"
 }

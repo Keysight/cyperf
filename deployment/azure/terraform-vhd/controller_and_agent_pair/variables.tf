@@ -75,26 +75,26 @@ variable "azure_agent_machine_type" {
 }
 
 variable "controller_image" {
-  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-6-0/keysight-cyperf-controller-6-0.vhd"
+  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-7-0/keysight-cyperf-controller-7-0.vhd"
   type        = string
   description = "Controller image path"
 }
 
 variable "agent_image" {
-  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-6-0/keysight-cyperf-agent-6-0.vhd"
+  default     = "https://cyperf.blob.core.windows.net/keysight-cyperf-7-0/keysight-cyperf-agent-7-0.vhd"
   type        = string
   description = "Agent image path"
 }
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-6-0"
+  default     = "keysight-cyperf-controller-7-0"
   description = "Name for the cyperf controller machine"
 }
 
 variable "agent_name" {
   type        = string
-  default     = "keysight-cyperf-agent-6-0"
+  default     = "keysight-cyperf-agent-7-0"
   description = "Name for the cyperf agent machines"
 }
 

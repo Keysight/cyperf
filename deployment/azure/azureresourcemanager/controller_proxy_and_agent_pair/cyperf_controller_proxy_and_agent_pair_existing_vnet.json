@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "0.6.0",
+            "defaultValue": "0.7.0",
 
             "allowedValues": [
+                "0.7.0",
                 "0.6.0",
                 "0.5.0",
                 "0.4.0",
@@ -266,6 +267,10 @@
         "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
 
         "skunames" : {
+            "0.7.0": {
+                "skunameagent": "keysight-cyperf-agent-70",
+                "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-70"
+            },
             "0.6.0": {
                 "skunameagent": "keysight-cyperf-agent-60",
                 "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-60"
