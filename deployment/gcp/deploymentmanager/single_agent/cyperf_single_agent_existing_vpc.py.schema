@@ -40,7 +40,7 @@ properties:
 
   agentSourceImage:
     type: string
-    default: keysight-cyperf-agent-6-0
+    default: keysight-cyperf-agent-7-0
     description: source image for agents
 
   management_subnetwork:
