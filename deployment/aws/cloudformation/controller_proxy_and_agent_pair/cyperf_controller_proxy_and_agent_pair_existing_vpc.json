@@ -524,7 +524,7 @@
                         "AMIxBROKER"
                     ]
                 },
-                "InstanceType": "t2.medium",
+                "InstanceType": "t3.medium",
                 "KeyName": {
                     "Ref": "KeyNameForCyPerfAgent"
                 },
