@@ -111,7 +111,7 @@ resource "aws_network_interface" "aws_mdw_interface" {
 resource "aws_eip" "mdw_public_ip" {
   count                     = var.stack_type == "ipv6" ? 0 : 1
   instance                  = aws_instance.aws_mdw.id
-  vpc                       = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.aws_mdw.private_ip
   depends_on = [
     aws_internet_gateway.aws_internet_gateway

@@ -223,7 +223,7 @@ resource "aws_network_interface" "aws_server_test_interface" {
 resource "aws_eip" "broker_public_ip" {
   count                     = var.stack_type == "ipv6" ? 0 : 1
   instance                  = aws_instance.aws_broker.id
-  vpc                       = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.aws_broker.private_ip
   depends_on = [
     aws_internet_gateway.aws_internet_gateway
@@ -233,7 +233,7 @@ resource "aws_eip" "broker_public_ip" {
 resource "aws_eip" "server_public_ip" {
   count                     = var.stack_type == "ipv6" ? 0 : 1
   network_interface         = aws_network_interface.aws_server_mgmt_interface.id
-  vpc                       = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.aws_server_agent.private_ip
   depends_on = [
     aws_internet_gateway.aws_internet_gateway
@@ -243,7 +243,7 @@ resource "aws_eip" "server_public_ip" {
 resource "aws_eip" "client_public_ip" {
   count                     = var.stack_type == "ipv6" ? 0 : 1
   network_interface         = aws_network_interface.aws_client_mgmt_interface.id
-  vpc                       = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.aws_client_agent.private_ip
   depends_on = [
     aws_internet_gateway.aws_internet_gateway

@@ -212,7 +212,7 @@ resource "aws_network_interface" "main_agent_test_interface" {
 
 resource "aws_eip" "mdw_public_ip" {
   instance = aws_instance.mdw.id
-  vpc = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.mdw.private_ip
   depends_on = [
     aws_internet_gateway.main_internet_gateway
@@ -222,7 +222,7 @@ resource "aws_eip" "mdw_public_ip" {
 resource "aws_eip" "main_agent_public_ip" {
   count = var.agent_number
   network_interface = aws_network_interface.main_agent_mgmt_interface[count.index].id
-  vpc = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.main_agent[count.index].private_ip
   depends_on = [
     aws_internet_gateway.main_internet_gateway
@@ -472,7 +472,7 @@ resource "aws_network_interface" "secondary_agent_test_interface" {
 
 resource "aws_eip" "broker_public_ip" {
   instance = aws_instance.broker.id
-  vpc = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.broker.private_ip
   depends_on = [
     aws_internet_gateway.secondary_internet_gateway
@@ -482,7 +482,7 @@ resource "aws_eip" "broker_public_ip" {
 resource "aws_eip" "secondary_agent_public_ip" {
   count = var.agent_number
   network_interface = aws_network_interface.secondary_agent_mgmt_interface[count.index].id
-  vpc = true
+  domain = "vpc"
   associate_with_private_ip = aws_instance.secondary_agent[count.index].private_ip
   depends_on = [
     aws_internet_gateway.secondary_internet_gateway
