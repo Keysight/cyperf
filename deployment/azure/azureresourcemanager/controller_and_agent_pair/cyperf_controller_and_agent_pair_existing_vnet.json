@@ -267,7 +267,7 @@
 
         "skunames" : {
             "0.7.0": {
-                "skunameagent": "keysight-cyperf-agent-70",
+                "skunameagent": "keysight-cyperf-agent-7-0",
                 "skunamecontroller": "keysight-cyperf-controller-70"
             },
             "0.6.0": {
