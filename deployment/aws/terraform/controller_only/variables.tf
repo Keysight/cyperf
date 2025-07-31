@@ -58,6 +58,6 @@ variable "mdw_version" {
 
 variable "cyperf_release" {
   type        = string
-  default     = "6.0"
+  default     = "7.0"
   description = "The version of the cyperf release"
 }

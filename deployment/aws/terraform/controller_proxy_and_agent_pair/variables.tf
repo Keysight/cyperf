@@ -45,7 +45,7 @@ variable "availability_zone" {
 
 variable "aws_broker_machine_type" {
   type        = string
-  default     = "t2.medium"
+  default     = "t3.medium"
   description = "MDW instance type"
 }
 
@@ -79,6 +79,6 @@ variable "agent_version" {
 
 variable "cyperf_release" {
   type        = string
-  default     = "6.0"
+  default     = "7.0"
   description = "The version of the cyperf release"
 }

@@ -48,7 +48,7 @@ variable "aws_agent_machine_type" {
 
 variable "aws_broker_machine_type"{
   type = string
-  default = "t2.medium"
+  default = "t3.medium"
   description = "MDW instance type"
 }
 
@@ -108,6 +108,6 @@ variable "broker_password" {
 
 variable "cyperf_release" {
   type        = string
-  default     = "6.0"
+  default     = "7.0"
   description = "The version of the cyperf release"
 }

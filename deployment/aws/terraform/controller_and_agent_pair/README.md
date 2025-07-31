@@ -72,7 +72,7 @@ The following table lists the parameters for this deployment.
 | aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
 | mdw_version   | keysight-cyperf-controller-7-0           | The CyPerf controller image version. |
 | agent_version       | keysight-cyperf-agent-7-0     | The CyPerf agent image version.   |
-| cyperf_release   | 6.0           | The version of the cyperf release. |   
+| cyperf_release   | 7.0           | The version of the cyperf release. |   
 
 ## Destruction
 

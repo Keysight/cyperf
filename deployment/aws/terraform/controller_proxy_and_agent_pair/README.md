@@ -69,7 +69,7 @@ The following table lists the parameters for this deployment.
 | aws_allowed_cidr | ["0.0.0.0/0"] |List of ip allowed to access the deployed machines. |
 | aws_region            | us-east-2   | The AWS region for deployment. |
 | availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
-| aws_broker_machine_type   | t2.medium   | The machine type used for deploying the CyPerf controller proxy. |
+| aws_broker_machine_type   | t3.medium   | The machine type used for deploying the CyPerf controller proxy. |
 | aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
 | broker_version   | keysight-cyperf-controller-proxy-7-0           | The CyPerf controller proxy image version. |
 | agent_version       | keysight-cyperf-agent-7-0     | The CyPerf agent image version.   |  
