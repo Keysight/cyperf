@@ -19,7 +19,7 @@ locals {
   test_iprange              = ["10.0.2.0/24"]
   split_version             = split(".", var.cyperf_version)
   sku_name_controller_proxy = var.broker_version != "0.2.0" ? "keysight-cyperf-controllerproxy-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-controller-proxy"
-  sku_name_agent            = var.cyperf_version != "0.2.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent"
+  sku_name_agent  = var.cyperf_version != "0.7.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
   instance_sku_map = {
     "Standard_F4s_v2"   = "A2"
     "Standard_F16s_v2"  = "A4"
