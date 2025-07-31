@@ -96,24 +96,24 @@ variable "gcp_agent_machine_type" {
 
 variable "cyperf_version" {
   type        = string
-  default     = "0.3.0"
+  default     = "0.7.0"
   description = "CyPerf release version to get the images from Azure Marketplace"
 }
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-4-0"
+  default     = "keysight-cyperf-controller-7-0"
   description = "Image id for the cyperf controller machine"
 }
 
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-4-0"
+  default     = "keysight-cyperf-agent-7-0"
   description = "Image id for the cyperf agent machines"
 }
 
 variable "broker_image" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-4-0"
+  default     = "keysight-cyperf-controller-proxy-7-0"
   description = "Image id for the cyperf controller proxy machines"
 }
