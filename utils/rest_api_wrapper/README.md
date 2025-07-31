@@ -1,3 +1,9 @@
+⚠️ Notice: Development on the RESTasV3 API wrapper has been frozen ⚠️
+
+We strongly encourage you to switch to the [new API wrapper](https://github.com/Keysight/cyperf-api-wrapper), which is actively maintained and aligned with the latest features introduced in CyPerf.
+Please note that this legacy wrapper includes updates only up to CyPerf 7.0 release and will no longer receive further improvements or support for newly added capabilities.
+To get started with the new REST API wrapper, refer to the [README](https://github.com/Keysight/cyperf-api-wrapper/blob/main/README.md) of the new wrapper.
+
 # CyPerf REST API Wrapper
 
 # Introduction
