@@ -1,0 +1,166 @@
+
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+    name: client-device-net
+    namespace: default
+spec:
+    config: '{
+        "cniVersion": "0.3.1",
+        "type": "host-device",
+        "device": "ens192",
+        "ipam": {
+          "type": "host-local",
+          "subnet": "172.168.1.0/24",
+          "rangeStart": "172.168.1.1",
+          "rangeEnd": "172.168.1.100"
+      }
+    }'
+---
+
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+    name: server-device-net
+    namespace: default
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "type": "host-device",
+    "device": "ens224",
+    "ipam": {
+      "type": "host-local",
+      "subnet": "172.168.1.0/24",
+      "rangeStart": "172.168.1.101",
+      "rangeEnd": "172.168.1.200"
+    }
+  }'
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: cyperf-agent-client-deployment
+    namespace: default
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: cyperf-agent
+    template:
+        metadata:
+            labels:
+                app: cyperf-agent
+            annotations:
+                k8s.v1.cni.cncf.io/networks: '[{ "name": "client-device-net", "interface": "ens192" }]'
+        spec:
+            containers:
+                -   name: cyperf-agent-client
+                    image: public.ecr.aws/keysight/cyperf-agent:latest
+                    env:
+                    -   name: AGENT_CONTROLLER
+                        value: "10.36.66.111"
+                    -   name: AGENT_MANAGEMENT_INTERFACE
+                        value: "eth0"
+                    -   name: AGENT_TAGS
+                        value: "K8s-Group=K8-Agent,node-owner=User,AgentType=K8-Client"
+                    -   name: AGENT_CPU_SET
+                        value: "0,1"
+                    securityContext:
+                        privileged: true
+                        capabilities:
+                          add: ["NET_ADMIN", "IPC_LOCK", "NET_RAW"]
+                    resources:
+                        limits:
+                            memory: "4Gi"
+                            #cpu: "3.5"
+                            ## skipping requests means limits=requests
+                            ## with 3.5 for 8 core node it should be able to run 2 replicas
+                            ## but experiments needed to see how other pods react for perf configs.
+                        requests:
+                            memory: "4Gi"
+                    readinessProbe:
+                        exec:
+                            command:
+                            - /bin/bash
+                            - -c
+                            - cat /appsec/startup_ready
+            #nodeSelector:
+            #    agenttype: client
+            #affinity:
+            #    podAntiAffinity:
+            #        requiredDuringSchedulingIgnoredDuringExecution:
+            #        - labelSelector:
+            #            matchExpressions:
+            #            - key: app
+            #              operator: In
+            #              values:
+            #              - cyperf-agent
+            #          topologyKey: "kubernetes.io/hostname"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: cyperf-agent-server-deployment
+    namespace: default
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: cyperf-agent
+    template:
+        metadata:
+            labels:
+                app: cyperf-agent
+            annotations:
+                #k8s.v1.cni.cncf.io/networks: server-device-net
+                k8s.v1.cni.cncf.io/networks: '[{ "name": "server-device-net", "interface": "ens224" }]'
+        spec:
+            containers:
+                -   name: cyperf-agent-server
+                    image: public.ecr.aws/keysight/cyperf-agent:latest
+                    env:
+                    -   name: AGENT_CONTROLLER
+                        value: "10.36.66.111"
+                    -   name: AGENT_MANAGEMENT_INTERFACE
+                        value: "eth0"
+                    -   name: AGENT_TAGS
+                        value: "K8s-Group=K8-Agent,node-owner=User,AgentType=K8-Server"
+                    -   name: AGENT_CPU_SET
+                        value: "2,3"
+                    securityContext:
+                        privileged: true
+                        capabilities:
+                          add: ["NET_ADMIN", "IPC_LOCK", "NET_RAW"]
+                    resources:
+                        limits:
+                            memory: "4Gi"
+                            #cpu: "3.5"
+                            ## skipping requests means limits=requests
+                            ## with 3.5 for 8 core node it should be able to run 2 replicas
+                            ## but experiments needed to see how other pods react for perf configs.
+                        requests:
+                            memory: "4Gi"
+                    readinessProbe:
+                        exec:
+                            command:
+                            - /bin/bash
+                            - -c
+                            - cat /appsec/startup_ready
+            #nodeSelector:
+            #    agenttype: client
+            #affinity:
+            #    podAntiAffinity:
+            #        requiredDuringSchedulingIgnoredDuringExecution:
+            #        - labelSelector:
+            #            matchExpressions:
+            #            - key: app
+            #              operator: In
+            #              values:
+            #              - cyperf-agent
+            #          topologyKey: "kubernetes.io/hostname"
+
+
