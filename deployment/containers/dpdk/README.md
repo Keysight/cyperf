@@ -10,8 +10,12 @@ CyPerf Agent container supports DPDK. Below sections provides step by step guide
   - [Removing Docker containers](#removing-docker-containers)
   - [Troubleshooting](#troubleshooting)
   - [Known Limitations](#known-limitations)
+  - [Releases](#releases)
 
 ## Prerequisites
+
+- Install Docker Engine in your desired host platform if not already. Refer [Install Docker Engine Server](https://docs.docker.com/engine/install/#server) for more details. 
+
 ### Supported Enviornments
 - Qualified on Ubuntu 22.04 host with DPDK version 22.11
 - Recomended NIC types are
@@ -24,6 +28,19 @@ User needs to carryout following steps to get the host ready
 
 - Install DPDK. For detail steps click [Install DPDK](#dpdk-installation)
 
+- Pull CyPerf Agent Docker image `public.ecr.aws/keysight/cyperf-agent-dpdk:latest`. Refer [Pull an image](https://docs.docker.com/engine/reference/commandline/pull/) for more details.
+
+    ```
+    sudo docker pull public.ecr.aws/keysight/cyperf-agent-dpdk:latest
+    ```
+    - **_NOTE:_**
+    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-70) and load it using the following command
+    
+        ```
+        sudo docker load -i <downloaded tar file>
+        ```
+        The loaded image needs to be tagged properly and samples need to be updated accordingly.
+
 ### Configure host for CyPerf DPDK containers
  - NUMA (Non-Uniform Memory Access) architecture is mandatory for optimal DPDK performance. Ensure that your system is configured with NUMA nodes.
       Verify NUMA Nodes:
@@ -31,12 +48,12 @@ User needs to carryout following steps to get the host ready
         lscpu | grep NUMA
     ```
 - Configure `hugepage`. Check [hugepage configuration](#hugepage-configuration)
-- Take note of NUMA node and inteface associate with that. Check [Interface to NUMA mapping](#interface-and-numa-node-mapping)
+- Take note of NUMA node and inteface associate with that. Check [interface to NUMA mapping](#interface-and-numa-node-mapping)
 - Bind Test interface. Check [bind interface](#binding-interface-for-dpdk)
   
 ### Container Deployment
 - CyPerf Controller or Controller-proxy must pre exists. For detail description check [here][4,5,6](../README.md/#general-prerequisites).
-- Deploy DPDK docker conainer. Check [container deployment](#docker-container-deployment)
+- Deploy DPDK docker conainer. Check [docker container deployment](#docker-container-deployment)
 
 ### DPDK Installation
 ```shell
@@ -54,18 +71,14 @@ apt install -y build-essential cmake
 apt install -y libnuma-dev libpcap-dev 
 pip3 install meson ninja pyelftools 
 wget https://fast.dpdk.org/rel/dpdk-22.11.tar.xz 
-tar -xvf ./dpdk-22.11.tar.xz 
+tar -xvf ./dpdk-22.11.tar.xz
+
 cd dpdk-22.11 
 meson build 
 ninja -C build 
 ninja -C build install 
-cd /root 
-git clone git://dpdk.org/dpdk-kmods 
-cd dpdk-kmods/linux/igb_uio/ 
-make clean && make 
-modprobe uio 
-insmod igb_uio.ko 
-cd /root/dpdk-22.11 
+
+# check interface status
 ./usertools/dpdk-devbind.py --status 
 ```
 
@@ -76,7 +89,7 @@ cd /root/dpdk-22.11
 # `hugepage` cleanup and unmount
 sudo ./usertools/dpdk-hugepages.py -u -c -s
 
-sudo ./usertools/dpdk-hugepages.py -p <Page size e.g. 1G> -r <Reserve memory e.g. 32G> -m -s
+sudo ./usertools/dpdk-hugepages.py -p 1G -r <Reserve memory e.g. 32G> -m -s
 
 # Check the `hugepage` allocation
 mount | grep huge

@@ -2,6 +2,11 @@
 ## Introduction
 This document describes how you can deploy the Keysight CyPerf agents inside Kubernetes clusters. The Following sections contain information about the prerequisites for deployments and also explain the modifications that are required in the client and server manifest yaml examples. Some modifications are mandatory for updating the manifests for specific user environment whereas some of them are optional and depend on different types of deployment scenarios.
 
+The following section describes the steps for using same interface for both management and test traffic.
+
+> ### For running CyPerf agents using separate management and test interface, please switch to the other [page](multus/README.md). This page also describes [how to enable DPDK](multus/README.md) for CyPerf agents.
+
+
 - [General Prerequisites](#general-prerequisites)
 - [Workflow](#workflow)
     - [Example Manifests](#example-manifests)
@@ -134,6 +139,7 @@ You can deploy in AWS EKS or in AZURE AKS in the following two ways:
     - in the CyPerf test config, "Traffic destination port" should be same as the port which is set as NodePort service port in the manifest
 
 ## Deployment in **On-Premise K8s Cluster**
+### For running CyPerf agents using separate test interface or DPDK test interface please follow this [link](multus/README.md).
 ### Prerequisites
 1. All the general prerequisites that are mentioned in the [General Prerequisites](#general-prerequisites) section.
     
