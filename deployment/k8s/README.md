@@ -242,7 +242,7 @@ You can deploy in On-Premise K8s Cluster in the following two ways:
 
 
     ```
-    -   name: AGENT_TEST_INTERFACE
+    -   name: AGENT_MANAGEMENT_INTERFACE
         value: "vxlan0"
     -   name: AGENT_PROMISC_INTERFACE
         value: "<all>"
