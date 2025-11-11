@@ -168,6 +168,10 @@ docker container rm -v <container name>
 - DPDK Container with Single Interface as Management & Test  - Not supported.
 - Automatic MAC not supported. User need to disable Automatic mac in the Ethernet Range section of all Network segments.
 - In controller UI, DPDK is shown as enabled but Supported section shows "No".
+- Container deployment fails when "vfio-pci" driver is not loaded in the host. The module needs to be manually loaded using the command:
+```shell
+sudo modprobe vfio-pci
+```
 
 ### Releases
 
