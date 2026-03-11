@@ -57,7 +57,7 @@ variable "aws_agent_machine_type" {
 
 variable "broker_version" {
   type        = string
-  default     = "keysight-cyperf-controller-proxy-7-0"
+  default     = "keysight-cyperf-controller-proxy-26-0-0"
   description = "Version for the controller-proxy machine"
 }
 
@@ -73,12 +73,12 @@ variable "broker_password" {
 }
 variable "agent_version" {
   type        = string
-  default     = "keysight-cyperf-agent-7-0"
+  default     = "keysight-cyperf-agent-26-0-0"
   description = "Version for the cyperf agent machines"
 }
 
 variable "cyperf_release" {
   type        = string
-  default     = "7.0"
+  default     = "26.0.0"
   description = "The version of the cyperf release"
 }

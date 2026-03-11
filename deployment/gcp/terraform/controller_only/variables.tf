@@ -54,7 +54,7 @@ variable "gcp_mdw_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-7-0"
+  default     = "keysight-cyperf-controller-26-0-0"
   description = "Image id for the cyperf controller machine"
 }
 

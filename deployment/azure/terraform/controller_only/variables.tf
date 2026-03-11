@@ -75,6 +75,6 @@ variable "cyperf_version" {
 
 variable "mdw_name" {
   type        = string
-  default     = "keysight-cyperf-controller-7-0"
+  default     = "keysight-cyperf-controller-26-0-0"
   description = "Name for the cyperf controller machine"
 }
