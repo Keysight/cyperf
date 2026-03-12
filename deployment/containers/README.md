@@ -7,6 +7,7 @@ This document describes how you can deploy the Keysight CyPerf agents inside Doc
 ### [CyPerf Agents in Containers environments](#cyperf-agents-in-containers-environments)
   - [Introduction](#introduction)
   - [General Prerequisites](#general-prerequisites)
+  - [ARM Architecture (aarch64) Support](#arm-architecture-aarch64-support)
   - [Workflow](#workflow)
     - [**Manual Deployment**](#manual-deployment)
     - [**Docker Compose**](#docker-compose)
@@ -27,7 +28,7 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
     sudo docker pull public.ecr.aws/keysight/cyperf-agent:latest
     ```
     - **_NOTE:_**
-    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-70) and load it using the following command
+    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-2600) and load it using the following command
     
         ```
         sudo docker load -i <downloaded tar file>
@@ -35,11 +36,39 @@ To deploy a Keysight CyPerf agent container at Docker, you need the following:
         The loaded image needs to be tagged properly and samples need to be updated accordingly.
 
 4.  A CyPerf Controller that is already deployed and accessible from the Agent docker containers.  
-    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/6.0/CyPerf_UserGuide.pdf).
+    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/26.0.0/CyPerf_UserGuide.pdf).
 
 5.  A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
 6.  Make sure that the ingress security rules for CyPerf Controller (or Contoller Proxy) allow port numbers **443** for the control subnet in which Agent and CyPerf Controller (or Controller Proxy) can communicate.
+
+## ARM Architecture (aarch64) Support
+
+CyPerf supports deployment on ARM architecture (aarch64) systems from 26.0.0 release onwards. This section describes how to deploy CyPerf Agents as Docker containers on ARM-based hosts.
+
+### ARM Prerequisites
+
+1. An ARM-based system running a supported Linux distribution (Debian 12/Ubuntu 22.04 or later recommended).
+2. Docker Engine installed on the ARM host. Refer to [Install Docker Engine](https://docs.docker.com/engine/install/#server) for details.
+3. A CyPerf Controller that is already deployed and accessible from the Agent.
+
+### ARM Docker Image
+
+CyPerf agent's ARM image can be pulled from `public.ecr.aws` using the following commad:
+
+```shell
+sudo docker pull public.ecr.aws/keysight/cyperf-agent-aarch64:latest
+```
+
+This image is also available as a `.tar` file which can be downloaded from [Keysight Software Download Portal](https://support.ixiacom.com/keysight-cyperf-2600).
+
+Load the .tar file using the following command:
+```shell
+sudo docker load -i cyperf_agent_aarch64_ixstack-raw_release_<version>.tar
+```
+
+### ARM Known Limitations
+ - **DPDK is not supported on ARM architecture.**
 
 ## Workflow
 To test a device which is running inside a Docker, do the following:
@@ -49,7 +78,7 @@ To test a device which is running inside a Docker, do the following:
 - Introduce the CyPerf Agent as a client or a server or as both that are running inside the same Docker host or separate docker host. This can be achieved by applying the [manual deployment](#manual-deployment). 
     - **_NOTE:_** Agents will be visible (by their tags and IP addresses) in the _Agent Assignment_ dialog.
 - Create a test using CyPerf Controller UI. Select Agents for respective _Network Segments_ and configure appropriate properties in the _DUT Network->Configure DUT_ page in the UI before running the test. 
-  - **_NOTE:_** For more information, see _Chapter 3_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
+  - **_NOTE:_** For more information, see _Chapter 3_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/26.0.0/CyPerf_UserGuide.pdf).
 
 ###  **Manual Deployment**
 By default, the agent will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. The same interface will be used for test traffic also.
@@ -260,6 +289,14 @@ sudo modprobe ip6table_filter
 
 ## Releases
 
+
+- **CyPerf 26.0.0** - [March, 2026]
+    - Image URI (x86_64): 
+        - public.ecr.aws/keysight/cyperf-agent:release26.0.0
+        - public.ecr.aws/keysight/cyperf-agent:26.0.3.834
+    - Image URI (aarch64): 
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:release26.0.0
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:26.0.3.834
 
 - **CyPerf 7.0** - [July, 2025]
     - Image URI: 

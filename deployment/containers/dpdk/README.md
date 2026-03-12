@@ -34,7 +34,7 @@ User needs to carryout following steps to get the host ready
     sudo docker pull public.ecr.aws/keysight/cyperf-agent-dpdk:latest
     ```
     - **_NOTE:_**
-    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-70) and load it using the following command
+    In case this public repository cannot be used to pull the CyPerf Agent Docker image, download it (.tar) from [here](https://support.ixiacom.com/keysight-cyperf-2600) and load it using the following command
     
         ```
         sudo docker load -i <downloaded tar file>
@@ -171,6 +171,11 @@ docker container rm -v <container name>
 
 ### Releases
 
+
+- **CyPerf 26.0.0** - [March, 2026]
+    - Image URI:
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:release26.0.0
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:26.0.3.834
 
 - **CyPerf 7.0** - [July, 2025]
     - Image URI:
