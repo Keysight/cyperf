@@ -26,10 +26,10 @@ To deploy a Keysight CyPerf agent inside Kubernetes, you need the following:
     
 2. A kubernetes cluster along with a containerzied device under test (DUT) that is already deployed in the same cluster. 
   
-    - **_NOTE:_** For more information on how to deploy the DUT in a K8s cluster, follow the instructions provided in the [Cyperf Deployment Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_Deployment_Guide.pdf) for a specific DUT . For general information on K8s cluster deployment, see [Kubernetes Documentation](https://kubernetes.io/docs/setup/).
+    - **_NOTE:_** For more information on how to deploy the DUT in a K8s cluster, follow the instructions provided in the [Cyperf Deployment Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/26.0.0/CyPerf_Deployment_Guide.pdf) for a specific DUT . For general information on K8s cluster deployment, see [Kubernetes Documentation](https://kubernetes.io/docs/setup/).
 
 3.  A CyPerf Controller that is already deployed and accessible from the nodes inside the kubernetes cluster.  
-    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/2.1/CyPerf_UserGuide.pdf).
+    - **_NOTE:_** For information on how to deploy CyPerf Controller, see _Chapter 2_ of the [Cyperf User Guide](http://downloads.ixiacom.com/library/user_guides/KeysightCyPerf/26.0.0/CyPerf_UserGuide.pdf).
 
 3. A CyPerf Controller Proxy is required in hybrid deployment scenarios, where each of the distributed Agents cannot directly access the CyPerf Controller. For example, if the CyPerf Controller is deployed on premise and some CyPerf Agents are in the cloud, they can still communicate through a CyPerf Controller Proxy. In this case, the public IP address of the Controller Proxy is configured in the CyPerf Controller and Agents become available to the Controller by registering to the Controller Proxy.
 
@@ -312,6 +312,14 @@ Ensure that the following configurations are appropriate, when configuring the C
 
 
 ## Releases
+
+- **CyPerf 26.0.0** - [March, 2026]
+    - Image URI (x86_64): 
+        - public.ecr.aws/keysight/cyperf-agent:release26.0.0
+        - public.ecr.aws/keysight/cyperf-agent:26.0.3.834
+    - Image URI (aarch64): 
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:release26.0.0
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:26.0.3.834
 
 - **CyPerf 7.0** - [July, 2025]
     - Image URI: 
