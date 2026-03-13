@@ -58,9 +58,9 @@
                 "REGIONxTAG": "AP_SOUTH_1"
             },
             "ap-south-2": {
-                "AMIxAPPLICATION": "ami-0ad49e55a3285b895",
-                "AMIxBROKER": "ami-0995949e52f0cc98e",
-                "AMIxAGENT": "ami-046ef19e6e1a446c4",
+                "AMIxAPPLICATION": "ami-0b837f2ead59fd635",
+                "AMIxBROKER": "ami-011857eb70068aed2",
+                "AMIxAGENT": "ami-05a4d43be857e5b27",
                 "AMIxLICENSE": "ami-00000000000000000",
                 "EC2xCONNECTxCIDR": "13.233.177.0/29",
                 "EC2xREGION": "Asia Pacific (Hyderabad)",
