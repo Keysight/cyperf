@@ -13,8 +13,15 @@ locals {
       bash /usr/bin/image_init_azure.sh  ${var.controller_ip} --username "${var.controller_username}" --password "${var.controller_password}" --fingerprint "">> /home/cyperf/azure_image_init_log
       CUSTOM_DATA
   split_version        = split(".", var.cyperf_version)
-  sku_name_agent            = var.cyperf_version != "0.7.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
-  instance_sku_map = {
+    sku_agent_map = {
+    "0.7.0"  = "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
+    "26.0.0" = "keysight-cyperf-agent-2600"
+  }
+  sku_name_agent = lookup(
+    local.sku_agent_map,
+    var.cyperf_version
+  )
+    instance_sku_map = {
     "Standard_F4s_v2"   = "A2"
     "Standard_F16s_v2"  = "A4"
     "Standard_D48s_v4"  = "A8"

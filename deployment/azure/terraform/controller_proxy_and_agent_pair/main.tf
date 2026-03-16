@@ -17,9 +17,26 @@ locals {
       CUSTOM_DATA
   mgmt_iprange              = ["10.0.1.0/24", "fd00:10::/64"]
   test_iprange              = ["10.0.2.0/24"]
-  split_version             = split(".", var.cyperf_version)
-  sku_name_controller_proxy = var.broker_version != "0.2.0" ? "keysight-cyperf-controllerproxy-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-controller-proxy"
-  sku_name_agent  = var.cyperf_version != "0.7.0" ? "keysight-cyperf-agent-${local.split_version[1]}${local.split_version[2]}" : "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
+  split_version             = split(".", var.cyperf_version)  
+  sku_controller_proxy_map = {
+    "0.2.0"  = "keysight-cyperf-controllerproxy"
+    "0.4.0"  = "keysight-cyperf-controllerproxy-${local.split_version[1]}-${local.split_version[2]}"
+    "26.0.0" = "keysight-cyperf-controllerproxy-2600"
+  }
+
+  sku_agent_map = {
+    "0.7.0"  = "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
+    "26.0.0" = "keysight-cyperf-agent-2600"
+  }
+  sku_name_controller_proxy = lookup(
+    local.sku_controller_proxy_map,
+    var.cyperf_version
+  )
+
+  sku_name_agent = lookup(
+    local.sku_agent_map,
+    var.cyperf_version
+  )
   instance_sku_map = {
     "Standard_F4s_v2"   = "A2"
     "Standard_F16s_v2"  = "A4"
