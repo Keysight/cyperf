@@ -62,7 +62,7 @@ Keysight CyPerf license needs to be procured for further usage. These licenses n
 You are responsible for the cost of the AWS services used while running this manual deployment. There is no additional cost for using this manual deployment. For further details, see the pricing pages for each AWS service you will be using in this manual deployment guide. Prices are subject to change.
 1.	In the AWS console, select **EC2** service, followed by **Instances** and **Launch Instance**.
 2.	Go to **Community AMIs** and then select **“keysight-cyperf-controller-proxy-26-0-0”**. 
-3.	Select Instance Type **“t2.medium”** and move next. 
+3.	Select Instance Type **“t3.medium”** and move next. 
 4.	Select your preferred **VPC**, preferred public subnet in that **VPC** and move next. 
 5.	Keep default storage size **8 GiB** and move next. 
 6.	Select or create a Security group with bellow ingress custom TCP port.
