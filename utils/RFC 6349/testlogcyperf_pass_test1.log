@@ -1,0 +1,25 @@
+2025-01-24 12:45:07,299 INFO     RUNNING RFC 6349 TEST WITH PARAMETERS
+
+2025-01-24 12:45:07,299 INFO     CyPerf Server 10.39.46.181 Client ID clt-wap
+
+2025-01-24 12:45:07,299 INFO     Client Agent 10.39.47.53 Server Agent  10.39.47.97
+
+2025-01-24 12:45:07,299 INFO     Client Ip 10.0.0.30 Client gateway IP  0.0.0.0Client subnet mask 16
+
+2025-01-24 12:45:07,299 INFO     Server Ip 10.0.0.40 Server gateway IP 0.0.0.0 Server Subnet Mask 16
+
+2025-01-24 12:45:07,299 INFO     RFC 6349 based Throughput Testing 
+ ********************************** 
+The RFC 6349 “Framework for TCP Throughput Testing” provides a methodology for testing sustained TCP Layer performance. 
+ In addition to finding the TCP throughput at the optimal buffer size, RFC 6349 presents metrics that can be used to better understand the results.
+ RFC 6349 testing is done in 3 steps:
+ 1.	Identify the Path Maximum Transmission Unit (MTU) 
+ 2.	Identify the Baseline Round-Trip Time (RTT) and the Bottleneck Bandwidth (BB) 
+ 3.	Perform the TCP Connection Throughput Tests 
+ ***********************************
+
+
+2025-01-24 12:45:07,299 INFO     Test 1 - Determine the Path MTU between the client and the server
+ -----------------------------------------------------------------
+
+
