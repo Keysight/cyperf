@@ -264,8 +264,6 @@ resource "aws_instance" "aws_mdw" {
   instance_type = var.aws_mdw_machine_type
 
   root_block_device {
-    volume_size           = "100"
-    volume_type           = "gp3"
     delete_on_termination = true
   }
 

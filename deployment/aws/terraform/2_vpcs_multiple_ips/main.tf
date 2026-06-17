@@ -246,8 +246,6 @@ resource "aws_instance" "mdw" {
     instance_type = var.aws_mdw_machine_type
 
     root_block_device {
-        volume_size           = "100"
-        volume_type           = "gp3"
         delete_on_termination = true
     }
 
@@ -505,8 +503,6 @@ resource "aws_instance" "broker" {
     instance_type = var.aws_broker_machine_type
 
     root_block_device {
-        volume_size           = "30"
-        volume_type           = "gp3"
         delete_on_termination = true
     }
 

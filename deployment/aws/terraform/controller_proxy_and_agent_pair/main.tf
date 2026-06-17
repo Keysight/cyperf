@@ -262,8 +262,6 @@ resource "aws_instance" "aws_broker" {
   instance_type = var.aws_broker_machine_type
 
   root_block_device {
-    volume_size           = "30"
-    volume_type           = "gp3"
     delete_on_termination = true
   }
 

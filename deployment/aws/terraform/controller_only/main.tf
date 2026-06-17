@@ -131,8 +131,6 @@ resource "aws_instance" "aws_mdw" {
   ami           = data.aws_ssm_parameter.cyperf_mdw_ami.value
   instance_type = var.aws_mdw_machine_type
   root_block_device {
-    volume_size           = "256"
-    volume_type           = "gp3"
     delete_on_termination = true
   }
 
