@@ -4,6 +4,14 @@ provider "aws" {
   region = var.aws_region
 }
 
+data "aws_ssm_parameter" "cyperf_mdw_ami" {
+  name = "/aws/service/marketplace/prod-svag4bs7dtcbu/${var.cyperf_release}"
+}
+
+data "aws_ssm_parameter" "cyperf_broker_ami" {
+  name = "/aws/service/marketplace/prod-xopwud6rtquaw/${var.cyperf_release}"
+}
+
 locals{
     main_cidr = "172.16.0.0/16"
     main_mgmt_subnet = "172.16.1.0/24"
@@ -234,13 +242,10 @@ resource "aws_instance" "mdw" {
         Name = local.mdw_name
     }
 
-
-    ami           = "resolve:ssm:/aws/service/marketplace/prod-svag4bs7dtcbu/${var.cyperf_release}"
+    ami           = data.aws_ssm_parameter.cyperf_mdw_ami.value
     instance_type = var.aws_mdw_machine_type
 
-    ebs_block_device {
-        device_name = "/dev/sda1"
-        volume_size = "100"
+    root_block_device {
         delete_on_termination = true
     }
 
@@ -494,13 +499,10 @@ resource "aws_instance" "broker" {
         Name = local.broker_name
     }
 
-
-    ami           = "resolve:ssm:/aws/service/marketplace/prod-xopwud6rtquaw/${var.cyperf_release}"
+    ami           = data.aws_ssm_parameter.cyperf_broker_ami.value
     instance_type = var.aws_broker_machine_type
 
-    ebs_block_device {
-        device_name = "/dev/sda1"
-        volume_size = "100"
+    root_block_device {
         delete_on_termination = true
     }
 

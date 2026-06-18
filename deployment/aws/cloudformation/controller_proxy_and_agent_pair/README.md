@@ -64,9 +64,9 @@ After successful deployment of stack, flow bellow instructions
 -	Go to EC2 Dashboard and look for the deployed instance
 -	Select the Controller Proxy instance and check the public IP 
 -	Open your browser and access pre existing CyPerf Controller UI with URL https://"Controller Public IP" (Default Username/Password: `admin`/`CyPerf&Keysight#1`)
--   Select the gear icon in the right top corner. Select “Administration”, followed by Controller Proxies. 
+-   Select the gear icon in the right top corner. Select “Agent Management...”, followed by Controller Proxies. 
     If Controller and Controller Proxy are in same vpc, add the Controller Proxy private IP.
     Else, add Controller Proxy Public IP. Allow Controller Public IP at Controller proxy's inbound Security rule for port 443.
 -   Registered CyPerf agents should appear in Controller UI automatically.
--   CyPerf license needs to be procured for further usage. These licenses need to be configured at “Administration” followed by “License Manager” on CyPerf controller gear menu.
+-   A valid CyPerf license must be procured prior to continued use of the product. To configure licensing, navigate to the CyPerf Controller and go to Settings > Licenses > License Manager. To configure an external License Server, navigate to Settings > Licenses > License Server and provide the required server details.
 
