@@ -68,7 +68,7 @@ sudo docker load -i cyperf_agent_aarch64_ixstack-raw_release_<version>.tar
 ```
 
 ### ARM Known Limitations
- - **DPDK is not supported on ARM architecture.**
+
 
 ## Workflow
 To test a device which is running inside a Docker, do the following:

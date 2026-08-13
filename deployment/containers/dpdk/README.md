@@ -4,18 +4,20 @@
 ## Introduction
 This guide provides step-by-step instructions for deploying CyPerf Agent containers with DPDK support for enhanced performance.
 
-  1. [Prerequisites](#prerequisites)
-  2. [Prepare the Host](#prepare-the-host)
-  3. [Configure the Host](#configure-the-host)
-  4. [Deploying Containers](#deploying-containers)
+  1. [Supported Architectures](#supported-architectures)
+  2. [Deploying Containers](#deploying-containers)
         - [Attaching Interface to Containers](#attaching-interface-to-containers)
         - [Detaching Interface from Containers](#detaching-interface-from-containers)
-  5. [Removing Containers](#removing-containers)
-  6. [Troubleshooting](#troubleshooting)
-  7. [Known Limitations](#known-limitations)
-  8. [Releases](#releases)
+  3. [Removing Containers](#removing-containers)
+  4. [Troubleshooting](#troubleshooting)
+  5. [Known Limitations](#known-limitations)
+  6. [Releases](#releases)
 
-## Prerequisites
+## Supported architectures
+CyPerf Contailer image now support both [x86_64](#x86_64-cpu-architecture) and [aarch64](#aarch64-cpu-architecture) CPU architectures.
+
+## x86_64 CPU architecture
+### Prerequisites
 
 - Install Docker Engine on the host if not already installed. For more details, refer to: [How to install Docker Engine](https://docs.docker.com/engine/install/#server).
 
@@ -25,7 +27,7 @@ This guide provides step-by-step instructions for deploying CyPerf Agent contain
         - Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
         - MT2892 Family [ConnectX-6 Dx] or higher - mlx5_core driver
 
-## Prepare the Host
+### Prepare the Host
 Complete the following steps to prepare the host for configuring and deploying CyPerf containers:
 
 - Pull the container image `public.ecr.aws/keysight/cyperf-agent-dpdk:latest`. For more details, refer to: [How to pull docker image](https://docs.docker.com/engine/reference/commandline/pull/).
@@ -44,14 +46,45 @@ Complete the following steps to prepare the host for configuring and deploying C
         ixia@cyperf:~$ docker images
         REPOSITORY                            TAG          IMAGE ID       CREATED       SIZE
         cyperf_agent_x86_64_ixstack_release   26.0.3.834   a8c4f5afd0e1   4 weeks ago   841MB
-        ```
+   ```
 
+## aarch64 CPU architecture
+### ARM Prerequisites
+
+- An ARM-based system running a supported Linux distribution (Debian 12/Ubuntu 22.04 or later recommended).
+- Docker Engine installed on the ARM host. Refer to [Install Docker Engine](https://docs.docker.com/engine/install/#server) for details.
+- A CyPerf Controller that is already deployed and accessible from the Agent.
+
+- ### Supported Environments
+    - Ubuntu 22.04 or higher, or Debian 12
+    - Recommended NIC types:
+        - Intel Corporation Ethernet Controller E810-C for QSFP (rev 02) - ice driver
+        - MT2892 Family [ConnectX-6 Dx] or higher - mlx5_core driver
+
+### ARM Docker Image
+
+CyPerf agent's ARM image can be pulled from `public.ecr.aws` using the following commad:
+
+```shell
+sudo docker pull public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:latest
+```
+
+This image is also available as a `.tar` file which can be downloaded from [Keysight Software Download Portal](https://support.ixiacom.com/keysight-cyperf-2601).
+
+Load the .tar file using the following command:
+```shell
+sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
+```
+
+### ARM Known Limitations
+
+## Workflow 
 
 - Download the DPDK Usertools package (required for NIC inspection and hugepage allocation):
     ```shell
-    wget https://fast.dpdk.org/rel/dpdk-22.11.tar.xz 
-    tar -xvf ./dpdk-22.11.tar.xz
-    #CyPerf currently supports DPDK 22.11 LTS
+    wget https://fast.dpdk.org/rel/dpdk-25.11.tar.xz 
+    tar -xvf ./dpdk-25.11.tar.xz
+    #CyPerf currently supports DPDK 25.11 LTS
     ```
 - DPDK runs on both single-node (SMP/UMA) and multi-node (NUMA) systems. On NUMA systems, performance can be improved by aligning CPU, memory, and NIC resources per node.
 
@@ -68,7 +101,7 @@ Complete the following steps to prepare the host for configuring and deploying C
 
 - ### 1. Check interface status
     ```shell
-    cd dpdk-22.11/
+    cd dpdk-25.11/
     ./usertools/dpdk-devbind.py --status 
     ```
     This tool lists all network devices available in the system along with their PCI ID, interface name, and the network driver. This information will be required later when deploying containers.
@@ -118,7 +151,7 @@ Complete the following steps to prepare the host for configuring and deploying C
     
         Set up 1G hugepages using the DPDK usertools:    
         ```shell
-        cd dpdk-22.11/
+        cd dpdk-25.11/
 
         # Reset existing hugepages
         sudo ./usertools/dpdk-hugepages.py -u -c -s
@@ -307,6 +340,11 @@ Complete the following steps to prepare the host for configuring and deploying C
 
 ## Releases
 
+- **CyPerf 26.0.1** - [August, 2026]
+    - Image URI:
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:release26.0.1
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:26.0.X.X
+        - public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:26.0.X.X
 
 - **CyPerf 26.0.0** - [March, 2026]
     - Image URI:
