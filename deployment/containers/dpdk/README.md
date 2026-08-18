@@ -6,6 +6,9 @@ This guide provides step-by-step instructions for deploying CyPerf Agent contain
 
   1. [Supported Architectures](#supported-architectures)
   2. [Deploying Containers](#deploying-containers)
+       - [Workflow](#workflow)
+            - [Manual Deployment](#manual-deployment)
+            - [Docker Compose](#docker-compose)
         - [Attaching Interface to Containers](#attaching-interface-to-containers)
         - [Detaching Interface from Containers](#detaching-interface-from-containers)
   3. [Removing Containers](#removing-containers)
@@ -76,8 +79,6 @@ Load the .tar file using the following command:
 sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
 ```
 
-### ARM Known Limitations
-
 ## Workflow 
 
 - Download the DPDK Usertools package (required for NIC inspection and hugepage allocation):
@@ -97,15 +98,15 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
     NUMA node1 CPU(s):                    32-63,96-127
     ```
 
-## Configure the Host
+- ### Configure the Host
 
-- ### 1. Check interface status
+    - #### 1. Check interface status
     ```shell
     cd dpdk-25.11/
     ./usertools/dpdk-devbind.py --status 
     ```
     This tool lists all network devices available in the system along with their PCI ID, interface name, and the network driver. This information will be required later when deploying containers.
-    - #### Example output for MLX NIC:
+    - ##### Example output for MLX NIC:
         ```shell
         Network devices using kernel driver
         ===================================
@@ -117,7 +118,7 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
         ```
         **Note:** MLX NICs do not require additional driver configuration. Skip to [Hugepage Configuration](#2-hugepage-configuration).
 
-    - #### Example output for Intel NIC:
+    - ##### Example output for Intel NIC:
         ```shell
         Network devices using kernel driver
         ===================================
@@ -146,82 +147,84 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
             To know more about `vfio` and `iommu`, refer to the [official DPDK guide](https://doc.dpdk.org/guides/linux_gsg/linux_drivers.html#vfio).
 
 
-- ### 2. Hugepage Configuration
-    - Ubuntu and Debian distributions come with 2M hugepages mounted by default. However, 1G hugepages are recommended for DPDK as they significantly improve performance. 
+    - #### 2. Hugepage Configuration
+        - Ubuntu and Debian distributions come with 2M hugepages mounted by default. However, 1G hugepages are recommended for DPDK as they significantly improve performance. 
     
-        Set up 1G hugepages using the DPDK usertools:    
-        ```shell
-        cd dpdk-25.11/
+            Set up 1G hugepages using the DPDK usertools:    
+            ```shell
+            cd dpdk-25.11/
 
-        # Reset existing hugepages
-        sudo ./usertools/dpdk-hugepages.py -u -c -s
+            # Reset existing hugepages
+            sudo ./usertools/dpdk-hugepages.py -u -c -s
 
-        # Check per-NUMA memory
-        numactl --hardware
+            # Check per-NUMA memory
+            numactl --hardware
 
-        # Hugepages are allocated uniformly across NUMA nodes.
-        # Use 50% of the memory of the node with lower memory for all nodes.
-        # Example: Node 0 = 128G, Node 1 = 64G → reserve 32G per node.
+            # Hugepages are allocated uniformly across NUMA nodes.
+            # Use 50% of the memory of the node with lower memory for all nodes.
+            # Example: Node 0 = 128G, Node 1 = 64G → reserve 32G per node.
 
-        # Reserve 1G hugepages (32G per node in this example)
-        sudo ./usertools/dpdk-hugepages.py -p 1G -r 32G -m -s
+            # Reserve 1G hugepages (32G per node in this example)
+            sudo ./usertools/dpdk-hugepages.py -p 1G -r 32G -m -s
 
-        # Verify (expect pagesize=1024M)
-        mount | grep huge
-        ```
+            # Verify (expect pagesize=1024M)
+            mount | grep huge
+            ```
     - In case `mount` shows pagesize=2M, Follow the steps mentioned in [Troubleshooting](#troubleshooting).
     - **Note:** The hugepage configuration shown above must be repeated after every reboot. Alternatively, configure hugepages permanently by adding `hugepagesz=1G hugepages=<number>` to the kernel boot parameters in `/etc/default/grub`.
 
-- ### 3. Interface and NUMA Node Mapping
+    - #### 3. Interface and NUMA Node Mapping
 
-    Before deploying containers, identify the interface name, PCI ID, and NUMA node for each interface:
+        Before deploying containers, identify the interface name, PCI ID, and NUMA node for each interface:
 
-    - To list available interfaces and their PCI IDs, refer to [Check Interface Status](#1-check-interface-status). 
-    - Alternatively, use `ethtool -i <interface name>` to retrieve the bus-info (PCI ID) of a specific interface:
+        - To list available interfaces and their PCI IDs, refer to [Check Interface Status](#1-check-interface-status). 
+        - Alternatively, use `ethtool -i <interface name>` to retrieve the bus-info (PCI ID) of a specific interface:
 
-        **Example:**
-        ```shell
-        ixia@cyperf:~$ ethtool -i enP4p1s0f0np0
-        driver: mlx5_core
-        ...
-        bus-info: 0004:01:00.0
-        ...
-        # bus-info is PCI ID
-        ```
+            **Example:**
+            ```shell
+            ixia@cyperf:~$ ethtool -i enP4p1s0f0np0
+            driver: mlx5_core
+            ...
+            bus-info: 0004:01:00.0
+            ...
+            # bus-info is PCI ID
+            ```
 
-    - Identify the NUMA node the interface is connected to:
-        ```shell
-        cat /sys/class/net/<interface name>/device/numa_node
-        ```
-        **Example:**
-        ```shell
-        ixia@cyperf:~$ cat /sys/class/net/enP4p1s0f0np0/device/numa_node 
-        0 # This is the NUMA node ID
-        ```
+            - Identify the NUMA node the interface is connected to:
+            ```shell
+            cat /sys/class/net/<interface name>/device/numa_node
+            ```
+            **Example:**
+            ```shell
+            ixia@cyperf:~$ cat /sys/class/net/enP4p1s0f0np0/device/numa_node 
+            0 # This is the NUMA node ID
+            ```
     
-## Deploying Containers
+- ### Deploying Containers
 
-- Before deploying containers, ensure the host is configured correctly and hugepages are set up as described in [Configure the Host](#configure-the-host).
+    - Before deploying containers, ensure the host is configured correctly and hugepages are set up as described in [Configure the Host](#configure-the-host).
 
-- Ensure a CyPerf Controller or Controller-proxy is already deployed and running, and is accessible from the host.
+    - Ensure a CyPerf Controller or Controller-proxy is already deployed and running, and is accessible from the host.
 
-- **NUMA Node Selection:**
+    - **NUMA Node Selection:**
 
-    Check the NUMA topology of the system using `numactl --hardware` and decide which NUMA node to use for each container.
-    
-    While deploying the containers, set the `DPDK_HUGEMEM_ALLOCATION_SIZE` parameter based on the selected NUMA node as shown below:
-    - For `NUMA_NODE=0`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in MB>,0"`
-    - For `NUMA_NODE=1`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in MB>"`
-    - For single node systems, i.e, `NUMA_NODE=0`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in MB>"`
-   
-- ### Deploying Multiple Agents on the Same Host
+        Check the NUMA topology of the system using `numactl --hardware` and decide which NUMA node to use for each container.
+        
+        While deploying the containers, set the `DPDK_HUGEMEM_ALLOCATION_SIZE` parameter based on the selected NUMA node as shown below:
+        - For `NUMA_NODE=0`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in MB>,0"`
+        - For `NUMA_NODE=1`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="0,<Hugepage size in MB>"`
+        - For single node systems, i.e, `NUMA_NODE=0`: set `DPDK_HUGEMEM_ALLOCATION_SIZE="<Hugepage size in MB>"`
+
+  ####  **Manual Deployment** 
+
+    - ### Deploying Multiple Agents on the Same Host
   
-    - #### 1. Create a Local Management Network
-        This network will be used by the containers to communicate with CyPerf Controller.
-        ```shell
-        docker network create --subnet=192.168.0.0/24 mgmt-network
-        ```
-    - #### 2. Deploy Containers
+       - #### 1. Create a Local Management Network
+            This network will be used by the containers to communicate with CyPerf Controller.
+            ```shell
+            docker network create --subnet=192.168.0.0/24 mgmt-network
+            ```
+       - #### 2. Deploy Containers
         ```Shell
         docker run -td --privileged \
         --cap-add=NET_ADMIN \
@@ -283,8 +286,34 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
         public.ecr.aws/keysight/cyperf-agent-dpdk:latest
         ```
 
-- ### Deploying Agents on Different Hosts
-    The deployment steps are the same as above. However, the management network (specified with the `--network` parameter) for each container must use a different subnet to avoid duplicate management IP addresses. Unique management IP addresses are required because CyPerf identifies agents based on this address.
+    - ### Deploying Agents on Different Hosts
+        The deployment steps are the same as above. However, the management network (specified with the `--network` parameter) for each container must use a different subnet to avoid duplicate management IP addresses. Unique management IP addresses are required because CyPerf identifies agents based on this address.
+
+  #### **Docker Compose**
+
+    - Compose manifest: [agent_examples/docker-compose.yml](agent_examples/docker-compose.yml) 
+
+    - Modifications that are required to delpoy a CyPerf Agents, are as follows:
+    i. Replace the place holder container `image` URL with the specific version, that you want to use for the CyPerf Agent container. You can get this URL from [Keysight software download portal](https://support.ixiacom.com/keysight-cyperf-software-downloads-documentation).
+
+    - Replace the place holder `AGENT_CONTROLLER` value with your CyPerf Controller IP address. If the controller IP address is not available, then this variable must be ommitted from the yaml. You can set this IP address after the controller deployment, by using the Cyperf Agent CLI.
+
+    -  By default, agents will use the interface through which it can connect to the controller (or controller proxy) and select it as a management interface. A test interface needs to attach explicitly with PCI bus ID.
+
+    - Replace the place holder `AGENT_TAGS` with your preferred tags for identifying the agents as visible in the CyPerf Controller Agent Assignement dialog.
+    
+    - When Client and Server containers are running in two different hosts, them Server container must do port mirroring with host for port 80 and 443.
+    ```js
+            #     ports:
+            #       - "80:80"
+            #       - "443:443"
+    ```
+    - Apply the conpose file. Download the docker compose file and place in the docker host. Change to the directory where docker compose file present.
+        ```js
+        # For creating containers
+        sudo docker compose up -d
+        ```
+    - This step is required when Client and Server containers use two differnt test network which are uplink with two different network interfaces of the host system. 
 
 - ### Attaching Interface to Containers
 
@@ -328,7 +357,7 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
 - For MLX NICs, if the interface is not detached before the container is stopped and removed, it may take some time to return to the host OS. This is expected behavior.
 - For Intel NICs, if the container is not stopped gracefully, the interface will not return to the host. To recover the interface, use the following command:
     ```shell
-    cd dpdk-22.11/
+    cd dpdk-25.11/
     ./usertools/dpdk-devbind.py -b ice <PCI ID of interface>
 
     # This rebinds the interface to the ice kernel driver, making it visible to the host OS.

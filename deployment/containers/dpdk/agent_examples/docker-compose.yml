@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  client:
+    image: docker-local-nas.artifactorylbj.it.keysight.com/packages_tiger/1.0.0.2644/cyperf_agent_aarch64_ixstack_release:1.0.0.2644
+    container_name: CY-ClientAgent1
+    privileged: true
+    cpuset: "41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56"
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat /appsec/startup_ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    cap_add:
+      - NET_ADMIN
+      - IPC_LOCK
+      - NET_RAW
+
+    environment:
+      - NUMA_NODE=0
+      - AGENT_CPU_SET=41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56
+      - DPDK_TEST_INTERFACE_PCI_ID=0000:01:00.0
+      - DPDK_HUGEMEM_ALLOCATION_SIZE=0,10000
+      - DPDK_HUGEMEM_ALLOCATION_PREFIX=cy_dpdk_client1
+      - AGENT_CONTROLLER=10.36.65.38
+      - AGENT_TAGS=AgentType=MLXDockerClient
+#   for single NUMA set DPDK_HUGEMEM_ALLOCATION_SIZE=10000
+    volumes:
+      - /lib/modules:/lib/modules
+      - /dev:/dev
+      - /lib/firmware:/lib/firmware
+
+    networks:
+      - mgmt-network
+
+    restart: unless-stopped
+
+  server:
+    image: docker-local-nas.artifactorylbj.it.keysight.com/packages_tiger/1.0.0.2644/cyperf_agent_aarch64_ixstack_release:1.0.0.2644
+    container_name: CY-ServerAgent1
+    privileged: true
+    cpuset: "57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72"
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat /appsec/startup_ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    cap_add:
+      - NET_ADMIN
+      - IPC_LOCK
+      - NET_RAW
+
+#     ports:
+#         - "80:80"
+#         - "443:443"
+#
+    environment:
+      - NUMA_NODE=0
+      - AGENT_CPU_SET=57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72
+      - DPDK_TEST_INTERFACE_PCI_ID=0004:01:00.0
+      - DPDK_HUGEMEM_ALLOCATION_SIZE=10000,0
+      - DPDK_HUGEMEM_ALLOCATION_PREFIX=cy_dpdk_server1
+      - AGENT_CONTROLLER=10.36.65.38
+      - AGENT_TAGS=AgentType=MLXDockerServer
+#     for single NUMA set DPDK_HUGEMEM_ALLOCATION_SIZE=10000
+    volumes:
+      - /lib/modules:/lib/modules
+      - /dev:/dev
+      - /lib/firmware:/lib/firmware
+
+    networks:
+      - mgmt-network
+
+    restart: unless-stopped
+
+networks:
+  mgmt-network:
+    external: true
+    name: mgmt-network

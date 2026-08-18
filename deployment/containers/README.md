@@ -67,9 +67,6 @@ Load the .tar file using the following command:
 sudo docker load -i cyperf_agent_aarch64_ixstack-raw_release_<version>.tar
 ```
 
-### ARM Known Limitations
-
-
 ## Workflow
 To test a device which is running inside a Docker, do the following:
 - Select and start with a Docker setup that is already deployed. The containerized device under test (DUT) is also expected to be deployed in the same Docker host or, deployed outside the Docker host and accessible from Agent docker containers.
