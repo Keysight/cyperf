@@ -2,7 +2,10 @@ version: "3.8"
 
 services:
   client:
-    image: docker-local-nas.artifactorylbj.it.keysight.com/packages_tiger/1.0.0.2644/cyperf_agent_aarch64_ixstack_release:1.0.0.2644
+  # For aarch64 use the following image:
+    image: public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:latest
+  # For x86-64 use the following image instead:
+  #image: public.ecr.aws/keysight/cyperf-agent-dpdk:latest
     container_name: CY-ClientAgent1
     privileged: true
     cpuset: "41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56"
@@ -38,7 +41,10 @@ services:
     restart: unless-stopped
 
   server:
-    image: docker-local-nas.artifactorylbj.it.keysight.com/packages_tiger/1.0.0.2644/cyperf_agent_aarch64_ixstack_release:1.0.0.2644
+  # For aarch64 use the following image:
+    image: public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:latest
+  # For x86-64 use the following image instead:
+  #image: public.ecr.aws/keysight/cyperf-agent-dpdk:latest
     container_name: CY-ServerAgent1
     privileged: true
     cpuset: "57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72"

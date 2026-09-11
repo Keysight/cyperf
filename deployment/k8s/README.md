@@ -313,6 +313,14 @@ Ensure that the following configurations are appropriate, when configuring the C
 
 ## Releases
 
+- **CyPerf 26.1.0** - [September, 2026]
+    - Image URI (x86_64): 
+        - public.ecr.aws/keysight/cyperf-agent:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent:26.1.3.876
+    - Image URI (aarch64): 
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:26.1.3.876
+
 - **CyPerf 26.0.0** - [March, 2026]
     - Image URI (x86_64): 
         - public.ecr.aws/keysight/cyperf-agent:release26.0.0

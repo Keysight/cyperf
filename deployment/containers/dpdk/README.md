@@ -369,11 +369,12 @@ sudo docker load -i cyperf_agent_aarch64_ixstack_release_<version>.tar
 
 ## Releases
 
-- **CyPerf 26.0.1** - [August, 2026]
+- **CyPerf 26.1.0** - [September, 2026]
     - Image URI:
-        - public.ecr.aws/keysight/cyperf-agent-dpdk:release26.0.1
-        - public.ecr.aws/keysight/cyperf-agent-dpdk:26.0.X.X
-        - public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:26.0.X.X
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent-dpdk:26.1.3.876
+        - public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent-dpdk-aarch64:26.1.3.876
 
 - **CyPerf 26.0.0** - [March, 2026]
     - Image URI:
