@@ -67,9 +67,6 @@ Load the .tar file using the following command:
 sudo docker load -i cyperf_agent_aarch64_ixstack-raw_release_<version>.tar
 ```
 
-### ARM Known Limitations
- - **DPDK is not supported on ARM architecture.**
-
 ## Workflow
 To test a device which is running inside a Docker, do the following:
 - Select and start with a Docker setup that is already deployed. The containerized device under test (DUT) is also expected to be deployed in the same Docker host or, deployed outside the Docker host and accessible from Agent docker containers.
@@ -288,6 +285,15 @@ sudo modprobe ip6table_filter
 4. CyPerf Container deployment workflow does not recommend using cyperagent CLI commands within the containers. container spawning command should supply all the environment variables for initializing the agent.
 
 ## Releases
+
+
+- **CyPerf 26.1.0** - [September, 2026]
+    - Image URI (x86_64): 
+        - public.ecr.aws/keysight/cyperf-agent:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent:26.1.3.876
+    - Image URI (aarch64): 
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:release26.1.0
+        - public.ecr.aws/keysight/cyperf-agent-aarch64:26.1.3.876
 
 
 - **CyPerf 26.0.0** - [March, 2026]
