@@ -59,39 +59,39 @@ To generate the public key and enable SSH access to the CyPerf instances, perfor
 ## Template Parameters:
 The following table lists the parameters for this deployment in **New VPC**.
 
-| Parameter label (name)                   | Default            | Description  |
-| ----------------------- | ----------------- | ----- |
-| zone                   | Requires input            | Preferred Zone name for the deployment.  |
-| region                   | Requires input            | Preferred Region name for the deployment.  |
-| controllerip                   | Requires input            | Preferred CyPerf Controller ip where agent needs to register.  |
-| agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| agentSourceImage                   | keysight-cyperf-agent-26-0-0            | Preferred CyPerf Agent image.  |
-| managementNetworkCIDR                   | Requires input. Example: 172.16.5.0/24 | CyPerf agents will use this subnet for management traffic  |
-| testNetworkCIDR                   | Requires input. Example: 10.0.0.0/8            | CyPerf agents will use this subnet for test traffic.  |
-| agentCount                  | 1            | Number of CyPerf agents will be deployed from this template.  |
-| serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
-| authUsername                  | `admin`           | Username for agent to controller authentication.  |
-| authPassword                  | `CyPerf&Keysight#1`            | Password for agent to controller authentication. |
+| Parameter label (name) | Default                                | Description                                                                                                                                                                                                                                  |
+|------------------------|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| zone                   | Requires input                         | Preferred Zone name for the deployment.                                                                                                                                                                                                      |
+| region                 | Requires input                         | Preferred Region name for the deployment.                                                                                                                                                                                                    |
+| controllerip           | Requires input                         | Preferred CyPerf Controller ip where agent needs to register.                                                                                                                                                                                |
+| agentMachineType       | c2-standard-4                          | Preferred machine Type for CyPerf Agent.                                                                                                                                                                                                     |
+| agentSourceImage       | keysight-cyperf-agent-26-1-0           | Preferred CyPerf Agent image.                                                                                                                                                                                                                |
+| managementNetworkCIDR  | Requires input. Example: 172.16.5.0/24 | CyPerf agents will use this subnet for management traffic                                                                                                                                                                                    |
+| testNetworkCIDR        | Requires input. Example: 10.0.0.0/8    | CyPerf agents will use this subnet for test traffic.                                                                                                                                                                                         |
+| agentCount             | 1                                      | Number of CyPerf agents will be deployed from this template.                                                                                                                                                                                 |
+| serviceAccountEmail    | Requires input                         | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
+| authUsername           | `admin`                                | Username for agent to controller authentication.                                                                                                                                                                                             |
+| authPassword           | `CyPerf&Keysight#1`                    | Password for agent to controller authentication.                                                                                                                                                                                             |
 
 
 ## Template Parameters:
 The following table lists the parameters for this deployment in **Existing VPC**.
 
-| Parameter label (name)                   | Default            | Description  |
-| ----------------------- | ----------------- | ----- |
-| zone                   | Requires input            | Preferred Zone name for the deployment.  |
-| region                   | Requires input            | Preferred Region name for the deployment.  |
-| controllerip                   | Requires input            | Preferred CyPerf Controller ip where agent needs to register.  |
-| agentMachineType                   | c2-standard-4            | Preferred machine Type for CyPerf Agent.  |
-| agentSourceImage                   | keysight-cyperf-agent-26-0-0            | Preferred CyPerf Agent image.  |
-| management_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | CyPerf agents will use this subnet for management traffic.  |
-| management_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where management subnet exists  |
-| test_subnetwork                   | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"    | CyPerf agents will use this subnet for test traffic.  |
-| test_subnetwork_project                  | Requires input. Example: "kt-nas-cyperf-dev" | project where test subnet exists  |
-| agentCount                  | 1            | Number of CyPerf agents will be deployed from this template.  |
-| serviceAccountEmail         | Requires input       | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
-| authUsername                  | `admin`           | Username for agent to controller authentication.  |
-| authPassword                  | `CyPerf&Keysight#1`            | Password for agent to controller authentication. |
+| Parameter label (name)        | Default                                                                      | Description                                                                                                                                                                                                                                  |
+|-------------------------------|------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| zone                          | Requires input                                                               | Preferred Zone name for the deployment.                                                                                                                                                                                                      |
+| region                        | Requires input                                                               | Preferred Region name for the deployment.                                                                                                                                                                                                    |
+| controllerip                  | Requires input                                                               | Preferred CyPerf Controller ip where agent needs to register.                                                                                                                                                                                |
+| agentMachineType              | c2-standard-4                                                                | Preferred machine Type for CyPerf Agent.                                                                                                                                                                                                     |
+| agentSourceImage              | keysight-cyperf-agent-26-1-0                                                 | Preferred CyPerf Agent image.                                                                                                                                                                                                                |
+| management_subnetwork         | Requires input. Example: "keysight-cyperf-gcp1-cyperf-management-subnetwork" | CyPerf agents will use this subnet for management traffic.                                                                                                                                                                                   |
+| management_subnetwork_project | Requires input. Example: "kt-nas-cyperf-dev"                                 | project where management subnet exists                                                                                                                                                                                                       |
+| test_subnetwork               | Requires input. Example: "keysight-cyperf-gcp1-cyperf-test-subnetwork"       | CyPerf agents will use this subnet for test traffic.                                                                                                                                                                                         |
+| test_subnetwork_project       | Requires input. Example: "kt-nas-cyperf-dev"                                 | project where test subnet exists                                                                                                                                                                                                             |
+| agentCount                    | 1                                                                            | Number of CyPerf agents will be deployed from this template.                                                                                                                                                                                 |
+| serviceAccountEmail           | Requires input                                                               | service accont with 'compute admin' and 'compute network admin' role must be pre exists. Update serviceAccoutEmail value in cyperf_controller_and_agent_pair_new_vpc.py.schema file. Donot use serviceAccountEmail as commandline Parameter. |
+| authUsername                  | `admin`                                                                      | Username for agent to controller authentication.                                                                                                                                                                                             |
+| authPassword                  | `CyPerf&Keysight#1`                                                          | Password for agent to controller authentication.                                                                                                                                                                                             |
 
 ## Post deploy
 
