@@ -23,6 +23,7 @@ variable "aws_allowed_cidr_ipv4" {
   default     = ["0.0.0.0/0"]
   description = "List of IPv4 allowed to access the deployed machines"
 }
+
 variable "aws_allowed_cidr_ipv6" {
   type        = list(string)
   default     = ["::/0"]
@@ -52,12 +53,12 @@ variable "aws_mdw_machine_type" {
 
 variable "mdw_version" {
   type        = string
-  default     = "keysight-cyperf-controller-26-0-0"
+  default     = "keysight-cyperf-controller-26-1-0"
   description = "Version for the cyperf controller machine"
 }
 
 variable "cyperf_release" {
   type        = string
-  default     = "26.0.0"
+  default     = "26.1.0"
   description = "The version of the cyperf release"
 }

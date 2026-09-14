@@ -60,19 +60,19 @@ Using this method you can ensure that all further deployments will be done with 
 
 The following table lists the parameters for this deployment.
 
-| **Parameter label (name)**                  | **Default**            | **Description**  |
-| ----------------------- | ----------------- | ----- |
-| aws_access_key | Requires input | The AWS access key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
-| aws_secret_key  | Requires input | The AWS secret key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
-| aws_stack_name | Requires input |The AWS stack name. |
-| aws_auth_key | Requires input | Specify the AWS SSH key name. |
-| aws_allowed_cidr | ["0.0.0.0/0"] |List of ip allowed to access the deployed machines. |
-| aws_region            | us-east-2   | The AWS region for deployment. |
-| availability_zone      | us-east-2a       | The AWS availability zone for deployment. |
-| aws_broker_machine_type   | t3.medium   | The machine type used for deploying the CyPerf controller proxy. |
-| aws_agent_machine_type    | c5.2xlarge   |The machine type used for deploying the CyPerf agent.  |
-| broker_version   | keysight-cyperf-controller-proxy-26-0-0           | The CyPerf controller proxy image version. |
-| agent_version       | keysight-cyperf-agent-26-0-0     | The CyPerf agent image version.   |  
+| **Parameter label (name)**                  | **Default**                             | **Description**  |
+| ----------------------- |-----------------------------------------| ----- |
+| aws_access_key | Requires input                          | The AWS access key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
+| aws_secret_key  | Requires input                          | The AWS secret key must be obtained using following specification https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html. |
+| aws_stack_name | Requires input                          |The AWS stack name. |
+| aws_auth_key | Requires input                          | Specify the AWS SSH key name. |
+| aws_allowed_cidr | ["0.0.0.0/0"]                           |List of ip allowed to access the deployed machines. |
+| aws_region            | us-east-2                               | The AWS region for deployment. |
+| availability_zone      | us-east-2a                              | The AWS availability zone for deployment. |
+| aws_broker_machine_type   | t3.medium                               | The machine type used for deploying the CyPerf controller proxy. |
+| aws_agent_machine_type    | c5.2xlarge                              |The machine type used for deploying the CyPerf agent.  |
+| broker_version   | keysight-cyperf-controller-proxy-26-1-0 | The CyPerf controller proxy image version. |
+| agent_version       | keysight-cyperf-agent-26-1-0            | The CyPerf agent image version.   |  
 
 ## Destruction
 
