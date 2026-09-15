@@ -4,7 +4,12 @@ imports:
 resources:
 - name: myresources
   type: cyperf_controller_proxy_and_agent_pair_existing_vpc.py
-  properties: 
-      region: us-east1
+  properties:
+    region: us-east1
+    zone: us-east1-c
+    management_subnetwork: "keysight-cyperf-gcp-ext1-cyperf-management-subnetwork"
+    management_subnetwork_project: "kt-nas-cyperf-dev"
+    test_subnetwork: "keysight-cyperf-gcp-ext1-cyperf-test-subnetwork"
+    test_subnetwork_project: "kt-nas-cyperf-dev"
 
       
