@@ -1,5 +1,4 @@
 # Terraform deployments
-## **NOTE** - Azure Marketplace image scan for 26.1.0 release still under progress......
 ## Introduction
 
 This is the Terraform approach for CyPerf Controller and CyPerf Agents in different cloud providers.
