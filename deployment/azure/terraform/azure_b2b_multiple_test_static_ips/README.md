@@ -67,13 +67,13 @@ The following table lists the parameters for this deployment.
 | ----------------------- | ----------------- | ----- |
 | azure_project_name     | Requires input   | Specify Azure project name. |
 | azure_owner_tag | Requires input | The Azure owner tag name. |
-| subscription_id     | Requires input   | Specify the Azure subscription id.    |
-| client_id       | Requires input   | Specify the Azure client id.   |
-| client_secret     | Requires input     | Specify the Azure client secret.   |
-| tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
-| controller_image       | Requires input    | Specify the Azure controller VHD image|
-| agent_image | Requires input    | Specify the Azure agent VHD image |
+| subscription_id     | Requires input   | Specify the Azure subscription id. |
+| client_id       | Requires input   | Specify the Azure client id.  |
+| client_secret     | Requires input     | Specify the Azure client secret. |
+| tenant_id       | Requires input    | Specify the Azure tenant id.  |
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub) |
+| controller_image       | Requires input    | Specify the Azure controller image|
+| agent_image | Requires input    | Specify the Azure agent image |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | centralus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
