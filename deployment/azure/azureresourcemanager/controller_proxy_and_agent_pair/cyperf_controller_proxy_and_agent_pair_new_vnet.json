@@ -26,9 +26,10 @@
 
             "type": "string",
 
-            "defaultValue": "26.0.0",
+            "defaultValue": "26.1.0",
 
             "allowedValues": [
+                "26.1.0",
                 "26.0.0",
                 "0.7.0",
                 "0.6.0",
