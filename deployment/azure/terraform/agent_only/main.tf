@@ -15,7 +15,7 @@ locals {
   split_version        = split(".", var.cyperf_version)
     sku_agent_map = {
     "0.7.0"  = "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
-    "26.0.0" = "keysight-cyperf-agent-2600"
+    "26.1.0" = "keysight-cyperf-agent-2610"
   }
   sku_name_agent = lookup(
     local.sku_agent_map,
