@@ -269,6 +269,10 @@
         "userdata"  :     "#!/bin/bash -xe\n bash /usr/bin/image_init_azure.sh ",
 
         "skunames" : {
+            "26.1.0": {
+                "skunameagent": "keysight-cyperf-agent-2610",
+                "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-2610"
+            },
             "26.0.0": {
                 "skunameagent": "keysight-cyperf-agent-2600",
                 "skunamecontrollerproxy": "keysight-cyperf-controllerproxy-2600"
