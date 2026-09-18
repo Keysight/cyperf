@@ -21,12 +21,12 @@ locals {
   sku_controller_proxy_map = {
     "0.2.0"  = "keysight-cyperf-controllerproxy"
     "0.4.0"  = "keysight-cyperf-controllerproxy-${local.split_version[1]}-${local.split_version[2]}"
-    "26.0.0" = "keysight-cyperf-controllerproxy-2600"
+    "26.1.0" = "keysight-cyperf-controllerproxy-2610"
   }
 
   sku_agent_map = {
     "0.7.0"  = "keysight-cyperf-agent-${local.split_version[1]}-${local.split_version[2]}"
-    "26.0.0" = "keysight-cyperf-agent-2600"
+    "26.1.0" = "keysight-cyperf-agent-2610"
   }
   sku_name_controller_proxy = lookup(
     local.sku_controller_proxy_map,

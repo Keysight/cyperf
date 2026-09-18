@@ -14,7 +14,7 @@ locals {
   sku_controller_map = {
     "0.2.0"  = "keysight-cyperf-controller"
     "0.4.0"  = "keysight-cyperf-controller-${local.split_version[1]}-${local.split_version[2]}"
-    "26.0.0" = "keysight-cyperf-controller-2600"
+    "26.1.0" = "keysight-cyperf-controller-2610"
   }
 
   sku_name_controller = lookup(

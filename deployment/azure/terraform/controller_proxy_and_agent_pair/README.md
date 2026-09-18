@@ -65,21 +65,21 @@ The following table lists the parameters for this deployment.
 | ----------------------- | ----------------- | ----- |
 | azure_project_name     | Requires input   | Specify Azure project name. |
 | azure_owner_tag | Requires input | The Azure owner tag name. |
-| subscription_id     | Requires input   | Specify the Azure subscription id.    |
-| client_id       | Requires input   | Specify the Azure client id.   |
-| client_secret     | Requires input     | Specify the Azure client secret.   |
-| tenant_id       | Requires input    | Specify the Azure tenant id.   |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms.   |
-| controller_proxy_image       | Requires input    | Specify the Azure controller proxy  VHD image|
-| agent_image | Requires input    | Specify the Azure agent VHD image |
+| subscription_id     | Requires input   | Specify the Azure subscription id. |
+| client_id       | Requires input   | Specify the Azure client id.  |
+| client_secret     | Requires input     | Specify the Azure client secret. |
+| tenant_id       | Requires input    | Specify the Azure tenant id.  |
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. |
+| controller_proxy_image       | Requires input    | Specify the Azure controller proxy image|
+| agent_image | Requires input    | Specify the Azure agent image |
 | azure_allowed_cidr      | ["0.0.0.0/0"]       | Allowed IP ranges. Take into account also the ip ranges used in the management and test, subnets. |
 | azure_region_name      | centralus       | The Azure region where the deployment will take place. |
 | azure_admin_username  | cyperf | The Azure administrator username. |
 | azure_project_tag | keysight-azure-cyperf |The Azure project tag name. |
 | azure_broker_machine_type | Standard_F2s_v2 | The machine type used for deploying the CyPerf controller proxy. |
 | azure_agent_machine_type   | Standard_F4s_v2   | The machine type used for deploying the CyPerf agent. |
-| broker_name   | keysight-cyperf-controller-proxy-26-0-0      | Name for the cyperf broker machines. |
-| agent_name   | keysight-cyperf-agent-26-0-0            | Name for the cyperf agent machines. |
+| broker_name   | keysight-cyperf-controller-proxy-26-1-0      | Name for the cyperf broker machines. |
+| agent_name   | keysight-cyperf-agent-26-1-0            | Name for the cyperf agent machines. |
 
 ## Destruction
 

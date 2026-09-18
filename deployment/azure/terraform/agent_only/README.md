@@ -71,18 +71,18 @@ The following table lists the parameters for this deployment.
 | **Parameter label (name)**                  | **Default**            | **Description**  |
 | ----------------------- | ----------------- | ----- |
 | azure_agent_name | Requires input | The Azure agent name. |
-| subscription_id     | Requires input   | Specify the Azure subscription id.    |
-| client_id       | Requires input   | Specify the Azure client id.   |
-| client_secret     | Requires input     | Specify the Azure client secret.   |
-| tenant_id       | Requires input    | Specify the Azure tenant id.   |
+| subscription_id     | Requires input   | Specify the Azure subscription id. |
+| client_id       | Requires input   | Specify the Azure client id.  |
+| client_secret     | Requires input     | Specify the Azure client secret. |
+| tenant_id       | Requires input    | Specify the Azure tenant id.  |
 | resource_group_name     | Requires input   | Specify Azure resource group name. |
 | resource_group_location     | Requires input   | Specify Azure resource group location. |
 | virtual_network_name     | Requires input   | Virtual network name. |
-| agent_image | Requires input  | Specify the Azure agent VHD image |
+| agent_image | Requires input  | Specify the Azure agent image |
 | mgmt_subnet | Requires input    | Management subnet id |
 | test_subnet | Requires input    | Test subnet id |
 | controller_ip | Requires input    | Test subnet id |
-| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub)   |
+| public_key       | Requires input    | Specify the Azure public key that will be used to auth into the vms. (*.pub) |
 | azure_agent_machine_type   | Standard_F16s_v2   | The machine type used for deploying the CyPerf agent. |
 | agent_role | azure-agent | This will act as a tag in controller UI and will enable assignment by tag|
 
