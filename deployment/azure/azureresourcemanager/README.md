@@ -1,4 +1,5 @@
 # About CyPerf Azure ARM Templates
+## **NOTE** - Azure Marketplace image scan for 26.1.0 release still under progress......
 ## Introduction
 Welcome to the GitHub repository for Keysight CyPerf ARM templates for deploying CyPerf with Azure portal.
 

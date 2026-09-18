@@ -90,11 +90,26 @@ sudo docker network create --subnet=192.168.0.0/24 mgmt-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+
+# Example:
+## Single and same Management and Test interfaces
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="0,2,4,6,8,10" -m 4g --name ClientAgent1 --network=mgmt-network -e AGENT_CONTROLLER=X.X.X.X -e AGENT_TAGS="AgentType=DockerClient" public.ecr.aws/keysight/cyperf-agent:latest
+
+## Different Management and Test interfaces
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="0,2,4,6,8,10" -m 4g --name ClientAgent1 --network=mgmt-network -e AGENT_CONTROLLER=X.X.X.X -e AGENT_TAGS="AgentType=DockerClient" -e AGENT_MANAGEMENT_INTERFACE="<REPLACE WITH MANAGEMENT INTERFACE" -e AGENT_TEST_INTERFACE="REPLACE WITH TEST INTERFACE" public.ecr.aws/keysight/cyperf-agent:latest
+ 
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+
+# Example:
+## Single and same Management and Test interfaces
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="1,3,5,7,9,11" -m 4g --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer"  public.ecr.aws/keysight/cyperf-agent:latest
+
+## Different Management and Test interfaces
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="1,3,5,7,9,11" -m 4g --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="<REPLACE WITH MANAGEMENT INTERFACE" -e AGENT_TEST_INTERFACE="<REPLACE WITH TEST INTERFACE>" public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
 - If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding.
@@ -107,7 +122,7 @@ By default, when you create or run a container using docker create or docker run
 ```shell
 # deploy server where test traffic is recieved from a different host
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 > ### Please note that management network CIDR should be different on different hosts. This is required since CyPerf agents are identified by management IP addresses in CyPerf Controller UI.
 
@@ -128,11 +143,11 @@ sudo docker network create --subnet=192.168.0.0/24 mgmt-network
 
 # Deploy Client agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ClientAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerClient" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
 
 # Deploy Server agent
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" public.ecr.aws/keysight/cyperf-agent:latest
 ```
 - If client is sending traffic outside the host to a DUT and traffic is coming back to server container from DUT via host then use port forwarding.
 
@@ -145,7 +160,7 @@ By default, when you create or run a container using docker create or docker run
 ```shell
 # deploy server where test traffic is recieved from a different host
 
-sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
+sudo docker run -td --cap-add=NET_ADMIN --cap-add=IPC_LOCK --cap-add=NET_RAW --cpuset-cpus="<dedicated cores>" -m <reserves memory> --name ServerAgent --network=mgmt-network -e AGENT_CONTROLLER=<REPLACE WITH CONTROLLER IP> -e AGENT_TAGS="AgentType=DockerServer" -e AGENT_MANAGEMENT_INTERFACE="eth0" -e AGENT_TEST_INTERFACE="<host interface name>" -p 80:80 -p 443:443  public.ecr.aws/keysight/cyperf-agent:latest
 ```
 
 > ### Please note that management network CIDR should be different on different hosts. This is required since CyPerf agents are identified by management IP addresses in CyPerf Controller UI.
