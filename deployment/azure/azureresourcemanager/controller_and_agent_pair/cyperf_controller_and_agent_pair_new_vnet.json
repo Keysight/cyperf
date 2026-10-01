@@ -139,15 +139,15 @@
 
             "type": "string",
 
-            "defaultValue": "Standard_D4ls_v5",
+            "defaultValue": "Standard_D4ads_v5",
 
             "allowedValues": [
 
-               "Standard_D4ls_v5",
+               "Standard_D4ads_v5",
 
-               "Standard_D16ls_v5",
+               "Standard_D16ads_v5",
 
-               "Standard_D48ls_v5",
+               "Standard_D48ads_v5",
 
                "Stasndard_E104is_v5"
 
@@ -803,7 +803,7 @@
 
             "type": "Microsoft.Network/networkInterfaces",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48ls_v5'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48ads_v5'))]",
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
@@ -874,7 +874,7 @@
 
             "type": "Microsoft.Network/networkInterfaces",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D16ls_v5'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D16ads_v5'))]",
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
@@ -946,7 +946,7 @@
 
             "type": "Microsoft.Network/networkInterfaces",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D4ls_v5'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D4ads_v5'))]",
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
@@ -1044,7 +1044,7 @@
 
                 "hardwareProfile": {
 
-                    "vmSize": "Standard_D8ls_v5"
+                    "vmSize": "Standard_D8ads_v5"
 
                 },
 
