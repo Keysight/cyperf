@@ -1,9 +1,9 @@
 # Enhance traffic performance by enabling DPDK (Data Plane Development Kit)
 ## Introduction
-CyPerf automatically detects several dependencies for DPDK (such as driver, NIC type) and tries to enable it by default on a fresh deployment. In CyPerf Controller UI, **Agent Management** page shows  the auto-detected status in **DPDK Supported*% column. The following sections contain information about the prerequisites for deployments and also explain the debugging steps if DPDK is not used automatically even if platform requirements are satisfied.
-For the current CyPerf 3.0 release DPDK support for ESXi and Azure platform only.
+CyPerf automatically detects several dependencies for DPDK (such as driver, NIC type) and tries to enable it by default on a fresh deployment. In CyPerf Controller UI, **Agent Management** page shows  the auto-detected status in **DPDK Supported** column. The following sections contain information about the prerequisites for deployments and also explain the debugging steps if DPDK is not used automatically even if platform requirements are satisfied.
+For the current CyPerf 26.1.0 release DPDK support for ESXi and Azure platform only.
 
-- [DPDK on ESXi](https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/techpaper/intel-dpdk-vsphere-solution-brief-white-paper.pdf)
+
 - [DPDK in Azure](https://learn.microsoft.com/en-us/azure/virtual-network/setup-dpdk?tabs=redhat)
 
 
