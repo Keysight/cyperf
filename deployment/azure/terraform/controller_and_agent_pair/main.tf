@@ -21,17 +21,17 @@ locals {
   client_test_static_ip = "10.0.2.4"
   server_test_static_ip = "10.0.2.5"
   instance_sku_map = {
-    "Standard_F4s_v2"   = "A2"
-    "Standard_F16s_v2"  = "A4"
-    "Standard_D48s_v4"  = "A8"
-    "Standard_D48_v4"   = "A8"
+    "Standard_D4ds_v5"     = "A2"
+    "Standard_D16ds_v5"    = "A4"
+    "Standard_D48ads_v5"   = "A8"
+    "Standard_E104is_v5"   = "A8"
   }
   sku = lookup(local.instance_sku_map, var.azure_agent_machine_type)
   instance_storage_type ={
-    "Standard_F4s_v2"   = "Premium_LRS"
-    "Standard_F16s_v2"  = "Premium_LRS"
-    "Standard_D48s_v4"  = "Premium_LRS"
-    "Standard_D48_v4"   = "StandardSSD_LRS"
+    "Standard_D4ds_v5"     = "Premium_LRS"
+    "Standard_D16ds_v5"    = "Premium_LRS"
+    "Standard_D48ads_v5"   = "Premium_LRS"
+    "Standard_E104is_v5"   = "Premium_LRS"
   }
   storage_type = lookup(local.instance_storage_type, var.azure_agent_machine_type)
   split_version         = split(".", var.cyperf_version)

@@ -51,7 +51,7 @@ variable "agent_version" {
 
 variable "azure_agent_machine_type" {
   type    = string
-  default = "Standard_F4s_v2"
+  default = "Standard_D4ds_v5"
   description = "Azure machine type"
 }
 
