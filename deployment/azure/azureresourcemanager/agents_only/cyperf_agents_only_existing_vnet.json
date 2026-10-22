@@ -145,15 +145,17 @@
 
             "type": "string",
 
-            "defaultValue": "Standard_F4s_v2",
+            "defaultValue": "Standard_D4ads_v5",
 
             "allowedValues": [
 
-               "Standard_F4s_v2",
+               "Standard_D4ads_v5",
 
-               "Standard_F16s_v2",
+               "Standard_D16ads_v5",
 
-               "Standard_D48s_v4"
+               "Standard_D48ads_v5",
+
+               "Standard_E104is_v5"
 
 
             ],
@@ -577,7 +579,7 @@
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48s_v4'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_E104is_v5'))]",
 
             "apiVersion": "2022-11-01",
 
@@ -650,7 +652,80 @@
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F16s_v2'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D48ads_v5'))]",
+
+            "apiVersion": "2022-11-01",
+
+            "location": "[variables('location')]",
+
+            "copy": {
+
+                "name":"testinterface",
+
+                "count": "[parameters('Number of Cyperf Agents')]"
+
+            },
+
+            "dependsOn": [
+                
+                "[variables('securitygroup')]"
+
+            ],
+
+            "tags": {
+
+                "fastpathenabled": "true"
+
+            },
+
+            "properties": {
+
+                "enableAcceleratedNetworking": true,
+
+                "AuxiliaryMode": "AcceleratedConnections",
+
+                "AuxiliarySku": "A8",
+
+                "ipConfigurations": [
+
+                    {
+
+                        "name": "testnic",
+
+                        "properties": {
+
+                            "privateIPAllocationMethod": "Dynamic",
+
+                            "subnet": {
+
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Virtual Network'),parameters('Test Subnet for Cyperf Agents'))]"
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                "networkSecurityGroup": {
+
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('securitygroup'))]"
+                }
+
+            }
+
+        },
+
+        {
+
+            "comments": "creates n(based on agent count) no of test interface for the Agent",
+
+            "type": "Microsoft.Network/networkInterfaces",
+
+            "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
+
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D16ads_v5'))]",
 
             "apiVersion": "2022-11-01",
 
@@ -723,7 +798,7 @@
 
             "name": "[concat(variables('agenttestinterface'),copyIndex(1))]",
 
-            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_F4s_v2'))]",
+            "condition": "[and(equals(parameters('Accelerated Connections'),'Enable'), equals(parameters('VM Size Type for Cyperf Agents'),'Standard_D4ads_v5'))]",
 
             "apiVersion": "2022-11-01",
 
