@@ -64,7 +64,7 @@ variable "stack_type" {
 }
 variable "azure_mdw_machine_type" {
   type    = string
-  default = "Standard_F8s_v2"
+  default = "Standard_D8ds_v5"
 }
 
 variable "cyperf_version" {
